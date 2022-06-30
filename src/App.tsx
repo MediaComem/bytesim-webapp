@@ -1,26 +1,19 @@
-import React from 'react'
-import logo from './logo.svg'
-import './App.css'
+import "./App.css";
+import { Flex, Heading, Text } from "@chakra-ui/react";
 
-function App () {
+function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn this shit
-        </a>
-      </header>
+      <Flex flexDirection={'column'}>
+        <Heading>ByteSim</Heading>
+        <Text>
+          {
+            "Welcome in this amazing tool to analyze the footprint of your website or app with an SVG. Let's do it and get good green recommendations! #happygreen"
+          }
+        </Text>
+      </Flex>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

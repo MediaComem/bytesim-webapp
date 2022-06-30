@@ -22,6 +22,12 @@
   "ignorePatterns": ["*.css"],
   "rules": {
     "no-use-before-define": "off",
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "indent": "off",
+    "quotes": "off",
+    "no-extra-semi": "off",
+    "semi": "off",
+    "eol-last": "off",
+    "space-before-function-paren": "off"
   }
 }
