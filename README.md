@@ -1,28 +1,23 @@
-# ByteSim React App
+# ByteSim React App repo
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Project summary
 
-## Available Scripts
+ByteSim is a green focused project! 
+Based on Figma SVG exports initially, the webapp will provide a nice tool to build better apps for outr planet!
 
-In the project directory, you can run:
+⭐ Upload a SVG of your wireframe of printscreen
+⭐ Inform your project general settings
+⭐ Inform the nature of your content
+and then start the simulation! 
 
-### `npm start`
+ByteSim will help you by providing nice recommandations on how to reduce your footprint.
+Try to change some contents following the recommandation and see how green you can go!
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Project dev infos
+This project is based on React framework with Typescript.
+It uses Chakra UI kit, based on emotion css system.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## How to dev locally
+- You will need Node.js
+- Clone this repo
+- Use npm run start to run it. (localhost:3000)
