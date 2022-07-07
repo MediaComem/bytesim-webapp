@@ -5,5 +5,5 @@ interface ZoneDrawerProps {
 }
 
 export default function ZoneDrawer({ label }: ZoneDrawerProps) {
-  return <div>HOLA</div>;
+  return <div>TEST</div>;
 }

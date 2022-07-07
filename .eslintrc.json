@@ -28,6 +28,7 @@
     "no-extra-semi": "off",
     "semi": "off",
     "eol-last": "off",
-    "space-before-function-paren": "off"
+    "space-before-function-paren": "off",
+    "comma-dangle": "off"
   }
 }
