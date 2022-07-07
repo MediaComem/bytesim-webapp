@@ -1,7 +1,8 @@
 import "./App.css";
 import { Flex, Heading, Text } from "@chakra-ui/react";
 import { Resizable } from "re-resizable";
-import { css } from "@emotion/react";
+import { useAppSelector } from "./app/hooks";
+import { cx, css } from "@emotion/css";
 
 const panelStyle = css({
   border: "1px solid gray",
@@ -9,18 +10,21 @@ const panelStyle = css({
 });
 
 function App() {
+  const projectName = useAppSelector(state => state.project.name);
+
   return (
     <div className="App">
-      <Flex css={css({ height: "100vh" })}>
-        <Flex flexDirection={"column"} css={panelStyle} alignSelf="stretch">
+      <Flex className={css({ height: "100vh" })}>
+        <Flex flexDirection={"column"} className={cx(panelStyle, css({ maxWidth: '250px' }))} alignSelf="stretch">
           <Heading>ByteSim</Heading>
+          <Text>HOLA: {projectName}</Text>
           <Text>
             {
               "Welcome in this amazing tool to analyze the footprint of your website or app with an SVG. Let's do it and get good green recommendations! #happygreen"
             }
           </Text>
         </Flex>
-        <Flex flexDirection={"column"} css={panelStyle}>
+        <Flex flexDirection={"column"} className={panelStyle} grow={1}>
           Dynamic Form
         </Flex>
           <Resizable
@@ -28,7 +32,7 @@ function App() {
               width: "auto",
               height: "100%"
             }}
-            minWidth={200}
+            minWidth={150}
             enable={{
               top: false,
               right: false,
