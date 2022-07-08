@@ -1,17 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-
-export type StateStatus = "EDITING" | "SMIULATION" | "LOADING";
-export interface Zone {
-  id: number;
-  type: StateStatus;
-}
-export interface ProjectState {
-  id: number;
-  name: string;
-  status: StateStatus;
-  zones: Zone[] | [];
-}
+import { ProjectState } from "../../app/types";
 
 const initialState: ProjectState = {
   id: 1,

@@ -1,5 +1,5 @@
 import "./App.css";
-import { Button, Flex, Heading, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, Text } from "@chakra-ui/react";
 import { Resizable } from "re-resizable";
 import { useAppSelector } from "./app/hooks";
 import { cx, css } from "@emotion/css";
@@ -10,8 +10,18 @@ const panelStyle = css({
   padding: "5px",
 });
 
+const zoneStyle = css({
+  border: "3px solid red",
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+});
+
 function App() {
   const projectName = useAppSelector((state) => state.project.name);
+  // TEST DATA: add to store a list of zones, retrieve it
+  // create hook to get only the one zone selected(being edited => status: EDITING)
+  const zones = [{ id: '1', name: 'zone 1', x: 200, y: 80 }, { id: '2', name: 'zone 2', x: 120, y: 220 }];
 
   return (
     <div className="App">
@@ -51,14 +61,15 @@ function App() {
             topLeft: false,
           }}
         >
-          <Flex direction={"column"} align={"stretch"}>
+          <Flex direction={'column'} h='100%'>
             <Flex p={3}>
               <Button onClick={() => {}}>+ Create Zone</Button>
             </Flex>
-            <Flex align={"center"} justify={"center"}>
+            <Flex align={"center"} justify={"center"} maxH='90%' pos={'relative'}>
               <TestSVG />
+              {zones.map((z, i) => { return <Box key={i} h={'120px'} w={'135px'} pos={'absolute'} top={z.y} left={z.x} className={zoneStyle}>{z.name}</Box> })}
             </Flex>
-          </Flex>
+            </Flex>
         </Resizable>
       </Flex>
     </div>
