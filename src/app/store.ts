@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import projectReducer from '../features/project/projectSlice'
+import zonesSlice from '../features/zones/zonesSlice'
 
 export const store = configureStore({
   reducer: {
-    project: projectReducer
+    project: projectReducer,
+    zones: zonesSlice,
   }
 })
 

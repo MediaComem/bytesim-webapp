@@ -1,12 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import { ProjectState } from "../../app/types";
+import { Project } from "../../app/types";
 
-const initialState: ProjectState = {
+// const nbZones = useAppSelector((state) => state.project.zones.length);
+
+const initialState: Project = {
   id: 1,
-  name: "test project",
+  name: "Main project",
   status: "LOADING",
-  zones: []
 };
 
 const projectSlice = createSlice({
