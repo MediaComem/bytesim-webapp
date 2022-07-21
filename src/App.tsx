@@ -10,7 +10,14 @@ import {
   Flex,
   Heading,
   Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { Resizable } from "re-resizable";
 import { useAppSelector } from "./app/hooks";
@@ -50,6 +57,7 @@ function App() {
   const dispatch = useDispatch();
   const [projectNameI, setProjectNameI] = React.useState<string>(projectName);
   const zones = useAppSelector((state) => state.zones);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <div className="App">
@@ -85,9 +93,9 @@ function App() {
           <Accordion allowToggle>
             {zones.map((z, i) => {
               return (
-                <AccordionItem key={i}>
+                <AccordionItem key={i} onClick={() => dispatch(zoneSelected(z.id))}>
                   <h2>
-                    <AccordionButton>
+                    <AccordionButton bg={z.status === "EDITING" ? 'gray.200' : undefined}>
                       <Box flex="1" textAlign="left">
                         {z.name}
                       </Box>
@@ -103,13 +111,22 @@ function App() {
                       POSITION: left: {z.x}, top: {z.y}
                     </div>
                     <div>INDEX: {z.index}</div>
-                    <Button
-                      colorScheme={"red"}
-                      variant={"outline"}
-                      onClick={() => dispatch(zoneDeleted(z.id))}
-                    >
-                      Delete zone
-                    </Button>
+                    <Button colorScheme={'red'} variant="outline" onClick={onOpen}>Delete Zone</Button>
+                    <Modal isOpen={isOpen} onClose={onClose}>
+                      <ModalOverlay bg='blackAlpha.300'/>
+                      <ModalContent>
+                        <ModalHeader>Delete Zone</ModalHeader>
+                        <ModalBody>
+                          Are you sure you want to delete the Zone? It will delete the assiciated form too.
+                        </ModalBody>
+                        <ModalFooter>
+                          <Button variant="ghost" mr={3} onClick={onClose}>
+                            Close
+                          </Button>
+                          <Button colorScheme={'red'} variant="outline" onClick={() => dispatch(zoneDeleted(z.id))} >Delete zone</Button>
+                        </ModalFooter>
+                      </ModalContent>
+                    </Modal>
                   </AccordionPanel>
                 </AccordionItem>
               );

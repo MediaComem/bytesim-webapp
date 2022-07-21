@@ -48,12 +48,10 @@ const zonesSlice = createSlice({
         Object.assign(existingZone, action.payload);
       }
     },
-    // not working yet WIP
     zoneDeleted(state, action: PayloadAction<string>) {
       const existingZone = state.find((zone) => zone.id === action.payload);
       if (existingZone) {
-        console.log("hola");
-        state = state.filter((z) => z.id === action.payload);
+        state.splice(state.indexOf(existingZone), 1);
       }
     },
     zoneSelected(state, action: PayloadAction<string>) {
