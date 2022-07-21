@@ -31,7 +31,8 @@ export default function ZonesList() {
           <AccordionItem key={i} onClick={() => dispatch(zoneSelected(z.id))}>
             <h2>
               <AccordionButton
-                bg={z.status === "EDITING" ? "pink.100" : undefined}
+                bg={z.status === "EDITING" ? "brand.100" : undefined}
+                _hover={{ backgroundColor: "brand.100" }}
               >
                 <Box flex="1" textAlign="left">
                   {z.name}

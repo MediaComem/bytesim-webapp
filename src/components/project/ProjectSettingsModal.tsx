@@ -22,7 +22,7 @@ export default function ProjectSettingsModal() {
   const [projectNameI, setProjectNameI] = React.useState<string>(projectName);
   return (
     <>
-      <Button size="sm" onClick={onOpen} variant="outline" colorScheme={'pink'}>
+      <Button size="sm" onClick={onOpen} variant="outline" colorScheme={'brand'}>
         settings
       </Button>
       <Modal isOpen={isOpen} onClose={onClose}>

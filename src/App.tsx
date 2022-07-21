@@ -52,7 +52,7 @@ function App() {
                 dispatch(zoneAdded());
               }}
               size='sm'
-              colorScheme={'pink'}
+              colorScheme={'brand'}
             >
               + Create Zone
             </Button>

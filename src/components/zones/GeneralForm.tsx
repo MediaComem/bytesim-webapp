@@ -13,7 +13,7 @@ export default function GeneralFormAccordion() {
   return (
     <Accordion allowToggle>
       <AccordionItem>
-        <AccordionButton>
+        <AccordionButton _hover={{ backgroundColor: "brand.100" }}>
           <Box flex="1" textAlign="left">
             General
           </Box>

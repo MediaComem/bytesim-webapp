@@ -7,14 +7,13 @@ import { zoneSelected, zoneUpdated } from "../../features/zones/zonesSlice";
 import TestSVG from "../layout/TestSVG";
 
 const zoneStyle = css({
-    border: "3px solid red",
+    border: "3px solid violet",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
   });
   const selectedZoneStyle = css({
-    border: "3px solid blue",
-    boxShadow: "0px 0px 5px 1px blue",
+    border: "4px solid lightSeaGreen",
     fontWeight: "bold",
   });
 
