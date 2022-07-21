@@ -20,8 +20,12 @@ import { useDispatch } from "react-redux";
 import React from "react";
 import { setName } from "./features/project/projectSlice";
 import { Rnd } from "react-rnd";
-import { nanoid } from "@reduxjs/toolkit";
-import { zoneAdded, zoneDeleted, zoneSelected } from "./features/zones/zonesSlice";
+import {
+  zoneAdded,
+  zoneDeleted,
+  zoneSelected,
+  zoneUpdated,
+} from "./features/zones/zonesSlice";
 
 const panelStyle = css({
   border: "1px solid gray",
@@ -37,8 +41,8 @@ const zoneStyle = css({
 
 const selectedZoneStyle = css({
   border: "3px solid blue",
-  boxShadow: '0px 0px 5px 1px blue',
-  fontWeight: 'bold',
+  boxShadow: "0px 0px 5px 1px blue",
+  fontWeight: "bold",
 });
 
 function App() {
@@ -92,9 +96,20 @@ function App() {
                   </h2>
                   <AccordionPanel pb={4}>
                     <div>STATUS: {z.status}</div>
-                    <div>SIZE: {z.width}x{z.height}</div>
-                    <div>POSITION: left: {z.x}, top: {z.y}</div>
-                    <Button colorScheme={'red'} variant={'outline'} onClick={() => dispatch(zoneDeleted(z.id))}>Delete zone</Button>
+                    <div>
+                      SIZE: {z.width}x{z.height}
+                    </div>
+                    <div>
+                      POSITION: left: {z.x}, top: {z.y}
+                    </div>
+                    <div>INDEX: {z.index}</div>
+                    <Button
+                      colorScheme={"red"}
+                      variant={"outline"}
+                      onClick={() => dispatch(zoneDeleted(z.id))}
+                    >
+                      Delete zone
+                    </Button>
                   </AccordionPanel>
                 </AccordionItem>
               );
@@ -122,16 +137,7 @@ function App() {
             <Flex p={3}>
               <Button
                 onClick={() => {
-                  dispatch(zoneAdded({
-                    id: nanoid(),
-                    x: 100,
-                    y: 100,
-                    width: '100px',
-                    height: '100px',
-                    index: 1,
-                    name: `Zone ${zones.length + 1}`,
-                    status: "ACTIVE",
-                }));
+                  dispatch(zoneAdded());
                 }}
               >
                 + Create Zone
@@ -142,11 +148,11 @@ function App() {
               justify={"flex-start"}
               pos={"relative"}
               p={10}
-              overflow={'auto'}
+              overflow={"auto"}
               grow={1}
             >
               <div>
-              <TestSVG />
+                <TestSVG />
               </div>
               {zones.map((z, i) => {
                 return (
@@ -158,9 +164,29 @@ function App() {
                       width: z.width,
                       height: z.height,
                     }}
-                    className={cx(zoneStyle, { [selectedZoneStyle]: z.status === "EDITING" })}
+                    className={cx(zoneStyle, {
+                      [selectedZoneStyle]: z.status === "EDITING",
+                    })}
                     onMouseDown={() => dispatch(zoneSelected(z.id))}
                     enableResizing={z.status === "EDITING"}
+                    onResizeStop={(e, direction, ref, delta, position) => {
+                      const newZone = {
+                        id: z.id,
+                        x: position.x,
+                        y: position.y,
+                        width: z.width + delta.width,
+                        height: z.height + delta.height,
+                      };
+                      dispatch(zoneUpdated(newZone));
+                    }}
+                    onDragStop={(e, d) => {
+                      const newPos = {
+                        id: z.id,
+                        x: d.x,
+                        y: d.y,
+                      };
+                      dispatch(zoneUpdated(newPos));
+                    }}
                   >
                     {z.name}
                   </Rnd>
