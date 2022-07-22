@@ -3,6 +3,7 @@ import { Button, Flex, Text } from "@chakra-ui/react";
 import { css } from "@emotion/css";
 import { useDispatch } from "react-redux";
 import {
+  allZonesDeleted,
   zoneAdded,
 } from "./features/zones/zonesSlice";
 import Panel, { ResizablePanel } from "./components/layout/Panel";
@@ -27,7 +28,18 @@ function App() {
           {/* RecommandationsList */}
           {/* ExportButton */}
         </Panel>
-        <Panel title="Parameters" grow={1}>
+        <Panel title="Parameters" grow={1} toolbarButton={
+            <Button
+              onClick={() => {
+                dispatch(allZonesDeleted());
+              }}
+              size='sm'
+              colorScheme={'brand'}
+              variant='outline'
+            >
+              Reset all
+            </Button>
+          }>
           <GeneralFormAccordion />
           <ZonesList />
         </Panel>

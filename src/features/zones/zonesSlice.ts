@@ -63,10 +63,13 @@ const zonesSlice = createSlice({
         existingZone.status = "EDITING";
       }
     },
+    allZonesDeleted(state) {
+        state.length = 0;
+      }
   },
 });
 
-export const { zoneAdded, zoneDeleted, zoneSelected, zoneUpdated } =
+export const { zoneAdded, zoneDeleted, zoneSelected, zoneUpdated, allZonesDeleted } =
   zonesSlice.actions;
 // Other code such as selectors can use the imported `RootState` type
 export const selectZones = (state: RootState) => state.zones;
