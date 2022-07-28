@@ -20,10 +20,10 @@ import {
   MenuList,
   Collapse,
 } from "@chakra-ui/react";
-import React from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/hooks";
-import { PrettyZoneTypes } from "../../app/types";
+import { ZoneType } from "../../app/types";
+//import { PrettyZoneTypes } from "../../app/types";
 import {
   zoneSelected,
   zoneDeleted,
@@ -41,11 +41,10 @@ export default function ZonesList() {
       {zones.map((z, i) => {
         return (
           <AccordionItem key={i} onClick={() => dispatch(zoneSelected(z.id))} >
-            <h2>
+            <Flex bg={z.status === "EDITING" ? "brand.100" : undefined} _hover={{ backgroundColor: "brand.100" }}>
               <AccordionButton
-                bg={z.status === "EDITING" ? "brand.100" : undefined}
-                _hover={{ backgroundColor: "brand.100" }}
                 flexWrap="nowrap"
+                _hover={{ backgroundColor: "brand.100" }}
               >
                 <AccordionIcon onClick={() => Collapse} />
                 <Flex
@@ -57,19 +56,23 @@ export default function ZonesList() {
                   <Text whiteSpace="nowrap">{z.name}</Text>
                   {z.zoneType && (
                     <Text fontSize={"sm"} color={"gray"} whiteSpace="nowrap">
-                      ({PrettyZoneTypes(z.zoneType)})
+                      {Object.entries(ZoneType).find(s => s[0] === z.zoneType)?.[1]}
                     </Text>
                   )}
                 </Flex>
-                <Menu>
+              </AccordionButton>
+              <Menu>
                   <MenuButton
                     as={Button}
-                    variant="outline"
                     aria-label="Options"
+                    colorScheme={"brand"}
+                    variant="outline"
                     fontSize={"xs"}
-                    p={2}
+                    size='xs'
+                    m={2}
+                    minW={'fit-content'}
                   >
-                    menu
+                    <div>menu</div>
                   </MenuButton>
                   <MenuList>
                     {z.zoneType && (
@@ -89,8 +92,7 @@ export default function ZonesList() {
                     </MenuItem>
                   </MenuList>
                 </Menu>
-              </AccordionButton>
-            </h2>
+            </Flex>
             <AccordionPanel pb={4}>
               <ZoneForm zone={z} />
               <Modal isOpen={isOpen} onClose={onClose}>

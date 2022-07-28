@@ -3,6 +3,7 @@ export interface Project {
   name: string;
   status: ProjectStatus;
 }
+
 export interface User {
   id: string;
   status: UserStatus;
@@ -19,61 +20,126 @@ export interface Zone {
   height: number;
   zoneType?: ZoneType;
   status: ZoneStatus;
+  params?: ZoneParamsType;
 }
 
 export type ProjectStatus = "EDITING" | "SIMULATION" | "LOADING";
 export type ZoneStatus = "EDITING" | "ACTIVE" | "LOADING";
 export type UserStatus = "CONNECTED" | "AFK" | "LOADING";
 
-export const zoneTypes = [
-  "VIDEO",
-  "IMGS",
-  "TXT",
-  "SEARCH",
-  "DYN_MAP",
-  "ADS",
-  "SOCIAL_NETWORK",
-  "3D",
-  "OTHER_DYN_CONTENT",
-] as const;
-export type ZoneType = typeof zoneTypes[number];
-export function PrettyZoneTypes(type: ZoneType) {
-  switch (type) {
-    case "VIDEO":
-      return "Video";
-    case "IMGS":
-      return "Images";
-    case "TXT":
-      return "Text";
-    case "SEARCH":
-      return "Search";
-    case "DYN_MAP":
-      return "Dynamic map";
-    case "ADS":
-      return "Advertisment";
-    case "SOCIAL_NETWORK":
-      return "Social network";
-    case "3D":
-      return "3D element";
-    case "OTHER_DYN_CONTENT":
-      return "Other dynamic content";
-  }
+export enum ZoneType {
+  Video = "Video",
+  Imgs = "Images",
+  Text = "Text",
+  DynContent = "Dynamic content",
 }
 
-export const imgFormats = ["PNG", "JPG", "SVG", "OTHER"] as const;
-export type ImgFormat = typeof imgFormats[number];
-export const videoFormats = ["MP4", "AVI", "MKV", "MOV", "OTHER"] as const;
-export type VideoFormat = typeof videoFormats[number];
-export const imgQualities = ["> 100ko", "100 - 500ko", "> 500ko"] as const;
-export type ImgQuality = typeof imgQualities[number];
-export const videoQualities = ["> 300ko", "300 - 900ko", "> 900ko"] as const;
-export type VideoQuality = typeof videoQualities[number];
-export const serverTypes = [
+/* export function PrettyZoneTypes(type: ZoneType) {
+  switch (type as ZoneType) {
+    case 'Video':
+      return "Video";
+    case "Imgs":
+      return "Images";
+    case "Text":
+      return "Text";
+    case "DynContent":
+      return "Search";
+  }
+}*/
+
+// Formulaires general + zone
+// not complete form zone + general
+// store in localstorage -> lib?
+// front des reco (components)
+// Reco dans le store
+// Modele de calcul -> video pour le POC, 1 par type
+// Modele de reco
+//Zone View à adapter pour différents formats d'image svg de base
+// création de PDF
+
+export enum ImgFormat {
+  "PNG",
+  "JPG",
+  "SVG",
+  "OTHER",
+}
+
+export enum ImgQuality {
+  "> 100ko",
+  "100 - 500ko",
+  "> 500ko",
+}
+
+// --------------- VIDEO
+// -------VIDEO Format
+//NOT USED YET
+export enum EVideoFormat {
+  "GIF",
+  "Video",
+  "OTHER",
+}
+
+export const OVideoFormat = [
+  "GIF",
+  "Video",
+  "OTHER",
+ ] as const;
+
+type VideoFormat = typeof OVideoFormat[number];
+
+// -------VIDEO Quality
+//NOT USED YET
+export enum EVideoQuality {
+  "< 480p",
+  "720p",
+  "1080p",
+  "> 1080p (HD, 4K)",
+}
+
+export const OVideoQuality = [
+  "< 480p",
+  "720p",
+  "1080p",
+  "> 1080p (HD, 4K)",
+] as const;
+
+type VideoQuality = typeof OVideoQuality[number];
+
+// -------VIDEO Duration
+//not used yet
+export enum EVideoDuration {
+  "< 10s",
+  "10 - 30s",
+  "30s - 2min",
+  "2min - 5min",
+  "> 5min",
+}
+
+export const OVideoDuration = [
+  "< 10s",
+  "10 - 30s",
+  "30s - 2min",
+  "2min - 5min",
+  "> 5min",
+] as const;
+
+type VideoDuration = typeof OVideoDuration[number];
+
+export enum ServerType {
   "RENEWABLE_ENERGY",
   "NON_RENEWABLE_ENERGY",
   "UNDEFINED",
-] as const;
-export type ServerType = typeof serverTypes[number];
+}
+
+export enum Boolean {
+  "Yes" = 1,
+  "No" = 0,
+}
+
+export const OBoolean = [
+  "Yes",
+  "No",
+]
 
 export interface GeneralForm {
   nbVisit: number;
@@ -89,31 +155,35 @@ export interface ImgForm {
   quality: ImgQuality;
 }
 
-export interface VideoForm {
+/* export interface StockImgFormat {
   format: VideoFormat;
-  autoplay: boolean;
-  durationMin: number;
+  quantity: number;
   quality: VideoQuality;
 }
-export function getZoneTypeForm(type: ZoneType) {
-  switch (type) {
-    case "VIDEO":
-      return "Video";
-    case "IMGS":
-      return "Images";
-    case "TXT":
-      return "Text";
-    case "SEARCH":
-      return "Search";
-    case "DYN_MAP":
-      return "Dynamic map";
-    case "ADS":
-      return "Advertisment";
-    case "SOCIAL_NETWORK":
-      return "Social network";
-    case "3D":
-      return "3D element";
-    case "OTHER_DYN_CONTENT":
-      return "Other dynamic content";
+ */
+export const VideoFormEntries = {
+  format: OVideoFormat,
+  quality: OVideoQuality,
+  durationMin: OVideoDuration,
+  autoplay: Boolean,
+  loop: Boolean,
+}
+
+export interface StockVideoFormat {
+  format: VideoFormat;
+  quality: VideoQuality;
+  durationMin: VideoDuration;
+  autoplay: Boolean;
+  loop: Boolean;
+}
+// + StockImgFormat
+export type ZoneParamsType = StockVideoFormat;
+
+export function getZoneFormEntries(zoneType?: ZoneType) {
+  switch (zoneType) {
+    case "Video":
+      return VideoFormEntries;
+    default:
+      return undefined;
   }
 }
