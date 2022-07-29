@@ -1,7 +1,7 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import { Zone } from "../../app/types";
+import { Zone } from "../../app/types/types";
 
 const initialState: Zone[] = [];
 

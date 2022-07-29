@@ -9,11 +9,10 @@ import {
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import {
-  StockVideoFormat,
-  VideoFormEntries,
   Zone,
   ZoneType,
-} from "../../app/types";
+} from "../../app/types/types";
+import { StockVideoFormat, VideoFormEntries } from "../../app/types/videoTypes";
 import { zoneUpdated } from "../../features/zones/zonesSlice";
 
 interface ZoneParamsProps {
@@ -40,8 +39,9 @@ export default function ZoneParams({ zone }: ZoneParamsProps) {
           <TypeForm value={value} setValue={setValue} />
           <Button
             onClick={() => {
-              dispatch(zoneUpdated({ id: zone.id, zoneType: value }));
-              setStep("ZoneForm");
+              console.log(value);
+              console.log(zone.zoneType);
+              if (value !== zone.zoneType) { dispatch(zoneUpdated({ id: zone.id, zoneType: value, params: undefined })); }
             }}
             isDisabled={!value}
           >
@@ -93,13 +93,10 @@ function ZoneForm({ zone }: ZoneFormProps) {
 
 function VideoForm({ zone }: ZoneFormProps) {
   const dispatch = useDispatch();
-  console.log(zone.params);
   return (
     <Flex direction={"column"}>
       <div>
         {Object.entries(VideoFormEntries).map(([key, value]) => {
-          //const entryName = entry[0];
-          //console.log(value ? value[entryName] : undefined);
           return (
             <div key={key}>
               <Heading size="sm">{key}</Heading>
@@ -107,7 +104,7 @@ function VideoForm({ zone }: ZoneFormProps) {
                 value={ zone.params ? Number(zone.params[key as keyof StockVideoFormat]) : undefined }
               >
                 <Stack>
-                  {Object.values(value).map((data, index) => (
+                  {Object.values(value).filter(v => typeof v !== "number").map((data, index) => (
                     <Radio
                       colorScheme={"brand"}
                       key={index}

@@ -33,7 +33,7 @@ export default function ZonesView() {
     <div>
       <TestSVG />
     </div>
-    {zones.map((z, i) => {
+    {zones.map((z) => {
       return (
         <Rnd
           key={z.id}

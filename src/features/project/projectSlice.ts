@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import { Project } from "../../app/types";
+import { Project } from "../../app/types/types";
 
 // const nbZones = useAppSelector((state) => state.project.zones.length);
 
