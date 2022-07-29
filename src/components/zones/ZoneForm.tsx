@@ -9,7 +9,7 @@ import {
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import {
-  getZoneFormEntries,
+  StockVideoFormat,
   VideoFormEntries,
   Zone,
   ZoneType,
@@ -78,87 +78,63 @@ interface ZoneFormProps {
   zone: Zone;
 }
 function ZoneForm({ zone }: ZoneFormProps) {
-  const zoneFormEntries = getZoneFormEntries(zone.zoneType);
-  //const zoneParams = zone.params;
-  /*   const [value, setValue] = React.useState<ZoneParamsType | undefined>(
-    zoneParams
-  ); */
-  if (zoneFormEntries) {
-    // for POC, only Video form implemented
-    if (zone.zoneType === "Video") {
-      return (
-        <>
-          <VideoForm zone={zone} />
-        </>
-      );
-    } else if (zone.zoneType) {
-      return (
-        <Flex>Oops! Sorry, {zone.zoneType} form not implemented yet.</Flex>
-      );
-    } else {
-      return <Flex>Oops! Error.</Flex>;
-    }
-  } else {
-    return <div>Error, sorry.</div>;
+  const notImplementedYet = <Flex>Oops! Sorry, {zone.zoneType} form not implemented yet.</Flex>;
+  switch (zone.zoneType) {
+    case 'Video':
+      return (<VideoForm zone={zone} />);
+    case 'Images':
+      return (notImplementedYet);
+    case 'Text':
+      return (notImplementedYet);
+    default:
+      return (notImplementedYet);
   }
 }
 
-/* export const VideoFormEntries = {
-  format: VideoFormat,
-  quality: VideoQuality,
-  durationMin: VideoDuration,
-  autoplay: Boolean,
-  loop: Boolean,
-
-STOCKVIDEOFORMAT
-  format: 0,
-  quality: 0,
-  durationMin: 0,
-  autoplay: 0,
-  loop: 0,
-} */
 function VideoForm({ zone }: ZoneFormProps) {
-  //console.log(Object.entries(VideoFormEntries));
-  // recup la valeur dans le store
-  // zone.params ? zone.params.format : undefined
-  /* const [value, setValue] = React.useState<StockVideoFormat | undefined>(
-    undefined
-  ); */
-  //const dispatch = useDispatch();
-  console.log(zone);
+  const dispatch = useDispatch();
+  console.log(zone.params);
   return (
     <Flex direction={"column"}>
       <div>
-        {Object.entries(VideoFormEntries).map((entry) => {
+        {Object.entries(VideoFormEntries).map(([key, value]) => {
           //const entryName = entry[0];
           //console.log(value ? value[entryName] : undefined);
           return (
-            <div key={entry[0]}>
-              <Heading size="sm">{entry[0]}</Heading>
-              <RadioGroup value={
-                //value[entry[0]] ? value[entry[1]] :
-                2}>
+            <div key={key}>
+              <Heading size="sm">{key}</Heading>
+              <RadioGroup
+                value={ zone.params ? Number(zone.params[key as keyof StockVideoFormat]) : undefined }
+              >
                 <Stack>
-                  </Stack>
+                  {Object.values(value).map((data, index) => (
+                    <Radio
+                      colorScheme={"brand"}
+                      key={index}
+                      value={index}
+                      onChange={() => {
+                        const newPos = {
+                          id: zone.id,
+                          params: { ...zone.params, [key]: index }
+                        };
+                        dispatch(zoneUpdated(newPos));
+                      }}
+                    >
+                      {data}
+                    </Radio>
+                  ))}
+                </Stack>
               </RadioGroup>
             </div>
           );
         })}
       </div>
-      {/* <Button
-        onClick={() => {
-          dispatch(zoneUpdated({ id: zone.id, params: value }));
-        }}
-        isDisabled={!value}
-      >
-        PUT IN STORE
-      </Button> */}
     </Flex>
   );
 }
 
 // ARCHIVES: work on form with enums as forms types.
-              /* <RadioGroup value={
+/* <RadioGroup value={
                 //value[entry[0]] ? value[entry[1]] :
                 2}>
                 <Stack>
@@ -186,7 +162,7 @@ function VideoForm({ zone }: ZoneFormProps) {
                     })}
                 </Stack>
               </RadioGroup> */
-              /* <div>
+/* <div>
                 {Object.keys(entry[1])
                   .filter((e) => isNaN(Number(e)))
                   .map((x, i) => {

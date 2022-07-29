@@ -83,9 +83,10 @@ export const OVideoFormat = [
   "GIF",
   "Video",
   "OTHER",
- ] as const;
+ ];
 
-type VideoFormat = typeof OVideoFormat[number];
+export type VideoFormatKeys = keyof typeof OVideoFormat;
+export type VideoFormat = keyof typeof OVideoFormat;
 
 // -------VIDEO Quality
 //NOT USED YET
@@ -170,20 +171,11 @@ export const VideoFormEntries = {
 }
 
 export interface StockVideoFormat {
-  format: VideoFormat;
-  quality: VideoQuality;
-  durationMin: VideoDuration;
-  autoplay: Boolean;
-  loop: Boolean;
+  format?: VideoFormat;
+  quality?: keyof VideoQuality;
+  durationMin?: keyof VideoDuration;
+  autoplay?: keyof Boolean;
+  loop?: keyof Boolean;
 }
 // + StockImgFormat
 export type ZoneParamsType = StockVideoFormat;
-
-export function getZoneFormEntries(zoneType?: ZoneType) {
-  switch (zoneType) {
-    case "Video":
-      return VideoFormEntries;
-    default:
-      return undefined;
-  }
-}
