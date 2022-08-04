@@ -1,22 +1,18 @@
 import {
-  AccordionButton,
-  AccordionIcon,
   AccordionItem,
   AccordionPanel,
-  Box,
+  Button,
   Flex,
   Text,
 } from "@chakra-ui/react";
+import AccordionItemTitleWithButton from "../layout/AccordionItemTitleWithButton";
 
 export default function GeneralFormAccordion() {
   return (
     <AccordionItem>
-      <AccordionButton _hover={{ backgroundColor: "brand.100" }} pl={2}>
-        <AccordionIcon />
-        <Box flex="1" textAlign="left">
-          General
-        </Box>
-      </AccordionButton>
+      <AccordionItemTitleWithButton label='General' p={2}>
+        <Button variant={'ghost'} size='sm'>Reset ⟳</Button>
+      </AccordionItemTitleWithButton>
       <AccordionPanel>
         <GeneralForm />
       </AccordionPanel>

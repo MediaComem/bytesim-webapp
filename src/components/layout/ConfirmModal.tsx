@@ -2,6 +2,7 @@ import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Modal
 import * as React from 'react';
 
 interface ConfirmModalProps {
+headerText: string;
 message: string | React.ReactNode;
 buttonLabel: string;
 confrimeButtonClassName?: string;
@@ -9,15 +10,14 @@ isOpen: boolean;
 onClose: () => void;
 onConfirm: () => void;
 }
-export default function ConfirmModal({ isOpen, onClose, onConfirm }:ConfirmModalProps) {
+export default function ConfirmModal({ headerText, message, buttonLabel, isOpen, onClose, onConfirm }:ConfirmModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay bg="blackAlpha.300" />
       <ModalContent>
-        <ModalHeader>Delete Zone</ModalHeader>
+        <ModalHeader>{headerText}</ModalHeader>
         <ModalBody>
-          Are you sure you want to delete the Zone? It will delete the
-          assiciated form too.
+          {message}
         </ModalBody>
         <ModalFooter>
           <Button variant="ghost" mr={3} onClick={onClose}>
@@ -32,7 +32,7 @@ export default function ConfirmModal({ isOpen, onClose, onConfirm }:ConfirmModal
               onClose();
             }} */
           >
-            Delete zone
+            {buttonLabel}
           </Button>
         </ModalFooter>
       </ModalContent>

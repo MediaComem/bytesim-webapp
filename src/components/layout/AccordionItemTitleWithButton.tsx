@@ -1,19 +1,19 @@
-import { AccordionButton, AccordionIcon, Flex } from "@chakra-ui/react";
+import { AccordionButton, AccordionIcon, BackgroundProps, Flex, SpaceProps } from "@chakra-ui/react";
 import { css, cx } from "@emotion/css";
 import * as React from "react";
-interface AccordionItemWithButtonProps {
-  bg?: string;
+interface AccordionItemTitleWithButtonProps extends SpaceProps, BackgroundProps {
   hoverBgColor?: string;
   label: string | React.ReactNode;
   children: React.ReactNode;
   hiddenButtons?: boolean;
 }
-export default function AccordionItemWithButton({
+export default function AccordionItemTitleWithButton({
   label,
   children,
   bg,
+  p,
   hoverBgColor,
-}: AccordionItemWithButtonProps) {
+}: AccordionItemTitleWithButtonProps) {
   return (
     <Flex
       bg={bg}
@@ -23,10 +23,12 @@ export default function AccordionItemWithButton({
           visibility: "visible",
         },
       }}
+      align='center'
     >
       <AccordionButton
         flexWrap="nowrap"
         _hover={{ backgroundColor: hoverBgColor || "brand.100" }}
+        p={p}
       >
         <AccordionIcon />
         {label}

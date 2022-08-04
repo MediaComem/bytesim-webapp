@@ -37,6 +37,7 @@
         "error",
         { "argsIgnorePattern": "^_" }
     ],
-    "dot-notation": "off"
+    "dot-notation": "off",
+    "func-call-spacing": "off"
   }
 }

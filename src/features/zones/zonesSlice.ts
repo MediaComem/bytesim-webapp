@@ -70,13 +70,19 @@ const zonesSlice = createSlice({
         existingZone.status = "EDITING";
       }
     },
+    allZonesReset(state) {
+      state.forEach((z) => {
+        z.params = undefined;
+        z.zoneType = undefined;
+      });
+    },
     allZonesDeleted(state) {
         state.length = 0;
       }
   },
 });
 
-export const { zoneAdded, zoneDeleted, zoneSelected, zoneUpdated, zoneReset, allZonesDeleted } =
+export const { zoneAdded, zoneDeleted, zoneSelected, zoneUpdated, zoneReset, allZonesReset, allZonesDeleted } =
   zonesSlice.actions;
 // Other code such as selectors can use the imported `RootState` type
 export const selectZones = (state: RootState) => state.zones;
