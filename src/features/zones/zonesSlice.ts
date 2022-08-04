@@ -48,6 +48,13 @@ const zonesSlice = createSlice({
         Object.assign(existingZone, action.payload);
       }
     },
+    zoneReset(state, action: PayloadAction<string>) {
+      const existingZone = state.find((zone) => zone.id === action.payload);
+      if (existingZone) {
+        existingZone.zoneType = undefined;
+        existingZone.params = undefined;
+      }
+    },
     zoneDeleted(state, action: PayloadAction<string>) {
       const existingZone = state.find((zone) => zone.id === action.payload);
       if (existingZone) {
@@ -69,7 +76,7 @@ const zonesSlice = createSlice({
   },
 });
 
-export const { zoneAdded, zoneDeleted, zoneSelected, zoneUpdated, allZonesDeleted } =
+export const { zoneAdded, zoneDeleted, zoneSelected, zoneUpdated, zoneReset, allZonesDeleted } =
   zonesSlice.actions;
 // Other code such as selectors can use the imported `RootState` type
 export const selectZones = (state: RootState) => state.zones;

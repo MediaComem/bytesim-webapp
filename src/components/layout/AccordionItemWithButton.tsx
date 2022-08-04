@@ -1,10 +1,12 @@
 import { AccordionButton, AccordionIcon, Flex } from "@chakra-ui/react";
+import { css, cx } from "@emotion/css";
 import * as React from "react";
 interface AccordionItemWithButtonProps {
   bg?: string;
   hoverBgColor?: string;
   label: string | React.ReactNode;
   children: React.ReactNode;
+  hiddenButtons?: boolean;
 }
 export default function AccordionItemWithButton({
   label,
@@ -13,7 +15,15 @@ export default function AccordionItemWithButton({
   hoverBgColor,
 }: AccordionItemWithButtonProps) {
   return (
-    <Flex bg={bg} _hover={{ backgroundColor: hoverBgColor || "brand.100" }}>
+    <Flex
+      bg={bg}
+      _hover={{
+        backgroundColor: hoverBgColor || "brand.100",
+        ".visibleOnHover": {
+          visibility: "visible",
+        },
+      }}
+    >
       <AccordionButton
         flexWrap="nowrap"
         _hover={{ backgroundColor: hoverBgColor || "brand.100" }}
@@ -21,7 +31,9 @@ export default function AccordionItemWithButton({
         <AccordionIcon />
         {label}
       </AccordionButton>
-      {children}
+      <div className={cx("visibleOnHover ", css({ visibility: "hidden" }))}>
+        {children}
+      </div>
     </Flex>
   );
 }
