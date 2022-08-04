@@ -32,11 +32,11 @@ export default function ZoneParams({ zone }: ZoneParamsProps) {
     <Flex direction={"column"}>
       {step === "ZoneForm" && value ? (
         <>
-          <ZoneForm zone={zone} />
+          <ZoneParamsForm zone={zone} />
         </>
       ) : (
         <>
-          <TypeForm value={value} setValue={setValue} />
+          <ZoneTypeForm value={value} setValue={setValue} />
           <Button
             onClick={() => {
               console.log(value);
@@ -52,11 +52,11 @@ export default function ZoneParams({ zone }: ZoneParamsProps) {
     </Flex>
   );
 }
-interface TypeProps {
+interface ZoneTypeFormProps {
   value: ZoneType | undefined;
   setValue: React.Dispatch<React.SetStateAction<ZoneType | undefined>>;
 }
-function TypeForm({ value, setValue }: TypeProps) {
+function ZoneTypeForm({ value, setValue }: ZoneTypeFormProps) {
   return (
     <RadioGroup value={value}>
       <Stack>
@@ -74,10 +74,10 @@ function TypeForm({ value, setValue }: TypeProps) {
     </RadioGroup>
   );
 }
-interface ZoneFormProps {
+interface ZoneParamsFormProps {
   zone: Zone;
 }
-function ZoneForm({ zone }: ZoneFormProps) {
+function ZoneParamsForm({ zone }: ZoneParamsFormProps) {
   const notImplementedYet = <Flex>Oops! Sorry, {zone.zoneType} form not implemented yet.</Flex>;
   switch (zone.zoneType) {
     case 'Video':
@@ -91,7 +91,8 @@ function ZoneForm({ zone }: ZoneFormProps) {
   }
 }
 
-function VideoForm({ zone }: ZoneFormProps) {
+// TO DO after POC: make it abstract for all zone types
+function VideoForm({ zone }: ZoneParamsFormProps) {
   const dispatch = useDispatch();
   return (
     <Flex direction={"column"}>
@@ -129,40 +130,3 @@ function VideoForm({ zone }: ZoneFormProps) {
     </Flex>
   );
 }
-
-// ARCHIVES: work on form with enums as forms types.
-/* <RadioGroup value={
-                //value[entry[0]] ? value[entry[1]] :
-                2}>
-                <Stack>
-                  {Object.entries(entry[1])
-                    .filter((e) => isNaN(Number(e)))
-                    .map((x, i) => {
-                      return (
-                        <Radio
-                          colorScheme={"brand"}
-                          key={i}
-                          value={Number(x[0])}
-                          onChange={() =>
-                            setValue({
-                              format: 0,
-                              quality: 0,
-                              durationMin: 0,
-                              autoplay: 0,
-                              loop: 0,
-                            })
-                          }
-                        >
-                          {x}
-                        </Radio>
-                      );
-                    })}
-                </Stack>
-              </RadioGroup> */
-/* <div>
-                {Object.keys(entry[1])
-                  .filter((e) => isNaN(Number(e)))
-                  .map((x, i) => {
-                    return <div key={i}>{x}</div>;
-                  })}
-              </div> */

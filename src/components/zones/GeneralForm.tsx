@@ -1,5 +1,4 @@
 import {
-  Accordion,
   AccordionButton,
   AccordionIcon,
   AccordionItem,
@@ -11,19 +10,17 @@ import {
 
 export default function GeneralFormAccordion() {
   return (
-    <Accordion allowToggle>
-      <AccordionItem>
-        <AccordionButton _hover={{ backgroundColor: "brand.100" }}>
-          <Box flex="1" textAlign="left">
-            General
-          </Box>
-          <AccordionIcon />
-        </AccordionButton>
-        <AccordionPanel>
-          <GeneralForm />
-        </AccordionPanel>
-      </AccordionItem>
-    </Accordion>
+    <AccordionItem>
+      <AccordionButton _hover={{ backgroundColor: "brand.100" }} pl={2}>
+        <AccordionIcon />
+        <Box flex="1" textAlign="left">
+          General
+        </Box>
+      </AccordionButton>
+      <AccordionPanel>
+        <GeneralForm />
+      </AccordionPanel>
+    </AccordionItem>
   );
 }
 

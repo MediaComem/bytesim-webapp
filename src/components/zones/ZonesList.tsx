@@ -12,7 +12,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  Collapse,
+  Box,
 } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/hooks";
@@ -23,6 +23,7 @@ import {
   zoneDeleted,
   zoneUpdated,
 } from "../../features/zones/zonesSlice";
+import AccordionItemWithButton from "../layout/AccordionItemWithButton";
 import ConfirmModal from "../layout/ConfirmModal";
 import ZoneParams from "./ZoneParams";
 
@@ -31,30 +32,43 @@ export default function ZonesList() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const zones = useAppSelector((state) => state.zones);
   return (
-    <Accordion allowToggle>
-      {zones.map((z, i) => {
-        return (
-          <AccordionItem key={i} onClick={() => dispatch(zoneSelected(z.id))}>
-            <ZoneListButton zone={z} onOpen={onOpen} />
-            <AccordionPanel pb={4}>
-              <ZoneParams zone={z} />
-            </AccordionPanel>
-            <ConfirmModal
-              message={
-                "Are you sure you want to delete the Zone? It will delete the associated form too."
-              }
-              buttonLabel={"Delete Zone"}
-              isOpen={isOpen}
-              onClose={onClose}
-              onConfirm={() => {
-                dispatch(zoneDeleted(z.id));
-                onClose();
-              }}
-            />
-          </AccordionItem>
-        );
-      })}
-    </Accordion>
+    <AccordionItem>
+      <AccordionButton _hover={{ backgroundColor: "brand.100" }} pl={2}>
+        <AccordionIcon />
+        <Box flex="1" textAlign="left">
+          Drawn Zones
+        </Box>
+      </AccordionButton>
+      <AccordionPanel p={0}>
+        <Accordion allowToggle>
+          {zones.map((z, i) => {
+            return (
+              <AccordionItem
+                key={i}
+                onClick={() => dispatch(zoneSelected(z.id))}
+              >
+                <ZoneListButton zone={z} onOpen={onOpen} />
+                <AccordionPanel pb={4} pl={4}>
+                  <ZoneParams zone={z} />
+                </AccordionPanel>
+                <ConfirmModal
+                  message={
+                    "Are you sure you want to delete the Zone? It will delete the associated form too."
+                  }
+                  buttonLabel={"Delete Zone"}
+                  isOpen={isOpen}
+                  onClose={onClose}
+                  onConfirm={() => {
+                    dispatch(zoneDeleted(z.id));
+                    onClose();
+                  }}
+                />
+              </AccordionItem>
+            );
+          })}
+        </Accordion>
+      </AccordionPanel>
+    </AccordionItem>
   );
 }
 
@@ -65,34 +79,24 @@ interface ZoneListButtonProps {
 function ZoneListButton({ zone, onOpen }: ZoneListButtonProps) {
   const dispatch = useDispatch();
   return (
-    <Flex
-      bg={zone.status === "EDITING" ? "brand.100" : undefined}
-      _hover={{ backgroundColor: "brand.100" }}
+    <AccordionItemWithButton bg={zone.status === "EDITING" ? "brand.100" : undefined} label={<Flex
+      flex="1"
+      align={"baseline"}
+      fontStyle={zone.zoneType ? "normal" : "italic"}
+      gap={2}
     >
-      <AccordionButton
-        flexWrap="nowrap"
-        _hover={{ backgroundColor: "brand.100" }}
-      >
-        <AccordionIcon onClick={() => Collapse} />
-        <Flex
-          flex="1"
-          align={"baseline"}
-          fontStyle={zone.zoneType ? "normal" : "italic"}
-          gap={2}
-        >
-          <Text whiteSpace="nowrap">{zone.name}</Text>
-          {zone.zoneType && (
-            <Text fontSize={"sm"} color={"gray"} whiteSpace="nowrap">
-              {
-                Object.entries(ZoneType).find(
-                  (s) => s[0] === zone.zoneType
-                )?.[1]
-              }
-            </Text>
-          )}
-        </Flex>
-      </AccordionButton>
-      <Menu>
+      <Text whiteSpace="nowrap">{zone.name}</Text>
+      {zone.zoneType && (
+        <Text fontSize={"sm"} color={"gray"} whiteSpace="nowrap">
+          {
+            Object.entries(ZoneType).find(
+              (s) => s[0] === zone.zoneType
+            )?.[1]
+          }
+        </Text>
+      )}
+    </Flex>}>
+    <Menu>
         <MenuButton
           as={Button}
           aria-label="Options"
@@ -121,6 +125,6 @@ function ZoneListButton({ zone, onOpen }: ZoneListButtonProps) {
           </MenuItem>
         </MenuList>
       </Menu>
-    </Flex>
+    </AccordionItemWithButton>
   );
 }
