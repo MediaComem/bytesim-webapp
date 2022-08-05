@@ -5,7 +5,7 @@ export interface Project {
   id: number;
   name: string;
   status: ProjectStatus;
-  params?: ProjectParamsType;
+  params?: StockGeneralFormat;
 }
 
 export interface User {
@@ -38,15 +38,14 @@ export enum ZoneType {
   DynContent = "Dynamic content",
 }
 
-export type ZoneParamsType = StockVideoFormat // | ImgFormat | TextFormat
-export type ProjectParamsType = StockGeneralFormat;
+export type FormsType = ZoneParamsType | StockGeneralFormat;
+export type ZoneParamsType = StockVideoFormat; // | ImgFormat | TextFormat
 
 export enum EBoolean {
   "Yes" = 1,
   "No" = 0,
 }
 
-// Formulaires general
 // not complete form zone + general
 // front des reco (components)
 // Reco dans le store

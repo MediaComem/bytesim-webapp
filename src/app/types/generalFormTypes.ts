@@ -1,9 +1,9 @@
 import { EBoolean } from "./types";
 
 export enum ServerType {
-    "RENEWABLE_ENERGY",
-    "NON_RENEWABLE_ENERGY",
-    "UNDEFINED",
+    "Renewable energy",
+    "Non renewable energy",
+    "Do not know",
   }
 
   export const GeneralFormEntries = {

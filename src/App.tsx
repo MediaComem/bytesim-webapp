@@ -34,7 +34,7 @@ function App() {
           </Text>
           <div>
             <p>PROJECT: {project.name}</p>
-            <p>{typeof project.params?.nbVisit}</p>
+            <p>{project.params?.nbVisit}</p>
             <p>{project.params?.server}</p>
             <p>{project.params?.plugins}</p>
             <p>{project.params?.genericFont}</p>

@@ -2,8 +2,6 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import { Project } from "../../app/types/types";
 
-// const nbZones = useAppSelector((state) => state.project.zones.length);
-
 const initialState: Project = {
   id: 1,
   name: "Main project",
@@ -20,17 +18,14 @@ const projectSlice = createSlice({
     projectReset: (state) => {
       state.params = undefined;
     },
-    projectUpdated(
-      state,
-      action: PayloadAction<Partial<Project>>
-    ) {
-        Object.assign(state, action.payload);
+    projectUpdated(state, action: PayloadAction<Partial<Project>>) {
+      Object.assign(state, action.payload);
     },
-  }
+  },
 });
 
-export const { setName, projectReset, projectUpdated } = projectSlice.actions
+export const { setName, projectReset, projectUpdated } = projectSlice.actions;
 // Other code such as selectors can use the imported `RootState` type
-export const selectProject = (state: RootState) => state.project
+export const selectProject = (state: RootState) => state.project;
 
 export default projectSlice.reducer;

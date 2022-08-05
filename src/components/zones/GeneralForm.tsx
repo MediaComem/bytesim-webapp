@@ -21,25 +21,41 @@ import {
   GeneralFormEntries,
   StockGeneralFormat,
 } from "../../app/types/generalFormTypes";
+import { Project } from "../../app/types/types";
 import {
   projectReset,
   projectUpdated,
 } from "../../features/project/projectSlice";
 import AccordionItemTitleWithButton from "../layout/AccordionItemTitleWithButton";
 import ConfirmModal from "../layout/ConfirmModal";
+import ProgressPoints from "../layout/ProgressPoints";
 
 export default function GeneralFormAccordion() {
+  const project = useAppSelector((state) => state.project);
   const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <AccordionItem>
-      <AccordionItemTitleWithButton label="General" p={2}>
+      <AccordionItemTitleWithButton
+        p={2}
+        label={
+          <>
+            <Flex align={"center"}>
+              <Heading size={"sm"}>General</Heading>
+              <ProgressPoints
+                completeObject={GeneralFormEntries}
+                params={project.params}
+              />
+            </Flex>
+          </>
+        }
+      >
         <Button variant={"ghost"} size="sm" onClick={onOpen}>
           Reset ⟳
         </Button>
       </AccordionItemTitleWithButton>
       <AccordionPanel>
-        <GeneralForm />
+        <GeneralForm project={project} />
       </AccordionPanel>
       <ConfirmModal
         headerText={"Reset general form"}
@@ -58,8 +74,7 @@ export default function GeneralFormAccordion() {
   );
 }
 
-function GeneralForm() {
-  const project = useAppSelector((state) => state.project);
+function GeneralForm({ project }: { project: Project }) {
   const dispatch = useDispatch();
   return (
     <Flex>
@@ -67,7 +82,9 @@ function GeneralForm() {
         {Object.entries(GeneralFormEntries).map(([key, value]) => {
           return (
             <div key={key}>
-              <Heading size="sm">{key}</Heading>
+              <Heading size="sm" my={2}>
+                {key}
+              </Heading>
               <RadioGroup
                 value={
                   project.params
@@ -102,6 +119,7 @@ function GeneralForm() {
                             };
                             dispatch(projectUpdated(newParams));
                           }}
+                          size="sm"
                         >
                           {data}
                         </Radio>
@@ -136,6 +154,7 @@ function NumberInputCustom({
       min={min}
       step={step}
       onChange={onChange}
+      size="sm"
     >
       <NumberInputField />
       <NumberInputStepper>
