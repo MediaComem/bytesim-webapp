@@ -16,11 +16,20 @@ const projectSlice = createSlice({
   reducers: {
     setName: (state, action: PayloadAction<string>) => {
       state.name = action.payload;
-    }
+    },
+    projectReset: (state) => {
+      state.params = undefined;
+    },
+    projectUpdated(
+      state,
+      action: PayloadAction<Partial<Project>>
+    ) {
+        Object.assign(state, action.payload);
+    },
   }
 });
 
-export const { setName } = projectSlice.actions
+export const { setName, projectReset, projectUpdated } = projectSlice.actions
 // Other code such as selectors can use the imported `RootState` type
 export const selectProject = (state: RootState) => state.project
 

@@ -28,7 +28,7 @@ export default function ZoneParams({ zone }: ZoneParamsProps) {
       {(Object.keys(ZoneType) as Array<keyof typeof ZoneType>).map((z) => {
         if (z === "Text") {
           return (
-            <AccordionItem p={2} pl={6} display='flex'>
+            <AccordionItem p={2} pl={6} display='flex' key={z}>
               <Checkbox
                 colorScheme={"brand"}
                 isChecked={zone.zoneType === "Text"}

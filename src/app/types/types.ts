@@ -1,9 +1,11 @@
+import { StockGeneralFormat } from "./generalFormTypes";
 import { StockVideoFormat } from "./videoTypes";
 
 export interface Project {
   id: number;
   name: string;
   status: ProjectStatus;
+  params?: ProjectParamsType;
 }
 
 export interface User {
@@ -37,6 +39,7 @@ export enum ZoneType {
 }
 
 export type ZoneParamsType = StockVideoFormat // | ImgFormat | TextFormat
+export type ProjectParamsType = StockGeneralFormat;
 
 export enum EBoolean {
   "Yes" = 1,
@@ -45,7 +48,6 @@ export enum EBoolean {
 
 // Formulaires general
 // not complete form zone + general
-// store in localstorage -> lib?
 // front des reco (components)
 // Reco dans le store
 // Modele de calcul -> video pour le POC, 1 par type
