@@ -2,6 +2,7 @@ import { createSlice, nanoid } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import { Zone } from "../../app/types/types";
+import simulationService from "../../services/simulationService";
 
 const initialState: Zone[] = [];
 
@@ -14,6 +15,8 @@ const defaultZone: Zone = {
   y: 100,
   index: 0,
   status: "EDITING",
+  zoneType: undefined,
+  params: undefined
 };
 
 const zonesSlice = createSlice({
@@ -46,6 +49,18 @@ const zonesSlice = createSlice({
       const existingZone = state.find((zone) => zone.id === action.payload.id);
       if (existingZone) {
         Object.assign(existingZone, action.payload);
+        // TODO Test only - remove when simulate panel implemented
+        try {
+          const simulator = simulationService.simulator(existingZone);
+          if (simulator) {
+            const { energy, co2 } = simulator.simulate();
+            console.log(`impact zone ${existingZone.name}: ${energy} MJ - ${co2} kg Co2eq`);
+            const recommandations = simulator.recommandations();
+            console.log(recommandations);
+          }
+        } catch (e) {
+          console.log(e);
+        }
       }
     },
     zoneReset(state, action: PayloadAction<string>) {

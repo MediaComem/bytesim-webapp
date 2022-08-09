@@ -1,18 +1,18 @@
-export enum ImgFormat {
+export enum EImgFormat {
   "PNG",
   "JPG",
   "SVG",
   "OTHER",
 }
 
-export enum ImgQuality {
+export enum EImgQuality {
   "> 100ko",
   "100 - 500ko",
   "> 500ko",
 }
 
-export interface ImgForm {
-    format: ImgFormat;
+export interface ImagesParameters {
+    format: EImgFormat;
     quantity: number;
-    quality: ImgQuality;
+    quality: EImgQuality;
   }
