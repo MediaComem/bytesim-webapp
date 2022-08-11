@@ -28,7 +28,7 @@ export default function ZoneParams({ zone }: ZoneParamsProps) {
       {(Object.keys(ZoneType) as Array<keyof typeof ZoneType>).map((z) => {
         if (z === "Text") {
           return (
-            <AccordionItem p={2} pl={6} display='flex'>
+            <AccordionItem p={2} pl={6} display='flex' key={z}>
               <Checkbox
                 colorScheme={"brand"}
                 isChecked={zone.zoneType === "Text"}
@@ -81,18 +81,6 @@ export default function ZoneParams({ zone }: ZoneParamsProps) {
           );
         }
       })}
-      {/* <Stack>
-        {(Object.keys(ZoneType) as Array<keyof typeof ZoneType>).map((z) => (
-          <Radio
-            colorScheme={"brand"}
-            key={z}
-            value={z}
-            onChange={() => setValue(z as ZoneType)}
-          >
-            {ZoneType[z]}
-          </Radio>
-        ))}
-      </Stack> */}
     </Accordion>
   );
 }
@@ -124,7 +112,7 @@ function VideoForm({ zone, zoneType }: ZoneParamsFormProps) {
         {Object.entries(VideoFormEntries).map(([key, value]) => {
           return (
             <div key={key}>
-              <Heading size="sm">{key}</Heading>
+              <Heading size="sm" my={2}>{key}</Heading>
               <RadioGroup
                 value={
                   zone.params
@@ -151,6 +139,7 @@ function VideoForm({ zone, zoneType }: ZoneParamsFormProps) {
                           }
                           dispatch(zoneUpdated(newParams));
                         }}
+                        size='sm'
                       >
                         {data}
                       </Radio>

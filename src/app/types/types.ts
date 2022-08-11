@@ -1,3 +1,6 @@
+
+import { GenericParameters } from "./generalFormTypes";
+
 import { ImagesParameters } from "./imgTypes";
 import { VideoParameters } from "./videoTypes";
 
@@ -5,6 +8,7 @@ export interface Project {
   id: number;
   name: string;
   status: ProjectStatus;
+  params?: GenericParameters;
 }
 
 export interface User {
@@ -62,6 +66,7 @@ export enum ZoneType {
   DynContent = "Dynamic content",
 }
 
+export type FormsType = ZoneParamsType | GenericParameters;
 export type ZoneParamsType = VideoParameters | ImagesParameters;
 
 export enum EBoolean {
@@ -69,9 +74,7 @@ export enum EBoolean {
   "No" = 0,
 }
 
-// Formulaires general
 // not complete form zone + general
-// store in localstorage -> lib?
 // front des reco (components)
 // Reco dans le store
 // Modele de calcul -> video pour le POC, 1 par type

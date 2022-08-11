@@ -22,6 +22,8 @@ import {
 import AccordionItemTitleWithButton from "../layout/AccordionItemTitleWithButton";
 import ConfirmModal from "../layout/ConfirmModal";
 import ZoneParams from "./ZoneParams";
+import ProgressPoints from "../layout/ProgressPoints";
+import { VideoFormEntries } from "../../app/types/videoTypes";
 
 export default function ZonesList() {
   const dispatch = useDispatch();
@@ -119,15 +121,23 @@ function ZoneListButton({ zone, onOpen }: ZoneListButtonProps) {
           fontStyle={zone.zoneType ? "normal" : "italic"}
           gap={2}
         >
-          <Text whiteSpace="nowrap" fontSize='sm'>{zone.name}</Text>
+          <Text whiteSpace="nowrap" fontSize="sm">
+            {zone.name}
+          </Text>
           {zone.zoneType && (
-            <Text fontSize={"sm"} color={"gray"} whiteSpace="nowrap">
-              {
-                Object.entries(ZoneType).find(
-                  (s) => s[0] === zone.zoneType
-                )?.[1]
-              }
-            </Text>
+            <>
+              <Text fontSize={"sm"} color={"gray"} whiteSpace="nowrap">
+                {
+                  Object.entries(ZoneType).find(
+                    (s) => s[0] === zone.zoneType
+                  )?.[1]
+                }
+              </Text>
+              <ProgressPoints
+                completeObject={VideoFormEntries}
+                params={zone.params}
+              />
+            </>
           )}
         </Flex>
       }
