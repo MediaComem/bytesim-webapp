@@ -115,7 +115,7 @@ function GeneralForm({ project }: { project: Project }) {
                           value={data}
                           onChange={() => {
                             const newParams = {
-                              params: { ...project.params, [key]: index },
+                              params: { ...project.params, [key]: data},
                             };
                             dispatch(projectUpdated(newParams));
                           }}
