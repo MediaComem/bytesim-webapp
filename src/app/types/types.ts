@@ -1,5 +1,5 @@
 
-import { StockGeneralFormat } from "./generalFormTypes";
+import { GenericParameters } from "./generalFormTypes";
 
 import { ImagesParameters } from "./imgTypes";
 import { VideoParameters } from "./videoTypes";
@@ -8,7 +8,7 @@ export interface Project {
   id: number;
   name: string;
   status: ProjectStatus;
-  params?: StockGeneralFormat;
+  params?: GenericParameters;
 }
 
 export interface User {
@@ -66,7 +66,7 @@ export enum ZoneType {
   DynContent = "Dynamic content",
 }
 
-export type FormsType = ZoneParamsType | StockGeneralFormat;
+export type FormsType = ZoneParamsType | GenericParameters;
 export type ZoneParamsType = VideoParameters | ImagesParameters;
 
 export enum EBoolean {

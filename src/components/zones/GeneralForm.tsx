@@ -19,7 +19,7 @@ import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/hooks";
 import {
   GeneralFormEntries,
-  StockGeneralFormat,
+  GenericParameters,
 } from "../../app/types/generalFormTypes";
 import { Project } from "../../app/types/types";
 import {
@@ -88,7 +88,7 @@ function GeneralForm({ project }: { project: Project }) {
               <RadioGroup
                 value={
                   project.params
-                    ? Number(project.params[key as keyof StockGeneralFormat])
+                    ? Number(project.params[key as keyof GenericParameters])
                     : undefined
                 }
               >
@@ -115,7 +115,7 @@ function GeneralForm({ project }: { project: Project }) {
                           value={data}
                           onChange={() => {
                             const newParams = {
-                              params: { ...project.params, [key]: data},
+                              params: { ...project.params, [key]: data },
                             };
                             dispatch(projectUpdated(newParams));
                           }}
