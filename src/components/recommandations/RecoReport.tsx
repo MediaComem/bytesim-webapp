@@ -1,16 +1,11 @@
 import { Button, Divider, Flex } from "@chakra-ui/react";
-import { calculateRecommandationsForZone } from "../../app/hooks";
-import { StockGeneralFormat } from "../../app/types/generalFormTypes";
-import { Zone } from "../../app/types/types";
+import { calculateAllRecommandations } from "../../app/hooks";
 import RecommandationsList from "./RecommandationsList";
 import ReportGeneralInfo from "./ReportGeneralInfo";
 import ReportToolBar from "./ReportToolBar";
-interface RecoReportProps {
-  zones: Zone[];
-  projectParams?: StockGeneralFormat;
-}
-export default function RecoReport({ zones }: RecoReportProps) {
-  const recos = calculateRecommandationsForZone(zones[0].id);
+
+export default function RecoReport() {
+  const recos = calculateAllRecommandations();
 
   return (
     <>

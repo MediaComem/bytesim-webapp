@@ -20,7 +20,6 @@ function App() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const state = useAppSelector((s) => s);
   const project = state.project;
-  const zones = state.zones;
   return (
     <div
       className={
@@ -49,7 +48,7 @@ function App() {
           )}
           {project.status === "SIMULATION" && (
             <>
-              <RecoReport zones={zones}/>
+              <RecoReport />
               <Button
                 onClick={() => {
                   dispatch(projectUpdated({ status: "EDITING" }));

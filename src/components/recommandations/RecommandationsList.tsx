@@ -1,10 +1,10 @@
 import { Accordion } from "@chakra-ui/react";
-import { Recommandation } from "../../app/types/recommandations";
-import { ZoneParamsType } from "../../app/types/types";
+import { RecommandationWithZone } from "../../app/types/recommandations";
+import { VideoParameters } from "../../app/types/videoTypes";
 import RecommandationDisplay from "./Recommandation";
 
 interface RecommandationsListProps {
-  recommandations: Recommandation<ZoneParamsType[keyof ZoneParamsType]>[];
+  recommandations: RecommandationWithZone<VideoParameters[keyof VideoParameters]>[];
 }
 export default function RecommandationsList({
   recommandations,
