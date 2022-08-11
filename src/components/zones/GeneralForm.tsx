@@ -112,7 +112,7 @@ function GeneralForm({ project }: { project: Project }) {
                         <Radio
                           colorScheme={"brand"}
                           key={index}
-                          value={index}
+                          value={data}
                           onChange={() => {
                             const newParams = {
                               params: { ...project.params, [key]: index },
