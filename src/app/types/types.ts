@@ -1,4 +1,5 @@
-import { StockVideoFormat } from "./videoTypes";
+import { ImagesParameters } from "./imgTypes";
+import { VideoParameters } from "./videoTypes";
 
 export interface Project {
   id: number;
@@ -12,7 +13,7 @@ export interface User {
   connexionToken: string;
 }
 
-export interface Zone {
+export interface ZoneInfo {
   id: string;
   name: string;
   index: number;
@@ -20,10 +21,35 @@ export interface Zone {
   y: number;
   width: number;
   height: number;
-  zoneType?: ZoneType;
   status: ZoneStatus;
-  params?: ZoneParamsType;
 }
+
+export interface ZoneUnknown extends ZoneInfo {
+  zoneType?: undefined;
+  params?: undefined;
+}
+
+export interface ZoneVideo extends ZoneInfo {
+  zoneType: ZoneType.Video;
+  params?: VideoParameters;
+}
+
+export interface ZoneImages extends ZoneInfo {
+  zoneType: ZoneType.Imgs;
+  params?: ImagesParameters;
+}
+
+export interface ZoneText extends ZoneInfo {
+  zoneType: ZoneType.Text;
+  params?: any
+}
+
+export interface ZoneDynamic extends ZoneInfo {
+  zoneType: ZoneType.DynContent;
+  params?: any
+}
+
+export type Zone = ZoneUnknown | ZoneVideo | ZoneImages | ZoneText | ZoneDynamic;
 
 export type ProjectStatus = "EDITING" | "SIMULATION" | "LOADING";
 export type ZoneStatus = "EDITING" | "ACTIVE" | "LOADING";
@@ -36,7 +62,7 @@ export enum ZoneType {
   DynContent = "Dynamic content",
 }
 
-export type ZoneParamsType = StockVideoFormat // | ImgFormat | TextFormat
+export type ZoneParamsType = VideoParameters | ImagesParameters;
 
 export enum EBoolean {
   "Yes" = 1,
