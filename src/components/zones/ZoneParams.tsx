@@ -15,7 +15,7 @@ import { css } from "@emotion/css";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { Zone, ZoneType } from "../../app/types/types";
-import { StockVideoFormat, VideoFormEntries } from "../../app/types/videoTypes";
+import { VideoParameters, VideoFormEntries } from "../../app/types/videoTypes";
 import { zoneUpdated } from "../../features/zones/zonesSlice";
 
 interface ZoneParamsProps {
@@ -116,7 +116,7 @@ function VideoForm({ zone, zoneType }: ZoneParamsFormProps) {
               <RadioGroup
                 value={
                   zone.params
-                    ? Number(zone.params[key as keyof StockVideoFormat])
+                    ? zone.params[key as keyof VideoParameters]
                     : undefined
                 }
               >
@@ -127,11 +127,11 @@ function VideoForm({ zone, zoneType }: ZoneParamsFormProps) {
                       <Radio
                         colorScheme={"brand"}
                         key={index}
-                        value={index}
+                        value={data}
                         onChange={() => {
                           const newParams = {
                             id: zone.id,
-                            params: { ...zone.params, [key]: index },
+                            params: { ...zone.params, [key]: data },
                             zoneType: zone.zoneType,
                           };
                           if (zoneType !== zone.zoneType) {
