@@ -2,7 +2,7 @@ import { createSlice, nanoid } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import { Zone } from "../../app/types/types";
-import simulationService from "../../services/simulationService";
+//import simulationService from "../../services/simulationService";
 
 const initialState: Zone[] = [];
 
@@ -50,7 +50,7 @@ const zonesSlice = createSlice({
       if (existingZone) {
         Object.assign(existingZone, action.payload);
         // TODO Test only - remove when simulate panel implemented
-        try {
+        /* try {
           const simulator = simulationService.simulator(existingZone);
           if (simulator) {
             const { energy, co2 } = simulator.simulate();
@@ -60,7 +60,7 @@ const zonesSlice = createSlice({
           }
         } catch (e) {
           console.log(e);
-        }
+        } */
       }
     },
     zoneReset(state, action: PayloadAction<string>) {
@@ -101,5 +101,8 @@ export const { zoneAdded, zoneDeleted, zoneSelected, zoneUpdated, zoneReset, all
   zonesSlice.actions;
 // Other code such as selectors can use the imported `RootState` type
 export const selectZones = (state: RootState) => state.zones;
+export const selectZone = (state: RootState, zoneId: string) => {
+  return state.zones.find((zone) => zone.id === zoneId);
+}
 
 export default zonesSlice.reducer;

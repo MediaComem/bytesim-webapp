@@ -1,4 +1,5 @@
 export interface Recommandation<T> {
+  id: string;
   parameter: string;
   currentValue: T;
   betterValue: T;

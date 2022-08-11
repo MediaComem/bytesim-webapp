@@ -9,15 +9,18 @@ import ZonesView from "./components/zones/ZonesView";
 import GeneralFormAccordion from "./components/zones/GeneralForm";
 import FigmaZonesList from "./components/zones/FigmaZonesList";
 import ConfirmModal from "./components/layout/ConfirmModal";
-import { projectReset, projectUpdated } from "./features/project/projectSlice";
+import { projectReset, projectStateUpdate, projectUpdated } from "./features/project/projectSlice";
 import { useAppSelector } from "./app/hooks";
 import RecoReport from "./components/recommandations/RecoReport";
 import ZonesList from "./components/zones/ZonesList";
+import React from "react";
 
 function App() {
   const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const project = useAppSelector((state) => state.project);
+  const state = useAppSelector((s) => s);
+  const project = state.project;
+  const zones = state.zones;
   return (
     <div
       className={
@@ -37,7 +40,7 @@ function App() {
               </Text>
               <Button
                 onClick={() => {
-                  dispatch(projectUpdated({ status: "SIMULATION" }));
+                  dispatch(projectStateUpdate("SIMULATION"));
                 }}
               >
                 Calculate
@@ -46,7 +49,7 @@ function App() {
           )}
           {project.status === "SIMULATION" && (
             <>
-              <RecoReport />
+              <RecoReport zones={zones}/>
               <Button
                 onClick={() => {
                   dispatch(projectUpdated({ status: "EDITING" }));
