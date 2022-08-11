@@ -5,6 +5,7 @@ import * as React from "react";
 
 const panelStyle = css({
   border: "1px solid gray",
+  overflow: 'auto',
 });
 
 interface PanelProps {

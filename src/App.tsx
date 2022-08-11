@@ -5,13 +5,14 @@ import { useDispatch } from "react-redux";
 import { zoneAdded } from "./features/zones/zonesSlice";
 import Panel, { ResizablePanel } from "./components/layout/Panel";
 import BytesimeHeader from "./components/layout/ByteSimHeader";
-import ZonesList from "./components/zones/ZonesList";
 import ZonesView from "./components/zones/ZonesView";
 import GeneralFormAccordion from "./components/zones/GeneralForm";
 import FigmaZonesList from "./components/zones/FigmaZonesList";
 import ConfirmModal from "./components/layout/ConfirmModal";
-import { projectReset } from "./features/project/projectSlice";
+import { projectReset, projectUpdated } from "./features/project/projectSlice";
 import { useAppSelector } from "./app/hooks";
+import RecoReport from "./components/recommandations/RecoReport";
+import ZonesList from "./components/zones/ZonesList";
 
 function App() {
   const dispatch = useDispatch();
@@ -26,23 +27,36 @@ function App() {
     >
       <BytesimeHeader />
       <Flex grow={1}>
-        <Panel title="Report" className={css({ maxWidth: "25vw" })}>
-          <Text p={4} fontSize="sm" color={"gray.700"}>
-            {
-              "Welcome in this amazing tool to analyze the footprint of your website or app with an SVG. Let's do it and get good green recommendations! #happygreen"
-            }
-          </Text>
-          <div>
-            <p>PROJECT: {project.name}</p>
-            <p>{project.params?.nbVisit}</p>
-            <p>{project.params?.server}</p>
-            <p>{project.params?.plugins}</p>
-            <p>{project.params?.genericFont}</p>
-            <p>{project.params?.inifiteScroll}</p>
-          </div>
-          {/* ReportToolBar */}
-          {/* RecommandationsList */}
-          {/* ExportButton */}
+        <Panel title="Report" className={css({ minWidth: '22vw', maxWidth: '22vw' })}>
+          {project.status === "EDITING" && (
+            <>
+              <Text p={4} fontSize="sm" color={"gray.700"}>
+                {
+                  "Welcome in this amazing tool to analyze the footprint of your website or app with an SVG. Let's do it and get good green recommendations! #happygreen"
+                }
+              </Text>
+              <Button
+                onClick={() => {
+                  dispatch(projectUpdated({ status: "SIMULATION" }));
+                }}
+              >
+                Calculate
+              </Button>
+            </>
+          )}
+          {project.status === "SIMULATION" && (
+            <>
+              <RecoReport />
+              <Button
+                onClick={() => {
+                  dispatch(projectUpdated({ status: "EDITING" }));
+                }}
+                variant='outline'
+              >
+                Stop calculate
+              </Button>
+            </>
+          )}
         </Panel>
         <Panel
           title="Parameters"

@@ -5,7 +5,7 @@ import { Project } from "../../app/types/types";
 const initialState: Project = {
   id: 1,
   name: "Main project",
-  status: "LOADING",
+  status: "EDITING",
 };
 
 const projectSlice = createSlice({
