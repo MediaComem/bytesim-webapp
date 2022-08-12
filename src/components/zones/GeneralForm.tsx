@@ -79,7 +79,7 @@ function GeneralForm({ project }: { project: Project }) {
   return (
     <Flex>
       <div>
-        {Object.entries(GeneralFormEntries).map(([key, value]) => {
+        {Object.entries(GeneralFormEntries).map(([key, data]) => {
           return (
             <div key={key}>
               <Heading size="sm" my={2}>
@@ -87,16 +87,14 @@ function GeneralForm({ project }: { project: Project }) {
               </Heading>
               <RadioGroup
                 value={
-                  project.params
-                    ? Number(project.params[key as keyof GenericParameters])
-                    : undefined
+                  project.params ? String(project.params[key as keyof GenericParameters]) : undefined
                 }
                 isDisabled={project.status === "SIMULATION"}
               >
                 <Stack>
-                  {typeof value === "number" ? (
+                  {typeof data === "number" ? (
                     <NumberInputCustom
-                      defaultValue={value}
+                      defaultValue={data}
                       min={0}
                       step={100}
                       onChange={(n) => {
@@ -105,9 +103,10 @@ function GeneralForm({ project }: { project: Project }) {
                         };
                         dispatch(projectUpdated(newParams));
                       }}
+                      disableEdition={project.status === "SIMULATION"}
                     />
                   ) : (
-                    Object.values(value)
+                    Object.values(data)
                       .filter((v) => typeof v !== "number")
                       .map((data, index) => (
                         <Radio
@@ -141,6 +140,7 @@ interface numberINputProps {
   min: number;
   step: number;
   onChange(valueAsString: string, valueAsNumber: number): void;
+  disableEdition?: boolean;
 }
 
 function NumberInputCustom({
@@ -148,6 +148,7 @@ function NumberInputCustom({
   min,
   step,
   onChange,
+  disableEdition,
 }: numberINputProps) {
   return (
     <NumberInput
@@ -156,6 +157,7 @@ function NumberInputCustom({
       step={step}
       onChange={onChange}
       size="sm"
+      isDisabled={disableEdition}
     >
       <NumberInputField />
       <NumberInputStepper>

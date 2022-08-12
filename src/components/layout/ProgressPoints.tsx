@@ -23,5 +23,5 @@ export default function ProgressPoints({
   for (let j = 0; j < total - completed; j++) {
     points.push(<span key={j + 'empty'}>◎</span>);
   }
-  return <Flex mx={2}>{points}</Flex>;
+  return <Flex mx={2} fontSize='xs' color={'gray.400'}>{points}</Flex>;
 }

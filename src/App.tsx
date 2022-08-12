@@ -9,11 +9,7 @@ import ZonesView from "./components/zones/ZonesView";
 import GeneralFormAccordion from "./components/zones/GeneralForm";
 import FigmaZonesList from "./components/zones/FigmaZonesList";
 import ConfirmModal from "./components/layout/ConfirmModal";
-import {
-  projectReset,
-  projectStateUpdate,
-  projectUpdated,
-} from "./features/project/projectSlice";
+import { projectReset, projectUpdated } from "./features/project/projectSlice";
 import { useAppSelector } from "./app/hooks";
 import RecoReport from "./components/recommandations/RecoReport";
 import ZonesList from "./components/zones/ZonesList";
@@ -46,7 +42,7 @@ function App() {
               </Text>
               <Button
                 onClick={() => {
-                  dispatch(projectStateUpdate("SIMULATION"));
+                  dispatch(projectUpdated({ status: "SIMULATION" }));
                 }}
               >
                 Calculate
