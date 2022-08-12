@@ -72,7 +72,7 @@ function App() {
           <ConfirmModal
             headerText={"Reset the whole project"}
             message={
-              "Are you sur eyou want to reset the whole project? It will delete all the provided data in general and all the zones."
+              "Are you sure you want to reset the whole project? It will delete all the provided data in general and all the zones."
             }
             buttonLabel={"Reset project"}
             isOpen={isOpen}

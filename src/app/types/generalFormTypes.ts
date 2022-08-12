@@ -14,7 +14,7 @@ export enum ServerType {
     inifiteScroll: EBoolean,
   };
 
-  export interface StockGeneralFormat {
+  export interface GenericParameters {
     nbVisit?: number;
     server?: ServerType;
     plugins?: boolean;
