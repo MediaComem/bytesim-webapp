@@ -14,6 +14,7 @@ import {
 import { css } from "@emotion/css";
 import * as React from "react";
 import { useDispatch } from "react-redux";
+import { useAppSelector } from "../../app/hooks";
 import { Zone, ZoneType } from "../../app/types/types";
 import { VideoParameters, VideoFormEntries } from "../../app/types/videoTypes";
 import { zoneUpdated } from "../../features/zones/zonesSlice";
@@ -23,6 +24,7 @@ interface ZoneParamsProps {
 }
 export default function ZoneParams({ zone }: ZoneParamsProps) {
   const dispatch = useDispatch();
+  const projectStatus = useAppSelector(state => state.project.status);
   return (
     <Accordion allowToggle>
       {(Object.keys(ZoneType) as Array<keyof typeof ZoneType>).map((z) => {
@@ -45,6 +47,7 @@ export default function ZoneParams({ zone }: ZoneParamsProps) {
                     })
                   );
                 }}
+                isDisabled={projectStatus === 'SIMULATION'}
               />
               <div
                 className={
@@ -106,6 +109,7 @@ function ZoneParamsForm({ zone, zoneType }: ZoneParamsFormProps) {
 // TO DO after POC: make it abstract for all zone types
 function VideoForm({ zone, zoneType }: ZoneParamsFormProps) {
   const dispatch = useDispatch();
+  const projectStatus = useAppSelector(state => state.project.status);
   return (
     <Flex direction={"column"}>
       <div>
@@ -119,6 +123,7 @@ function VideoForm({ zone, zoneType }: ZoneParamsFormProps) {
                     ? zone.params[key as keyof VideoParameters]
                     : undefined
                 }
+                isDisabled={projectStatus === 'SIMULATION'}
               >
                 <Stack>
                   {Object.values(value)

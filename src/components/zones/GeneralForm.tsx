@@ -50,7 +50,7 @@ export default function GeneralFormAccordion() {
           </>
         }
       >
-        <Button variant={"ghost"} size="sm" onClick={onOpen}>
+        <Button variant={"ghost"} size="sm" onClick={onOpen} disabled={project.status === "SIMULATION"}>
           Reset ⟳
         </Button>
       </AccordionItemTitleWithButton>
@@ -91,6 +91,7 @@ function GeneralForm({ project }: { project: Project }) {
                     ? Number(project.params[key as keyof GenericParameters])
                     : undefined
                 }
+                isDisabled={project.status === "SIMULATION"}
               >
                 <Stack>
                   {typeof value === "number" ? (

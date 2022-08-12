@@ -16,7 +16,7 @@ const defaultZone: Zone = {
   index: 0,
   status: "EDITING",
   zoneType: undefined,
-  params: undefined
+  params: undefined,
 };
 
 const zonesSlice = createSlice({
@@ -92,17 +92,24 @@ const zonesSlice = createSlice({
       });
     },
     allZonesDeleted(state) {
-        state.length = 0;
-      }
+      state.length = 0;
+    },
   },
 });
 
-export const { zoneAdded, zoneDeleted, zoneSelected, zoneUpdated, zoneReset, allZonesReset, allZonesDeleted } =
-  zonesSlice.actions;
+export const {
+  zoneAdded,
+  zoneDeleted,
+  zoneSelected,
+  zoneUpdated,
+  zoneReset,
+  allZonesReset,
+  allZonesDeleted,
+} = zonesSlice.actions;
 // Other code such as selectors can use the imported `RootState` type
 export const selectZones = (state: RootState) => state.zones;
 export const selectZone = (state: RootState, zoneId: string) => {
   return state.zones.find((zone) => zone.id === zoneId);
-}
+};
 
 export default zonesSlice.reducer;

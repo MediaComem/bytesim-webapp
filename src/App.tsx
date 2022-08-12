@@ -9,7 +9,11 @@ import ZonesView from "./components/zones/ZonesView";
 import GeneralFormAccordion from "./components/zones/GeneralForm";
 import FigmaZonesList from "./components/zones/FigmaZonesList";
 import ConfirmModal from "./components/layout/ConfirmModal";
-import { projectReset, projectStateUpdate, projectUpdated } from "./features/project/projectSlice";
+import {
+  projectReset,
+  projectStateUpdate,
+  projectUpdated,
+} from "./features/project/projectSlice";
 import { useAppSelector } from "./app/hooks";
 import RecoReport from "./components/recommandations/RecoReport";
 import ZonesList from "./components/zones/ZonesList";
@@ -29,7 +33,10 @@ function App() {
     >
       <BytesimeHeader />
       <Flex grow={1}>
-        <Panel title="Report" className={css({ minWidth: '22vw', maxWidth: '22vw' })}>
+        <Panel
+          title="Report"
+          className={css({ minWidth: "22vw", maxWidth: "22vw" })}
+        >
           {project.status === "EDITING" && (
             <>
               <Text p={4} fontSize="sm" color={"gray.700"}>
@@ -53,7 +60,7 @@ function App() {
                 onClick={() => {
                   dispatch(projectUpdated({ status: "EDITING" }));
                 }}
-                variant='outline'
+                variant="outline"
               >
                 Stop calculate
               </Button>
@@ -64,7 +71,12 @@ function App() {
           title="Parameters"
           grow={1}
           toolbarButton={
-            <Button onClick={onOpen} size="sm" variant="ghost">
+            <Button
+              onClick={onOpen}
+              size="sm"
+              variant="ghost"
+              disabled={project.status === "SIMULATION"}
+            >
               Reset all ⟳
             </Button>
           }
@@ -110,12 +122,13 @@ function App() {
               }}
               size="sm"
               colorScheme={"brand"}
+              disabled={project.status === "SIMULATION"}
             >
               + Create Zone
             </Button>
           }
         >
-          <ZonesView />
+          <ZonesView disableEdition={project.status === "SIMULATION"} />
         </ResizablePanel>
       </Flex>
     </div>

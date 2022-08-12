@@ -28,7 +28,9 @@ import { VideoFormEntries } from "../../app/types/videoTypes";
 export default function ZonesList() {
   const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const zones = useAppSelector((state) => state.zones);
+  const state = useAppSelector((state) => state);
+  const zones = state.zones;
+  const project = state.project;
   const [modalContent, setModalContent] = React.useState<{
     modal: string;
     buttonLabel: string;
@@ -56,6 +58,7 @@ export default function ZonesList() {
             });
             onOpen();
           }}
+          isDisabled={project.status === "SIMULATION"}
         >
           Reset ⟳
         </Button>
@@ -111,6 +114,7 @@ interface ZoneListButtonProps {
 }
 function ZoneListButton({ zone, onOpen }: ZoneListButtonProps) {
   const dispatch = useDispatch();
+  const projectStatus = useAppSelector((state) => state.project.status);
   return (
     <AccordionItemTitleWithButton
       bg={zone.status === "EDITING" ? "brand.100" : undefined}
@@ -147,10 +151,16 @@ function ZoneListButton({ zone, onOpen }: ZoneListButtonProps) {
           variant={"ghost"}
           title="Reset zone"
           onClick={() => dispatch(zoneReset(zone.id))}
+          isDisabled={projectStatus === "SIMULATION"}
         >
           ⟳
         </Button>
-        <Button variant={"ghost"} onClick={onOpen} title="Delete zone">
+        <Button
+          variant={"ghost"}
+          onClick={onOpen}
+          title="Delete zone"
+          isDisabled={projectStatus === "SIMULATION"}
+        >
           ✖︎
         </Button>
       </Flex>
