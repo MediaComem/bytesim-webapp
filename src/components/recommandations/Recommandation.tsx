@@ -12,16 +12,38 @@ import {
   Text,
   Tooltip,
 } from "@chakra-ui/react";
-import { RecommandationWithZone } from "../../app/types/recommandations";
+import React from "react";
+import { Benefits, RecommandationWithZone } from "../../app/types/recommandations";
 import { VideoParameters } from "../../app/types/videoTypes";
 
 interface RecommandationDisplayProps {
-  recommandation: RecommandationWithZone<VideoParameters[keyof VideoParameters]>;
+  recommandation: RecommandationWithZone<
+    VideoParameters[keyof VideoParameters]
+  >;
+  updateTotalBenefits: (benef: Benefits, substract?: boolean)=>void;
 }
 
 export default function RecommandationDisplay({
   recommandation,
 }: RecommandationDisplayProps) {
+  const [selected, setSelected] = React.useState<string>('current');
+
+ /*  const onChangeParams = React.useCallback(
+    (v: string) => {
+        if (v !== selected) {
+          if (v === "better") {
+            updateTotalBenefits(recommandation.benefits);
+            //enlever recommandation.benefits du state parent
+          } else if (v === "current") {
+            updateTotalBenefits(recommandation.benefits, true);
+            //enlever recommandation.benefits du state parent
+          }
+        }
+        console.log(selected);
+      console.log(v);
+        setSelected(v);
+      }, [selected]
+  ); */
   return (
     <AccordionItem>
       <AccordionButton _hover={{ backgroundColor: "brand.100" }} pl={2}>
@@ -39,32 +61,24 @@ export default function RecommandationDisplay({
         <AccordionIcon />
       </AccordionButton>
       <AccordionPanel>
-        <RadioGroup value={1}>
+        <RadioGroup
+          value={selected}
+        >
           <Stack>
-            <Radio
-              colorScheme={"brand"}
-              value={1}
-              onChange={() => {}}
-              size="sm"
-            >
+            <Radio colorScheme={"brand"} value={"current"} size="sm" onChange={(e) => setSelected(e.target.value)}>
               Current:{recommandation.currentValue}
             </Radio>
-            <Radio
-              colorScheme={"brand"}
-              value={2}
-              onChange={() => {}}
-              size="sm"
-            >
+            <Radio colorScheme={"brand"} value={"better"} size="sm" onChange={(e) => setSelected(e.target.value)}>
               Better:{recommandation.betterValue}
             </Radio>
-            <Radio
+            {/* <Radio
               colorScheme={"brand"}
               value={3}
               onChange={() => {}}
               size="sm"
             >
               Optimal:{recommandation.bestValue}
-            </Radio>
+            </Radio> */}
           </Stack>
         </RadioGroup>
       </AccordionPanel>
