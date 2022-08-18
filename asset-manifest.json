@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/bytesim-webapp/static/css/main.e6c13ad2.css",
+    "main.js": "/bytesim-webapp/static/js/main.ab1b465c.js",
+    "static/js/787.63137bab.chunk.js": "/bytesim-webapp/static/js/787.63137bab.chunk.js",
+    "index.html": "/bytesim-webapp/index.html",
+    "main.e6c13ad2.css.map": "/bytesim-webapp/static/css/main.e6c13ad2.css.map",
+    "main.ab1b465c.js.map": "/bytesim-webapp/static/js/main.ab1b465c.js.map",
+    "787.63137bab.chunk.js.map": "/bytesim-webapp/static/js/787.63137bab.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.ab1b465c.js"
+  ]
+}
