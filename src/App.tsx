@@ -10,7 +10,8 @@ import GeneralFormAccordion from "./components/zones/GeneralForm";
 import FigmaZonesList from "./components/zones/FigmaZonesList";
 import ConfirmModal from "./components/layout/ConfirmModal";
 import { projectReset, projectUpdated } from "./features/project/projectSlice";
-import { useAppSelector } from "./app/hooks";
+import { recommandationsPopulated } from "./features/recommandations/recommandationsSlice";
+import { useAppSelector, useCalculateAllRecommandations } from "./app/hooks";
 import RecoReport from "./components/recommandations/RecoReport";
 import ZonesList from "./components/zones/ZonesList";
 import React from "react";
@@ -20,6 +21,13 @@ function App() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const state = useAppSelector((s) => s);
   const project = state.project;
+  const recos = useCalculateAllRecommandations();
+
+  const startSimulation = React.useCallback(() => {
+    dispatch(projectUpdated({ status: "SIMULATION" }));
+    dispatch(recommandationsPopulated(recos));
+  }, [dispatch, projectUpdated, recos]);
+
   return (
     <div
       className={
@@ -40,13 +48,7 @@ function App() {
                   "Welcome in this amazing tool to analyze the footprint of your website or app with an SVG. Let's do it and get good green recommendations! #happygreen"
                 }
               </Text>
-              <Button
-                onClick={() => {
-                  dispatch(projectUpdated({ status: "SIMULATION" }));
-                }}
-              >
-                Calculate
-              </Button>
+              <Button onClick={startSimulation}>Calculate</Button>
             </>
           )}
           {project.status === "SIMULATION" && (

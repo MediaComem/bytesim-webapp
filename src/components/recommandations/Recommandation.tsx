@@ -32,8 +32,6 @@ export default function RecommandationDisplay({
    const onChangeParams = React.useCallback(
     (v: string) => {
       setSelected(v);
-      console.log(v);
-      //console.log(selected);
       if (v === "better") {
         const newCo2 = totalBenefits.co2 + recommandation.benefits.co2;
         const newEnergy = totalBenefits.energy + recommandation.benefits.energy;
@@ -49,27 +47,8 @@ export default function RecommandationDisplay({
           energy: newEnergy,
         });
       }
-      //console.log(v);
-    },
-    [totalBenefits]
+    }, [recommandation, totalBenefits]
   );
-
-  /*  function onAddBenefits() {
-    const newCo2 = (totalBenefits.co2 + recommandation.benefits.co2);
-    const newEnergy = (totalBenefits.energy + recommandation.benefits.energy);
-    setTotalBenefits({
-      co2: newCo2,
-      energy: newEnergy
-    })
-  } */
-  /* function onSubstractBenefits(e) {
-    const newCo2 = (totalBenefits.co2 - recommandation.benefits.co2);
-    const newEnergy = (totalBenefits.energy - recommandation.benefits.energy);
-    setTotalBenefits({
-      co2: newCo2,
-      energy: newEnergy
-    })
-  }  */
   return (
     <AccordionItem>
       <AccordionButton _hover={{ backgroundColor: "brand.100" }} pl={2}>

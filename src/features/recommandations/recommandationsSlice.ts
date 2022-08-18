@@ -1,20 +1,30 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import { Recommandation } from "../../app/types/recommandations";
+import { Recommandation, RecommandationWithZone } from "../../app/types/recommandations";
 import { FormsType } from "../../app/types/types";
+import { VideoParameters } from "../../app/types/videoTypes";
 
-const initialState: Recommandation<FormsType[keyof FormsType]>[] = [];
+const initialState: RecommandationWithZone<VideoParameters[keyof VideoParameters]>[] = [];
 
 const recommandationsSlice = createSlice({
   name: "recommandations",
   initialState,
   reducers: {
-    /* recommandationsReset: (state) => {
-      //state = undefined;
-    }, */
+    recommandationAdded(state, action: PayloadAction<RecommandationWithZone<VideoParameters[keyof VideoParameters]>>) {
+      state.push(action.payload);
+    },
+    recommandationsPopulated(state, action: PayloadAction<RecommandationWithZone<VideoParameters[keyof VideoParameters]>[]>) {
+      state.length = 0;
+      action.payload.forEach((r) => {
+        state.push(r);
+      })
+    },
+    recommandationsReset: (state) => {
+      state.length = 0;
+    },
     recommandationUpdated(
       state,
-      action: PayloadAction<Partial<Recommandation<FormsType[keyof FormsType]>> & Pick<Recommandation<FormsType[keyof FormsType]>, "id">>
+      action: PayloadAction<Partial<RecommandationWithZone<FormsType[keyof FormsType]>> & Pick<Recommandation<FormsType[keyof FormsType]>, "id">>
     ) {
       const existingReco = state.find((reco) => reco.id === action.payload.id);
       if (existingReco) {
@@ -24,7 +34,7 @@ const recommandationsSlice = createSlice({
   },
 });
 
-export const { recommandationUpdated } = recommandationsSlice.actions;
+export const { recommandationUpdated, recommandationsPopulated, recommandationAdded, recommandationsReset } = recommandationsSlice.actions;
 // Other code such as selectors can use the imported `RootState` type
 export const selectRecommandations = (state: RootState) => state.project;
 
