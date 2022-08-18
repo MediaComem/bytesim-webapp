@@ -13,37 +13,63 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import React from "react";
-import { Benefits, RecommandationWithZone } from "../../app/types/recommandations";
+import { RecommandationWithZone } from "../../app/types/recommandations";
 import { VideoParameters } from "../../app/types/videoTypes";
+import { ReportCTX } from "./RecoReport";
 
 interface RecommandationDisplayProps {
   recommandation: RecommandationWithZone<
     VideoParameters[keyof VideoParameters]
   >;
-  updateTotalBenefits: (benef: Benefits, substract?: boolean)=>void;
 }
 
 export default function RecommandationDisplay({
   recommandation,
 }: RecommandationDisplayProps) {
-  const [selected, setSelected] = React.useState<string>('current');
+  const [selected, setSelected] = React.useState<string>("current");
+  const { totalBenefits, setTotalBenefits } = React.useContext(ReportCTX);
 
- /*  const onChangeParams = React.useCallback(
+   const onChangeParams = React.useCallback(
     (v: string) => {
-        if (v !== selected) {
-          if (v === "better") {
-            updateTotalBenefits(recommandation.benefits);
-            //enlever recommandation.benefits du state parent
-          } else if (v === "current") {
-            updateTotalBenefits(recommandation.benefits, true);
-            //enlever recommandation.benefits du state parent
-          }
-        }
-        console.log(selected);
+      setSelected(v);
       console.log(v);
-        setSelected(v);
-      }, [selected]
-  ); */
+      //console.log(selected);
+      if (v === "better") {
+        const newCo2 = totalBenefits.co2 + recommandation.benefits.co2;
+        const newEnergy = totalBenefits.energy + recommandation.benefits.energy;
+        setTotalBenefits({
+          co2: newCo2,
+          energy: newEnergy,
+        });
+      } else if (v === "current") {
+        const newCo2 = totalBenefits.co2 - recommandation.benefits.co2;
+        const newEnergy = totalBenefits.energy - recommandation.benefits.energy;
+        setTotalBenefits({
+          co2: newCo2,
+          energy: newEnergy,
+        });
+      }
+      //console.log(v);
+    },
+    [totalBenefits]
+  );
+
+  /*  function onAddBenefits() {
+    const newCo2 = (totalBenefits.co2 + recommandation.benefits.co2);
+    const newEnergy = (totalBenefits.energy + recommandation.benefits.energy);
+    setTotalBenefits({
+      co2: newCo2,
+      energy: newEnergy
+    })
+  } */
+  /* function onSubstractBenefits(e) {
+    const newCo2 = (totalBenefits.co2 - recommandation.benefits.co2);
+    const newEnergy = (totalBenefits.energy - recommandation.benefits.energy);
+    setTotalBenefits({
+      co2: newCo2,
+      energy: newEnergy
+    })
+  }  */
   return (
     <AccordionItem>
       <AccordionButton _hover={{ backgroundColor: "brand.100" }} pl={2}>
@@ -61,24 +87,23 @@ export default function RecommandationDisplay({
         <AccordionIcon />
       </AccordionButton>
       <AccordionPanel>
-        <RadioGroup
-          value={selected}
-        >
+        <RadioGroup value={selected} onChange={onChangeParams}>
           <Stack>
-            <Radio colorScheme={"brand"} value={"current"} size="sm" onChange={(e) => setSelected(e.target.value)}>
-              Current:{recommandation.currentValue}
-            </Radio>
-            <Radio colorScheme={"brand"} value={"better"} size="sm" onChange={(e) => setSelected(e.target.value)}>
-              Better:{recommandation.betterValue}
-            </Radio>
-            {/* <Radio
+            <Radio
               colorScheme={"brand"}
-              value={3}
-              onChange={() => {}}
+              value={"current"}
               size="sm"
             >
-              Optimal:{recommandation.bestValue}
-            </Radio> */}
+              Current:{recommandation.currentValue}
+            </Radio>
+            <Radio
+              colorScheme={"brand"}
+              value={"better"}
+              size="sm"
+
+            >
+              Better:{recommandation.betterValue}
+            </Radio>
           </Stack>
         </RadioGroup>
       </AccordionPanel>
