@@ -13,9 +13,11 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import React from "react";
-import { RecommandationWithZone } from "../../app/types/recommandations";
+import { useDispatch } from "react-redux";
+import { RecommandationOption, RecommandationWithZone } from "../../app/types/recommandations";
 import { VideoParameters } from "../../app/types/videoTypes";
-import { ReportCTX } from "./RecoReport";
+import { recommandationUpdated } from "../../features/recommandations/recommandationsSlice";
+//import { ReportCTX } from "./RecoReport";
 
 interface RecommandationDisplayProps {
   recommandation: RecommandationWithZone<
@@ -26,28 +28,12 @@ interface RecommandationDisplayProps {
 export default function RecommandationDisplay({
   recommandation,
 }: RecommandationDisplayProps) {
-  const [selected, setSelected] = React.useState<string>("current");
-  const { totalBenefits, setTotalBenefits } = React.useContext(ReportCTX);
-
+  //const { totalBenefits, setTotalBenefits } = React.useContext(ReportCTX);
+  const dispatch = useDispatch();
    const onChangeParams = React.useCallback(
-    (v: string) => {
-      setSelected(v);
-      if (v === "better") {
-        const newCo2 = totalBenefits.co2 + recommandation.benefits.co2;
-        const newEnergy = totalBenefits.energy + recommandation.benefits.energy;
-        setTotalBenefits({
-          co2: newCo2,
-          energy: newEnergy,
-        });
-      } else if (v === "current") {
-        const newCo2 = totalBenefits.co2 - recommandation.benefits.co2;
-        const newEnergy = totalBenefits.energy - recommandation.benefits.energy;
-        setTotalBenefits({
-          co2: newCo2,
-          energy: newEnergy,
-        });
-      }
-    }, [recommandation, totalBenefits]
+    (v: RecommandationOption) => {
+      dispatch(recommandationUpdated({ id: recommandation.id, selectedValue: v }));
+    }, [recommandation]
   );
   return (
     <AccordionItem>
@@ -66,7 +52,7 @@ export default function RecommandationDisplay({
         <AccordionIcon />
       </AccordionButton>
       <AccordionPanel>
-        <RadioGroup value={selected} onChange={onChangeParams}>
+        <RadioGroup value={recommandation.selectedValue || 'current'} onChange={onChangeParams}>
           <Stack>
             <Radio
               colorScheme={"brand"}
