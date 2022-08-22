@@ -5,7 +5,7 @@ import { Project } from "../../app/types/types";
 const initialState: Project = {
   id: 1,
   name: "Main project",
-  status: "LOADING",
+  status: "EDITING",
 };
 
 const projectSlice = createSlice({
@@ -16,10 +16,17 @@ const projectSlice = createSlice({
       state.name = action.payload;
     },
     projectReset: (state) => {
-      state.params = undefined;
+      if (state.status !== "SIMULATION") {
+        state.params = undefined;
+      }
     },
     projectUpdated(state, action: PayloadAction<Partial<Project>>) {
-      Object.assign(state, action.payload);
+      if (
+        !Object.prototype.hasOwnProperty.call(action.payload, "params") ||
+        state.status !== "SIMULATION"
+      ) {
+        Object.assign(state, action.payload);
+      }
     },
   },
 });

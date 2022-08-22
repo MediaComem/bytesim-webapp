@@ -5,18 +5,29 @@ import { useDispatch } from "react-redux";
 import { zoneAdded } from "./features/zones/zonesSlice";
 import Panel, { ResizablePanel } from "./components/layout/Panel";
 import BytesimeHeader from "./components/layout/ByteSimHeader";
-import ZonesList from "./components/zones/ZonesList";
 import ZonesView from "./components/zones/ZonesView";
 import GeneralFormAccordion from "./components/zones/GeneralForm";
 import FigmaZonesList from "./components/zones/FigmaZonesList";
 import ConfirmModal from "./components/layout/ConfirmModal";
-import { projectReset } from "./features/project/projectSlice";
-import { useAppSelector } from "./app/hooks";
+import { projectReset, projectUpdated } from "./features/project/projectSlice";
+import { recommandationsPopulated } from "./features/recommandations/recommandationsSlice";
+import { useAppSelector, useCalculateAllRecommandations } from "./app/hooks";
+import RecoReport from "./components/recommandations/RecoReport";
+import ZonesList from "./components/zones/ZonesList";
+import React from "react";
 
 function App() {
   const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const project = useAppSelector((state) => state.project);
+  const state = useAppSelector((s) => s);
+  const project = state.project;
+  const recos = useCalculateAllRecommandations();
+
+  const startSimulation = React.useCallback(() => {
+    dispatch(projectUpdated({ status: "SIMULATION" }));
+    dispatch(recommandationsPopulated(recos));
+  }, [dispatch, projectUpdated, recos]);
+
   return (
     <div
       className={
@@ -26,29 +37,44 @@ function App() {
     >
       <BytesimeHeader />
       <Flex grow={1}>
-        <Panel title="Report" className={css({ maxWidth: "25vw" })}>
-          <Text p={4} fontSize="sm" color={"gray.700"}>
-            {
-              "Welcome in this amazing tool to analyze the footprint of your website or app with an SVG. Let's do it and get good green recommendations! #happygreen"
-            }
-          </Text>
-          <div>
-            <p>PROJECT: {project.name}</p>
-            <p>{project.params?.nbVisit}</p>
-            <p>{project.params?.server}</p>
-            <p>{project.params?.plugins}</p>
-            <p>{project.params?.genericFont}</p>
-            <p>{project.params?.inifiteScroll}</p>
-          </div>
-          {/* ReportToolBar */}
-          {/* RecommandationsList */}
-          {/* ExportButton */}
+        <Panel
+          title="Report"
+          className={css({ minWidth: "22vw", maxWidth: "22vw" })}
+        >
+          {project.status === "EDITING" && (
+            <>
+              <Text p={4} fontSize="sm" color={"gray.700"}>
+                {
+                  "Welcome in this amazing tool to analyze the footprint of your website or app with an SVG. Let's do it and get good green recommendations! #happygreen"
+                }
+              </Text>
+              <Button onClick={startSimulation}>Calculate</Button>
+            </>
+          )}
+          {project.status === "SIMULATION" && (
+            <>
+              <RecoReport />
+              <Button
+                onClick={() => {
+                  dispatch(projectUpdated({ status: "EDITING" }));
+                }}
+                variant="outline"
+              >
+                Stop calculate
+              </Button>
+            </>
+          )}
         </Panel>
         <Panel
           title="Parameters"
           grow={1}
           toolbarButton={
-            <Button onClick={onOpen} size="sm" variant="ghost">
+            <Button
+              onClick={onOpen}
+              size="sm"
+              variant="ghost"
+              disabled={project.status === "SIMULATION"}
+            >
               Reset all ⟳
             </Button>
           }
@@ -94,12 +120,13 @@ function App() {
               }}
               size="sm"
               colorScheme={"brand"}
+              disabled={project.status === "SIMULATION"}
             >
               + Create Zone
             </Button>
           }
         >
-          <ZonesView />
+          <ZonesView disableEdition={project.status === "SIMULATION"} />
         </ResizablePanel>
       </Flex>
     </div>

@@ -1,3 +1,4 @@
+import { nanoid } from "@reduxjs/toolkit";
 import { ImagesParameters } from "../app/types/imgTypes";
 import { Recommandation } from "../app/types/recommandations";
 import { Zone, ZoneType } from "../app/types/types";
@@ -69,7 +70,7 @@ class simulationService {
 
   static simulator(zone: Zone): SimulatorVideo | SimulatorImages | undefined {
     if (!zone.params) {
-      console.log(`No parameters for Zone $ {zone.id}`);
+      console.log(`No parameters for Zone ${zone.id}`);
       return undefined;
     }
     switch (zone.zoneType) {
@@ -145,6 +146,7 @@ class VideoSimulator implements SimulatorVideo {
         };
         const { energy: energyBetter, co2: co2Better } = this.simulateParameters(betterParams);
         const recommandation = {
+          id: nanoid(),
           parameter: 'Video quality',
           currentValue: resolution,
           betterValue: better,

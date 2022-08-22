@@ -3,11 +3,13 @@ import projectReducer from '../features/project/projectSlice'
 import zonesSlice from '../features/zones/zonesSlice'
 import { debounce } from "debounce";
 import browserStorage from '../services/browserStorage';
+import recommandationsSlice from '../features/recommandations/recommandationsSlice';
 
 export const store = configureStore({
   reducer: {
     project: projectReducer,
-    zones: zonesSlice
+    zones: zonesSlice,
+    recommandations: recommandationsSlice
   },
   preloadedState: browserStorage.loadState(), // load state from local storage
 })
