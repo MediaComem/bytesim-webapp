@@ -17,7 +17,7 @@ function App() {
       <BytesimeHeader />
       <Routes>
         <Route path="/*" element={<Home />}/>
-        <Route path="export" element={<div>holà</div>}/>
+        <Route path="export" element={<ReportExportTemplate/>}/>
         <Route path="bytesim-webapp/export" element={<ReportExportTemplate/>}/>
       </Routes>
     </div>

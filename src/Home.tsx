@@ -30,6 +30,7 @@ export default function Home() {
       <Panel
         title="Report"
         className={css({ minWidth: "22vw", maxWidth: "22vw" })}
+        id='report'
       >
         {project.status === "EDITING" && (
           <>

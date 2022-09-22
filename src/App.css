@@ -1,0 +1,4 @@
+@media print {
+#header { display: none;}
+#reportToPrint #exportToolbox { display: none;}
+}

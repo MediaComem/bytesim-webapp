@@ -5,7 +5,7 @@ import ProjectSettingsModal from "../project/ProjectSettingsModal";
 export default function BytesimeHeader() {
   const projectName = useAppSelector((state) => state.project.name);
   return (
-    <Flex align="baseline" alignSelf="stretch" p={2} gap={1} justify={'space-between'}>
+    <Flex align="baseline" alignSelf="stretch" p={2} gap={1} justify={'space-between'} id='header'>
       <Flex gap={2}>
         <Heading size={"md"}>■ ByteSim</Heading>
         <Heading size={"md"} fontWeight={"light"}>

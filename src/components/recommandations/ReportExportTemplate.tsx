@@ -1,6 +1,4 @@
 import { Button, Divider, Flex, Heading } from "@chakra-ui/react";
-import html2canvas from "html2canvas";
-import JsPDF from "jspdf";
 //import html2canvas from "html2canvas";
 //import JsPDF from "jspdf";
 import { useRef } from "react";
@@ -10,7 +8,8 @@ import { ReportBody } from "./RecoReport";
 export default function ReportExportTemplate() {
   const navigate = useNavigate();
   const HTML_TO_EXPORT = useRef<any>(null);
-  const generatePDF = () => {
+  // export function with libs html2Canvas and jsPdf if wanted in future
+  /* const generatePDF = () => {
     html2canvas(HTML_TO_EXPORT.current, {
       scale: 2, // use the desired scale
       allowTaint: true,
@@ -39,11 +38,11 @@ export default function ReportExportTemplate() {
       report.save("report.pdf");
       navigate("/bytesim-webapp");
     });
-  };
+  }; */
   return (
     <>
-      <Flex direction="column" p={4} w={"180mm"} alignSelf="center">
-        <Flex justify={"space-between"} align={"flex-end"} pb={4}>
+      <Flex direction="column" p={4} w={"180mm"} alignSelf="center" id='reportToPrint'>
+        <Flex justify={"space-between"} align={"flex-end"} pb={4} id='exportToolbox'>
           <Heading size={"md"}>Report export</Heading>
           <div>
             <Button
@@ -54,7 +53,7 @@ export default function ReportExportTemplate() {
             >
               Cancel
             </Button>
-            <Button onClick={generatePDF} colorScheme="brand">
+            <Button onClick={() => { window.print() }} colorScheme="brand">
               Export in PDF
             </Button>
           </div>
