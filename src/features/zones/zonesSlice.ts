@@ -54,8 +54,12 @@ const zonesSlice = createSlice({
     zoneReset(state, action: PayloadAction<string>) {
       const existingZone = state.find((zone) => zone.id === action.payload);
       if (existingZone) {
-        existingZone.zoneType = undefined;
-        existingZone.params = undefined;
+        const resetParams = {
+          id: existingZone.id,
+          params: undefined,
+          zoneType: undefined,
+        };
+        Object.assign(existingZone, resetParams);
       }
     },
     zoneDeleted(state, action: PayloadAction<string>) {

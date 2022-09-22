@@ -1,5 +1,7 @@
 import { Flex } from "@chakra-ui/react";
 import * as React from "react";
+import { ReactComponent as EmptyPointIcon } from "../../assets/RondCompletion_NonComplete.svg";
+import { ReactComponent as FullPointIcon } from "../../assets/RondCompletion_complete.svg";
 
 interface ProgressPointsProps {
   completeObject: Object;
@@ -18,10 +20,22 @@ export default function ProgressPoints({
   }
   const points = [];
   for (let i = 0; i < completed; i++) {
-    points.push(<span key={i + 'completed'}>◉</span>);
+    points.push(
+      <span key={i + "completed"}>
+        <FullPointIcon />
+      </span>
+    );
   }
   for (let j = 0; j < total - completed; j++) {
-    points.push(<span key={j + 'empty'}>◎</span>);
+    points.push(
+      <span key={j + "empty"}>
+        <EmptyPointIcon />
+      </span>
+    );
   }
-  return <Flex mx={2} fontSize='xs' color={'gray.400'}>{points}</Flex>;
+  return (
+    <Flex mx={2} fontSize="xs" color={"gray.400"}>
+      {points}
+    </Flex>
+  );
 }

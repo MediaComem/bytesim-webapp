@@ -2,17 +2,19 @@ import { Accordion, Button, Flex, Text, useDisclosure } from "@chakra-ui/react";
 import { css } from "@emotion/css";
 import * as React from "react";
 import { useDispatch } from "react-redux";
+import { colorTheme } from ".";
 import { useAppSelector, useCalculateAllRecommandations } from "./app/hooks";
 import ConfirmModal from "./components/layout/ConfirmModal";
 import Panel, { ResizablePanel } from "./components/layout/Panel";
 import RecoReport from "./components/recommandations/RecoReport";
-import FigmaZonesList from "./components/zones/FigmaZonesList";
+import MainGroupList from "./components/zones/MainGroupList";
 import GeneralFormAccordion from "./components/zones/GeneralForm";
 import ZonesList from "./components/zones/ZonesList";
 import ZonesView from "./components/zones/ZonesView";
 import { projectUpdated, projectReset } from "./features/project/projectSlice";
 import { recommandationsPopulated } from "./features/recommandations/recommandationsSlice";
 import { zoneAdded } from "./features/zones/zonesSlice";
+import { ReactComponent as ResetIcon } from "./assets/ResetIcon_Active_MouseOver.svg";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -29,8 +31,12 @@ export default function Home() {
     <Flex grow={1}>
       <Panel
         title="Report"
-        className={css({ minWidth: "22vw", maxWidth: "22vw" })}
-        id='report'
+        className={css({
+          minWidth: "22vw",
+          maxWidth: "22vw",
+          backgroundColor: colorTheme[50],
+        })}
+        id="report"
       >
         {project.status === "EDITING" && (
           <>
@@ -66,7 +72,7 @@ export default function Home() {
             variant="ghost"
             disabled={project.status === "SIMULATION"}
           >
-            Reset all ⟳
+            Reset all <ResetIcon className={css({ margin: "3px" })} />
           </Button>
         }
       >
@@ -85,7 +91,7 @@ export default function Home() {
         />
         <Accordion allowToggle>
           <GeneralFormAccordion />
-          <FigmaZonesList />
+          <MainGroupList />
           <ZonesList />
         </Accordion>
       </Panel>
