@@ -14,9 +14,10 @@ import { Zone, ZoneType } from "../../app/types/types";
 //import { PrettyZoneTypes } from "../../app/types";
 import {
   zoneSelected,
-  zoneReset,
   allZonesReset,
   zoneDeleted,
+  zoneReset,
+  allZonesDeleted,
   //allZonesReset,
 } from "../../features/zones/zonesSlice";
 import AccordionItemTitleWithButton from "../layout/AccordionItemTitleWithButton";
@@ -24,6 +25,9 @@ import ConfirmModal from "../layout/ConfirmModal";
 import ZoneParams from "./ZoneParams";
 import ProgressPoints from "../layout/ProgressPoints";
 import { VideoFormEntries } from "../../app/types/videoTypes";
+import { ReactComponent as ResetIcon } from "../../assets/ResetIcon_Active_MouseOver.svg";
+import { css } from "@emotion/css";
+import AccordionCustomTitle from "../layout/AccordionCustomTitle";
 
 export default function ZonesList() {
   const dispatch = useDispatch();
@@ -42,68 +46,102 @@ export default function ZonesList() {
   });
   return (
     <AccordionItem>
-      <AccordionItemTitleWithButton label="Drawn Zones" p={2}>
-        <Button
-          variant={"ghost"}
-          size="sm"
-          //onClick={() => dispatch(allZonesReset())}
-          onClick={() => {
-            setModalContent({
-              modal:
-                "Are you sure you want to reset all zones? It will delete all provided data.",
-              buttonLabel: "Reset all zones",
-              onConfirm: () => {
-                dispatch(allZonesReset());
-              },
-            });
-            onOpen();
-          }}
-          isDisabled={project.status === "SIMULATION"}
-        >
-          Reset ⟳
-        </Button>
-      </AccordionItemTitleWithButton>
-      <AccordionPanel p={0}>
-        <Accordion allowToggle>
-          {zones.map((z, i) => {
-            return (
-              <AccordionItem
-                key={i}
-                onClick={() => dispatch(zoneSelected(z.id))}
+      {({ isExpanded }) => (
+        <>
+          <AccordionItemTitleWithButton
+            label={<AccordionCustomTitle label="DrawnZones" icon="drawnZone" />}
+            p={2}
+            isExpanded={isExpanded}
+          >
+            <Flex>
+              <Button
+                variant={"ghost"}
+                size="sm"
+                //onClick={() => dispatch(allZonesReset())}
+                onClick={() => {
+                  setModalContent({
+                    modal:
+                      "Are you sure you want to reset all zones? It will delete all provided data.",
+                    buttonLabel: "Reset all zones",
+                    onConfirm: () => {
+                      dispatch(allZonesReset());
+                    },
+                  });
+                  onOpen();
+                }}
+                isDisabled={project.status === "SIMULATION"}
               >
-                <ZoneListButton
-                  zone={z}
-                  onOpen={() => {
-                    setModalContent({
-                      modal:
-                        "Are you sure you want to delete the zone? It will delete the associated form too.",
-                      buttonLabel: "Delete zone",
-                      onConfirm: () => {
-                        dispatch(zoneDeleted(z.id));
-                      },
-                    });
-                    onOpen();
-                  }}
-                />
-                <AccordionPanel p={0}>
-                  <ZoneParams zone={z} />
-                </AccordionPanel>
-                <ConfirmModal
-                  headerText={modalContent.buttonLabel}
-                  message={modalContent.modal}
-                  buttonLabel={modalContent.buttonLabel}
-                  isOpen={isOpen}
-                  onClose={onClose}
-                  onConfirm={() => {
-                    modalContent.onConfirm();
-                    onClose();
-                  }}
-                />
-              </AccordionItem>
-            );
-          })}
-        </Accordion>
-      </AccordionPanel>
+                Reset <ResetIcon className={css({ margin: "3px" })} />
+              </Button>
+              <Button
+                variant={"ghost"}
+                size="sm"
+                //onClick={() => dispatch(allZonesReset())}
+                onClick={() => {
+                  setModalContent({
+                    modal:
+                      "Are you sure you want to delete all zones? It will delete all drawn zones on the view panel and all data.",
+                    buttonLabel: "Delete all zones",
+                    onConfirm: () => {
+                      dispatch(allZonesDeleted());
+                    },
+                  });
+                  onOpen();
+                }}
+                isDisabled={project.status === "SIMULATION"}
+              >
+                Delete all ✖︎
+              </Button>
+            </Flex>
+          </AccordionItemTitleWithButton>
+          <AccordionPanel p={0}>
+            <Accordion allowToggle>
+              {zones.map((z, i) => {
+                return (
+                  <AccordionItem
+                    key={i}
+                    onClick={() => dispatch(zoneSelected(z.id))}
+                  >
+                    {({ isExpanded }) => (
+                      <>
+                        <ZoneListButton
+                          zone={z}
+                          onOpen={() => {
+                            setModalContent({
+                              modal:
+                                "Are you sure you want to delete the zone? It will delete the associated form too.",
+                              buttonLabel: "Delete zone",
+                              onConfirm: () => {
+                                dispatch(zoneDeleted(z.id));
+                              },
+                            });
+                            onOpen();
+                          }}
+                          isExpanded={isExpanded}
+                        />
+                        <AccordionPanel p={0} bg={"brand.50"}>
+                          <ZoneParams zone={z} />
+                        </AccordionPanel>
+                      </>
+                    )}
+                  </AccordionItem>
+                );
+              })}
+            </Accordion>
+          </AccordionPanel>
+          <ConfirmModal
+            headerText={modalContent.buttonLabel}
+            message={modalContent.modal}
+            buttonLabel={modalContent.buttonLabel}
+            isOpen={isOpen}
+            onClose={onClose}
+            onConfirm={() => {
+              modalContent.onConfirm();
+              onClose();
+            }}
+          />
+        </>
+      )}
     </AccordionItem>
   );
 }
@@ -111,12 +149,14 @@ export default function ZonesList() {
 interface ZoneListButtonProps {
   zone: Zone;
   onOpen: () => void;
+  isExpanded: boolean;
 }
-function ZoneListButton({ zone, onOpen }: ZoneListButtonProps) {
+function ZoneListButton({ zone, onOpen, isExpanded }: ZoneListButtonProps) {
   const dispatch = useDispatch();
   const projectStatus = useAppSelector((state) => state.project.status);
   return (
     <AccordionItemTitleWithButton
+      isExpanded={isExpanded}
       bg={zone.status === "EDITING" ? "brand.100" : undefined}
       label={
         <Flex
@@ -125,9 +165,11 @@ function ZoneListButton({ zone, onOpen }: ZoneListButtonProps) {
           fontStyle={zone.zoneType ? "normal" : "italic"}
           gap={2}
         >
-          <Text whiteSpace="nowrap" fontSize="sm">
-            {zone.name}
-          </Text>
+          <AccordionCustomTitle
+            label={zone.name}
+            icon="drawnZone"
+            iconClassName={css({ transform: "scale(0.8)" })}
+          />
           {zone.zoneType && (
             <>
               <Text fontSize={"sm"} color={"gray"} whiteSpace="nowrap">
@@ -150,10 +192,12 @@ function ZoneListButton({ zone, onOpen }: ZoneListButtonProps) {
         <Button
           variant={"ghost"}
           title="Reset zone"
-          onClick={() => dispatch(zoneReset(zone.id))}
+          onClick={() => {
+            dispatch(zoneReset(zone.id));
+          }}
           isDisabled={projectStatus === "SIMULATION"}
         >
-          ⟳
+          <ResetIcon className={css({ margin: "3px" })} />
         </Button>
         <Button
           variant={"ghost"}

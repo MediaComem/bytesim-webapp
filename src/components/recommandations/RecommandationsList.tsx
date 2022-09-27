@@ -5,12 +5,15 @@ import RecommandationDisplay from "./Recommandation";
 
 interface RecommandationsListProps {
   recommandations: RecommandationWithZone<VideoParameters[keyof VideoParameters]>[];
+  allOpen: boolean;
 }
 export default function RecommandationsList({
   recommandations,
+  allOpen
 }: RecommandationsListProps) {
+  const indexes = Array.from(recommandations.keys());
   return (
-    <Accordion allowToggle allowMultiple>
+    <Accordion allowToggle allowMultiple index={allOpen ? indexes : undefined}>
       {recommandations.map((reco) => (
         <RecommandationDisplay key={reco.id} recommandation={reco} />
       ))}

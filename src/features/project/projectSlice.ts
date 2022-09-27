@@ -17,7 +17,7 @@ const projectSlice = createSlice({
     },
     projectReset: (state) => {
       if (state.status !== "SIMULATION") {
-        state.params = undefined;
+        Object.assign(state, { params: undefined });
       }
     },
     projectUpdated(state, action: PayloadAction<Partial<Project>>) {

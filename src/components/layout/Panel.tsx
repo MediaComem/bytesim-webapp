@@ -14,6 +14,7 @@ interface PanelProps {
   className?: string;
   grow?: 1 | 0;
   children: React.ReactNode;
+  id?: string;
 }
 
 export default function Panel({
@@ -22,6 +23,7 @@ export default function Panel({
   className,
   grow = 0,
   children,
+  id,
 }: PanelProps) {
   return (
     <Flex
@@ -29,6 +31,7 @@ export default function Panel({
       className={cx(panelStyle, className)}
       alignSelf="stretch"
       grow={grow}
+      id={id}
     >
     <PanelTitle title={title} toolbarButton={toolbarButton} />
       {children}

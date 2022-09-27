@@ -1,7 +1,6 @@
 import {
   Accordion,
   AccordionButton,
-  AccordionIcon,
   AccordionItem,
   AccordionPanel,
   Checkbox,
@@ -18,19 +17,20 @@ import { useAppSelector } from "../../app/hooks";
 import { Zone, ZoneType } from "../../app/types/types";
 import { VideoParameters, VideoFormEntries } from "../../app/types/videoTypes";
 import { zoneUpdated } from "../../features/zones/zonesSlice";
+import AccordionChevron from "../layout/AccordionChevron";
 
 interface ZoneParamsProps {
   zone: Zone;
 }
 export default function ZoneParams({ zone }: ZoneParamsProps) {
   const dispatch = useDispatch();
-  const projectStatus = useAppSelector(state => state.project.status);
+  const projectStatus = useAppSelector((state) => state.project.status);
   return (
     <Accordion allowToggle>
       {(Object.keys(ZoneType) as Array<keyof typeof ZoneType>).map((z) => {
         if (z === "Text") {
           return (
-            <AccordionItem p={2} pl={6} display='flex' key={z}>
+            <AccordionItem p={2} pl={6} display="flex" key={z}>
               <Checkbox
                 colorScheme={"brand"}
                 isChecked={zone.zoneType === "Text"}
@@ -47,7 +47,7 @@ export default function ZoneParams({ zone }: ZoneParamsProps) {
                     })
                   );
                 }}
-                isDisabled={projectStatus === 'SIMULATION'}
+                isDisabled={projectStatus === "SIMULATION"}
               />
               <div
                 className={
@@ -61,25 +61,25 @@ export default function ZoneParams({ zone }: ZoneParamsProps) {
         } else {
           return (
             <AccordionItem key={z}>
-              <Flex align="center">
-                <AccordionButton
-                  pl={6}
-                  pr={2}
-                  w={"auto"}
-                >
-                  <AccordionIcon />
-                </AccordionButton>
-                <div
-                  className={
-                    zone.zoneType !== z ? css({ opacity: 0.5 }) : undefined
-                  }
-                >
-                  {ZoneType[z]}
-                </div>
-              </Flex>
-              <AccordionPanel>
-                <ZoneParamsForm zone={zone} zoneType={z as ZoneType} />
-              </AccordionPanel>
+              {({ isExpanded }) => (
+                <>
+                  <Flex align="center">
+                    <AccordionButton pl={6} pr={2} w={"auto"}>
+                      <AccordionChevron isExpanded={isExpanded} />
+                    </AccordionButton>
+                    <div
+                      className={
+                        zone.zoneType !== z ? css({ opacity: 0.5 }) : undefined
+                      }
+                    >
+                      {ZoneType[z]}
+                    </div>
+                  </Flex>
+                  <AccordionPanel>
+                    <ZoneParamsForm zone={zone} zoneType={z as ZoneType} />
+                  </AccordionPanel>
+                </>
+              )}
             </AccordionItem>
           );
         }
@@ -109,21 +109,23 @@ function ZoneParamsForm({ zone, zoneType }: ZoneParamsFormProps) {
 // TO DO after POC: make it abstract for all zone types
 function VideoForm({ zone, zoneType }: ZoneParamsFormProps) {
   const dispatch = useDispatch();
-  const projectStatus = useAppSelector(state => state.project.status);
+  const projectStatus = useAppSelector((state) => state.project.status);
   return (
     <Flex direction={"column"}>
       <div>
         {Object.entries(VideoFormEntries).map(([key, value]) => {
           return (
             <div key={key}>
-              <Heading size="sm" my={2}>{key}</Heading>
+              <Heading size="sm" my={2}>
+                {key}
+              </Heading>
               <RadioGroup
                 value={
                   zone.params
                     ? zone.params[key as keyof VideoParameters]
                     : undefined
                 }
-                isDisabled={projectStatus === 'SIMULATION'}
+                isDisabled={projectStatus === "SIMULATION"}
               >
                 <Stack>
                   {Object.values(value)
@@ -132,7 +134,7 @@ function VideoForm({ zone, zoneType }: ZoneParamsFormProps) {
                       <Radio
                         colorScheme={"brand"}
                         key={index}
-                        value={data}
+                        value={zone.params ? data : 0}
                         onChange={() => {
                           const newParams = {
                             id: zone.id,
@@ -144,7 +146,7 @@ function VideoForm({ zone, zoneType }: ZoneParamsFormProps) {
                           }
                           dispatch(zoneUpdated(newParams));
                         }}
-                        size='sm'
+                        size="sm"
                       >
                         {data}
                       </Radio>
