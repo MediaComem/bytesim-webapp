@@ -101,9 +101,9 @@ function PanelTitle({
         alignSelf="stretch"
         justify={'space-between'}
         p={2}
-        h='45px'
+        h='35px'
       >
-        <Heading size={titleSize || 'md'}>{title}</Heading>
+        <Heading size={titleSize || 'sm'}>{title}</Heading>
         {toolbarButton}
       </Flex>
       <Divider />
