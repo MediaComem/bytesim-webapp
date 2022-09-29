@@ -75,6 +75,7 @@ export default function Home() {
             Reset all <ResetIcon className={css({ margin: "3px" })} />
           </Button>
         }
+        className={css({ borderLeft: 'none', borderRight: 'none' })}
       >
         <ConfirmModal
           headerText={"Reset the whole project"}

@@ -38,7 +38,7 @@ export default function GeneralFormAccordion() {
   const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <AccordionItem>
+    <AccordionItem borderTop={'none'}>
       {({ isExpanded }) => (
         <>
           <AccordionItemTitleCustom

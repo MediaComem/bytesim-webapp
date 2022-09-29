@@ -10,6 +10,7 @@ import {
   AccordionButton,
   Input,
   Text,
+  Heading,
 } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/hooks";
@@ -55,7 +56,7 @@ export default function ZonesList() {
       {({ isExpanded }) => (
         <>
           <AccordionItemTitleCustom
-            label={<AccordionCustomTitle label="DrawnZones" icon="drawnZone" />}
+            label={<AccordionCustomTitle label="Drawn zones" icon="drawnZone" />}
             p={2}
             isExpanded={isExpanded}
           >
@@ -106,6 +107,7 @@ export default function ZonesList() {
                     <AccordionItem
                       key={i}
                       onClick={() => dispatch(zoneSelected(z.id))}
+                      border='none'
                     >
                       {({ isExpanded }) => (
                         <>
@@ -126,6 +128,12 @@ export default function ZonesList() {
                             //setOpen={() => toggleAccordion(i)}
                           />
                           <AccordionPanel p={0} bg={"brand.50"}>
+                            <Box p={2} pl={6}>
+                              <Heading size={"xs"}>Type</Heading>
+                              <Text fontSize={"xs"}>
+                                Paramètres spécifiques sur la page
+                              </Text>
+                            </Box>
                             <ZoneParams zone={z} />
                           </AccordionPanel>
                         </>
@@ -171,7 +179,6 @@ function ZoneListButton({ zone, isExpanded, onOpen }: ZoneListButtonProps) {
         alignItems="center"
         justifyContent="space-between"
         flexWrap="nowrap"
-        p={1}
         pl={5}
         _hover={{
           backgroundColor: "brand.100",
@@ -179,35 +186,53 @@ function ZoneListButton({ zone, isExpanded, onOpen }: ZoneListButtonProps) {
             visibility: "visible",
           },
         }}
-        style={zone.status === 'EDITING' ? { backgroundColor: colorTheme[100] } : undefined }
+        style={
+          zone.status === "EDITING"
+            ? { backgroundColor: colorTheme[100] }
+            : undefined
+        }
       >
         <Flex align="center" justify="flex-start">
           <AccordionButton p={1} width="auto">
             <AccordionChevron isExpanded={isExpanded} />
           </AccordionButton>
-          {editNameMode ? (
-            <Input
-              //variant={"unstyled"}
-              value={value}
-              onChange={(e) => {
-                setValue(e.target.value);
-              }}
-              onBlur={() => {
-                const newName = {
-                  id: zone.id,
-                  name: value,
-                };
-                dispatch(zoneUpdated(newName));
-                setEditNameMode(false);
-              }}
-              autoFocus
-              p={1}
-              whiteSpace={'nowrap'}
-              minW='100px'
-            />
-          ) : (
-            <Text ml={1} fontStyle={zone.zoneType ? 'initial' : 'italic'} whiteSpace={'nowrap'} onDoubleClick={() => setEditNameMode(true)}>{value}</Text>
-          )}
+          <AccordionCustomTitle
+            label={
+              <>
+                {editNameMode ? (
+                  <Input
+                    value={value}
+                    onChange={(e) => {
+                      setValue(e.target.value);
+                    }}
+                    onBlur={() => {
+                      const newName = {
+                        id: zone.id,
+                        name: value,
+                      };
+                      dispatch(zoneUpdated(newName));
+                      setEditNameMode(false);
+                    }}
+                    autoFocus
+                    p={1}
+                    whiteSpace={"nowrap"}
+                    minW="100px"
+                  />
+                ) : (
+                  <Text
+                    ml={1}
+                    fontStyle={zone.zoneType ? "initial" : "italic"}
+                    whiteSpace={"nowrap"}
+                    onDoubleClick={() => setEditNameMode(true)}
+                  >
+                    {value}
+                  </Text>
+                )}
+              </>
+            }
+            icon={"drawnZone"}
+            iconClassName={css({ transform: "scale(0.8)" })}
+          />
           {zone.zoneType && (
             <>
               <Text fontSize={"sm"} color={"gray"} whiteSpace="nowrap" ml={2}>
@@ -218,8 +243,12 @@ function ZoneListButton({ zone, isExpanded, onOpen }: ZoneListButtonProps) {
                 }
               </Text>
               <ProgressPoints
-                completeObject={zone.zoneType === 'Video' ? VideoFormEntries : { text: true }}
-                params={ zone.zoneType === 'Video' ? zone.params : { text: true }}
+                completeObject={
+                  zone.zoneType === "Video" ? VideoFormEntries : { text: true }
+                }
+                params={
+                  zone.zoneType === "Video" ? zone.params : { text: true }
+                }
               />
             </>
           )}

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Flex, Text, ThemingProps } from "@chakra-ui/react";
+import { Box, Flex, ThemingProps } from "@chakra-ui/react";
 import { css, cx } from "@emotion/css";
 import { ReactComponent as SettingsIcon } from "../../assets/GeneralSettings_Icon.svg";
 import { ReactComponent as ImportedGroupIcon } from "../../assets/ImportedGroup_Icon.svg";
@@ -11,7 +11,7 @@ const iconStyle = css({
 
 interface AccordionCustomTitleProps extends ThemingProps<'Text'>{
   label: string | React.ReactNode;
-  icon?: 'settings' | 'importedGroup' | 'drawnZone';
+  icon?: string;
   className?: string;
   iconClassName?: string;
 }
@@ -25,7 +25,7 @@ export default function AccordionCustomTitle({
   return (
     <Flex align='center' className={className}>
       {icon && <Icon icon={icon} className={iconClassName} /> }
-      <Text fontSize={size || 'md'} whiteSpace="nowrap">{label}</Text>
+      <Box fontSize={size || 'md'} whiteSpace="nowrap">{label}</Box>
     </Flex>
   );
 }

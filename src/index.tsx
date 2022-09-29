@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
+
 export const colorTheme = {
     50: "#FFFBFF",
     100: "#fce9fc",

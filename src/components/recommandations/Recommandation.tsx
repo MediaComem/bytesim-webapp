@@ -42,7 +42,7 @@ export default function RecommandationDisplay({
     [recommandation]
   );
   return (
-    <AccordionItem>
+    <AccordionItem key={recommandation.id}>
       {({ isExpanded }) => (
         <>
           <AccordionButton _hover={{ backgroundColor: "brand.100" }} pl={2}>

@@ -27,10 +27,10 @@ export default function ZoneParams({ zone }: ZoneParamsProps) {
   const projectStatus = useAppSelector((state) => state.project.status);
   return (
     <Accordion allowToggle>
-      {(Object.keys(ZoneType) as Array<keyof typeof ZoneType>).map((z) => {
+      {(Object.keys(ZoneType) as Array<keyof typeof ZoneType>).map((z, i) => {
         if (z === "Text") {
           return (
-            <AccordionItem p={2} pl={6} display="flex" key={z}>
+            <AccordionItem p={2} pl={6} display="flex" key={i} border='none'>
               <Checkbox
                 colorScheme={"brand"}
                 isChecked={zone.zoneType === "Text"}
@@ -60,7 +60,7 @@ export default function ZoneParams({ zone }: ZoneParamsProps) {
           );
         } else {
           return (
-            <AccordionItem key={z}>
+            <AccordionItem key={i} border='none'>
               {({ isExpanded }) => (
                 <>
                   <Flex align="center">
