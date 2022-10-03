@@ -7,12 +7,14 @@ const navigate = useNavigate();
     <>
       <Button
         variant={"outline"}
-        colorScheme="brand"
+        alignSelf={'center'}
+        justifySelf={'flex-end'}
+        colorScheme="black"
         onClick={() => {
             navigate('/bytesim-webapp/export');
         }}
       >
-        Export report
+        Export
       </Button>
     </>
   );

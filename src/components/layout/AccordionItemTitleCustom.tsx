@@ -17,7 +17,7 @@ interface AccordionItemTitleWithButtonProps
   hiddenButtons?: boolean;
   isExpanded: boolean;
 }
-export default function AccordionItemTitleWithButton({
+export default function AccordionItemTitleCustom({
   label,
   children,
   bg,
@@ -41,7 +41,7 @@ export default function AccordionItemTitleWithButton({
         _hover={{ backgroundColor: hoverBgColor || "brand.100" }}
         p={p}
       >
-        <AccordionChevron isExpanded={isExpanded} />
+        <AccordionChevron isExpanded={isExpanded}/>
         {label}
       </AccordionButton>
       <div className={cx("visibleOnHover ", css({ visibility: "hidden" }))}>

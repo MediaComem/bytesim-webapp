@@ -26,7 +26,7 @@ import {
   projectReset,
   projectUpdated,
 } from "../../features/project/projectSlice";
-import AccordionItemTitleWithButton from "../layout/AccordionItemTitleWithButton";
+import AccordionItemTitleCustom from "../layout/AccordionItemTitleCustom";
 import ConfirmModal from "../layout/ConfirmModal";
 import ProgressPoints from "../layout/ProgressPoints";
 import { ReactComponent as ResetIcon } from "../../assets/ResetIcon_Active_MouseOver.svg";
@@ -38,10 +38,10 @@ export default function GeneralFormAccordion() {
   const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <AccordionItem>
+    <AccordionItem borderTop={'none'}>
       {({ isExpanded }) => (
         <>
-          <AccordionItemTitleWithButton
+          <AccordionItemTitleCustom
             p={2}
             label={
               <>
@@ -64,7 +64,7 @@ export default function GeneralFormAccordion() {
             >
               Reset <ResetIcon className={css({ margin: "3px" })} />
             </Button>
-          </AccordionItemTitleWithButton>
+          </AccordionItemTitleCustom>
           <AccordionPanel>
             <GeneralForm project={project} />
           </AccordionPanel>

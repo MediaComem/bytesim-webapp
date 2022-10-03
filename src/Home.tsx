@@ -15,6 +15,9 @@ import { projectUpdated, projectReset } from "./features/project/projectSlice";
 import { recommandationsPopulated } from "./features/recommandations/recommandationsSlice";
 import { zoneAdded } from "./features/zones/zonesSlice";
 import { ReactComponent as ResetIcon } from "./assets/ResetIcon_Active_MouseOver.svg";
+import ButtonWithIconCustom from "./components/layout/ButtonWithIconCustom";
+import { ReactComponent as CalculateArrow } from "./assets/Fleche_calculate.svg";
+import { ReactComponent as TimesIcon } from "./assets/Times_Icon.svg";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -35,32 +38,33 @@ export default function Home() {
           minWidth: "22vw",
           maxWidth: "22vw",
           backgroundColor: colorTheme[50],
+          position: 'relative',
         })}
         id="report"
       >
-        {project.status === "EDITING" && (
-          <>
-            <Text p={4} fontSize="sm" color={"gray.700"}>
-              {
-                "Welcome in this amazing tool to analyze the footprint of your website or app with an SVG. Let's do it and get good green recommendations! #happygreen"
-              }
-            </Text>
-            <Button onClick={startSimulation}>Calculate</Button>
-          </>
+        {project.status === "EDITING" ? (
+          <ButtonWithIconCustom
+            icon={<CalculateArrow />}
+            label={"Calculate"}
+            subLabel={"Validate the initial state and launch the calculation"}
+            onClick={startSimulation}
+          />
+        ) : (
+          <ButtonWithIconCustom
+            icon={<TimesIcon />}
+            label={"Stop"}
+            subLabel={"Stop the simulation"}
+            onClick={() => {
+              dispatch(projectUpdated({ status: "EDITING" }));
+            }}
+          />
         )}
-        {project.status === "SIMULATION" && (
-          <>
-            <RecoReport />
-            <Button
-              onClick={() => {
-                dispatch(projectUpdated({ status: "EDITING" }));
-              }}
-              variant="outline"
-            >
-              Stop calculate
-            </Button>
-          </>
-        )}
+        <Text px={4} py={2} fontSize="xs" color={"gray.700"}>
+          {
+            "Entering as many parameters as possible allows you to refine the calculation of your page. #happygreen"
+          }
+        </Text>
+        {project.status === "SIMULATION" && <RecoReport />}
       </Panel>
       <Panel
         title="Parameters"
@@ -75,6 +79,7 @@ export default function Home() {
             Reset all <ResetIcon className={css({ margin: "3px" })} />
           </Button>
         }
+        className={css({ borderLeft: "none", borderRight: "none" })}
       >
         <ConfirmModal
           headerText={"Reset the whole project"}

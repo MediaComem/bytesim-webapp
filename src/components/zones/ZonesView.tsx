@@ -5,16 +5,35 @@ import { Rnd } from "react-rnd";
 import { useAppSelector } from "../../app/hooks";
 import { zoneSelected, zoneUpdated } from "../../features/zones/zonesSlice";
 import TestSVG from "../layout/TestSVG";
-
+const brandColor = '#ea62ea';
+const resizeHandleSVG = (<svg width="15" height="15" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="7" y="7" width="14" height="14" fill="white" stroke={brandColor} strokeWidth="2"/>
+</svg>
+);
+const handleComp = {
+  topRight: resizeHandleSVG,
+  bottomRight: resizeHandleSVG,
+  bottomLeft: resizeHandleSVG,
+  topLeft: resizeHandleSVG,
+}
 const zoneStyle = css({
-  border: "3px solid violet",
+  border: `2px solid ${brandColor}55`,
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  backgroundColor: `${brandColor}09`,
+  color: `${brandColor}`
 });
 const selectedZoneStyle = css({
-  border: "4px solid lightSeaGreen",
+  border: `2px solid ${brandColor}`,
   fontWeight: "bold",
+});
+const aboveZoneStyle = css({
+  marginTop: '-20px',
+  whiteSpace: 'nowrap',
+  fontSize: '0.85em',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
 });
 
 export default function ZonesView({
@@ -71,8 +90,9 @@ export default function ZonesView({
               };
               dispatch(zoneUpdated(newPos));
             }}
+            resizeHandleComponent={handleComp}
           >
-            {z.name}
+            <p className={aboveZoneStyle}>{z.name}</p>
           </Rnd>
         );
       })}
