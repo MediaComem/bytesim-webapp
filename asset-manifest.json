@@ -1,15 +1,25 @@
 {
   "files": {
-    "main.css": "/bytesim-webapp/static/css/main.e6c13ad2.css",
-    "main.js": "/bytesim-webapp/static/js/main.aaa318c5.js",
-    "static/js/787.63137bab.chunk.js": "/bytesim-webapp/static/js/787.63137bab.chunk.js",
+    "main.css": "/bytesim-webapp/static/css/main.f0052763.css",
+    "main.js": "/bytesim-webapp/static/js/main.c559468d.js",
+    "static/js/988.2e94a79a.chunk.js": "/bytesim-webapp/static/js/988.2e94a79a.chunk.js",
+    "static/media/GeneralSettings_Icon.svg": "/bytesim-webapp/static/media/GeneralSettings_Icon.675088608896b304004937abdd9c6b3a.svg",
     "index.html": "/bytesim-webapp/index.html",
-    "main.e6c13ad2.css.map": "/bytesim-webapp/static/css/main.e6c13ad2.css.map",
-    "main.aaa318c5.js.map": "/bytesim-webapp/static/js/main.aaa318c5.js.map",
-    "787.63137bab.chunk.js.map": "/bytesim-webapp/static/js/787.63137bab.chunk.js.map"
+    "static/media/ResetIcon_Active_MouseOver.svg": "/bytesim-webapp/static/media/ResetIcon_Active_MouseOver.2b86e3fc3a13a3d5ab5c5457e0567d82.svg",
+    "static/media/DrawnZones_icon.svg": "/bytesim-webapp/static/media/DrawnZones_icon.c56a1a1f9aa5db18f81d712c8fe6d01a.svg",
+    "static/media/Help_Icon.svg": "/bytesim-webapp/static/media/Help_Icon.605da2cda42914b8d94efc3023d46ec8.svg",
+    "static/media/Times_Icon.svg": "/bytesim-webapp/static/media/Times_Icon.6eabb3e0f0b16a5f0fa5770db62c079e.svg",
+    "static/media/Fleche_calculate.svg": "/bytesim-webapp/static/media/Fleche_calculate.33da3329a8465fc514d0195376eea330.svg",
+    "static/media/ImportedGroup_Icon.svg": "/bytesim-webapp/static/media/ImportedGroup_Icon.df4d8aab0d4234760c91fd5a161b0d62.svg",
+    "static/media/RondCompletion_NonComplete.svg": "/bytesim-webapp/static/media/RondCompletion_NonComplete.eefc65df515d38aafbf0e2507cd882b3.svg",
+    "static/media/RondCompletion_complete.svg": "/bytesim-webapp/static/media/RondCompletion_complete.6acba68df8f6db826072800e01ce6ff4.svg",
+    "static/media/Fleche_Fermee.svg": "/bytesim-webapp/static/media/Fleche_Fermee.378623ecaf2ff555ba024f885ed52464.svg",
+    "main.f0052763.css.map": "/bytesim-webapp/static/css/main.f0052763.css.map",
+    "main.c559468d.js.map": "/bytesim-webapp/static/js/main.c559468d.js.map",
+    "988.2e94a79a.chunk.js.map": "/bytesim-webapp/static/js/988.2e94a79a.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e6c13ad2.css",
-    "static/js/main.aaa318c5.js"
+    "static/css/main.f0052763.css",
+    "static/js/main.c559468d.js"
   ]
 }
