@@ -56,7 +56,9 @@ export default function ZonesList() {
       {({ isExpanded }) => (
         <>
           <AccordionItemTitleCustom
-            label={<AccordionCustomTitle label="Drawn zones" icon="drawnZone" />}
+            label={
+              <AccordionCustomTitle label="Drawn zones" icon="drawnZone" />
+            }
             p={2}
             isExpanded={isExpanded}
           >
@@ -77,7 +79,7 @@ export default function ZonesList() {
                 }}
                 isDisabled={project.status === "SIMULATION"}
               >
-                Reset <ResetIcon className={css({ margin: "3px" })} />
+                Reset <ResetIcon className={css({ margin: "3px" })} stroke='black'/>
               </Button>
               <Button
                 variant={"ghost"}
@@ -107,7 +109,7 @@ export default function ZonesList() {
                     <AccordionItem
                       key={i}
                       onClick={() => dispatch(zoneSelected(z.id))}
-                      border='none'
+                      border="none"
                     >
                       {({ isExpanded }) => (
                         <>
@@ -131,7 +133,7 @@ export default function ZonesList() {
                             <Box p={2} pl={6}>
                               <Heading size={"xs"}>Type</Heading>
                               <Text fontSize={"xs"}>
-                                Paramètres spécifiques sur la page
+                                Specific settings on the page
                               </Text>
                             </Box>
                             <ZoneParams zone={z} />
@@ -262,7 +264,7 @@ function ZoneListButton({ zone, isExpanded, onOpen }: ZoneListButtonProps) {
             }}
             isDisabled={projectStatus === "SIMULATION"}
           >
-            <ResetIcon className={css({ margin: "3px" })} />
+            <ResetIcon className={css({ margin: "3px" })} stroke='black'/>
           </Button>
           <Button
             variant={"ghost"}

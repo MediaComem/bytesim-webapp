@@ -30,7 +30,7 @@ export default function ZoneParams({ zone }: ZoneParamsProps) {
       {(Object.keys(ZoneType) as Array<keyof typeof ZoneType>).map((z, i) => {
         if (z === "Text") {
           return (
-            <AccordionItem p={2} pl={6} display="flex" key={i} border='none'>
+            <AccordionItem p={2} pl={6} display="flex" key={i} border="none">
               <Checkbox
                 colorScheme={"brand"}
                 isChecked={zone.zoneType === "Text"}
@@ -60,7 +60,7 @@ export default function ZoneParams({ zone }: ZoneParamsProps) {
           );
         } else {
           return (
-            <AccordionItem key={i} border='none'>
+            <AccordionItem key={i} border="none">
               {({ isExpanded }) => (
                 <>
                   <Flex align="center">
@@ -76,7 +76,7 @@ export default function ZoneParams({ zone }: ZoneParamsProps) {
                     </div>
                   </Flex>
                   <AccordionPanel>
-                    <ZoneParamsForm zone={zone} zoneType={z as ZoneType} />
+                    <ZoneParamsForm zoneId={zone.id} zoneType={z as ZoneType} />
                   </AccordionPanel>
                 </>
               )}
@@ -89,16 +89,16 @@ export default function ZoneParams({ zone }: ZoneParamsProps) {
 }
 
 interface ZoneParamsFormProps {
-  zone: Zone;
+  zoneId: string;
   zoneType: ZoneType;
 }
-function ZoneParamsForm({ zone, zoneType }: ZoneParamsFormProps) {
+function ZoneParamsForm({ zoneId, zoneType }: ZoneParamsFormProps) {
   const notImplementedYet = (
     <Flex>Oops! Sorry, {zoneType} form not implemented yet.</Flex>
   );
   switch (zoneType) {
     case "Video":
-      return <VideoForm zone={zone} zoneType={zoneType} />;
+      return <VideoForm zoneId={zoneId} />;
     case "Images":
       return notImplementedYet;
     default:
@@ -106,57 +106,65 @@ function ZoneParamsForm({ zone, zoneType }: ZoneParamsFormProps) {
   }
 }
 
+interface VideoFormProps {
+  zoneId: string;
+}
 // TO DO after POC: make it abstract for all zone types
-function VideoForm({ zone, zoneType }: ZoneParamsFormProps) {
+function VideoForm({ zoneId }: VideoFormProps) {
   const dispatch = useDispatch();
   const projectStatus = useAppSelector((state) => state.project.status);
-  return (
-    <Flex direction={"column"}>
-      <div>
-        {Object.entries(VideoFormEntries).map(([key, value]) => {
-          return (
-            <div key={key}>
-              <Heading size="sm" my={2}>
-                {key}
-              </Heading>
-              <RadioGroup
-                value={
-                  zone.params
-                    ? zone.params[key as keyof VideoParameters]
-                    : undefined
-                }
-                isDisabled={projectStatus === "SIMULATION"}
-              >
-                <Stack>
-                  {Object.values(value)
-                    .filter((v) => typeof v !== "number")
-                    .map((data, index) => (
-                      <Radio
-                        colorScheme={"brand"}
-                        key={index}
-                        value={zone.params ? data : 0}
-                        onChange={() => {
-                          const newParams = {
-                            id: zone.id,
-                            params: { ...zone.params, [key]: data },
-                            zoneType: zone.zoneType,
-                          };
-                          if (zoneType !== zone.zoneType) {
-                            newParams.zoneType = zoneType;
-                          }
-                          dispatch(zoneUpdated(newParams));
-                        }}
-                        size="sm"
-                      >
-                        {data}
-                      </Radio>
-                    ))}
-                </Stack>
-              </RadioGroup>
-            </div>
-          );
-        })}
-      </div>
-    </Flex>
+  const zone = useAppSelector((state) =>
+    state.zones.find((z) => z.id === zoneId)
   );
+  const VideoZoneType = 'Video' as ZoneType;
+  if (zone) {
+    return (
+      <Flex direction={"column"}>
+        <div>
+          {Object.entries(VideoFormEntries).map(([key, value]) => {
+            return (
+              <div key={key}>
+                <Heading size="sm" my={2}>
+                  {key}
+                </Heading>
+                <RadioGroup
+                  value={
+                    zone.params
+                      ? zone.params[key as keyof VideoParameters]
+                      : undefined
+                  }
+                  isDisabled={projectStatus === "SIMULATION"}
+                >
+                  <Stack>
+                    {Object.values(value)
+                      .filter((v) => typeof v !== "number")
+                      .map((data, index) => (
+                        <Radio
+                          colorScheme={"brand"}
+                          key={index}
+                          value={data}
+                          onChange={() => {
+                            const newParams = {
+                              id: zone.id,
+                              params: { ...zone.params, [key]: data },
+                              zoneType: VideoZoneType,
+                            };
+                            dispatch(zoneUpdated(newParams));
+                          }}
+                          size="sm"
+                        >
+                          {data}
+                        </Radio>
+                      ))}
+                  </Stack>
+                </RadioGroup>
+              </div>
+            );
+          })}
+        </div>
+      </Flex>
+    );
+  } else {
+    return <></>;
+  }
 }

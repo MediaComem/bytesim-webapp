@@ -6,6 +6,13 @@ const initialState: Project = {
   id: 1,
   name: "Main project",
   status: "EDITING",
+  params: {
+    nbVisit: undefined,
+    genericFont: undefined,
+    inifiteScroll: undefined,
+    plugins: undefined,
+    server: undefined,
+  },
 };
 
 const projectSlice = createSlice({
@@ -17,7 +24,15 @@ const projectSlice = createSlice({
     },
     projectReset: (state) => {
       if (state.status !== "SIMULATION") {
-        Object.assign(state, { params: undefined });
+        Object.assign(state, {
+          params: {
+            nbVisit: undefined,
+            genericFont: undefined,
+            inifiteScroll: undefined,
+            plugins: undefined,
+            server: undefined,
+          },
+        });
       }
     },
     projectUpdated(state, action: PayloadAction<Partial<Project>>) {

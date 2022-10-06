@@ -16,7 +16,11 @@ export default function ProgressPoints({
   const total = Object.keys(completeObject).length;
   let completed = 0;
   if (params) {
-    completed = Object.keys(params).length;
+    Object.values(params).forEach(param => {
+      if (param !== undefined) {
+        completed++
+      }
+    });
   }
   const points = [];
   for (let i = 0; i < completed; i++) {

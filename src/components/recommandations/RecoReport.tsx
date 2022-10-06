@@ -1,7 +1,6 @@
 import { Divider, Flex } from "@chakra-ui/react";
 import * as React from "react";
 import { useAppSelector } from "../../app/hooks";
-import ExportButton from "./ExportButton";
 import RecommandationsList from "./RecommandationsList";
 import ReportGeneralInfo from "./ReportGeneralInfo";
 import ReportToolBar from "./ReportToolBar";
@@ -11,7 +10,6 @@ export default function RecoReport({ className }: { className?: string }) {
     <>
     <Divider/>
       <ReportBody allOpen={false} className={className} />
-      <ExportButton />
     </>
   );
 }

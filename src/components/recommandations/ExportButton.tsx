@@ -6,13 +6,13 @@ const navigate = useNavigate();
   return (
     <>
       <Button
-        variant={"outline"}
+        variant={"solid"}
         alignSelf={'center'}
         justifySelf={'flex-end'}
-        colorScheme="black"
         onClick={() => {
             navigate('/bytesim-webapp/export');
         }}
+        size='sm'
       >
         Export
       </Button>
