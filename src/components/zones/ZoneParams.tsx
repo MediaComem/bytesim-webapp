@@ -26,23 +26,12 @@ interface ZoneParamsProps {
 export default function ZoneParams({ zone, index, setIndex }: ZoneParamsProps) {
   const dispatch = useDispatch();
   const projectStatus = useAppSelector((state) => state.project.status);
-  const { isOpen, onClose } = useDisclosure();
+  const { onOpen } = useDisclosure();
+  const [onConfirm, setOnConfirm] = React.useState<() => void>();
   return (
     <>
-      <ConfirmModal
-        headerText={"Reset the whole project"}
-        message={
-          "Are you sure you want to reset the whole project? It will delete all the provided data in general and all the zones."
-        }
-        buttonLabel={"Reset project"}
-        isOpen={isOpen}
-        onClose={onClose}
-        onConfirm={() => {
-          //dispatch(projectReset());
-          onClose();
-        }}
-      />
       <Accordion allowToggle index={index} onChange={setIndex}>
+        <ConfirmModalChangeType onConfirm={onConfirm} />
         {(Object.keys(ZoneType) as Array<keyof typeof ZoneType>).map((z, i) => {
           if (z === "Text") {
             return (
@@ -55,13 +44,26 @@ export default function ZoneParams({ zone, index, setIndex }: ZoneParamsProps) {
                     const newType = e.target.checked
                       ? (z as ZoneType)
                       : undefined;
-                    dispatch(
-                      zoneUpdated({
-                        id: zone.id,
-                        zoneType: newType,
-                        params: undefined,
-                      })
-                    );
+                    if (zone.zoneType !== undefined) {
+                      setOnConfirm(() => {
+                        dispatch(
+                          zoneUpdated({
+                            id: zone.id,
+                            zoneType: newType,
+                            params: undefined,
+                          })
+                        );
+                      });
+                      onOpen();
+                    } else {
+                      dispatch(
+                        zoneUpdated({
+                          id: zone.id,
+                          zoneType: newType,
+                          params: undefined,
+                        })
+                      );
+                    }
                   }}
                   isDisabled={projectStatus === "SIMULATION"}
                 />
@@ -95,7 +97,26 @@ export default function ZoneParams({ zone, index, setIndex }: ZoneParamsProps) {
     </>
   );
 }
-
+function ConfirmModalChangeType({ onConfirm }: { onConfirm?: () => void }) {
+  const { isOpen, onClose } = useDisclosure();
+  return (
+    <ConfirmModal
+      headerText={"Change zone type"}
+      message={
+        "Are you sure you want to change the type of the zone? It will delete all the provided data in other type."
+      }
+      buttonLabel={"Change type"}
+      isOpen={isOpen}
+      onClose={onClose}
+      onConfirm={() => {
+        if (onConfirm) {
+          onConfirm();
+        }
+        onClose();
+      }}
+    />
+  );
+}
 interface ZoneParamsFormProps {
   zoneId: string;
   zoneType: ZoneType;
@@ -128,30 +149,33 @@ function VideoForm({ zoneId }: VideoFormProps) {
       <Flex direction={"column"} pl={14}>
         <div>
           {Object.entries(VideoFormEntries).map(([key, value]) => {
-            const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+            const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
               const newParams = {
                 id: zone.id,
                 params: { ...zone.params, [key]: e.target.value },
                 zoneType: VideoZoneType,
               };
               dispatch(zoneUpdated(newParams));
-            }
+            };
             return (
               <div key={key}>
-                <Heading size="sm" mt={2} textTransform='capitalize'>
+                <Heading size="sm" mt={2} textTransform="capitalize">
                   {key}
                 </Heading>
                 <form>
                   {Object.values(value)
                     .filter((v) => typeof v !== "number")
                     .map((data, index) => (
-                      <Flex key={index} gap={1} fontSize={'sm'}>
+                      <Flex key={index} gap={1} fontSize={"sm"}>
                         <input
                           type="radio"
                           name={data}
                           id={key + data}
                           value={data}
-                          checked={zone.params && zone.params[key as keyof VideoParameters] === data}
+                          checked={
+                            zone.params &&
+                            zone.params[key as keyof VideoParameters] === data
+                          }
                           onChange={handleChange}
                         />
                         <label htmlFor={key + data}>{data}</label>

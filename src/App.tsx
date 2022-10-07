@@ -11,7 +11,7 @@ function App() {
     <div
       className={
         "App " +
-        css({ display: "flex", flexDirection: "column", height: "100vh" })
+        css({ display: "flex", flexDirection: "column", height: "100vh", overflow: 'hidden' })
       }
     >
       <BytesimeHeader />

@@ -15,20 +15,17 @@ import { projectReset } from "./features/project/projectSlice";
 import { zoneAdded } from "./features/zones/zonesSlice";
 import { ReactComponent as ResetIcon } from "./assets/ResetIcon_Active_MouseOver.svg";
 import ExportButton from "./components/recommandations/ExportButton";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const state = useAppSelector((s) => s);
   const project = state.project;
-  //const recos = useCalculateAllRecommandations();
+  const navigate = useNavigate();
 
-/*   const startSimulation = React.useCallback(() => {
-    dispatch(projectUpdated({ status: "SIMULATION" }));
-    dispatch(recommandationsPopulated(recos));
-  }, [dispatch, projectUpdated, recos]); */
   return (
-    <Flex grow={1}>
+    <Flex grow={1} overflow="hidden">
       <Panel
         title="Parameters"
         grow={1}
@@ -43,7 +40,7 @@ export default function Home() {
             <ResetIcon className={css({ margin: "3px" })} stroke="black" />
           </Button>
         }
-        className={css({ borderLeft: "none", borderRight: "none" })}
+        className={css({ borderLeft: "none", borderRight: "none", minWidth: "20vw", })}
       >
         <ConfirmModal
           headerText={"Reset the whole project"}
@@ -58,11 +55,13 @@ export default function Home() {
             onClose();
           }}
         />
-        <Accordion allowToggle>
-          <GeneralFormAccordion />
-          <MainGroupList />
-          <ZonesList />
-        </Accordion>
+        <div className={css({ overflowY: "auto", overflowX: 'hidden' })}>
+          <Accordion allowToggle>
+            <GeneralFormAccordion />
+            <MainGroupList />
+            <ZonesList />
+          </Accordion>
+        </div>
       </Panel>
       <ResizablePanel
         title="View"
@@ -80,6 +79,13 @@ export default function Home() {
           topLeft: false,
         }}
         toolbarButton={
+          <>
+          <Flex alignItems={'center'}>
+            <Button variant={'outline'} size='xs' onClick={() => navigate('./bytesim-webapp/1')}>1</Button>
+            <Button variant={'outline'} size='xs' onClick={() => navigate('./bytesim-webapp/2')}>2</Button>
+            <Button variant={'outline'} size='xs' onClick={() => navigate('./bytesim-webapp/3')}>3</Button>
+            <Button variant={'outline'} size='xs' onClick={() => navigate('./bytesim-webapp/4')}>4</Button>
+          </Flex>
           <Button
             onClick={() => {
               dispatch(zoneAdded());
@@ -90,6 +96,7 @@ export default function Home() {
           >
             + Create Zone
           </Button>
+          </>
         }
       >
         <ZonesView disableEdition={project.status === "SIMULATION"} />
@@ -101,7 +108,7 @@ export default function Home() {
           maxWidth: "26vw",
           backgroundColor: colorTheme[50],
           position: "relative",
-          borderLeft: 'none',
+          borderLeft: "none",
         })}
         id="report"
         toolbarButton={
