@@ -4,13 +4,11 @@ import {
   AccordionItem,
   AccordionPanel,
   Checkbox,
+  ExpandedIndex,
   Flex,
   Heading,
-  Radio,
-  RadioGroup,
-  Stack,
+  useDisclosure,
 } from "@chakra-ui/react";
-import { css } from "@emotion/css";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/hooks";
@@ -18,73 +16,83 @@ import { Zone, ZoneType } from "../../app/types/types";
 import { VideoParameters, VideoFormEntries } from "../../app/types/videoTypes";
 import { zoneUpdated } from "../../features/zones/zonesSlice";
 import AccordionChevron from "../layout/AccordionChevron";
+import ConfirmModal from "../layout/ConfirmModal";
 
 interface ZoneParamsProps {
   zone: Zone;
+  index: ExpandedIndex;
+  setIndex: React.Dispatch<React.SetStateAction<ExpandedIndex>>;
 }
-export default function ZoneParams({ zone }: ZoneParamsProps) {
+export default function ZoneParams({ zone, index, setIndex }: ZoneParamsProps) {
   const dispatch = useDispatch();
   const projectStatus = useAppSelector((state) => state.project.status);
+  const { isOpen, onClose } = useDisclosure();
   return (
-    <Accordion allowToggle>
-      {(Object.keys(ZoneType) as Array<keyof typeof ZoneType>).map((z, i) => {
-        if (z === "Text") {
-          return (
-            <AccordionItem p={2} pl={6} display="flex" key={i} border="none">
-              <Checkbox
-                colorScheme={"brand"}
-                isChecked={zone.zoneType === "Text"}
-                mr={3}
-                onChange={(e) => {
-                  const newType = e.target.checked
-                    ? (z as ZoneType)
-                    : undefined;
-                  dispatch(
-                    zoneUpdated({
-                      id: zone.id,
-                      zoneType: newType,
-                      params: undefined,
-                    })
-                  );
-                }}
-                isDisabled={projectStatus === "SIMULATION"}
-              />
-              <div
-                className={
-                  zone.zoneType !== z ? css({ opacity: 0.5 }) : undefined
-                }
-              >
-                {z}
-              </div>
-            </AccordionItem>
-          );
-        } else {
-          return (
-            <AccordionItem key={i} border="none">
-              {({ isExpanded }) => (
-                <>
-                  <Flex align="center">
-                    <AccordionButton pl={6} pr={2} w={"auto"}>
-                      <AccordionChevron isExpanded={isExpanded} />
-                    </AccordionButton>
-                    <div
-                      className={
-                        zone.zoneType !== z ? css({ opacity: 0.5 }) : undefined
-                      }
-                    >
-                      {ZoneType[z]}
-                    </div>
-                  </Flex>
-                  <AccordionPanel>
-                    <ZoneParamsForm zoneId={zone.id} zoneType={z as ZoneType} />
-                  </AccordionPanel>
-                </>
-              )}
-            </AccordionItem>
-          );
+    <>
+      <ConfirmModal
+        headerText={"Reset the whole project"}
+        message={
+          "Are you sure you want to reset the whole project? It will delete all the provided data in general and all the zones."
         }
-      })}
-    </Accordion>
+        buttonLabel={"Reset project"}
+        isOpen={isOpen}
+        onClose={onClose}
+        onConfirm={() => {
+          //dispatch(projectReset());
+          onClose();
+        }}
+      />
+      <Accordion allowToggle index={index} onChange={setIndex}>
+        {(Object.keys(ZoneType) as Array<keyof typeof ZoneType>).map((z, i) => {
+          if (z === "Text") {
+            return (
+              <AccordionItem p={2} pl={12} display="flex" key={i} border="none">
+                <Checkbox
+                  colorScheme={"brand"}
+                  isChecked={zone.zoneType === "Text"}
+                  mr={3}
+                  onChange={(e) => {
+                    const newType = e.target.checked
+                      ? (z as ZoneType)
+                      : undefined;
+                    dispatch(
+                      zoneUpdated({
+                        id: zone.id,
+                        zoneType: newType,
+                        params: undefined,
+                      })
+                    );
+                  }}
+                  isDisabled={projectStatus === "SIMULATION"}
+                />
+                <div>{z}</div>
+              </AccordionItem>
+            );
+          } else {
+            return (
+              <AccordionItem key={i} border="none">
+                {({ isExpanded }) => (
+                  <>
+                    <Flex align="center">
+                      <AccordionButton pl={12} pr={2} w={"auto"}>
+                        <AccordionChevron isExpanded={isExpanded} />
+                      </AccordionButton>
+                      <div>{ZoneType[z]}</div>
+                    </Flex>
+                    <AccordionPanel>
+                      <ZoneParamsForm
+                        zoneId={zone.id}
+                        zoneType={z as ZoneType}
+                      />
+                    </AccordionPanel>
+                  </>
+                )}
+              </AccordionItem>
+            );
+          }
+        })}
+      </Accordion>
+    </>
   );
 }
 
@@ -109,14 +117,65 @@ function ZoneParamsForm({ zoneId, zoneType }: ZoneParamsFormProps) {
 interface VideoFormProps {
   zoneId: string;
 }
-// TO DO after POC: make it abstract for all zone types
 function VideoForm({ zoneId }: VideoFormProps) {
+  const dispatch = useDispatch();
+  const zone = useAppSelector((state) =>
+    state.zones.find((z) => z.id === zoneId)
+  );
+  const VideoZoneType = "Video" as ZoneType;
+  if (zone) {
+    return (
+      <Flex direction={"column"} pl={14}>
+        <div>
+          {Object.entries(VideoFormEntries).map(([key, value]) => {
+            const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+              const newParams = {
+                id: zone.id,
+                params: { ...zone.params, [key]: e.target.value },
+                zoneType: VideoZoneType,
+              };
+              dispatch(zoneUpdated(newParams));
+            }
+            return (
+              <div key={key}>
+                <Heading size="sm" mt={2} textTransform='capitalize'>
+                  {key}
+                </Heading>
+                <form>
+                  {Object.values(value)
+                    .filter((v) => typeof v !== "number")
+                    .map((data, index) => (
+                      <Flex key={index} gap={1} fontSize={'sm'}>
+                        <input
+                          type="radio"
+                          name={data}
+                          id={key + data}
+                          value={data}
+                          checked={zone.params && zone.params[key as keyof VideoParameters] === data}
+                          onChange={handleChange}
+                        />
+                        <label htmlFor={key + data}>{data}</label>
+                      </Flex>
+                    ))}
+                </form>
+              </div>
+            );
+          })}
+        </div>
+      </Flex>
+    );
+  } else {
+    return <></>;
+  }
+}
+
+/* function VideoForm({ zoneId }: VideoFormProps) {
   const dispatch = useDispatch();
   const projectStatus = useAppSelector((state) => state.project.status);
   const zone = useAppSelector((state) =>
     state.zones.find((z) => z.id === zoneId)
   );
-  const VideoZoneType = 'Video' as ZoneType;
+  const VideoZoneType = "Video" as ZoneType;
   if (zone) {
     return (
       <Flex direction={"column"}>
@@ -167,4 +226,4 @@ function VideoForm({ zoneId }: VideoFormProps) {
   } else {
     return <></>;
   }
-}
+} */

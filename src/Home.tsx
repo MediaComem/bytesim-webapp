@@ -15,7 +15,6 @@ import { projectReset } from "./features/project/projectSlice";
 import { zoneAdded } from "./features/zones/zonesSlice";
 import { ReactComponent as ResetIcon } from "./assets/ResetIcon_Active_MouseOver.svg";
 import ExportButton from "./components/recommandations/ExportButton";
-import ReloadRecoButton from "./components/recommandations/ReloadRecoButton";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -98,8 +97,8 @@ export default function Home() {
       <Panel
         title="Simulation"
         className={css({
-          minWidth: "25vw",
-          maxWidth: "25vw",
+          minWidth: "26vw",
+          maxWidth: "26vw",
           backgroundColor: colorTheme[50],
           position: "relative",
           borderLeft: 'none',
@@ -107,7 +106,7 @@ export default function Home() {
         id="report"
         toolbarButton={
           <Flex gap={1}>
-            <ReloadRecoButton />
+            {/* <ReloadRecoButton /> */}
             <ExportButton />
           </Flex>
         }

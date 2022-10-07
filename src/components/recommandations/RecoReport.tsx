@@ -1,6 +1,8 @@
 import { Divider, Flex } from "@chakra-ui/react";
 import * as React from "react";
-import { useAppSelector } from "../../app/hooks";
+import { useDispatch } from "react-redux";
+import { useAppSelector, useCalculateAllRecommandations } from "../../app/hooks";
+import { recommandationsPopulated } from "../../features/recommandations/recommandationsSlice";
 import RecommandationsList from "./RecommandationsList";
 import ReportGeneralInfo from "./ReportGeneralInfo";
 import ReportToolBar from "./ReportToolBar";
@@ -18,6 +20,12 @@ interface ReportBodyProps {
   className?: string;
 }
 export function ReportBody({ allOpen, className }: ReportBodyProps) {
+  const dispatch = useDispatch();
+  const recommandations = useCalculateAllRecommandations();
+  const zones = useAppSelector((state) => state.zones);
+  React.useEffect(() => {
+    dispatch(recommandationsPopulated(recommandations));
+  }, [zones])
   const recos = useAppSelector((state) => state.recommandations);
   return (
     <Flex direction={"column"} id="TO_EXPORT" className={className}>

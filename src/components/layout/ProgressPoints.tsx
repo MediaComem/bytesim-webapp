@@ -38,8 +38,10 @@ export default function ProgressPoints({
     );
   }
   return (
-    <Flex mx={2} fontSize="xs" color={"gray.400"}>
-      {points}
+    <Flex mx={2} fontSize="sm" color={"gray.500"}>
+    {/* <Flex mx={2} fontSize="xs" color={"gray.400"}> */}
+      {/* {points} */}
+      {completed}/{total}
     </Flex>
   );
 }
