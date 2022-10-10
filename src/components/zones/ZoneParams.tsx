@@ -126,10 +126,12 @@ function ZoneParamsForm({ zoneId, zoneType }: ZoneParamsFormProps) {
     <Flex>Oops! Sorry, {zoneType} form not implemented yet.</Flex>
   );
   switch (zoneType) {
-    case "Video":
+    case ZoneType.Video:
       return <VideoForm zoneId={zoneId} />;
-    case "Images":
+    case ZoneType.Images:
       return notImplementedYet;
+    case ZoneType.DynamicContent:
+      return <DynContentForm />
     default:
       return notImplementedYet;
   }
@@ -191,6 +193,22 @@ function VideoForm({ zoneId }: VideoFormProps) {
   } else {
     return <></>;
   }
+}
+
+function DynContentForm() {
+  return (
+    <div>
+      <Flex direction="column" pl={14}>
+        <div><Checkbox /> Search</div>
+        <div><Checkbox /> Dynamic map</div>
+        <div><Checkbox /> Advertising</div>
+        <div><Checkbox /> Social network</div>
+        <div><Checkbox /> Comments box</div>
+        <div><Checkbox /> Recommendations</div>
+        <div><Checkbox /> 3D</div>
+      </Flex>
+    </div>
+  );
 }
 
 /* function VideoForm({ zoneId }: VideoFormProps) {

@@ -85,7 +85,7 @@ class simulationService {
     switch (zone.zoneType) {
       case ZoneType.Video:
         return new VideoSimulator(zone.id, zone.params, renewable);
-      case ZoneType.Imgs:
+      case ZoneType.Images:
         return new ImageSimulator(zone.id, zone.params, renewable);
     }
   }

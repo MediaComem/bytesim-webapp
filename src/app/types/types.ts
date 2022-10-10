@@ -39,7 +39,7 @@ export interface ZoneVideo extends ZoneInfo {
 }
 
 export interface ZoneImages extends ZoneInfo {
-  zoneType: ZoneType.Imgs;
+  zoneType: ZoneType.Images;
   params?: ImagesParameters;
 }
 
@@ -49,7 +49,7 @@ export interface ZoneText extends ZoneInfo {
 }
 
 export interface ZoneDynamic extends ZoneInfo {
-  zoneType: ZoneType.DynContent;
+  zoneType: ZoneType.DynamicContent;
   params?: any
 }
 
@@ -61,9 +61,9 @@ export type UserStatus = "CONNECTED" | "AFK" | "LOADING";
 
 export enum ZoneType {
   Video = "Video",
-  Imgs = "Images",
+  Images = "Images",
   Text = "Text",
-  DynContent = "Dynamic content",
+  DynamicContent = "DynamicContent",
 }
 
 export type FormsType = ZoneParamsType | GenericParameters;
