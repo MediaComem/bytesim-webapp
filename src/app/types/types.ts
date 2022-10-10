@@ -8,7 +8,7 @@ export interface Project {
   id: number;
   name: string;
   status: ProjectStatus;
-  params?: GenericParameters;
+  params: GenericParameters;
 }
 
 export interface User {

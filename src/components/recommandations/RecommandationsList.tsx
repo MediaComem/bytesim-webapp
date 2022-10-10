@@ -13,7 +13,7 @@ export default function RecommandationsList({
 }: RecommandationsListProps) {
   const indexes = Array.from(recommandations.keys());
   return (
-    <Accordion allowToggle allowMultiple index={allOpen ? indexes : undefined}>
+    <Accordion allowToggle index={allOpen ? indexes : undefined}>
       {recommandations.map((reco) => (
         <RecommandationDisplay key={reco.id} recommandation={reco} />
       ))}

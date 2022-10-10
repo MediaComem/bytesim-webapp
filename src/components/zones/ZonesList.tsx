@@ -11,6 +11,7 @@ import {
   Input,
   Text,
   Heading,
+  ExpandedIndex,
 } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/hooks";
@@ -29,6 +30,7 @@ import AccordionItemTitleCustom from "../layout/AccordionItemTitleCustom";
 import ConfirmModal from "../layout/ConfirmModal";
 import ZoneParams from "./ZoneParams";
 import { ReactComponent as ResetIcon } from "../../assets/ResetIcon_Active_MouseOver.svg";
+import { ReactComponent as TrashIcon } from "../../assets/TEMP_trash.svg";
 import { css, cx } from "@emotion/css";
 import AccordionCustomTitle from "../layout/AccordionCustomTitle";
 import AccordionChevron from "../layout/AccordionChevron";
@@ -51,12 +53,15 @@ export default function ZonesList() {
     buttonLabel: "Confirm",
     onConfirm: () => {},
   });
+  const [index, setIndex] = React.useState<ExpandedIndex>([]);
   return (
     <AccordionItem>
       {({ isExpanded }) => (
         <>
           <AccordionItemTitleCustom
-            label={<AccordionCustomTitle label="Drawn zones" icon="drawnZone" />}
+            label={
+              <AccordionCustomTitle label="Drawn zones" icon="drawnZone" />
+            }
             p={2}
             isExpanded={isExpanded}
           >
@@ -77,7 +82,8 @@ export default function ZonesList() {
                 }}
                 isDisabled={project.status === "SIMULATION"}
               >
-                Reset <ResetIcon className={css({ margin: "3px" })} />
+                Reset{" "}
+                <ResetIcon className={css({ margin: "3px" })} stroke="black" />
               </Button>
               <Button
                 variant={"ghost"}
@@ -95,7 +101,8 @@ export default function ZonesList() {
                 }}
                 isDisabled={project.status === "SIMULATION"}
               >
-                Delete all ✖︎
+                Delete all
+                <TrashIcon className={css({ margin: "3px" })} fill="black" />
               </Button>
             </Flex>
           </AccordionItemTitleCustom>
@@ -107,7 +114,7 @@ export default function ZonesList() {
                     <AccordionItem
                       key={i}
                       onClick={() => dispatch(zoneSelected(z.id))}
-                      border='none'
+                      border="none"
                     >
                       {({ isExpanded }) => (
                         <>
@@ -125,16 +132,17 @@ export default function ZonesList() {
                               onOpen();
                             }}
                             isExpanded={isExpanded}
+                            closseAllItems={() => setIndex([])}
                             //setOpen={() => toggleAccordion(i)}
                           />
                           <AccordionPanel p={0} bg={"brand.50"}>
-                            <Box p={2} pl={6}>
+                            <Box p={2} pl={12}>
                               <Heading size={"xs"}>Type</Heading>
                               <Text fontSize={"xs"}>
-                                Paramètres spécifiques sur la page
+                                Specific settings on the page
                               </Text>
                             </Box>
-                            <ZoneParams zone={z} />
+                            <ZoneParams zone={z} index={index} setIndex={setIndex} />
                           </AccordionPanel>
                         </>
                       )}
@@ -165,9 +173,10 @@ interface ZoneListButtonProps {
   zone: Zone;
   onOpen: () => void;
   isExpanded: boolean;
+  closseAllItems: () => void;
   //setOpen: () => void;
 }
-function ZoneListButton({ zone, isExpanded, onOpen }: ZoneListButtonProps) {
+function ZoneListButton({ zone, isExpanded, onOpen, closseAllItems }: ZoneListButtonProps) {
   const dispatch = useDispatch();
   const projectStatus = useAppSelector((state) => state.project.status);
   const [value, setValue] = React.useState(zone.name);
@@ -221,7 +230,7 @@ function ZoneListButton({ zone, isExpanded, onOpen }: ZoneListButtonProps) {
                 ) : (
                   <Text
                     ml={1}
-                    fontStyle={zone.zoneType ? "initial" : "italic"}
+                    //fontStyle={zone.zoneType ? "initial" : "italic"}
                     whiteSpace={"nowrap"}
                     onDoubleClick={() => setEditNameMode(true)}
                   >
@@ -233,24 +242,20 @@ function ZoneListButton({ zone, isExpanded, onOpen }: ZoneListButtonProps) {
             icon={"drawnZone"}
             iconClassName={css({ transform: "scale(0.8)" })}
           />
+          <Text fontSize={"sm"} color={"gray"} whiteSpace="nowrap" ml={2}>
+            {zone.zoneType
+              ? Object.entries(ZoneType).find(
+                  (s) => s[0] === zone.zoneType
+                )?.[1]
+              : "- undefined"}
+          </Text>
           {zone.zoneType && (
-            <>
-              <Text fontSize={"sm"} color={"gray"} whiteSpace="nowrap" ml={2}>
-                {
-                  Object.entries(ZoneType).find(
-                    (s) => s[0] === zone.zoneType
-                  )?.[1]
-                }
-              </Text>
-              <ProgressPoints
-                completeObject={
-                  zone.zoneType === "Video" ? VideoFormEntries : { text: true }
-                }
-                params={
-                  zone.zoneType === "Video" ? zone.params : { text: true }
-                }
-              />
-            </>
+            <ProgressPoints
+              completeObject={
+                zone.zoneType === "Video" ? VideoFormEntries : { text: true }
+              }
+              params={zone.zoneType === "Video" ? zone.params : { text: true }}
+            />
           )}
         </Flex>
         <Flex className={cx("visibleOnHover ", css({ visibility: "hidden" }))}>
@@ -259,10 +264,11 @@ function ZoneListButton({ zone, isExpanded, onOpen }: ZoneListButtonProps) {
             title="Reset zone"
             onClick={() => {
               dispatch(zoneReset(zone.id));
+              closseAllItems();
             }}
             isDisabled={projectStatus === "SIMULATION"}
           >
-            <ResetIcon className={css({ margin: "3px" })} />
+            <ResetIcon className={css({ margin: "3px" })} stroke="black" />
           </Button>
           <Button
             variant={"ghost"}
@@ -270,7 +276,7 @@ function ZoneListButton({ zone, isExpanded, onOpen }: ZoneListButtonProps) {
             title="Delete zone"
             isDisabled={projectStatus === "SIMULATION"}
           >
-            ✖︎
+            <TrashIcon className={css({ margin: "3px" })} fill="black" />
           </Button>
         </Flex>
       </Box>

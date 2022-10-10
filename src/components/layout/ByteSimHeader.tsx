@@ -21,7 +21,7 @@ export default function BytesimeHeader() {
         <Heading size={"md"}>■ ByteSim</Heading>
         <Heading size={"md"} fontWeight={"light"}>
           <Input
-          variant={"unstyled"}
+          variant={"flushed"}
             value={value}
             onChange={(e) => {
               setValue(e.target.value);

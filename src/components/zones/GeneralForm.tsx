@@ -62,7 +62,7 @@ export default function GeneralFormAccordion() {
               onClick={onOpen}
               disabled={project.status === "SIMULATION"}
             >
-              Reset <ResetIcon className={css({ margin: "3px" })} />
+              Reset <ResetIcon className={css({ margin: "3px" })} stroke='black'/>
             </Button>
           </AccordionItemTitleCustom>
           <AccordionPanel>
@@ -102,9 +102,9 @@ function GeneralForm({ project }: { project: Project }) {
                 <NumberInputCustom
                   defaultValue={0}
                   value={
-                    project.params
+                    project.params && project.params[key as keyof GenericParameters]
                       ? Number(project.params[key as keyof GenericParameters])
-                      : undefined
+                      : 0
                   }
                   min={0}
                   step={100}
