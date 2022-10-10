@@ -9,7 +9,8 @@ import { FormsType } from "../../app/types/types";
 import { VideoParameters } from "../../app/types/videoTypes";
 
 const initialState: RecommandationWithZone<
-  VideoParameters[keyof VideoParameters] | GenericParameters[keyof GenericParameters]
+  | VideoParameters[keyof VideoParameters]
+  | GenericParameters[keyof GenericParameters]
 >[] = [];
 
 const recommandationsSlice = createSlice({
@@ -19,7 +20,10 @@ const recommandationsSlice = createSlice({
     recommandationAdded(
       state,
       action: PayloadAction<
-        RecommandationWithZone<VideoParameters[keyof VideoParameters] | GenericParameters[keyof GenericParameters]>
+        RecommandationWithZone<
+          | VideoParameters[keyof VideoParameters]
+          | GenericParameters[keyof GenericParameters]
+        >
       >
     ) {
       state.push(action.payload);
@@ -27,12 +31,19 @@ const recommandationsSlice = createSlice({
     recommandationsPopulated(
       state,
       action: PayloadAction<
-        RecommandationWithZone<VideoParameters[keyof VideoParameters] | GenericParameters[keyof GenericParameters]>[]
+        RecommandationWithZone<
+          | VideoParameters[keyof VideoParameters]
+          | GenericParameters[keyof GenericParameters]
+        >[]
       >
     ) {
-      state.length = 0;
       action.payload.forEach((r) => {
-        state.push(r);
+        const existingReco = state.find((reco) => (reco.zoneId === r.zoneId && reco.parameter === r.parameter));
+        if (!existingReco) {
+          state.push(r);
+        } else if (existingReco.currentValue !== r.currentValue) {
+          Object.assign(existingReco, r);
+        }
       });
     },
     recommandationsReset: (state) => {

@@ -9,7 +9,7 @@ export const store = configureStore({
   reducer: {
     project: projectReducer,
     zones: zonesSlice,
-    recommandations: recommandationsSlice
+    recommandations: recommandationsSlice,
   },
   preloadedState: browserStorage.loadState(), // load state from local storage
 })

@@ -12,7 +12,7 @@ import GeneralFormAccordion from "./components/zones/GeneralForm";
 import ZonesList from "./components/zones/ZonesList";
 import ZonesView from "./components/zones/ZonesView";
 import { projectReset } from "./features/project/projectSlice";
-import { zoneAdded } from "./features/zones/zonesSlice";
+import { allZonesReset, zoneAdded } from "./features/zones/zonesSlice";
 import { ReactComponent as ResetIcon } from "./assets/ResetIcon_Active_MouseOver.svg";
 import ExportButton from "./components/recommandations/ExportButton";
 import { useNavigate } from "react-router-dom";
@@ -23,7 +23,6 @@ export default function Home() {
   const state = useAppSelector((s) => s);
   const project = state.project;
   const navigate = useNavigate();
-
   return (
     <Flex grow={1} overflow="hidden">
       <Panel
@@ -40,7 +39,11 @@ export default function Home() {
             <ResetIcon className={css({ margin: "3px" })} stroke="black" />
           </Button>
         }
-        className={css({ borderLeft: "none", borderRight: "none", minWidth: "20vw", })}
+        className={css({
+          borderLeft: "none",
+          borderRight: "none",
+          minWidth: "20vw",
+        })}
       >
         <ConfirmModal
           headerText={"Reset the whole project"}
@@ -52,10 +55,11 @@ export default function Home() {
           onClose={onClose}
           onConfirm={() => {
             dispatch(projectReset());
+            dispatch(allZonesReset());
             onClose();
           }}
         />
-        <div className={css({ overflowY: "auto", overflowX: 'hidden' })}>
+        <div className={css({ overflowY: "auto", overflowX: "hidden" })}>
           <Accordion allowToggle>
             <GeneralFormAccordion />
             <MainGroupList />
@@ -80,22 +84,46 @@ export default function Home() {
         }}
         toolbarButton={
           <>
-          <Flex alignItems={'center'}>
-            <Button variant={'outline'} size='xs' onClick={() => navigate('./bytesim-webapp/1')}>1</Button>
-            <Button variant={'outline'} size='xs' onClick={() => navigate('./bytesim-webapp/2')}>2</Button>
-            <Button variant={'outline'} size='xs' onClick={() => navigate('./bytesim-webapp/3')}>3</Button>
-            <Button variant={'outline'} size='xs' onClick={() => navigate('./bytesim-webapp/4')}>4</Button>
-          </Flex>
-          <Button
-            onClick={() => {
-              dispatch(zoneAdded());
-            }}
-            size="sm"
-            colorScheme={"brand"}
-            disabled={project.status === "SIMULATION"}
-          >
-            + Create Zone
-          </Button>
+            <Flex alignItems={"center"}>
+              <Button
+                variant={"outline"}
+                size="xs"
+                onClick={() => navigate("./bytesim-webapp/1")}
+              >
+                1
+              </Button>
+              <Button
+                variant={"outline"}
+                size="xs"
+                onClick={() => navigate("./bytesim-webapp/2")}
+              >
+                2
+              </Button>
+              <Button
+                variant={"outline"}
+                size="xs"
+                onClick={() => navigate("./bytesim-webapp/3")}
+              >
+                3
+              </Button>
+              <Button
+                variant={"outline"}
+                size="xs"
+                onClick={() => navigate("./bytesim-webapp/4")}
+              >
+                4
+              </Button>
+            </Flex>
+            <Button
+              onClick={() => {
+                dispatch(zoneAdded());
+              }}
+              size="sm"
+              colorScheme={"brand"}
+              disabled={project.status === "SIMULATION"}
+            >
+              + Create Zone
+            </Button>
           </>
         }
       >

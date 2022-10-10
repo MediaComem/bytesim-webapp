@@ -37,6 +37,7 @@ import AccordionChevron from "../layout/AccordionChevron";
 import ProgressPoints from "../layout/ProgressPoints";
 import { VideoFormEntries } from "../../app/types/videoTypes";
 import { colorTheme } from "../..";
+import { recommandationsReset } from "../../features/recommandations/recommandationsSlice";
 
 export default function ZonesList() {
   const dispatch = useDispatch();
@@ -76,6 +77,7 @@ export default function ZonesList() {
                     buttonLabel: "Reset all zones",
                     onConfirm: () => {
                       dispatch(allZonesReset());
+                      dispatch(recommandationsReset());
                     },
                   });
                   onOpen();
