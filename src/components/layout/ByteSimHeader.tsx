@@ -4,7 +4,6 @@ import { useAppSelector } from "../../app/hooks";
 import { useDispatch } from "react-redux";
 import { setName } from "../../features/project/projectSlice";
 import ButtonWithIconCustom from "./ButtonWithIconCustom";
-import { ReactComponent as HelpIcon } from "../../assets/Help_Icon.svg";
 
 export default function BytesimeHeader() {
   const projectName = useAppSelector((state) => state.project.name);
@@ -32,9 +31,9 @@ export default function BytesimeHeader() {
         </Heading>
       </Flex>
       <ButtonWithIconCustom
-            icon={<HelpIcon />}
-            label={"Help"}
-            subLabel={"Start with ByteSim"}
+            icon={<></>}
+            label={"Best practices"}
+            //subLabel={"Start with ByteSim"}
             variant={'ghost'}
             iconAfter
           />
