@@ -1,10 +1,13 @@
 export interface Recommandation<T> {
   id: string;
+  zone_id: string;
   parameter: string;
+  tips?: string;
   currentValue: T;
   betterValue: T;
   bestValue?: T;
-  benefits: Benefits;
+  benefitsBetter: Benefits;
+  benefitsBest?: Benefits;
   selectedValue?:RecommandationOption;
 }
 

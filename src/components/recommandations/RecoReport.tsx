@@ -1,7 +1,7 @@
 import { Divider, Flex } from "@chakra-ui/react";
 import * as React from "react";
 import { useDispatch } from "react-redux";
-import { useAppSelector, useCalculateAllRecommandations } from "../../app/hooks";
+import { useAppSelector, useCalculateAllRecommandations, useCalculateGenericRecommandations } from "../../app/hooks";
 import { recommandationsPopulated } from "../../features/recommandations/recommandationsSlice";
 import RecommandationsList from "./RecommandationsList";
 import ReportGeneralInfo from "./ReportGeneralInfo";
@@ -22,9 +22,10 @@ interface ReportBodyProps {
 export function ReportBody({ allOpen, className }: ReportBodyProps) {
   const dispatch = useDispatch();
   const recommandations = useCalculateAllRecommandations();
+  const genericRecomandations = useCalculateGenericRecommandations();
   const zones = useAppSelector((state) => state.zones);
   React.useEffect(() => {
-    dispatch(recommandationsPopulated(recommandations));
+    dispatch(recommandationsPopulated([...recommandations, ...genericRecomandations]));
   }, [zones])
   const recos = useAppSelector((state) => state.recommandations);
   return (

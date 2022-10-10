@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { useDispatch } from "react-redux";
+import { GenericParameters } from "../../app/types/generalFormTypes";
 import {
   RecommandationOption,
   RecommandationWithZone,
@@ -24,7 +25,7 @@ import AccordionChevron from "../layout/AccordionChevron";
 
 interface RecommandationDisplayProps {
   recommandation: RecommandationWithZone<
-    VideoParameters[keyof VideoParameters]
+    VideoParameters[keyof VideoParameters] | GenericParameters[keyof GenericParameters]
   >;
 }
 
@@ -66,11 +67,16 @@ export default function RecommandationDisplay({
             >
               <Stack>
                 <Radio colorScheme={"brand"} value={"current"} size="sm">
-                  Current:{recommandation.currentValue}
+                  Current:&nbsp;{recommandation.currentValue}
                 </Radio>
                 <Radio colorScheme={"brand"} value={"better"} size="sm">
-                  Better:{recommandation.betterValue}
+                  More sober:&nbsp;{recommandation.betterValue}
                 </Radio>
+                {recommandation.bestValue &&
+                  <Radio colorScheme={"brand"} value={"optimal"} size="sm">
+                    Most sober:&nbsp;{recommandation.bestValue}
+                  </Radio>
+                }
               </Stack>
             </RadioGroup>
           </AccordionPanel>

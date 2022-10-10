@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Flex, Heading, Input } from "@chakra-ui/react";
+import { Badge, Flex, Heading, Input } from "@chakra-ui/react";
 import { useAppSelector } from "../../app/hooks";
 import { useDispatch } from "react-redux";
 import { setName } from "../../features/project/projectSlice";
@@ -18,7 +18,7 @@ export default function BytesimeHeader() {
       id="header"
     >
       <Flex p={2} gap={2} align='center'>
-        <Heading size={"md"}>■ ByteSim</Heading>
+        <Heading size={"md"}>■ ByteSim <Badge colorScheme='yellow' variant='outline'>Version alpha</Badge></Heading>
         <Heading size={"md"} fontWeight={"light"}>
           <Input
           variant={"flushed"}

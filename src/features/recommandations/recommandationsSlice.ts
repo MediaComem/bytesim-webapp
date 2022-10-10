@@ -1,9 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { shallowEqual } from "react-redux";
-import { useAppSelector } from "../../app/hooks";
 import { RootState } from "../../app/store";
+import { GenericParameters } from "../../app/types/generalFormTypes";
 import {
-  Benefits,
   Recommandation,
   RecommandationWithZone,
 } from "../../app/types/recommandations";
@@ -11,23 +9,8 @@ import { FormsType } from "../../app/types/types";
 import { VideoParameters } from "../../app/types/videoTypes";
 
 const initialState: RecommandationWithZone<
-  VideoParameters[keyof VideoParameters]
+  VideoParameters[keyof VideoParameters] | GenericParameters[keyof GenericParameters]
 >[] = [];
-
-export const useRecommandationsTotalBenefits = (): Benefits => {
-  return useAppSelector((state) => {
-    const recommandations = state.recommandations;
-    let totalCo2 = 0;
-    let totalEnergy = 0;
-    recommandations.forEach((reco) => {
-      if (reco.selectedValue === "better") {
-        totalCo2 += reco.benefits.co2;
-        totalEnergy += reco.benefits.energy;
-      }
-    });
-    return { co2: totalCo2, energy: totalEnergy };
-  }, shallowEqual);
-};
 
 const recommandationsSlice = createSlice({
   name: "recommandations",
@@ -36,7 +19,7 @@ const recommandationsSlice = createSlice({
     recommandationAdded(
       state,
       action: PayloadAction<
-        RecommandationWithZone<VideoParameters[keyof VideoParameters]>
+        RecommandationWithZone<VideoParameters[keyof VideoParameters] | GenericParameters[keyof GenericParameters]>
       >
     ) {
       state.push(action.payload);
@@ -44,7 +27,7 @@ const recommandationsSlice = createSlice({
     recommandationsPopulated(
       state,
       action: PayloadAction<
-        RecommandationWithZone<VideoParameters[keyof VideoParameters]>[]
+        RecommandationWithZone<VideoParameters[keyof VideoParameters] | GenericParameters[keyof GenericParameters]>[]
       >
     ) {
       state.length = 0;

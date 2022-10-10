@@ -20,7 +20,7 @@ export interface User {
 export interface ZoneInfo {
   id: string;
   name: string;
-  index: number;
+  index?: number;
   x: number;
   y: number;
   width: number;
@@ -70,8 +70,8 @@ export type FormsType = ZoneParamsType | GenericParameters;
 export type ZoneParamsType = VideoParameters | ImagesParameters;
 
 export enum EBoolean {
-  "Yes" = 1,
-  "No" = 0,
+  YES = "Yes",
+  NO = "No",
 }
 
 // not complete form zone + general

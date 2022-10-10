@@ -2,9 +2,9 @@ import { EBoolean } from "./types";
 
 // -------VIDEO Format
 export enum EVideoFormat {
-  "GIF",
-  "Video",
-  "Other",
+  FORMAT_VIDEO = "Video",
+  FORMAT_GIF = "GIF",
+  FORMAT_OTHER = "Other",
 }
 
 export enum EVideoQuality {
