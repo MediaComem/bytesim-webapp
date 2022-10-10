@@ -1,10 +1,11 @@
 import { Accordion } from "@chakra-ui/react";
+import { GenericParameters } from "../../app/types/generalFormTypes";
 import { RecommandationWithZone } from "../../app/types/recommandations";
 import { VideoParameters } from "../../app/types/videoTypes";
 import RecommandationDisplay from "./Recommandation";
 
 interface RecommandationsListProps {
-  recommandations: RecommandationWithZone<VideoParameters[keyof VideoParameters]>[];
+  recommandations: RecommandationWithZone<VideoParameters[keyof VideoParameters] | GenericParameters[keyof GenericParameters]>[];
   allOpen: boolean;
 }
 export default function RecommandationsList({

@@ -1,20 +1,9 @@
-import { nanoid } from "@reduxjs/toolkit";
-import { ImagesParameters } from "../app/types/imgTypes";
-import { Recommandation } from "../app/types/recommandations";
+import { GenericParameters } from "../app/types/generalFormTypes";
 import { Zone, ZoneType } from "../app/types/types";
-import { EVideoDuration, EVideoQuality, VideoParameters } from "../app/types/videoTypes";
-
-export interface Simulator {
-  simulate: () => { energy: number, co2: number};
-}
-
-export interface SimulatorVideo extends Simulator{
-  recommandations: () => Recommandation<VideoParameters[keyof VideoParameters]>[];
-}
-
-export interface SimulatorImages extends Simulator{
-  recommandations: () => Recommandation<ImagesParameters[keyof ImagesParameters]>[];
-}
+import { GenericParametersSimulator } from "./simulators/generic";
+import { ImageSimulator } from "./simulators/images";
+import { SimulatorImages, SimulatorVideo } from "./simulators/type";
+import { VideoSimulator } from "./simulators/video";
 
 /* Service to simulate the impact of a specific zone
 *  Create simulator for the give zone
@@ -39,9 +28,11 @@ class simulationService {
   private static coreNetworkKWhPerByte = 8.39E-11;
 
   private static dataCenterEnergyMJ(bytes: number) {
-    // TODO get server energy source from store (renewable or unknown)
-    // this.electricityGreenMJPerKWh * this.dataCenterKWhPerByte * bytes
     return this.electricityMJPerKWh * this.dataCenterKWhPerByte * bytes;
+  }
+
+  private static dataCenterRenewableEnergyMJ(bytes: number) {
+    return this.electricityGreenMJPerKWh * this.dataCenterKWhPerByte * bytes
   }
 
   private static networkEnergyMJ(bytes: number) {
@@ -49,14 +40,20 @@ class simulationService {
     return this.electricityMJPerKWh * this.coreNetworkKWhPerByte * bytes;
   }
 
-  static energyMJ(bytes: number) {
-    return this.dataCenterEnergyMJ(bytes) + this.networkEnergyMJ(bytes);
+  static energyMJ(bytes: number, renewable: boolean) {
+    if (renewable) {
+      return this.dataCenterRenewableEnergyMJ(bytes) + this.networkEnergyMJ(bytes);
+    } else {
+      return this.dataCenterEnergyMJ(bytes) + this.networkEnergyMJ(bytes);
+    }
   }
 
   private static dataCenterGWP(bytes: number) {
-    // TODO get server energy source from store (renewable or unknown)
-    // this.electricityGreenMJPerKWh * this.dataCenterKWhPerByte * bytes
     return this.electricityGWPPerKWh * this.dataCenterKWhPerByte * bytes;
+  }
+
+  private static dataCenterRenewableGWP(bytes: number) {
+    return this.electricityGreenGWPPerKWh * this.dataCenterKWhPerByte * bytes
   }
 
   private static networkGWP(bytes: number) {
@@ -64,117 +61,33 @@ class simulationService {
     return this.electricityGWPPerKWh * this.coreNetworkKWhPerByte * bytes;
   }
 
-  static gwp(bytes: number) {
-    return this.dataCenterGWP(bytes) + this.networkGWP(bytes);
+  static gwpRenewableFactor() {
+    return this.electricityGreenGWPPerKWh / this.electricityGWPPerKWh;
   }
 
-  static simulator(zone: Zone): SimulatorVideo | SimulatorImages | undefined {
+  static gwp(bytes: number, renewable: boolean) {
+    if (renewable) {
+      return this.dataCenterRenewableGWP(bytes) + this.networkGWP(bytes);
+    } else {
+      return this.dataCenterGWP(bytes) + this.networkGWP(bytes);
+    }
+  }
+
+  static genericParametersSimulator(parameters: GenericParameters) {
+    return new GenericParametersSimulator(parameters);
+  }
+
+  static simulator(zone: Zone, renewable: boolean): SimulatorVideo | SimulatorImages | undefined {
     if (!zone.params) {
       console.log(`No parameters for Zone ${zone.id}`);
       return undefined;
     }
     switch (zone.zoneType) {
       case ZoneType.Video:
-        return new VideoSimulator(zone.params);
-      case ZoneType.Imgs:
-        return new ImageSimulator(zone.params);
+        return new VideoSimulator(zone.id, zone.params, renewable);
+      case ZoneType.Images:
+        return new ImageSimulator(zone.id, zone.params, renewable);
     }
-  }
-}
-
-// TODO create separate folder for simulators per type
-class VideoSimulator implements SimulatorVideo {
-  video: VideoParameters;
-
-  constructor(parameters: VideoParameters) {
-    this.video = parameters;
-  }
-
-  // Video size in bytes
-  private videoSize(params: VideoParameters) {
-    // https://support.google.com/youtube/answer/1722171
-    // https://help.netflix.com/en/node/306
-    const bitratesMbps: { [key in EVideoQuality]: number } = {
-      [EVideoQuality.RES_480_P]: 2.5,
-      [EVideoQuality.RES_720_P]: 5,
-      [EVideoQuality.RES_1080_P]: 8,
-      [EVideoQuality.RES_4K]: 35
-    };
-    const durations: { [key in EVideoDuration]: number } = {
-      [EVideoDuration.DUR_10_SEC]: 10,
-      [EVideoDuration.DUR_10_30_SEC]: 30,
-      [EVideoDuration.DUR_30_SEC_2_MIN]: 120,
-      [EVideoDuration.DUR_2_5_MIN]: 300,
-      [EVideoDuration.DUR_5_MIN]: 600
-    };
-
-    if (!params.quality || !params.duration) {
-      throw new Error(`Missing some parameters for video`)
-    }
-
-    const quality = params.quality;
-    const durationSec = durations[params.duration];
-
-    // TODO handle GIF format
-    return 1000000 * bitratesMbps[quality] * durationSec / 8;
-  }
-
-  private simulateParameters(params: VideoParameters) {
-    const videoSize = this.videoSize(params);
-    const energy = simulationService.energyMJ(videoSize);
-    const co2 = simulationService.gwp(videoSize);
-    return { energy, co2 };
-  }
-
-  simulate() {
-    return this.simulateParameters(this.video);
-  }
-
-  recommandations() {
-    const recommandations: Recommandation<EVideoQuality>[] = [];
-    const currentImpact = this.simulate();
-    // TODO check all parameters
-    const resolution = this.video.quality;
-    if (resolution) {
-      const resolutions = Object.values(EVideoQuality);
-      const idx = resolutions.findIndex((res) => res === resolution);
-      if (idx !== 0) {
-        const better = resolutions[idx - 1];
-        const betterParams = {
-          ...this.video,
-          quality: better
-        };
-        const { energy: energyBetter, co2: co2Better } = this.simulateParameters(betterParams);
-        const recommandation = {
-          id: nanoid(),
-          parameter: 'Video quality',
-          currentValue: resolution,
-          betterValue: better,
-          benefits: {
-            energy: currentImpact.energy - energyBetter,
-            co2: currentImpact.co2 - co2Better
-          }
-        }
-        recommandations.push(recommandation);
-      }
-    }
-    return recommandations;
-  }
-}
-
-class ImageSimulator implements SimulatorImages {
-  images: ImagesParameters;
-
-  constructor(parameters: ImagesParameters) {
-    this.images = parameters;
-  }
-
-  simulate() {
-    return { energy: 0, co2: 0 };
-  }
-
-  recommandations() {
-    return [];
   }
 }
 
