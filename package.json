@@ -25,6 +25,7 @@
     "react-dom": "^18.2.0",
     "react-rectangle-selection": "^1.0.4",
     "react-redux": "^8.0.2",
+    "react-reflex": "^4.0.9",
     "react-rnd": "^10.3.7",
     "react-router-dom": "^6.4.0",
     "react-scripts": "5.0.1",
