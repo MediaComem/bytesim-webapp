@@ -3,7 +3,7 @@ import { css, cx } from "@emotion/css";
 import { useDispatch } from "react-redux";
 import { Rnd } from "react-rnd";
 import { Route, Routes } from "react-router-dom";
-import { useAppSelector } from "../../app/hooks";
+import { drawnZoneSelector, useAppSelector } from "../../app/hooks";
 import { zoneSelected, zoneUpdated } from "../../features/zones/zonesSlice";
 import TestSVG from "../layout/TestSVG";
 import RemoteSVG from "../remotesvg";
@@ -62,7 +62,7 @@ export default function ZonesView({
   disableEdition: boolean;
 }) {
   const dispatch = useDispatch();
-  const zones = useAppSelector((state) => state.zones);
+  const zones = useAppSelector(drawnZoneSelector);
   return (
     <Flex
       align={"flex-start"}

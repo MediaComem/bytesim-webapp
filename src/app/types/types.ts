@@ -1,4 +1,3 @@
-
 import { GenericParameters } from "./generalFormTypes";
 
 import { ImagesParameters } from "./imgTypes";
@@ -45,15 +44,21 @@ export interface ZoneImages extends ZoneInfo {
 
 export interface ZoneText extends ZoneInfo {
   zoneType: ZoneType.Text;
-  params?: any
+  params?: any;
 }
 
 export interface ZoneDynamic extends ZoneInfo {
   zoneType: ZoneType.DynamicContent;
-  params?: any
+  params?: any;
 }
 
-export type Zone = ZoneUnknown | ZoneVideo | ZoneImages | ZoneText | ZoneDynamic;
+export type Zone = (
+  | ZoneUnknown
+  | ZoneVideo
+  | ZoneImages
+  | ZoneText
+  | ZoneDynamic
+) & { createdFrom?: "user" | "figma" };
 
 export type ProjectStatus = "EDITING" | "SIMULATION" | "LOADING";
 export type ZoneStatus = "EDITING" | "ACTIVE" | "LOADING";

@@ -2,6 +2,7 @@ import { Divider, Flex } from "@chakra-ui/react";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import {
+  drawnZoneSelector,
   useAppSelector,
   useCalculateAllRecommandations,
   useCalculateGenericRecommandations,
@@ -38,7 +39,7 @@ export function ReportBody({
   const dispatch = useDispatch();
   const recommandations = useCalculateAllRecommandations();
   const genericRecomandations = useCalculateGenericRecommandations();
-  const zones = useAppSelector((state) => state.zones);
+  const zones = useAppSelector(drawnZoneSelector);
   /* const zonesParams = useAppSelector((state) => {
     return Object.values(state.zones).filter((zone) => zone.filter());
   }); */

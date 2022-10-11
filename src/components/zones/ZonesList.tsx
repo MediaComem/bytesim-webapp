@@ -14,7 +14,7 @@ import {
   ExpandedIndex,
 } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
-import { useAppSelector } from "../../app/hooks";
+import { drawnZoneSelector, useAppSelector } from "../../app/hooks";
 import { Zone, ZoneType } from "../../app/types/types";
 //import { PrettyZoneTypes } from "../../app/types";
 import {
@@ -43,7 +43,7 @@ export default function ZonesList() {
   const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const state = useAppSelector((state) => state);
-  const zones = state.zones;
+  const zones = useAppSelector(drawnZoneSelector);
   const project = state.project;
   const [modalContent, setModalContent] = React.useState<{
     modal: string;

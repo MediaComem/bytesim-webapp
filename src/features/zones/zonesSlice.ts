@@ -16,6 +16,7 @@ const defaultZone: Zone = {
   status: "EDITING",
   zoneType: undefined,
   params: undefined,
+  createdFrom: "user",
 };
 
 const zonesSlice = createSlice({
