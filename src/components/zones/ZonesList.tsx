@@ -36,8 +36,8 @@ import AccordionCustomTitle from "../layout/AccordionCustomTitle";
 import AccordionChevron from "../layout/AccordionChevron";
 import ProgressPoints from "../layout/ProgressPoints";
 import { VideoFormEntries } from "../../app/types/videoTypes";
-import { colorTheme } from "../..";
 import { recommandationsReset } from "../../features/recommandations/recommandationsSlice";
+import { colorTheme } from "../../theme";
 
 export default function ZonesList() {
   const dispatch = useDispatch();
@@ -144,7 +144,11 @@ export default function ZonesList() {
                                 Specific settings on the page
                               </Text>
                             </Box>
-                            <ZoneParams zone={z} index={index} setIndex={setIndex} />
+                            <ZoneParams
+                              zone={z}
+                              index={index}
+                              setIndex={setIndex}
+                            />
                           </AccordionPanel>
                         </>
                       )}
@@ -178,7 +182,12 @@ interface ZoneListButtonProps {
   closseAllItems: () => void;
   //setOpen: () => void;
 }
-function ZoneListButton({ zone, isExpanded, onOpen, closseAllItems }: ZoneListButtonProps) {
+function ZoneListButton({
+  zone,
+  isExpanded,
+  onOpen,
+  closseAllItems,
+}: ZoneListButtonProps) {
   const dispatch = useDispatch();
   const projectStatus = useAppSelector((state) => state.project.status);
   const [value, setValue] = React.useState(zone.name);

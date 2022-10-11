@@ -3,28 +3,10 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { ChakraProvider, theme } from "@chakra-ui/react";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
 
-export const colorTheme = {
-    50: "#FFFBFF",
-    100: "#fce9fc",
-    200: "#f6bcf6",
-    300: "#f08ff0",
-    400: "#ea62ea",
-    500: "#e435e4",
-    600: "#ca1bca",
-    700: "#9d159d",
-    800: "#700f70",
-    900: "#430943",
-  };
-
-const theme = extendTheme({
-  colors: {
-    brand: colorTheme
-  },
-});
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );

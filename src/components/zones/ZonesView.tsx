@@ -6,9 +6,10 @@ import { Route, Routes } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 import { zoneSelected, zoneUpdated } from "../../features/zones/zonesSlice";
 import TestSVG from "../layout/TestSVG";
-import REHome from "../../assets/RE-homepage.jpg";
-import REabout from "../../assets/RE-about.jpg";
-import REmap from "../../assets/RE-map.jpg";
+import RemoteSVG from "../remotesvg";
+// import REHome from "../../assets/RE-homepage.jpg";
+// import REabout from "../../assets/RE-about.jpg";
+// import REmap from "../../assets/RE-map.jpg";
 const brandColor = "#ea62ea";
 const resizeHandleSVG = (
   <svg
@@ -72,51 +73,59 @@ export default function ZonesView({
       grow={1}
       alignSelf="stretch"
     >
-      <Flex opacity={0.5} width='400' minWidth='400' maxWidth='400'>
-      <Routes>
-        <Route
-          path="bytesim-webapp/1/*"
-          element={
-            <Flex>
-              <TestSVG />
-            </Flex>
-          }
-        />
-        <Route
-          path="bytesim-webapp/2/*"
-          element={
-            <Flex>
-              <img src={REHome} alt="RE homepage"/>
-            </Flex>
-          }
-        />
-        <Route
-          path="bytesim-webapp/3/*"
-          element={
-            <Flex>
-              <img src={REabout} alt="RE about page"/>
-            </Flex>
-          }
-        />
-        <Route
-          path="bytesim-webapp/4/*"
-          element={
-            <Flex>
-              <img src={REmap} alt="RE network map"/>
-            </Flex>
-          }
-        />
-        <Route
-          path="bytesim-webapp/*"
-          element={
-            <Flex>
-              <TestSVG />
-            </Flex>
-          }
-        />
-      </Routes>
+      <Flex opacity={0.5} width="400" minWidth="400">
+        <Routes>
+          <Route
+            path="bytesim-webapp/figma/*"
+            element={
+              <Flex>
+                <RemoteSVG />
+              </Flex>
+            }
+          />
+          {/*<Route
+            path="bytesim-webapp/1/*"
+            element={
+              <Flex>
+                <TestSVG />
+              </Flex>
+            }
+          />
+          <Route
+            path="bytesim-webapp/2/*"
+            element={
+              <Flex>
+                <img src={REHome} alt="RE homepage" />
+              </Flex>
+            }
+          />
+          <Route
+            path="bytesim-webapp/3/*"
+            element={
+              <Flex>
+                <img src={REabout} alt="RE about page" />
+              </Flex>
+            }
+          />
+          <Route
+            path="bytesim-webapp/4/*"
+            element={
+              <Flex>
+                <img src={REmap} alt="RE network map" />
+              </Flex>
+            }
+          />
+          <Route
+            path="bytesim-webapp/*"
+            element={
+              <Flex>
+                <TestSVG />
+              </Flex>
+            }
+          /> */}
+        </Routes>
       </Flex>
-      {zones.map((z) => {
+      {/* {zones.map((z) => {
         return (
           <Rnd
             key={z.id}
@@ -155,7 +164,7 @@ export default function ZonesView({
             <p className={aboveZoneStyle}>{z.name}</p>
           </Rnd>
         );
-      })}
+      })} */}
     </Flex>
   );
 }

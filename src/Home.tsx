@@ -2,7 +2,6 @@ import { Accordion, Button, Flex, useDisclosure } from "@chakra-ui/react";
 import { css } from "@emotion/css";
 import * as React from "react";
 import { useDispatch } from "react-redux";
-import { colorTheme } from ".";
 import { useAppSelector } from "./app/hooks";
 import ConfirmModal from "./components/layout/ConfirmModal";
 import Panel, { ResizablePanel } from "./components/layout/Panel";
@@ -16,6 +15,7 @@ import { allZonesReset, zoneAdded } from "./features/zones/zonesSlice";
 import { ReactComponent as ResetIcon } from "./assets/ResetIcon_Active_MouseOver.svg";
 import ExportButton from "./components/recommandations/ExportButton";
 import { useNavigate } from "react-router-dom";
+import { colorTheme } from "./theme";
 
 export default function Home() {
   const dispatch = useDispatch();
