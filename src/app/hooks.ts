@@ -15,9 +15,16 @@ export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 const selectZones = (state: RootState) => state.zones;
-export const drawnZoneSelector = createDraftSafeSelector(selectZones, (state) =>
-  state.filter((z) => !z.createdFrom || z.createdFrom === "user")
+export const drawnZoneSelector = createDraftSafeSelector(
+  selectZones,
+  (state) => state
 );
+const selectZonesFigma = (state: RootState) => state.zonesFigma;
+export const figmaZoneSelector = createDraftSafeSelector(
+  selectZonesFigma,
+  (state) => state
+);
+
 export function useCalculateImpact(): { energy: number; co2: number } {
   const zones = useAppSelector(drawnZoneSelector);
   const renewable = useAppSelector(
@@ -130,7 +137,7 @@ export function useCalculateAllRecommandations(): RecommandationWithZone<
     recos.forEach((reco) => {
       const rec: RecommandationWithZone<
         VideoParameters[keyof VideoParameters]
-      > = { ...reco, zoneId: zone.id, zoneName: zone.name };
+      > = { ...reco, zoneId: zone.id!, zoneName: zone.name! };
       recommandations.push(rec);
     });
   });

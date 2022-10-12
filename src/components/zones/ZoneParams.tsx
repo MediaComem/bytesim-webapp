@@ -12,14 +12,14 @@ import {
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/hooks";
-import { Zone, ZoneType } from "../../app/types/types";
+import { Zone, ZoneFigma, ZoneType } from "../../app/types/types";
 import { VideoParameters, VideoFormEntries } from "../../app/types/videoTypes";
 import { zoneUpdated } from "../../features/zones/zonesSlice";
 import AccordionChevron from "../layout/AccordionChevron";
 import ConfirmModal from "../layout/ConfirmModal";
 
 interface ZoneParamsProps {
-  zone: Zone;
+  zone: Zone | ZoneFigma;
   index: ExpandedIndex;
   setIndex: React.Dispatch<React.SetStateAction<ExpandedIndex>>;
 }
@@ -131,7 +131,7 @@ function ZoneParamsForm({ zoneId, zoneType }: ZoneParamsFormProps) {
     case ZoneType.Images:
       return notImplementedYet;
     case ZoneType.DynamicContent:
-      return <DynContentForm />
+      return <DynContentForm />;
     default:
       return notImplementedYet;
   }
@@ -199,13 +199,27 @@ function DynContentForm() {
   return (
     <div>
       <Flex direction="column" pl={14}>
-        <div><Checkbox /> Search</div>
-        <div><Checkbox /> Dynamic map</div>
-        <div><Checkbox /> Advertising</div>
-        <div><Checkbox /> Social network</div>
-        <div><Checkbox /> Comments box</div>
-        <div><Checkbox /> Recommendations</div>
-        <div><Checkbox /> 3D</div>
+        <div>
+          <Checkbox /> Search
+        </div>
+        <div>
+          <Checkbox /> Dynamic map
+        </div>
+        <div>
+          <Checkbox /> Advertising
+        </div>
+        <div>
+          <Checkbox /> Social network
+        </div>
+        <div>
+          <Checkbox /> Comments box
+        </div>
+        <div>
+          <Checkbox /> Recommendations
+        </div>
+        <div>
+          <Checkbox /> 3D
+        </div>
       </Flex>
     </div>
   );

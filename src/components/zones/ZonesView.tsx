@@ -6,7 +6,7 @@ import { Route, Routes } from "react-router-dom";
 import { drawnZoneSelector, useAppSelector } from "../../app/hooks";
 import { zoneSelected, zoneUpdated } from "../../features/zones/zonesSlice";
 import TestSVG from "../layout/TestSVG";
-import RemoteSVG from "../remotesvg";
+import RemoteSVG from "../../features/figma/components/remoteSvg";
 // import REHome from "../../assets/RE-homepage.jpg";
 // import REabout from "../../assets/RE-about.jpg";
 // import REmap from "../../assets/RE-map.jpg";

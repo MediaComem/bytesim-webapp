@@ -25,6 +25,7 @@ export interface ZoneInfo {
   width: number;
   height: number;
   status: ZoneStatus;
+  createdFrom?: "user";
 }
 
 export interface ZoneUnknown extends ZoneInfo {
@@ -52,14 +53,18 @@ export interface ZoneDynamic extends ZoneInfo {
   params?: any;
 }
 
-export type Zone = (
+export type Zone =
   | ZoneUnknown
   | ZoneVideo
   | ZoneImages
   | ZoneText
-  | ZoneDynamic
-) & { createdFrom?: "user" | "figma" };
+  | ZoneDynamic;
 
+export type ZoneFigma = Partial<Omit<Zone, "createdFrom">> & {
+  id: string;
+  createdFrom: "figma";
+  elementId: string;
+};
 export type ProjectStatus = "EDITING" | "SIMULATION" | "LOADING";
 export type ZoneStatus = "EDITING" | "ACTIVE" | "LOADING";
 export type UserStatus = "CONNECTED" | "AFK" | "LOADING";

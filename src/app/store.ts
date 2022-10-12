@@ -1,18 +1,20 @@
-import { configureStore } from '@reduxjs/toolkit'
-import projectReducer from '../features/project/projectSlice'
-import zonesSlice from '../features/zones/zonesSlice'
+import { configureStore } from "@reduxjs/toolkit";
+import projectReducer from "../features/project/projectSlice";
+import zonesSlice from "../features/zones/zonesSlice";
 import { debounce } from "debounce";
-import browserStorage from '../services/browserStorage';
-import recommandationsSlice from '../features/recommandations/recommandationsSlice';
+import browserStorage from "../services/browserStorage";
+import recommandationsSlice from "../features/recommandations/recommandationsSlice";
+import zonesFigmaSlice from "../features/figma/zonesFigmaSlice";
 
 export const store = configureStore({
   reducer: {
     project: projectReducer,
     zones: zonesSlice,
+    zonesFigma: zonesFigmaSlice,
     recommandations: recommandationsSlice,
   },
   preloadedState: browserStorage.loadState(), // load state from local storage
-})
+});
 
 // Subscribe to the store changes to persist to local storage
 store.subscribe(
@@ -23,6 +25,6 @@ store.subscribe(
   }, 500)
 );
 
-export type RootState = ReturnType<typeof store.getState>
+export type RootState = ReturnType<typeof store.getState>;
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
-export type AppDispatch = typeof store.dispatch
+export type AppDispatch = typeof store.dispatch;
