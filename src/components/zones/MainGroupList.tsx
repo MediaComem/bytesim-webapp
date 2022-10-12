@@ -35,7 +35,7 @@ export default function MainGroupList() {
       {/* <AccordionPanel>Nothing here yet.</AccordionPanel> */}
       <AccordionPanel p={0}>
         <Accordion allowToggle>
-          {figmaZones.map((z, i) => {
+          {figmaZones?.zones?.map((z, i) => {
             return (
               <>
                 <AccordionItem

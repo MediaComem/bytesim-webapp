@@ -3,6 +3,7 @@ import SVG from "react-inlinesvg";
 import { useDispatch } from "react-redux";
 import {
   allZonesDeleted as allZonesFigmaDeleted,
+  zonesFigmaSetTree,
   zonesFigmaUpdated,
 } from "../zonesFigmaSlice";
 import { hashCode, registerHoverEventsOnFigmaEls } from "../utils";
@@ -28,8 +29,22 @@ const RemoteSVG = ({
       loader={<span>Loading...</span>}
       onError={(error) => console.log(error.message)}
       onLoad={(src, hasCache) => {
+        const ids = idsRefs.current;
         // register all events on ids
-        registerHoverEventsOnFigmaEls(idsRefs.current);
+        registerHoverEventsOnFigmaEls(ids);
+
+        // get tree hierarchy
+        const tree = getTreeHierarchy(ids);
+
+        dispatch(
+          zonesFigmaUpdated(
+            ids.map((elementId) => ({
+              elementId,
+              name: elementId,
+            }))
+          )
+        );
+        // dispatch(zonesFigmaSetTree(tree));
       }}
       preProcessor={(code) => {
         // code is a svg string
@@ -49,15 +64,12 @@ const RemoteSVG = ({
         const ids = (code.match(/id="[^"]+"/g) ?? []).map((id) =>
           id.replace(/id="|"/g, "")
         );
+        // based on the ids create a tree structure, where each id belonging to a g tag of the svg is a parent node
+        // and the ids of the children are the children of the parent node
+
+        // get the ids of all the direct children of the first id
+
         idsRefs.current = ids.map((id) => `${id}__${uniqueHash}`);
-        dispatch(
-          zonesFigmaUpdated(
-            ids.map((elementId) => ({
-              elementId: `${elementId}__${uniqueHash}`,
-              name: elementId,
-            }))
-          )
-        );
 
         return newCode;
       }}
@@ -74,3 +86,42 @@ const RemoteSVG = ({
   );
 };
 export default RemoteSVG;
+export type TreeEl = {
+  id: string;
+  children?: TreeEl[];
+};
+function getTreeHierarchy(idsToIndex: string[]) {
+  const rootId = idsToIndex?.[0];
+  const resultTree: TreeEl[] = [
+    {
+      id: rootId,
+      children: [],
+    },
+  ];
+
+  scrollThroughChildren(resultTree[0], idsToIndex, rootId);
+  return resultTree;
+}
+
+const scrollThroughChildren = (
+  resultTreeEl: TreeEl,
+  idsToIndex: string | string[],
+  parent: string
+) => {
+  const children = document?.getElementById(parent)?.children;
+  if (!children) return;
+  const chidrenIds = Array.from(children).map((child) => child.id);
+  // if no childrenIds is included in idsToIndex, return
+  if (!chidrenIds.some((id) => idsToIndex.includes(id))) return;
+  //else add parent to id and recurse over
+  chidrenIds?.forEach((id) => {
+    if (id) {
+      const newTreeEl = {
+        id,
+        children: [],
+      };
+      resultTreeEl.children?.push(newTreeEl);
+      scrollThroughChildren(newTreeEl, idsToIndex, id);
+    }
+  });
+};

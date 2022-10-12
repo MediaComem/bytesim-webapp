@@ -2,19 +2,30 @@ import { createSlice, nanoid } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import { ZoneFigma } from "../../app/types/types";
+import { TreeEl } from "./components/remoteSvg";
 
-const updateZone = (
-  state: Partial<ZoneFigma>[],
-  zoneToAdd: Partial<ZoneFigma>
-) => {
-  const zoneFound = state.find((zone) => zone.id === zoneToAdd?.id);
+type ZoneFigmaStore = { zones: ZoneFigma[]; tree: TreeEl[] };
+
+const updateZone = (state: ZoneFigmaStore, zoneToAdd: Partial<ZoneFigma>) => {
+  const zoneFound = state?.zones?.find((zone) => zone.id === zoneToAdd?.id);
   const existingZone = zoneFound ?? {
     ...zoneToAdd,
     id: nanoid(),
   };
-  zoneFound ? Object.assign(existingZone, zoneToAdd) : state.push(existingZone);
+  if (zoneFound) {
+    return Object.assign(existingZone, zoneToAdd);
+  }
+  if (!state.zones) state.zones = [];
+  state?.zones.push(existingZone as ZoneFigma);
 };
-const initialState: ZoneFigma[] = [];
+// type ZoneTree = {
+//   zone?: ZoneTree;
+//   children?: ZoneTree[];
+// };
+const initialState: ZoneFigmaStore = {
+  zones: [],
+  tree: [],
+};
 
 const defaultZone: ZoneFigma = {
   id: "0",
@@ -50,7 +61,9 @@ const zonesSlice = createSlice({
     //   },
     // },
     zoneFigmaUpdated(state, action: PayloadAction<ZoneFigma>) {
-      const zoneFound = state.find((zone) => zone.id === action.payload?.id);
+      const zoneFound = state.zones.find(
+        (zone) => zone.id === action.payload?.id
+      );
       const existingZone = zoneFound ?? {
         ...defaultZone,
         ...action.payload,
@@ -64,6 +77,9 @@ const zonesSlice = createSlice({
       action.payload?.forEach((zoneToAdd) => {
         if (zoneToAdd) updateZone(state, zoneToAdd);
       });
+    },
+    zonesFigmaSetTree(state, action: PayloadAction<TreeEl[]>) {
+      // return { ...state, tree: action.payload };
     },
     // zoneUpdated(
     //   state,
@@ -107,7 +123,8 @@ const zonesSlice = createSlice({
     //   });
     // },
     allZonesDeleted(state) {
-      state.length = 0;
+      if (state.zones) state.zones.length = 0;
+      if (state.tree) state.tree.length = 0;
     },
   },
 });
@@ -119,14 +136,15 @@ export const {
   // zoneUpdated,
   zoneFigmaUpdated,
   zonesFigmaUpdated,
+  zonesFigmaSetTree,
   // zoneReset,
   // allZonesReset,
   allZonesDeleted,
 } = zonesSlice.actions;
 // Other code such as selectors can use the imported `RootState` type
-export const selectZones = (state: RootState) => state.zones;
-export const selectZone = (state: RootState, zoneId: string) => {
-  return state.zones.find((zone) => zone.id === zoneId);
-};
+// export const selectZones = (state: RootState) => state.zones;
+// export const selectZone = (state: RootState, zoneId: string) => {
+//   return state.zones.find((zone) => zone.id === zoneId);
+// };
 
 export default zonesSlice.reducer;
