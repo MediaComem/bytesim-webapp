@@ -40,11 +40,11 @@ const RemoteSVG = ({
           zonesFigmaUpdated(
             ids.map((elementId) => ({
               elementId,
-              name: elementId,
+              name: elementId?.replace(`__${uniqueHash}`, ""),
             }))
           )
         );
-        // dispatch(zonesFigmaSetTree(tree));
+        dispatch(zonesFigmaSetTree(tree));
       }}
       preProcessor={(code) => {
         // code is a svg string

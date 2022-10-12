@@ -79,7 +79,7 @@ const zonesSlice = createSlice({
       });
     },
     zonesFigmaSetTree(state, action: PayloadAction<TreeEl[]>) {
-      // return { ...state, tree: action.payload };
+      return { ...state, tree: action.payload };
     },
     // zoneUpdated(
     //   state,
