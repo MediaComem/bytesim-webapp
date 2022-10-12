@@ -7,9 +7,9 @@ import { drawnZoneSelector, useAppSelector } from "../../app/hooks";
 import { zoneSelected, zoneUpdated } from "../../features/zones/zonesSlice";
 import TestSVG from "../layout/TestSVG";
 import RemoteSVG from "../../features/figma/components/remoteSvg";
-// import REHome from "../../assets/RE-homepage.jpg";
-// import REabout from "../../assets/RE-about.jpg";
-// import REmap from "../../assets/RE-map.jpg";
+import REHome from "../../assets/RE-homepage.jpg";
+import REabout from "../../assets/RE-about.jpg";
+import REmap from "../../assets/RE-map.jpg";
 const brandColor = "#ea62ea";
 const resizeHandleSVG = (
   <svg
@@ -83,7 +83,7 @@ export default function ZonesView({
               </Flex>
             }
           />
-          {/*<Route
+          <Route
             path="bytesim-webapp/1/*"
             element={
               <Flex>
@@ -122,7 +122,7 @@ export default function ZonesView({
                 <TestSVG />
               </Flex>
             }
-          /> */}
+          />
         </Routes>
       </Flex>
       {/* {zones.map((z) => {

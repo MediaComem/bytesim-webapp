@@ -65,6 +65,11 @@ export type ZoneFigma = Partial<Omit<Zone, "createdFrom">> & {
   createdFrom: "figma";
   elementId: string;
 };
+export type FigmaTreeEl = {
+  id: string;
+  children?: FigmaTreeEl[];
+};
+
 export type ProjectStatus = "EDITING" | "SIMULATION" | "LOADING";
 export type ZoneStatus = "EDITING" | "ACTIVE" | "LOADING";
 export type UserStatus = "CONNECTED" | "AFK" | "LOADING";

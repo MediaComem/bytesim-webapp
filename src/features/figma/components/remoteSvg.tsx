@@ -8,6 +8,7 @@ import {
 } from "../zonesFigmaSlice";
 import { hashCode, registerHoverEventsOnFigmaEls } from "../utils";
 import { colorTheme } from "../../../theme";
+import { FigmaTreeEl } from "../../../app/types/types";
 
 const RemoteSVG = ({
   url = "https://bytesim-bucket.s3.eu-west-3.amazonaws.com/0%253A1_Page%25201.svg",
@@ -86,13 +87,10 @@ const RemoteSVG = ({
   );
 };
 export default RemoteSVG;
-export type TreeEl = {
-  id: string;
-  children?: TreeEl[];
-};
+
 function getTreeHierarchy(idsToIndex: string[]) {
   const rootId = idsToIndex?.[0];
-  const resultTree: TreeEl[] = [
+  const resultTree: FigmaTreeEl[] = [
     {
       id: rootId,
       children: [],
@@ -104,7 +102,7 @@ function getTreeHierarchy(idsToIndex: string[]) {
 }
 
 const scrollThroughChildren = (
-  resultTreeEl: TreeEl,
+  resultTreeEl: FigmaTreeEl,
   idsToIndex: string | string[],
   parent: string
 ) => {
