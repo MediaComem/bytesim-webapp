@@ -25,7 +25,7 @@ export default function ReportGeneralInfo() {
     <Flex justify={"stretch"} align="center" minHeight={"fit-content"}>
       <Flex direction={"column"} justify="center" p={2} grow={1}>
         <Text fontSize={"sm"} color={"gray.500"}>
-          Energy (KWh)
+          Energy (KWh)/month
         </Text>
         <Flex justify={"stretch"} align="center" minHeight={"fit-content"}>
           <Text fontSize="lg" color={"gray.600"} fontWeight={"semibold"}>
@@ -45,7 +45,7 @@ export default function ReportGeneralInfo() {
         grow={1}
       >
         <Text fontSize={"sm"} color={"gray.500"}>
-          GWP ( kg CO2eq)
+          GWP ( kg CO2eq)/month
         </Text>
         <Flex justify={"stretch"} align="center" minHeight={"fit-content"}>
           <Text fontSize="lg" color={"gray.600"} fontWeight={"semibold"}>
