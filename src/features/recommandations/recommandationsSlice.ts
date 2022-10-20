@@ -38,10 +38,16 @@ const recommandationsSlice = createSlice({
       >
     ) {
       action.payload.forEach((r) => {
-        const existingReco = state.find((reco) => (reco.zoneId === r.zoneId && reco.parameter === r.parameter));
+        const existingReco = state.find(
+          (reco) => reco.zoneId === r.zoneId && reco.parameter === r.parameter
+        );
+
         if (!existingReco) {
           state.push(r);
-        } else if (existingReco.currentValue !== r.currentValue) {
+        } else if (
+          existingReco.currentValue !== r.currentValue ||
+          existingReco.zoneName !== r.zoneName
+        ) {
           Object.assign(existingReco, r);
         }
       });
