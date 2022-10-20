@@ -131,7 +131,7 @@ function ZoneParamsForm({ zoneId, zoneType }: ZoneParamsFormProps) {
     case ZoneType.Images:
       return notImplementedYet;
     case ZoneType.DynamicContent:
-      return <DynContentForm />
+      return <DynContentForm />;
     default:
       return notImplementedYet;
   }
@@ -159,6 +159,7 @@ function VideoForm({ zoneId }: VideoFormProps) {
               };
               dispatch(zoneUpdated(newParams));
             };
+
             return (
               <div key={key}>
                 <Heading size="sm" mt={2} textTransform="capitalize">
@@ -167,22 +168,25 @@ function VideoForm({ zoneId }: VideoFormProps) {
                 <form>
                   {Object.values(value)
                     .filter((v) => typeof v !== "number")
-                    .map((data, index) => (
-                      <Flex key={index} gap={1} fontSize={"sm"}>
-                        <input
-                          type="radio"
-                          name={data}
-                          id={key + data}
-                          value={data}
-                          checked={
-                            zone.params &&
-                            zone.params[key as keyof VideoParameters] === data
-                          }
-                          onChange={handleChange}
-                        />
-                        <label htmlFor={key + data}>{data}</label>
-                      </Flex>
-                    ))}
+                    .map((data, index) => {
+                      const inputId = `${zone.id} ${key} ${data}`;
+                      return (
+                        <Flex key={index} gap={1} fontSize={"sm"}>
+                          <input
+                            type="radio"
+                            name={data}
+                            id={inputId}
+                            value={data}
+                            checked={
+                              zone.params &&
+                              zone.params[key as keyof VideoParameters] === data
+                            }
+                            onChange={handleChange}
+                          />
+                          <label htmlFor={inputId}>{data}</label>
+                        </Flex>
+                      );
+                    })}
                 </form>
               </div>
             );
@@ -199,13 +203,27 @@ function DynContentForm() {
   return (
     <div>
       <Flex direction="column" pl={14}>
-        <div><Checkbox /> Search</div>
-        <div><Checkbox /> Dynamic map</div>
-        <div><Checkbox /> Advertising</div>
-        <div><Checkbox /> Social network</div>
-        <div><Checkbox /> Comments box</div>
-        <div><Checkbox /> Recommendations</div>
-        <div><Checkbox /> 3D</div>
+        <div>
+          <Checkbox /> Search
+        </div>
+        <div>
+          <Checkbox /> Dynamic map
+        </div>
+        <div>
+          <Checkbox /> Advertising
+        </div>
+        <div>
+          <Checkbox /> Social network
+        </div>
+        <div>
+          <Checkbox /> Comments box
+        </div>
+        <div>
+          <Checkbox /> Recommendations
+        </div>
+        <div>
+          <Checkbox /> 3D
+        </div>
       </Flex>
     </div>
   );
