@@ -1,4 +1,5 @@
 import { Flex } from "@chakra-ui/react";
+import * as React from "react";
 import { css, cx } from "@emotion/css";
 import { useDispatch } from "react-redux";
 import { Rnd } from "react-rnd";
@@ -9,6 +10,8 @@ import TestSVG from "../layout/TestSVG";
 import REHome from "../../assets/RE-homepage.jpg";
 import REabout from "../../assets/RE-about.jpg";
 import REmap from "../../assets/RE-map.jpg";
+import { Zone } from "../../app/types/types";
+//import RightClickMenu from "../layout/RightClickMenu";
 const brandColor = "#ea62ea";
 const resizeHandleSVG = (
   <svg
@@ -60,7 +63,6 @@ export default function ZonesView({
 }: {
   disableEdition: boolean;
 }) {
-  const dispatch = useDispatch();
   const zones = useAppSelector((state) => state.zones);
   return (
     <Flex
@@ -72,90 +74,128 @@ export default function ZonesView({
       grow={1}
       alignSelf="stretch"
     >
-      <Flex opacity={0.5} width='400' minWidth='400' maxWidth='400'>
-      <Routes>
-        <Route
-          path="bytesim-webapp/1/*"
-          element={
-            <Flex>
-              <TestSVG />
-            </Flex>
-          }
-        />
-        <Route
-          path="bytesim-webapp/2/*"
-          element={
-            <Flex>
-              <img src={REHome} alt="RE homepage"/>
-            </Flex>
-          }
-        />
-        <Route
-          path="bytesim-webapp/3/*"
-          element={
-            <Flex>
-              <img src={REabout} alt="RE about page"/>
-            </Flex>
-          }
-        />
-        <Route
-          path="bytesim-webapp/4/*"
-          element={
-            <Flex>
-              <img src={REmap} alt="RE network map"/>
-            </Flex>
-          }
-        />
-        <Route
-          path="bytesim-webapp/*"
-          element={
-            <Flex>
-              <TestSVG />
-            </Flex>
-          }
-        />
-      </Routes>
+      <Flex opacity={0.5} width="400" minWidth="400" maxWidth="400">
+        <Routes>
+          <Route
+            path="bytesim-webapp/1/*"
+            element={
+              <Flex>
+                <TestSVG />
+              </Flex>
+            }
+          />
+          <Route
+            path="bytesim-webapp/2/*"
+            element={
+              <Flex>
+                <img src={REHome} alt="RE homepage" />
+              </Flex>
+            }
+          />
+          <Route
+            path="bytesim-webapp/3/*"
+            element={
+              <Flex>
+                <img src={REabout} alt="RE about page" />
+              </Flex>
+            }
+          />
+          <Route
+            path="bytesim-webapp/4/*"
+            element={
+              <Flex>
+                <img src={REmap} alt="RE network map" />
+              </Flex>
+            }
+          />
+          <Route
+            path="bytesim-webapp/*"
+            element={
+              <Flex>
+                <TestSVG />
+              </Flex>
+            }
+          />
+        </Routes>
       </Flex>
       {zones.map((z) => {
         return (
-          <Rnd
-            key={z.id}
-            default={{
-              x: z.x,
-              y: z.y,
-              width: z.width,
-              height: z.height,
-            }}
-            className={cx(zoneStyle, {
-              [selectedZoneStyle]: z.status === "EDITING",
-            })}
-            onMouseDown={() => dispatch(zoneSelected(z.id))}
-            enableResizing={z.status === "EDITING" && !disableEdition}
-            disableDragging={disableEdition}
-            onResizeStop={(e, direction, ref, delta, position) => {
-              const newZone = {
-                id: z.id,
-                x: position.x,
-                y: position.y,
-                width: z.width + delta.width,
-                height: z.height + delta.height,
-              };
-              dispatch(zoneUpdated(newZone));
-            }}
-            onDragStop={(e, d) => {
-              const newPos = {
-                id: z.id,
-                x: d.x,
-                y: d.y,
-              };
-              dispatch(zoneUpdated(newPos));
-            }}
-            resizeHandleComponent={handleComp}
-          >
-            <p className={aboveZoneStyle}>{z.name}</p>
-          </Rnd>
+          <ZoneFrame key={z.id} zone={z} disableEdition={disableEdition} />
         );
       })}
     </Flex>
+  );
+}
+
+interface ZoneFrameProps {
+  //RCmenustate:RightClickMenuState;
+  zone: Zone;
+  disableEdition: boolean;
+}
+function ZoneFrame({
+  //RCmenustate,
+  zone,
+  disableEdition,
+}: ZoneFrameProps) {
+  const dispatch = useDispatch();
+  const handleClick = (e: MouseEvent, z: Zone) => {
+    dispatch(zoneSelected(z.id));
+/*     console.log(e.button);
+    if (e.button === 2) {
+      e.preventDefault();
+      setState({
+        showMenu: true,
+        xPos: e.pageX,
+        yPos: e.pageY,
+      });
+    } else {
+      setState({
+        ...state,
+        showMenu: false,
+      });
+    } */
+  };
+
+  return (
+    <Rnd
+      key={zone.id}
+      id={zone.id}
+      default={{
+        x: zone.x,
+        y: zone.y,
+        width: zone.width,
+        height: zone.height,
+      }}
+      className={
+        "rightClickable " +
+        cx(zoneStyle, {
+          [selectedZoneStyle]: zone.status === "EDITING",
+        })
+      }
+      onMouseDown={(e) => handleClick(e, zone)}
+      enableResizing={zone.status === "EDITING" && !disableEdition}
+      disableDragging={disableEdition}
+      onResizeStop={(e, direction, ref, delta, position) => {
+        const newZone = {
+          id: zone.id,
+          x: position.x,
+          y: position.y,
+          width: zone.width + delta.width,
+          height: zone.height + delta.height,
+        };
+        dispatch(zoneUpdated(newZone));
+      }}
+      onDragStop={(e, d) => {
+        const newPos = {
+          id: zone.id,
+          x: d.x,
+          y: d.y,
+        };
+        dispatch(zoneUpdated(newPos));
+      }}
+      resizeHandleComponent={handleComp}
+    >
+      <p className={aboveZoneStyle}>{zone.name}</p>
+    </Rnd>
   );
 }

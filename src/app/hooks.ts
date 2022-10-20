@@ -13,9 +13,11 @@ import { VideoParameters } from "./types/videoTypes";
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-export function useCalculateImpact(): { energy: number, co2: number} {
+export function useCalculateImpact(): { energy: number; co2: number } {
   const zones = useAppSelector((state) => state.zones);
-  const renewable = useAppSelector((state) => state.project.params.server === ServerType.RENEWABLE);
+  const renewable = useAppSelector(
+    (state) => state.project.params.server === ServerType.RENEWABLE
+  );
   const nbVisits = useAppSelector((state) => state.project.params.nbVisit) ?? 0;
   let energyTotal = 0;
   let co2Total = 0;
@@ -34,32 +36,43 @@ export function useCalculateImpact(): { energy: number, co2: number} {
   return { energy: nbVisits * energyTotal, co2: nbVisits * co2Total };
 }
 
-export function useCalculateRecommandationsImpact(): { energy: number, co2: number} {
+export function useCalculateRecommandationsImpact(): {
+  energy: number;
+  co2: number;
+} {
   const zones = useAppSelector((state) => state.zones);
   const recommandations = useAppSelector((state) => state.recommandations);
   const nbVisits = useAppSelector((state) => state.project.params.nbVisit) ?? 1; // if no visitor impact per visit
-  let renewable = useAppSelector((state) => state.project.params.server === ServerType.RENEWABLE);
+  let renewable = useAppSelector(
+    (state) => state.project.params.server === ServerType.RENEWABLE
+  );
   let energyTotal = 0;
   let co2Total = 0;
-  const recommandationRenewable = recommandations.find(rec => rec.id === 'energy');
+  const recommandationRenewable = recommandations.find(
+    (rec) => rec.id === "energy"
+  );
   if (recommandationRenewable) {
-    renewable = recommandationRenewable.selectedValue === 'better';
+    renewable = recommandationRenewable.selectedValue === "better";
   }
   zones.forEach((zone) => {
     // TODO optimize code + architecture
-    const zoneRecommandations = recommandations.filter(rec => rec.zone_id === zone.id);
+    const zoneRecommandations = recommandations.filter(
+      (rec) => rec.zone_id === zone.id
+    );
     const zoneParameters = { ...zone.params };
     const simulatedZone = {
       ...zone,
       id: `simulated_${zone.id}`,
       type: zone.zoneType,
-      params: zoneParameters
+      params: zoneParameters,
     };
     for (const recommandation of zoneRecommandations) {
       if (recommandation.selectedValue === "better") {
-        simulatedZone.params[recommandation.parameter] = recommandation.betterValue;
+        simulatedZone.params[recommandation.parameter] =
+          recommandation.betterValue;
       } else if (recommandation.selectedValue === "optimal") {
-        simulatedZone.params[recommandation.parameter] = recommandation.bestValue;
+        simulatedZone.params[recommandation.parameter] =
+          recommandation.bestValue;
       }
     }
     try {
@@ -81,19 +94,20 @@ export function useCalculateGenericRecommandations(): RecommandationWithZone<
 >[] {
   const genericParameters = useAppSelector((state) => state.project.params);
   const recommandations: RecommandationWithZone<
-  GenericParameters[keyof GenericParameters]
+    GenericParameters[keyof GenericParameters]
   >[] = [];
-    // Generic recommandations
-    const simulator = simulationService.genericParametersSimulator(genericParameters);
-    if (simulator) {
-      const recos = simulator.recommandations();
-      recos.forEach((reco) => {
-        const rec: RecommandationWithZone<
+  // Generic recommandations
+  const simulator =
+    simulationService.genericParametersSimulator(genericParameters);
+  if (simulator) {
+    const recos = simulator.recommandations();
+    recos.forEach((reco) => {
+      const rec: RecommandationWithZone<
         GenericParameters[keyof GenericParameters]
-        > = { ...reco, zoneId: 'generic', zoneName: 'Generic' };
-        recommandations.push(rec);
-      });
-    }
+      > = { ...reco, zoneId: "generic", zoneName: "Generic" };
+      recommandations.push(rec);
+    });
+  }
   return recommandations;
 }
 
@@ -106,15 +120,15 @@ export function useCalculateAllRecommandations(): RecommandationWithZone<
   const recommandations: RecommandationWithZone<
     VideoParameters[keyof VideoParameters]
   >[] = [];
-    zones.forEach((zone) => {
-      const recos = useCalculateRecommandationsForZone(zone, renewable);
-      recos.forEach((reco) => {
-        const rec: RecommandationWithZone<
-          VideoParameters[keyof VideoParameters]
-        > = { ...reco, zoneId: zone.id, zoneName: zone.name };
-        recommandations.push(rec);
-      });
+  zones.forEach((zone) => {
+    const recos = useCalculateRecommandationsForZone(zone, renewable);
+    recos.forEach((reco) => {
+      const rec: RecommandationWithZone<
+        VideoParameters[keyof VideoParameters]
+      > = { ...reco, zoneId: zone.id, zoneName: zone.name };
+      recommandations.push(rec);
     });
+  });
   return recommandations;
 }
 
@@ -123,13 +137,22 @@ export function useCalculateRecommandationsForZone(
   renewable: boolean
 ): Recommandation<VideoParameters[keyof VideoParameters]>[] {
   let recommandations: Recommandation<any>[] = [];
-    try {
-      const simulator = simulationService.simulator(zone, renewable);
-      if (simulator) {
-        recommandations = simulator.recommandations();
-      }
-    } catch (e) {
-      console.log(e);
+  try {
+    const simulator = simulationService.simulator(zone, renewable);
+    if (simulator) {
+      recommandations = simulator.recommandations();
+    }
+  } catch (e) {
+    console.log(e);
   }
   return recommandations;
+}
+
+export function useSelectedZone(): Zone | undefined {
+  let zone;
+  const zones = useAppSelector((state) => state.zones);
+  zones.forEach((z) => {
+    if (z.status === "EDITING") zone = z;
+  });
+  return zone;
 }

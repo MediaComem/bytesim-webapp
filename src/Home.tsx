@@ -44,7 +44,7 @@ export default function Home() {
               size="sm"
               variant="ghost"
               disabled={project.status === "SIMULATION"}
-              minWidth='min-content'
+              minWidth="min-content"
             >
               Reset all{" "}
               <ResetIcon className={css({ margin: "3px" })} stroke="black" />
@@ -53,7 +53,7 @@ export default function Home() {
           className={
             "pane-content " +
             css({
-              overflow: 'hidden'
+              overflow: "hidden",
             })
           }
         >
@@ -80,7 +80,7 @@ export default function Home() {
           </div>
         </Panel>
       </ReflexElement>
-      <ReflexSplitter />
+      <ReflexSplitter className={css({ zIndex: 1 })} />
       <ReflexElement
         className={"middle-pane " + css({ display: "flex" })}
         resizeHeight={false}
@@ -88,10 +88,12 @@ export default function Home() {
       >
         <Panel
           title="View"
-          className={"pane-content " + css({
-            borderLeft: "none",
-            borderRight: "none",
-          })}
+          className={
+            "pane-content " +
+            css({
+              position: "relative",
+            })
+          }
           grow={1}
           toolbarButton={
             <>
@@ -132,7 +134,7 @@ export default function Home() {
                 size="sm"
                 colorScheme={"brand"}
                 disabled={project.status === "SIMULATION"}
-                minWidth='min-content'
+                minWidth="min-content"
               >
                 + Create Zone
               </Button>
