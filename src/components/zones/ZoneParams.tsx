@@ -6,21 +6,18 @@ import {
   Checkbox,
   ExpandedIndex,
   Flex,
-  Heading,
   useDisclosure,
 } from "@chakra-ui/react";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/hooks";
+import { DynContentFormEntries } from "../../app/types/dynContentTypes";
 import { Zone, ZoneType } from "../../app/types/types";
-import { VideoParameters, VideoFormEntries } from "../../app/types/videoTypes";
-import {
-  DynContentParameters,
-  DynContentFormEntries,
-} from "../../app/types/dynContentTypes";
+import { VideoFormEntries } from "../../app/types/videoTypes";
 import { zoneUpdated } from "../../features/zones/zonesSlice";
 import AccordionChevron from "../layout/AccordionChevron";
 import ConfirmModal from "../layout/ConfirmModal";
+import ZoneSettingsForm from "./zones_settings/ZoneSettingsForm";
 
 interface ZoneParamsProps {
   zone: Zone;
@@ -132,197 +129,25 @@ function ZoneParamsForm({ zoneId, zoneType }: ZoneParamsFormProps) {
   );
   switch (zoneType) {
     case ZoneType.Video:
-      return <VideoForm zoneId={zoneId} />;
+      return (
+        <ZoneSettingsForm
+          zoneId={zoneId}
+          formZoneType={ZoneType.Video}
+          formEntries={VideoFormEntries}
+        />
+      );
     case ZoneType.Images:
       return notImplementedYet;
     case ZoneType.DynamicContent:
-      return <DynContentForm zoneId={zoneId} />;
+      return (
+        <ZoneSettingsForm
+          zoneId={zoneId}
+          formZoneType={ZoneType.DynamicContent}
+          formEntries={DynContentFormEntries}
+          showHeaders={false}
+        />
+      );
     default:
       return notImplementedYet;
   }
 }
-
-interface VideoFormProps {
-  zoneId: string;
-}
-function VideoForm({ zoneId }: VideoFormProps) {
-  const dispatch = useDispatch();
-  const zone = useAppSelector((state) =>
-    state.zones.find((z) => z.id === zoneId)
-  );
-  const VideoZoneType = "Video" as ZoneType;
-  if (zone) {
-    return (
-      <Flex direction={"column"} pl={14}>
-        <div>
-          {Object.entries(VideoFormEntries).map(([key, value]) => {
-            const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-              //remove params from other types
-              const newParams: Partial<Zone> =
-                zone.zoneType === VideoZoneType
-                  ? { params: zone.params }
-                  : { params: {} };
-              const newZone = {
-                id: zone.id,
-                params: { ...newParams.params, [key]: e.target.value },
-                zoneType: VideoZoneType,
-              };
-              dispatch(zoneUpdated(newZone));
-            };
-            return (
-              <div key={key}>
-                <Heading size="sm" mt={2} textTransform="capitalize">
-                  {key}
-                </Heading>
-                <form>
-                  {Object.values(value)
-                    .filter((v) => typeof v !== "number")
-                    .map((data, index) => (
-                      <Flex key={index} gap={1} fontSize={"sm"}>
-                        <input
-                          type="radio"
-                          name={data}
-                          id={key + data}
-                          value={data}
-                          checked={
-                            zone.params &&
-                            zone.params[key as keyof VideoParameters] === data
-                          }
-                          onChange={handleChange}
-                        />
-                        <label htmlFor={key + data}>{data}</label>
-                      </Flex>
-                    ))}
-                </form>
-              </div>
-            );
-          })}
-        </div>
-      </Flex>
-    );
-  } else {
-    return <></>;
-  }
-}
-interface DynContentFormProps {
-  zoneId: string;
-}
-
-function DynContentForm({ zoneId }: DynContentFormProps) {
-  const dispatch = useDispatch();
-  const zone = useAppSelector((state) =>
-    state.zones.find((z) => z.id === zoneId)
-  );
-  const DynContentZoneType = ZoneType.DynamicContent;
-  if (zone) {
-    return (
-      <Flex direction={"column"} pl={14}>
-        <div>
-          {Object.entries(DynContentFormEntries).map(([key, value]) => {
-            const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-              //remove params unwanted params from other types
-              const newZoneParams: Partial<Zone> = {
-                params: { [key]: e.target.value },
-              };
-              const newZone = {
-                id: zone.id,
-                params: newZoneParams.params,
-                zoneType: DynContentZoneType,
-              };
-              console.log(newZone);
-              console.warn("newParams", newZone);
-              dispatch(zoneUpdated(newZone));
-            };
-            console.log(key);
-            return (
-              <div key={key}>
-                <form>
-                  {Object.values(value)
-                    .filter((v) => typeof v !== "number")
-                    .map((data, index) => (
-                      <Flex key={index} gap={1} fontSize={"sm"}>
-                        <input
-                          type="radio"
-                          name={data}
-                          id={key + data}
-                          value={data}
-                          checked={
-                            zone.params &&
-                            zone.params[key as keyof DynContentParameters] ===
-                              data
-                          }
-                          onChange={handleChange}
-                        />
-                        <label htmlFor={key + data}>{data}</label>
-                      </Flex>
-                    ))}
-                </form>
-              </div>
-            );
-          })}
-        </div>
-      </Flex>
-    );
-  } else {
-    return <></>;
-  }
-}
-
-/* function VideoForm({ zoneId }: VideoFormProps) {
-  const dispatch = useDispatch();
-  const projectStatus = useAppSelector((state) => state.project.status);
-  const zone = useAppSelector((state) =>
-    state.zones.find((z) => z.id === zoneId)
-  );
-  const VideoZoneType = "Video" as ZoneType;
-  if (zone) {
-    return (
-      <Flex direction={"column"}>
-        <div>
-          {Object.entries(VideoFormEntries).map(([key, value]) => {
-            return (
-              <div key={key}>
-                <Heading size="sm" my={2}>
-                  {key}
-                </Heading>
-                <RadioGroup
-                  value={
-                    zone.params
-                      ? zone.params[key as keyof VideoParameters]
-                      : undefined
-                  }
-                  isDisabled={projectStatus === "SIMULATION"}
-                >
-                  <Stack>
-                    {Object.values(value)
-                      .filter((v) => typeof v !== "number")
-                      .map((data, index) => (
-                        <Radio
-                          colorScheme={"brand"}
-                          key={index}
-                          value={data}
-                          onChange={() => {
-                            const newParams = {
-                              id: zone.id,
-                              params: { ...zone.params, [key]: data },
-                              zoneType: VideoZoneType,
-                            };
-                            dispatch(zoneUpdated(newParams));
-                          }}
-                          size="sm"
-                        >
-                          {data}
-                        </Radio>
-                      ))}
-                  </Stack>
-                </RadioGroup>
-              </div>
-            );
-          })}
-        </div>
-      </Flex>
-    );
-  } else {
-    return <></>;
-  }
-} */
