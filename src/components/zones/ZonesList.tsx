@@ -144,7 +144,11 @@ export default function ZonesList() {
                                 Specific settings on the page
                               </Text>
                             </Box>
-                            <ZoneParams zone={z} index={index} setIndex={setIndex} />
+                            <ZoneParams
+                              zone={z}
+                              index={index}
+                              setIndex={setIndex}
+                            />
                           </AccordionPanel>
                         </>
                       )}
@@ -178,7 +182,12 @@ interface ZoneListButtonProps {
   closseAllItems: () => void;
   //setOpen: () => void;
 }
-function ZoneListButton({ zone, isExpanded, onOpen, closseAllItems }: ZoneListButtonProps) {
+function ZoneListButton({
+  zone,
+  isExpanded,
+  onOpen,
+  closseAllItems,
+}: ZoneListButtonProps) {
   const dispatch = useDispatch();
   const projectStatus = useAppSelector((state) => state.project.status);
   const [value, setValue] = React.useState(zone.name);
