@@ -72,49 +72,49 @@ export default function ZonesView({
       grow={1}
       alignSelf="stretch"
     >
-      <Flex opacity={0.5} width='400' minWidth='400' maxWidth='400'>
-      <Routes>
-        <Route
-          path="bytesim-webapp/1/*"
-          element={
-            <Flex>
-              <TestSVG />
-            </Flex>
-          }
-        />
-        <Route
-          path="bytesim-webapp/2/*"
-          element={
-            <Flex>
-              <img src={REHome} alt="RE homepage"/>
-            </Flex>
-          }
-        />
-        <Route
-          path="bytesim-webapp/3/*"
-          element={
-            <Flex>
-              <img src={REabout} alt="RE about page"/>
-            </Flex>
-          }
-        />
-        <Route
-          path="bytesim-webapp/4/*"
-          element={
-            <Flex>
-              <img src={REmap} alt="RE network map"/>
-            </Flex>
-          }
-        />
-        <Route
-          path="bytesim-webapp/*"
-          element={
-            <Flex>
-              <TestSVG />
-            </Flex>
-          }
-        />
-      </Routes>
+      <Flex opacity={0.5} width="400px" minWidth="400" maxWidth="400">
+        <Routes>
+          <Route
+            path="bytesim-webapp/1/*"
+            element={
+              <Flex>
+                <TestSVG />
+              </Flex>
+            }
+          />
+          <Route
+            path="bytesim-webapp/2/*"
+            element={
+              <Flex>
+                <img src={REHome} alt="RE homepage" />
+              </Flex>
+            }
+          />
+          <Route
+            path="bytesim-webapp/3/*"
+            element={
+              <Flex>
+                <img src={REabout} alt="RE about page" />
+              </Flex>
+            }
+          />
+          <Route
+            path="bytesim-webapp/4/*"
+            element={
+              <Flex>
+                <img src={REmap} alt="RE network map" />
+              </Flex>
+            }
+          />
+          <Route
+            path="bytesim-webapp/*"
+            element={
+              <Flex>
+                <TestSVG />
+              </Flex>
+            }
+          />
+        </Routes>
       </Flex>
       {zones.map((z) => {
         return (
