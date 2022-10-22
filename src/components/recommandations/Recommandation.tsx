@@ -20,12 +20,14 @@ import {
 } from "../../app/types/recommandations";
 import { VideoParameters } from "../../app/types/videoTypes";
 import { recommandationUpdated } from "../../features/recommandations/recommandationsSlice";
+import { useZone } from "../../hooks/useZone";
 import AccordionChevron from "../layout/AccordionChevron";
 //import { ReportCTX } from "./RecoReport";
 
 interface RecommandationDisplayProps {
   recommandation: RecommandationWithZone<
-    VideoParameters[keyof VideoParameters] | GenericParameters[keyof GenericParameters]
+    | VideoParameters[keyof VideoParameters]
+    | GenericParameters[keyof GenericParameters]
   >;
 }
 
@@ -34,6 +36,8 @@ export default function RecommandationDisplay({
 }: RecommandationDisplayProps) {
   //const { totalBenefits, setTotalBenefits } = React.useContext(ReportCTX);
   const dispatch = useDispatch();
+  const { ZoneScreenshot } = useZone();
+
   const onChangeParams = React.useCallback(
     (v: RecommandationOption) => {
       dispatch(
@@ -51,6 +55,7 @@ export default function RecommandationDisplay({
               <Heading mr={1} size="sm">
                 {recommandation.zoneName} - {recommandation.id}
               </Heading>
+              <ZoneScreenshot zoneId={recommandation.zoneId} />
               <Flex>
                 <Text>{recommandation.parameter}</Text>
                 <Tooltip label="Biblio de reco + best practices" hasArrow>
@@ -72,11 +77,11 @@ export default function RecommandationDisplay({
                 <Radio colorScheme={"brand"} value={"better"} size="sm">
                   More sober:&nbsp;{recommandation.betterValue}
                 </Radio>
-                {recommandation.bestValue &&
+                {recommandation.bestValue && (
                   <Radio colorScheme={"brand"} value={"optimal"} size="sm">
                     Most sober:&nbsp;{recommandation.bestValue}
                   </Radio>
-                }
+                )}
               </Stack>
             </RadioGroup>
           </AccordionPanel>
