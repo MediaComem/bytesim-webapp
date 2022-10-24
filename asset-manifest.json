@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/bytesim-webapp/static/css/main.f0052763.css",
-    "main.js": "/bytesim-webapp/static/js/main.da1445e1.js",
+    "main.js": "/bytesim-webapp/static/js/main.6bed1ea7.js",
     "static/js/988.2e94a79a.chunk.js": "/bytesim-webapp/static/js/988.2e94a79a.chunk.js",
     "static/media/RE-map.jpg": "/bytesim-webapp/static/media/RE-map.42c3e71794669838721b.jpg",
     "static/media/RE-homepage.jpg": "/bytesim-webapp/static/media/RE-homepage.62351fec9ca46faa812f.jpg",
@@ -16,11 +16,11 @@
     "static/media/RondCompletion_complete.svg": "/bytesim-webapp/static/media/RondCompletion_complete.6acba68df8f6db826072800e01ce6ff4.svg",
     "static/media/Fleche_Fermee.svg": "/bytesim-webapp/static/media/Fleche_Fermee.378623ecaf2ff555ba024f885ed52464.svg",
     "main.f0052763.css.map": "/bytesim-webapp/static/css/main.f0052763.css.map",
-    "main.da1445e1.js.map": "/bytesim-webapp/static/js/main.da1445e1.js.map",
+    "main.6bed1ea7.js.map": "/bytesim-webapp/static/js/main.6bed1ea7.js.map",
     "988.2e94a79a.chunk.js.map": "/bytesim-webapp/static/js/988.2e94a79a.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f0052763.css",
-    "static/js/main.da1445e1.js"
+    "static/js/main.6bed1ea7.js"
   ]
 }
