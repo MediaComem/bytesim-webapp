@@ -51,19 +51,22 @@ export default function ZoneSettingsForm({
                 <form>
                   {Object.values(value as object)
                     .filter((v) => typeof v !== "number")
-                    .map((data, index) => (
-                      <Flex key={index} gap={1} fontSize={"sm"}>
-                        <input
-                          type="radio"
-                          name={data as string}
-                          id={key + data}
-                          value={data as string}
-                          checked={zone.params && zone.params[key] === data}
-                          onChange={handleChange}
-                        />
-                        <label htmlFor={key + data}>{data as string}</label>
-                      </Flex>
-                    ))}
+                    .map((data, index) => {
+                      const inputId = `${zone.id} ${key} ${data}`;
+                      return (
+                        <Flex key={index} gap={1} fontSize={"sm"}>
+                          <input
+                            type="radio"
+                            name={data as string}
+                            id={inputId}
+                            value={data as string}
+                            checked={zone.params && zone.params[key] === data}
+                            onChange={handleChange}
+                          />
+                          <label htmlFor={inputId}>{data as string}</label>
+                        </Flex>
+                      );
+                    })}
                 </form>
               </div>
             );
