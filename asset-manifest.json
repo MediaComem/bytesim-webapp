@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/bytesim-webapp/static/css/main.f0052763.css",
-    "main.js": "/bytesim-webapp/static/js/main.6bed1ea7.js",
+    "main.js": "/bytesim-webapp/static/js/main.ba371d84.js",
     "static/js/988.2e94a79a.chunk.js": "/bytesim-webapp/static/js/988.2e94a79a.chunk.js",
     "static/media/RE-map.jpg": "/bytesim-webapp/static/media/RE-map.42c3e71794669838721b.jpg",
     "static/media/RE-homepage.jpg": "/bytesim-webapp/static/media/RE-homepage.62351fec9ca46faa812f.jpg",
@@ -9,18 +9,17 @@
     "static/media/TEMP_trash.svg": "/bytesim-webapp/static/media/TEMP_trash.dc72c668146cdd51f2507770034fd5d7.svg",
     "static/media/GeneralSettings_Icon.svg": "/bytesim-webapp/static/media/GeneralSettings_Icon.675088608896b304004937abdd9c6b3a.svg",
     "index.html": "/bytesim-webapp/index.html",
+    "static/media/Tick.svg": "/bytesim-webapp/static/media/Tick.b588a19db2d97aeda210453c74f7b223.svg",
     "static/media/DrawnZones_icon.svg": "/bytesim-webapp/static/media/DrawnZones_icon.c56a1a1f9aa5db18f81d712c8fe6d01a.svg",
     "static/media/ResetIcon_Active_MouseOver.svg": "/bytesim-webapp/static/media/ResetIcon_Active_MouseOver.e9d411c33085ad40b9c28d8d1fdcf87e.svg",
     "static/media/ImportedGroup_Icon.svg": "/bytesim-webapp/static/media/ImportedGroup_Icon.df4d8aab0d4234760c91fd5a161b0d62.svg",
-    "static/media/RondCompletion_NonComplete.svg": "/bytesim-webapp/static/media/RondCompletion_NonComplete.eefc65df515d38aafbf0e2507cd882b3.svg",
-    "static/media/RondCompletion_complete.svg": "/bytesim-webapp/static/media/RondCompletion_complete.6acba68df8f6db826072800e01ce6ff4.svg",
     "static/media/Fleche_Fermee.svg": "/bytesim-webapp/static/media/Fleche_Fermee.378623ecaf2ff555ba024f885ed52464.svg",
     "main.f0052763.css.map": "/bytesim-webapp/static/css/main.f0052763.css.map",
-    "main.6bed1ea7.js.map": "/bytesim-webapp/static/js/main.6bed1ea7.js.map",
+    "main.ba371d84.js.map": "/bytesim-webapp/static/js/main.ba371d84.js.map",
     "988.2e94a79a.chunk.js.map": "/bytesim-webapp/static/js/988.2e94a79a.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f0052763.css",
-    "static/js/main.6bed1ea7.js"
+    "static/js/main.ba371d84.js"
   ]
 }
