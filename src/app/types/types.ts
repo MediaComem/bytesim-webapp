@@ -21,7 +21,6 @@ export interface User {
 export interface ZoneInfo {
   id: string;
   name: string;
-  index?: number;
   x: number;
   y: number;
   width: number;
@@ -63,8 +62,8 @@ export type UserStatus = "CONNECTED" | "AFK" | "LOADING";
 export enum ZoneType {
   Video = "Video",
   Images = "Images",
-  Text = "Text",
   DynamicContent = "DynamicContent",
+  Text = "Text",
 }
 
 export type FormsType = ZoneParamsType | GenericParameters;
