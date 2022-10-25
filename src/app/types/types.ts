@@ -3,6 +3,7 @@ import { GenericParameters } from "./generalFormTypes";
 
 import { ImagesParameters } from "./imgTypes";
 import { VideoParameters } from "./videoTypes";
+import { DynContentParameters } from "./dynContentTypes";
 
 export interface Project {
   id: number;
@@ -67,7 +68,7 @@ export enum ZoneType {
 }
 
 export type FormsType = ZoneParamsType | GenericParameters;
-export type ZoneParamsType = VideoParameters | ImagesParameters;
+export type ZoneParamsType = VideoParameters | ImagesParameters | DynContentParameters;
 
 export enum EBoolean {
   YES = "Yes",
@@ -79,5 +80,5 @@ export enum EBoolean {
 // Reco dans le store
 // Modele de calcul -> video pour le POC, 1 par type
 // Modele de reco
-//Zone View à adapter pour différents formats d'image svg de base
+// Zone View à adapter pour différents formats d'image svg de base
 // création de PDF
