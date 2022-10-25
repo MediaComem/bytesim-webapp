@@ -40,7 +40,6 @@ export default function ZoneParams({ zone }: ZoneParamsProps) {
                   isChecked={zone.zoneType === "Text"}
                   mr={3}
                   onChange={(e) => {
-                    if (e.target.checked) setIndex(-1);
                     const newType = e.target.checked
                       ? (z as ZoneType)
                       : undefined;
