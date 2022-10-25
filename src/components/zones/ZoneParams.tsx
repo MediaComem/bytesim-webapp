@@ -4,7 +4,6 @@ import {
   AccordionItem,
   AccordionPanel,
   Checkbox,
-  ExpandedIndex,
   Flex,
   Heading,
   useDisclosure,
@@ -20,17 +19,16 @@ import ConfirmModal from "../layout/ConfirmModal";
 
 interface ZoneParamsProps {
   zone: Zone;
-  index: ExpandedIndex;
-  setIndex: React.Dispatch<React.SetStateAction<ExpandedIndex>>;
 }
-export default function ZoneParams({ zone, index, setIndex }: ZoneParamsProps) {
+export default function ZoneParams({ zone }: ZoneParamsProps) {
   const dispatch = useDispatch();
   const projectStatus = useAppSelector((state) => state.project.status);
+  const defaultIndex = Object.keys(ZoneType).indexOf(zone.zoneType!);
   const { onOpen } = useDisclosure();
   const [onConfirm, setOnConfirm] = React.useState<() => void>();
   return (
     <>
-      <Accordion allowToggle index={index} onChange={setIndex}>
+      <Accordion allowToggle defaultIndex={[defaultIndex]}>
         <ConfirmModalChangeType onConfirm={onConfirm} />
         {(Object.keys(ZoneType) as Array<keyof typeof ZoneType>).map((z, i) => {
           if (z === "Text") {

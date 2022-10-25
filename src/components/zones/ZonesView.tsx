@@ -4,7 +4,10 @@ import { useDispatch } from "react-redux";
 import { Rnd } from "react-rnd";
 import { Route, Routes } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
-import { zoneSelected, zoneUpdated } from "../../features/zones/zonesSlice";
+import {
+  zoneActiveToggled,
+  zoneUpdated,
+} from "../../features/zones/zonesSlice";
 import TestSVG from "../layout/TestSVG";
 import REHome from "../../assets/RE-homepage.jpg";
 import REabout from "../../assets/RE-about.jpg";
@@ -129,7 +132,7 @@ export default function ZonesView({
             className={cx(zoneStyle, {
               [selectedZoneStyle]: z.status === "EDITING",
             })}
-            onMouseDown={() => dispatch(zoneSelected(z.id))}
+            onMouseDown={() => dispatch(zoneActiveToggled(z.id))}
             enableResizing={z.status === "EDITING" && !disableEdition}
             disableDragging={disableEdition}
             onResizeStop={(e, direction, ref, delta, position) => {
