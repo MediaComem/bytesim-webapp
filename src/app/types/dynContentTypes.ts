@@ -13,6 +13,6 @@ export enum EDynContent {
   DYN_CONT_FORM = "Form"
 }
 
-export const DynContentFormEntries = {
+export const DynContentFormEntries: {[key: string]: any} = {
   content: EDynContent,
 };

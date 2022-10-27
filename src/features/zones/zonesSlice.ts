@@ -53,7 +53,7 @@ const zonesSlice = createSlice({
       if (existingZone) {
         const resetParams = {
           id: existingZone.id,
-          params: undefined,
+          params: {},
           zoneType: undefined,
         };
         Object.assign(existingZone, resetParams);

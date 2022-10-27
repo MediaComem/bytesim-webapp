@@ -1,4 +1,13 @@
-import { Flex, Heading, useDisclosure } from "@chakra-ui/react";
+import {
+  Flex,
+  Heading,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  useDisclosure,
+} from "@chakra-ui/react";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../app/hooks";
@@ -9,7 +18,7 @@ import ConfirmModal from "../../layout/ConfirmModal";
 interface VideoFormProps {
   zoneId: string;
   formZoneType: ZoneType;
-  formEntries: object;
+  formEntries: { [key: string]: any };
   showHeaders?: boolean;
 }
 export default function ZoneSettingsForm({
@@ -18,6 +27,7 @@ export default function ZoneSettingsForm({
   formEntries,
   showHeaders = true,
 }: VideoFormProps) {
+  const DEFAULT_NUMBER_INPUT: number = 1;
   const dispatch = useDispatch();
   const zone = useAppSelector((state) =>
     state.zones.find((z) => z.id === zoneId)
@@ -26,14 +36,30 @@ export default function ZoneSettingsForm({
   const [pendingKey, setPendingKey] = React.useState("");
   const [pendingValue, setPendingValue] = React.useState("");
   if (zone) {
+    const getNeededInputDefault = () => {
+      const inputsToAdd: { [key: string]: any } = {};
+      Object.keys(formEntries).forEach((key) => {
+        if (
+          key in formEntries &&
+          typeof formEntries[key] === "number" &&
+          !Object.keys(zone.params).includes(key)
+        ) {
+          inputsToAdd[key] = DEFAULT_NUMBER_INPUT;
+        }
+      });
+      return inputsToAdd;
+    };
     const setParamValue = () => {
       const newParams: Partial<Zone> =
         zone.zoneType === formZoneType
           ? { params: zone.params }
-          : { params: {} };
+          : { params: getNeededInputDefault() };
       const newZone = {
         id: zone.id,
-        params: { ...newParams.params, [pendingKey]: pendingValue },
+        params: {
+          ...newParams.params,
+          [pendingKey]: pendingValue,
+        },
         zoneType: formZoneType,
       };
       dispatch(zoneUpdated(newZone));
@@ -66,21 +92,48 @@ export default function ZoneSettingsForm({
         />
         <div>
           {Object.entries(formEntries).map(([key, value]) => {
-            const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-              //remove params from other types
+            const handleValueChange = (value: string) => {
               setPendingKey(key);
-              setPendingValue(e.target.value);
+              setPendingValue(value);
+            };
+            const handleEventChange = (
+              e: React.ChangeEvent<HTMLInputElement>
+            ) => {
+              handleValueChange(e.target.value);
             };
             return (
               <div key={key}>
                 {showHeaders ? (
-                  <Heading size="sm" mt={2} textTransform="capitalize">
+                  <Heading size="sm" mt={3} mb={1} textTransform="capitalize">
                     {key}
                   </Heading>
                 ) : (
                   <></>
                 )}
                 <form>
+                  {typeof value === "number" ? (
+                    <Flex gap={10} fontSize={"sm"}>
+                      <NumberInput
+                        size="sm"
+                        id={`${zone.id} ${key}`}
+                        value={
+                          zone.params && zone.params[key] ? zone.params[key] : 1
+                        }
+                        min={1}
+                        name={key as string}
+                        onChange={handleValueChange}
+                        onFocus={handleEventChange}
+                      >
+                        <NumberInputField />
+                        <NumberInputStepper>
+                          <NumberIncrementStepper />
+                          <NumberDecrementStepper />
+                        </NumberInputStepper>
+                      </NumberInput>
+                    </Flex>
+                  ) : (
+                    <></>
+                  )}
                   {Object.values(value as object)
                     .filter((v) => typeof v !== "number")
                     .map((data, index) => {
@@ -93,7 +146,7 @@ export default function ZoneSettingsForm({
                             id={inputId}
                             value={data as string}
                             checked={zone.params && zone.params[key] === data}
-                            onChange={handleChange}
+                            onChange={handleEventChange}
                           />
                           <label htmlFor={inputId}>{data as string}</label>
                         </Flex>

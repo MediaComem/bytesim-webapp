@@ -38,6 +38,8 @@ import ProgressPoints from "../layout/ProgressPoints";
 import { VideoFormEntries } from "../../app/types/videoTypes";
 import { colorTheme } from "../..";
 import { recommandationsReset } from "../../features/recommandations/recommandationsSlice";
+import { ImageFormEntries } from "../../app/types/imgTypes";
+import { DynContentFormEntries } from "../../app/types/dynContentTypes";
 
 export default function ZonesList() {
   const dispatch = useDispatch();
@@ -126,8 +128,7 @@ export default function ZonesList() {
                               zone={z}
                               onOpen={() => {
                                 setModalContent({
-                                  modal:
-                                    "Are you sure you want to delete the zone? It will delete the associated form too.",
+                                  modal: `Are you sure you want to delete ${z.name}? It will delete the associated form too.`,
                                   buttonLabel: "Delete zone",
                                   onConfirm: () => {
                                     dispatch(zoneDeleted(z.id));
@@ -184,6 +185,16 @@ function ZoneListButton({ zone, isExpanded, onOpen }: ZoneListButtonProps) {
   const projectStatus = useAppSelector((state) => state.project.status);
   const [value, setValue] = React.useState(zone.name);
   const [editNameMode, setEditNameMode] = React.useState(false);
+  const getCompleteObject = (typeOfZone: ZoneType) => {
+    switch (typeOfZone) {
+      case ZoneType.Video:
+        return VideoFormEntries;
+      case ZoneType.Images:
+        return ImageFormEntries;
+      case ZoneType.DynamicContent:
+        return DynContentFormEntries;
+    }
+  };
   return (
     <>
       <Box
@@ -255,10 +266,8 @@ function ZoneListButton({ zone, isExpanded, onOpen }: ZoneListButtonProps) {
           </Text>
           {zone.zoneType && (
             <ProgressPoints
-              completeObject={
-                zone.zoneType === "Video" ? VideoFormEntries : { text: true }
-              }
-              params={zone.zoneType === "Video" ? zone.params : { text: true }}
+              completeObject={getCompleteObject(zone.zoneType)}
+              params={zone.params}
             />
           )}
         </Flex>

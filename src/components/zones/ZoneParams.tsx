@@ -7,6 +7,7 @@ import {
 } from "@chakra-ui/react";
 import * as React from "react";
 import { DynContentFormEntries } from "../../app/types/dynContentTypes";
+import { ImageFormEntries } from "../../app/types/imgTypes";
 import { Zone, ZoneType } from "../../app/types/types";
 import { VideoFormEntries } from "../../app/types/videoTypes";
 import AccordionChevron from "../layout/AccordionChevron";
@@ -61,7 +62,13 @@ function ZoneParamsForm({ zoneId, zoneType }: ZoneParamsFormProps) {
         />
       );
     case ZoneType.Images:
-      return notImplementedYet;
+      return (
+        <ZoneSettingsForm
+          zoneId={zoneId}
+          formZoneType={ZoneType.Images}
+          formEntries={ImageFormEntries}
+        />
+      );
     case ZoneType.DynamicContent:
       return (
         <ZoneSettingsForm

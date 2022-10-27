@@ -1,7 +1,7 @@
 
 import { GenericParameters } from "./generalFormTypes";
 
-import { ImagesParameters } from "./imgTypes";
+import { ImageParameters } from "./imgTypes";
 import { VideoParameters } from "./videoTypes";
 import { DynContentParameters } from "./dynContentTypes";
 
@@ -40,7 +40,7 @@ export interface ZoneVideo extends ZoneInfo {
 
 export interface ZoneImages extends ZoneInfo {
   zoneType: ZoneType.Images;
-  params?: ImagesParameters;
+  params?: ImageParameters;
 }
 
 export interface ZoneDynamic extends ZoneInfo {
@@ -61,7 +61,7 @@ export enum ZoneType {
 }
 
 export type FormsType = ZoneParamsType | GenericParameters;
-export type ZoneParamsType = VideoParameters | ImagesParameters | DynContentParameters;
+export type ZoneParamsType = VideoParameters | ImageParameters | DynContentParameters;
 
 export enum EBoolean {
   YES = "Yes",
