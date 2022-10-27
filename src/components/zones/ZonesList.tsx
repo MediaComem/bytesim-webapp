@@ -106,11 +106,11 @@ export default function ZonesList() {
           </AccordionItemTitleCustom>
           <AccordionPanel p={0}>
             <Accordion allowToggle>
-              {zones.map((z, i) => {
+              {zones.map((z) => {
                 return (
                   <>
                     <AccordionItem
-                      key={i}
+                      key={'zone' + z.id}
                       onClick={() => dispatch(zoneSelected(z.id))}
                       border="none"
                     >

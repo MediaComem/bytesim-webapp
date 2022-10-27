@@ -1,16 +1,17 @@
-import { Flex } from "@chakra-ui/react";
+import { Flex, useDisclosure } from "@chakra-ui/react";
 import * as React from "react";
 import { css, cx } from "@emotion/css";
 import { useDispatch } from "react-redux";
 import { Rnd } from "react-rnd";
-import { Route, Routes } from "react-router-dom";
-import { useAppSelector } from "../../app/hooks";
-import { zoneSelected, zoneUpdated } from "../../features/zones/zonesSlice";
-import TestSVG from "../layout/TestSVG";
+import { useAppSelector, useSelectedZone } from "../../app/hooks";
+import {
+  zoneDeleted,
+  zoneSelected,
+  zoneUpdated,
+} from "../../features/zones/zonesSlice";
 import REHome from "../../assets/RE-homepage.jpg";
-import REabout from "../../assets/RE-about.jpg";
-import REmap from "../../assets/RE-map.jpg";
 import { Zone } from "../../app/types/types";
+import ConfirmModal, { confirmText } from "../layout/ConfirmModal";
 //import RightClickMenu from "../layout/RightClickMenu";
 const brandColor = "#ea62ea";
 const resizeHandleSVG = (
@@ -63,7 +64,24 @@ export default function ZonesView({
 }: {
   disableEdition: boolean;
 }) {
+  const dispatch = useDispatch();
   const zones = useAppSelector((state) => state.zones);
+  const projectScreenshot = useAppSelector(
+    (state) => state.project.screenshotBlob
+  );
+  const selectedZone = useSelectedZone();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const handleDelete = (e: KeyboardEvent) => {
+    if (e.key === "Backspace" || e.key === "Delete") {
+      onOpen();
+    }
+  };
+  React.useEffect(() => {
+    document.addEventListener("keydown", handleDelete);
+    return () => {
+      document.removeEventListener("keydown", handleDelete);
+    };
+  }, []);
   return (
     <Flex
       align={"flex-start"}
@@ -74,8 +92,26 @@ export default function ZonesView({
       grow={1}
       alignSelf="stretch"
     >
+      <ConfirmModal
+        texts={confirmText.deleteZone}
+        isOpen={isOpen}
+        onClose={onClose}
+        onConfirm={() => {
+          if (selectedZone) {
+            dispatch(zoneDeleted(selectedZone.id));
+          }
+          onClose();
+        }}
+      />
       <Flex opacity={0.5} width="400" minWidth="400" maxWidth="400">
-        <Routes>
+        <Flex>
+          {projectScreenshot ? (
+            <img src={projectScreenshot} alt="screenshot" />
+          ) : (
+            <img src={REHome} alt="RE homepage" />
+          )}
+        </Flex>
+        {/* <Routes>
           <Route
             path="bytesim-webapp/1/*"
             element={
@@ -116,7 +152,7 @@ export default function ZonesView({
               </Flex>
             }
           />
-        </Routes>
+        </Routes> */}
       </Flex>
       {zones.map((z) => {
         return (
@@ -140,7 +176,7 @@ function ZoneFrame({
   const dispatch = useDispatch();
   const handleClick = (e: MouseEvent, z: Zone) => {
     dispatch(zoneSelected(z.id));
-/*     console.log(e.button);
+    /*     console.log(e.button);
     if (e.button === 2) {
       e.preventDefault();
       setState({

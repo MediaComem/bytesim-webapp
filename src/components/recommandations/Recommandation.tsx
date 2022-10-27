@@ -26,8 +26,7 @@ import AccordionChevron from "../layout/AccordionChevron";
 interface RecommandationDisplayProps {
   recommandation: RecommandationWithZone<
     VideoParameters[keyof VideoParameters] | GenericParameters[keyof GenericParameters]
-  >;
-}
+  >;}
 
 export default function RecommandationDisplay({
   recommandation,
@@ -43,7 +42,7 @@ export default function RecommandationDisplay({
     [recommandation]
   );
   return (
-    <AccordionItem>
+    <AccordionItem key={recommandation.id}>
       {({ isExpanded }) => (
         <>
           <AccordionButton _hover={{ backgroundColor: "brand.100" }} pl={2}>

@@ -8,23 +8,22 @@ import ConfirmModal, { confirmText } from "./components/layout/ConfirmModal";
 import Panel from "./components/layout/Panel";
 import RecoReport from "./components/recommandations/RecoReport";
 import MainGroupList from "./components/zones/MainGroupList";
-import GeneralFormAccordion from "./components/zones/GeneralForm";
+import GeneralFormAccordion from "./components/project/GeneralForm";
 import ZonesList from "./components/zones/ZonesList";
 import ZonesView from "./components/zones/ZonesView";
 import { projectReset } from "./features/project/projectSlice";
 import { allZonesReset, zoneAdded } from "./features/zones/zonesSlice";
 import { ReactComponent as ResetIcon } from "./assets/ResetIcon_Active_MouseOver.svg";
 import ExportButton from "./components/recommandations/ExportButton";
-import { useNavigate } from "react-router-dom";
 import "react-reflex/styles.css";
 import { ReflexContainer, ReflexElement, ReflexSplitter } from "react-reflex";
+import UploadButton from "./components/project/UploadButton";
 
 export default function Home() {
   const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const state = useAppSelector((s) => s);
   const project = state.project;
-  const navigate = useNavigate();
   return (
     <ReflexContainer
       orientation="vertical"
@@ -94,7 +93,7 @@ export default function Home() {
           toolbarButton={
             <>
               <Flex alignItems={"center"}>
-                <Button
+                {/* <Button
                   variant={"outline"}
                   size="xs"
                   onClick={() => navigate("./bytesim-webapp/1")}
@@ -121,8 +120,9 @@ export default function Home() {
                   onClick={() => navigate("./bytesim-webapp/4")}
                 >
                   4
-                </Button>
+                </Button> */}
               </Flex>
+              <UploadButton />
               <Button
                 onClick={() => {
                   dispatch(zoneAdded());
