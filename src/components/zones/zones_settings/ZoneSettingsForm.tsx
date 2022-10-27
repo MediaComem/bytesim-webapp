@@ -1,9 +1,10 @@
-import { Flex, Heading } from "@chakra-ui/react";
+import { Flex, Heading, useDisclosure } from "@chakra-ui/react";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../app/hooks";
 import { Zone, ZoneType } from "../../../app/types/types";
 import { zoneUpdated } from "../../../features/zones/zonesSlice";
+import ConfirmModal from "../../layout/ConfirmModal";
 
 interface VideoFormProps {
   zoneId: string;
@@ -21,23 +22,54 @@ export default function ZoneSettingsForm({
   const zone = useAppSelector((state) =>
     state.zones.find((z) => z.id === zoneId)
   );
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [pendingKey, setPendingKey] = React.useState("");
+  const [pendingValue, setPendingValue] = React.useState("");
   if (zone) {
+    const setParamValue = () => {
+      const newParams: Partial<Zone> =
+        zone.zoneType === formZoneType
+          ? { params: zone.params }
+          : { params: {} };
+      const newZone = {
+        id: zone.id,
+        params: { ...newParams.params, [pendingKey]: pendingValue },
+        zoneType: formZoneType,
+      };
+      dispatch(zoneUpdated(newZone));
+    };
+    React.useEffect(() => {
+      if (pendingKey !== "") {
+        if (zone.zoneType !== formZoneType && zone.zoneType !== undefined) {
+          onOpen();
+        } else {
+          setParamValue();
+        }
+      }
+    }, [pendingKey, pendingValue]);
     return (
       <Flex direction={"column"} pl={14}>
+        <ConfirmModal
+          headerText={"Change zone type"}
+          message={`Are you sure you want to change the type of ${zone.name}? It will delete all the provided data in other type.`}
+          buttonLabel={"Change type"}
+          isOpen={isOpen}
+          onClose={() => {
+            setPendingKey("");
+            setPendingValue("");
+            onClose();
+          }}
+          onConfirm={() => {
+            setParamValue();
+            onClose();
+          }}
+        />
         <div>
           {Object.entries(formEntries).map(([key, value]) => {
             const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
               //remove params from other types
-              const newParams: Partial<Zone> =
-                zone.zoneType === formZoneType
-                  ? { params: zone.params }
-                  : { params: {} };
-              const newZone = {
-                id: zone.id,
-                params: { ...newParams.params, [key]: e.target.value },
-                zoneType: formZoneType,
-              };
-              dispatch(zoneUpdated(newZone));
+              setPendingKey(key);
+              setPendingValue(e.target.value);
             };
             return (
               <div key={key}>

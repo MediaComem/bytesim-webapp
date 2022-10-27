@@ -5,7 +5,6 @@ import {
   AccordionPanel,
   Checkbox,
   Flex,
-  useDisclosure,
 } from "@chakra-ui/react";
 import * as React from "react";
 import { useDispatch } from "react-redux";
@@ -15,7 +14,6 @@ import { Zone, ZoneType } from "../../app/types/types";
 import { VideoFormEntries } from "../../app/types/videoTypes";
 import { zoneUpdated } from "../../features/zones/zonesSlice";
 import AccordionChevron from "../layout/AccordionChevron";
-import ConfirmModal from "../layout/ConfirmModal";
 import ZoneSettingsForm from "./zones_settings/ZoneSettingsForm";
 
 interface ZoneParamsProps {
@@ -25,12 +23,9 @@ export default function ZoneParams({ zone }: ZoneParamsProps) {
   const dispatch = useDispatch();
   const projectStatus = useAppSelector((state) => state.project.status);
   const defaultIndex = Object.keys(ZoneType).indexOf(zone.zoneType!);
-  const { onOpen } = useDisclosure();
-  const [onConfirm, setOnConfirm] = React.useState<() => void>();
   return (
     <>
       <Accordion allowToggle defaultIndex={[defaultIndex]}>
-        <ConfirmModalChangeType onConfirm={onConfirm} />
         {(Object.keys(ZoneType) as Array<keyof typeof ZoneType>).map((z, i) => {
           if (z === "Text") {
             return (
@@ -44,16 +39,13 @@ export default function ZoneParams({ zone }: ZoneParamsProps) {
                       ? (z as ZoneType)
                       : undefined;
                     if (zone.zoneType !== undefined) {
-                      setOnConfirm(() => {
-                        dispatch(
-                          zoneUpdated({
-                            id: zone.id,
-                            zoneType: newType,
-                            params: undefined,
-                          })
-                        );
-                      });
-                      onOpen();
+                      dispatch(
+                        zoneUpdated({
+                          id: zone.id,
+                          zoneType: newType,
+                          params: undefined,
+                        })
+                      );
                     } else {
                       dispatch(
                         zoneUpdated({
@@ -94,27 +86,6 @@ export default function ZoneParams({ zone }: ZoneParamsProps) {
         })}
       </Accordion>
     </>
-  );
-}
-//! To be removed if no longer used
-function ConfirmModalChangeType({ onConfirm }: { onConfirm?: () => void }) {
-  const { isOpen, onClose } = useDisclosure();
-  return (
-    <ConfirmModal
-      headerText={"Change zone type"}
-      message={
-        "Are you sure you want to change the type of the zone? It will delete all the provided data in other type."
-      }
-      buttonLabel={"Change type"}
-      isOpen={isOpen}
-      onClose={onClose}
-      onConfirm={() => {
-        if (onConfirm) {
-          onConfirm();
-        }
-        onClose();
-      }}
-    />
   );
 }
 interface ZoneParamsFormProps {
