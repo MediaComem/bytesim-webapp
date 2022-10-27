@@ -43,17 +43,12 @@ export interface ZoneImages extends ZoneInfo {
   params?: ImagesParameters;
 }
 
-export interface ZoneText extends ZoneInfo {
-  zoneType: ZoneType.Text;
-  params?: any
-}
-
 export interface ZoneDynamic extends ZoneInfo {
   zoneType: ZoneType.DynamicContent;
   params?: any
 }
 
-export type Zone = ZoneUnknown | ZoneVideo | ZoneImages | ZoneText | ZoneDynamic;
+export type Zone = ZoneUnknown | ZoneVideo | ZoneImages | ZoneDynamic;
 
 export type ProjectStatus = "EDITING" | "SIMULATION" | "LOADING";
 export type ZoneStatus = "EDITING" | "ACTIVE" | "LOADING";
@@ -63,7 +58,6 @@ export enum ZoneType {
   Video = "Video",
   Images = "Images",
   DynamicContent = "DynamicContent",
-  Text = "Text",
 }
 
 export type FormsType = ZoneParamsType | GenericParameters;
