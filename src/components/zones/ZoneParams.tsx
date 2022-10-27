@@ -16,7 +16,7 @@ import { Zone, ZoneType } from "../../app/types/types";
 import { VideoParameters, VideoFormEntries } from "../../app/types/videoTypes";
 import { zoneUpdated } from "../../features/zones/zonesSlice";
 import AccordionChevron from "../layout/AccordionChevron";
-import ConfirmModal from "../layout/ConfirmModal";
+import ConfirmModal, { confirmText } from "../layout/ConfirmModal";
 
 interface ZoneParamsProps {
   zone: Zone;
@@ -101,11 +101,7 @@ function ConfirmModalChangeType({ onConfirm }: { onConfirm?: () => void }) {
   const { isOpen, onClose } = useDisclosure();
   return (
     <ConfirmModal
-      headerText={"Change zone type"}
-      message={
-        "Are you sure you want to change the type of the zone? It will delete all the provided data in other type."
-      }
-      buttonLabel={"Change type"}
+      texts={confirmText.changeZoneType}
       isOpen={isOpen}
       onClose={onClose}
       onConfirm={() => {

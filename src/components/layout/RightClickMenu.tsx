@@ -1,9 +1,11 @@
-import { Menu, MenuList, MenuItem } from "@chakra-ui/react";
+import { Menu, MenuList, MenuItem, useDisclosure } from "@chakra-ui/react";
 import { css, cx } from "@emotion/css";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { useSelectedZone } from "../../app/hooks";
 import { zoneDeleted, zoneReset } from "../../features/zones/zonesSlice";
+import { DynamicModalParams } from "../zones/ZonesList";
+import ConfirmModal, { confirmText } from "./ConfirmModal";
 
 export interface RightClickMenuState {
   showMenu: boolean;
@@ -23,8 +25,14 @@ interface RightClickMenuProps {
 
 export default function RightClickMenu({ className }: RightClickMenuProps) {
   const dispatch = useDispatch();
-const [state, setState] =
+  const [state, setState] =
     React.useState<RightClickMenuState>(defaultRCMenuState);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [modalContent, setModalContent] = React.useState<DynamicModalParams>({
+    title: "",
+    text: "",
+    onConfirm: () => {},
+  });
   const handleClick = () => {
     setState({
       ...state,
@@ -57,6 +65,15 @@ const [state, setState] =
 
   return (
     <>
+      <ConfirmModal
+        texts={modalContent}
+        isOpen={isOpen}
+        onClose={onClose}
+        onConfirm={() => {
+          modalContent.onConfirm();
+          onClose();
+        }}
+      />
       {state.showMenu && selectedZone && (
         <div
           className={cx(
@@ -71,9 +88,30 @@ const [state, setState] =
         >
           <Menu isOpen={state.showMenu}>
             <MenuList>
-              <MenuItem onClick={() => dispatch(zoneReset(selectedZone.id))}>Reset</MenuItem>
-              {/* <MenuItem>Rename</MenuItem> */}
-              <MenuItem onClick={() => dispatch(zoneDeleted(selectedZone.id))}>
+              <MenuItem
+                onClick={() => {
+                  setModalContent({
+                    ...confirmText.resetZone,
+                    onConfirm: () => {
+                      dispatch(zoneReset(selectedZone.id));
+                    },
+                  });
+                  onOpen();
+                }}
+              >
+                Reset
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  setModalContent({
+                    ...confirmText.deleteZone,
+                    onConfirm: () => {
+                      dispatch(zoneDeleted(selectedZone.id));
+                    },
+                  });
+                  onOpen();
+                }}
+              >
                 Delete zone
               </MenuItem>
             </MenuList>

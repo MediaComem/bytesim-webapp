@@ -4,7 +4,7 @@ import * as React from "react";
 import { useDispatch } from "react-redux";
 import { colorTheme } from ".";
 import { useAppSelector } from "./app/hooks";
-import ConfirmModal from "./components/layout/ConfirmModal";
+import ConfirmModal, { confirmText } from "./components/layout/ConfirmModal";
 import Panel from "./components/layout/Panel";
 import RecoReport from "./components/recommandations/RecoReport";
 import MainGroupList from "./components/zones/MainGroupList";
@@ -58,11 +58,7 @@ export default function Home() {
           }
         >
           <ConfirmModal
-            headerText={"Reset the whole project"}
-            message={
-              "Are you sure you want to reset the whole project? It will delete all the provided data in general and all the zones."
-            }
-            buttonLabel={"Reset project"}
+            texts={confirmText.resetProject}
             isOpen={isOpen}
             onClose={onClose}
             onConfirm={() => {

@@ -26,7 +26,7 @@ export default function Panel({
       alignSelf="stretch"
       grow={grow}
       id={id}
-      overflow="auto"
+      overflowX="auto"
     >
       <PanelTitle
         title={title}
@@ -61,6 +61,7 @@ function PanelTitle({
         alignSelf="stretch"
         justify={"space-between"}
         p={2}
+        minH='50px'
       >
         <Heading size={titleSize || "sm"}>{title}</Heading>
         {toolbarButton}

@@ -27,7 +27,7 @@ import {
   projectUpdated,
 } from "../../features/project/projectSlice";
 import AccordionItemTitleCustom from "../layout/AccordionItemTitleCustom";
-import ConfirmModal from "../layout/ConfirmModal";
+import ConfirmModal, { confirmText } from "../layout/ConfirmModal";
 import ProgressPoints from "../layout/ProgressPoints";
 import { ReactComponent as ResetIcon } from "../../assets/ResetIcon_Active_MouseOver.svg";
 import { css } from "@emotion/css";
@@ -69,11 +69,7 @@ export default function GeneralFormAccordion() {
             <GeneralForm project={project} />
           </AccordionPanel>
           <ConfirmModal
-            headerText={"Reset general form"}
-            message={
-              "Are you sure you want to reset the general from? It will delete all the provided data in it."
-            }
-            buttonLabel={"Reset general form"}
+            texts={confirmText.resetGeneral}
             isOpen={isOpen}
             onClose={onClose}
             onConfirm={() => {
