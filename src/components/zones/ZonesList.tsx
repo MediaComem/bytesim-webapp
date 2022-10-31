@@ -185,6 +185,14 @@ function ZoneListButton({ zone, isExpanded, onOpen }: ZoneListButtonProps) {
   const projectStatus = useAppSelector((state) => state.project.status);
   const [value, setValue] = React.useState(zone.name);
   const [editNameMode, setEditNameMode] = React.useState(false);
+  const updateZoneName = (newName: string) => {
+    const newNameObject = {
+      id: zone.id,
+      name: newName,
+    };
+    dispatch(zoneUpdated(newNameObject));
+    setEditNameMode(false);
+  };
   const getCompleteObject = (typeOfZone: ZoneType) => {
     switch (typeOfZone) {
       case ZoneType.Video:
@@ -226,16 +234,16 @@ function ZoneListButton({ zone, isExpanded, onOpen }: ZoneListButtonProps) {
                 {editNameMode ? (
                   <Input
                     value={value}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        updateZoneName(value);
+                      }
+                    }}
                     onChange={(e) => {
                       setValue(e.target.value);
                     }}
                     onBlur={() => {
-                      const newName = {
-                        id: zone.id,
-                        name: value,
-                      };
-                      dispatch(zoneUpdated(newName));
-                      setEditNameMode(false);
+                      updateZoneName(value);
                     }}
                     autoFocus
                     p={1}
