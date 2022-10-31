@@ -185,12 +185,18 @@ function ZoneListButton({ zone, isExpanded, onOpen }: ZoneListButtonProps) {
   const projectStatus = useAppSelector((state) => state.project.status);
   const [value, setValue] = React.useState(zone.name);
   const [editNameMode, setEditNameMode] = React.useState(false);
+  const [oldZoneName, setOldZoneName] = React.useState(zone.name);
   const updateZoneName = (newName: string) => {
     const newNameObject = {
       id: zone.id,
       name: newName,
     };
-    dispatch(zoneUpdated(newNameObject));
+    if (value !== "") {
+      setOldZoneName(newName);
+      dispatch(zoneUpdated(newNameObject));
+    } else {
+      setValue(oldZoneName);
+    }
     setEditNameMode(false);
   };
   const getCompleteObject = (typeOfZone: ZoneType) => {
