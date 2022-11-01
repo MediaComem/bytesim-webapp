@@ -9,7 +9,7 @@ const initialState: Project = {
   params: {
     nbVisit: undefined,
     genericFont: undefined,
-    inifiteScroll: undefined,
+    infiniteScroll: undefined,
     plugins: undefined,
     server: undefined,
   },

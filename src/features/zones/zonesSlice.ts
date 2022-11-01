@@ -28,6 +28,7 @@ const zonesSlice = createSlice({
           ...action.payload,
           name: `Zone ${state.length + 1}`,
         };
+        state.forEach(zone => { zone.status = "ACTIVE" });
         state.push(newPayload);
       },
       prepare() {
@@ -52,7 +53,7 @@ const zonesSlice = createSlice({
       if (existingZone) {
         const resetParams = {
           id: existingZone.id,
-          params: undefined,
+          params: {},
           zoneType: undefined,
         };
         Object.assign(existingZone, resetParams);

@@ -11,13 +11,21 @@ export const GeneralFormEntries = {
   server: ServerType,
   plugins: EBoolean,
   genericFont: EBoolean,
-  inifiteScroll: EBoolean,
+  infiniteScroll: EBoolean,
 };
 
 export const getGeneralEntryLabel = (entry: string) => {
   switch (entry) {
     case "nbVisit":
-      return "number of visits/month";
+      return "Estimated visits / Month";
+    case "server":
+      return "Server";
+    case "plugins":
+      return "Plugins";
+    case "genericFont":
+      return "Generic fonts";
+    case "infiniteScroll":
+      return "Infinite scroll";
     default:
       return entry;
   }
@@ -28,5 +36,5 @@ export interface GenericParameters {
   server?: ServerType;
   plugins?: boolean;
   genericFont?: boolean;
-  inifiteScroll?: boolean;
+  infiniteScroll?: boolean;
 }

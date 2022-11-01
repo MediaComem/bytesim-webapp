@@ -22,7 +22,7 @@ export enum EVideoDuration {
   DUR_5_MIN = "> 5min",
 }
 
-export const VideoFormEntries = {
+export const VideoFormEntries: {[key: string]: any} = {
   format: EVideoFormat,
   quality: EVideoQuality,
   duration: EVideoDuration,
