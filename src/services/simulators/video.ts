@@ -1,5 +1,7 @@
 import { Recommandation } from "../../app/types/recommandations";
+import { Zone } from "../../app/types/types";
 import { VideoParameters, EVideoQuality, EVideoDuration, EVideoFormat } from "../../app/types/videoTypes";
+import { isZoneComplete } from "../../utils/utils";
 import simulationService from "../simulationService";
 import { SimulatorVideo } from "./type";
 import { ZoneSimulator } from "./zoneSimulator";
@@ -7,12 +9,14 @@ import { ZoneSimulator } from "./zoneSimulator";
 export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
   video: VideoParameters;
   renewable: boolean;
+  zone: Zone;
 
-  constructor(id: string, parameters: VideoParameters, renewable: boolean) {
-    super(id);
+  constructor(zone: Zone, parameters: VideoParameters, renewable: boolean) {
+    super(zone.id);
     this.video = parameters;
     this.renewable = renewable;
-    this.zone_id = id;
+    this.zone_id = zone.id;
+    this.zone = zone;
   }
 
   // Video size in bytes
@@ -62,12 +66,15 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
   recommandations() {
     const recommandations: Recommandation< EVideoQuality | EVideoDuration>[] = [];
     const currentImpact = this.simulate();
-    const recommandationsQuality = this.recommandations4Parameter(currentImpact, EVideoQuality, this.video, 'quality');
-    recommandations.push(...recommandationsQuality);
-    const recommandationsDuration = this.recommandations4Parameter(currentImpact, EVideoDuration, this.video, 'duration');
-    recommandations.push(...recommandationsDuration);
-    const recommandationsFormat = this.recommandations4Parameter(currentImpact, EVideoFormat, this.video, 'format');
-    recommandations.push(...recommandationsFormat);
+    //show recommandations only if the zone params are fully filled
+    if (isZoneComplete(this.zone)) {
+      const recommandationsQuality = this.recommandations4Parameter(currentImpact, EVideoQuality, this.video, 'quality');
+      recommandations.push(...recommandationsQuality);
+      const recommandationsDuration = this.recommandations4Parameter(currentImpact, EVideoDuration, this.video, 'duration');
+      recommandations.push(...recommandationsDuration);
+      const recommandationsFormat = this.recommandations4Parameter(currentImpact, EVideoFormat, this.video, 'format');
+      recommandations.push(...recommandationsFormat);
+    }
     return recommandations;
   }
 }

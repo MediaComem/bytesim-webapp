@@ -1,5 +1,6 @@
 import { ImageParameters } from "../../app/types/imgTypes";
 import { Recommandation } from "../../app/types/recommandations";
+import { Zone } from "../../app/types/types";
 import { SimulatorImages } from "./type";
 import { ZoneSimulator } from "./zoneSimulator";
 
@@ -7,8 +8,8 @@ export class ImageSimulator extends ZoneSimulator implements SimulatorImages {
   images: ImageParameters;
   renewable: boolean;
 
-  constructor(id: string, parameters: ImageParameters, renewable: boolean) {
-    super(id);
+  constructor(zone: Zone, parameters: ImageParameters, renewable: boolean) {
+    super(zone.id);
     this.images = parameters;
     this.renewable = renewable;
   }
