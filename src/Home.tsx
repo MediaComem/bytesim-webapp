@@ -12,10 +12,15 @@ import GeneralFormAccordion from "./components/zones/GeneralForm";
 import ZonesList from "./components/zones/ZonesList";
 import ZonesView from "./components/zones/ZonesView";
 import { projectReset } from "./features/project/projectSlice";
-import { allZonesReset, zoneAdded } from "./features/zones/zonesSlice";
+import {
+  allZonesReset,
+  getUncompleteZones,
+  zoneAdded,
+} from "./features/zones/zonesSlice";
 import { ReactComponent as ResetIcon } from "./assets/ResetIcon_Active_MouseOver.svg";
 import ExportButton from "./components/recommandations/ExportButton";
 import { useNavigate } from "react-router-dom";
+import RecoWarning from "./components/recommandations/RecoWarning";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -23,6 +28,7 @@ export default function Home() {
   const state = useAppSelector((s) => s);
   const project = state.project;
   const navigate = useNavigate();
+  const uncompleteZones = useAppSelector(getUncompleteZones);
   return (
     <Flex grow={1} overflow="hidden">
       <Panel
@@ -168,6 +174,9 @@ export default function Home() {
             "Entering as many parameters as possible allows you to refine the calculation of your page. #happygreen"
           }
         </Text> */}
+        {uncompleteZones.length !== 0 && (
+          <RecoWarning uncompleteZoneNames={uncompleteZones} />
+        )}
         <RecoReport />
       </Panel>
     </Flex>
