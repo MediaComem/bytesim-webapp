@@ -27,6 +27,7 @@ export default function ZoneSettingsForm({
   formEntries,
   showHeaders = true,
 }: VideoFormProps) {
+  //Match the current needs but may change in the futur
   const DEFAULT_NUMBER_INPUT: number = 1;
   const dispatch = useDispatch();
   const zone = useAppSelector((state) =>
@@ -36,7 +37,12 @@ export default function ZoneSettingsForm({
   const [pendingKey, setPendingKey] = React.useState("");
   const [pendingValue, setPendingValue] = React.useState("");
   if (zone) {
-    const getNeededInputDefault = () => {
+    /**
+     * Params with number values have a default one. Those values have to be
+     * set by default in the zone params when selecting a type.
+     * @returns default zone params as an object
+     */
+    const defaultZoneParams = () => {
       const inputsToAdd: { [key: string]: any } = {};
       Object.keys(formEntries).forEach((key) => {
         if (
@@ -53,7 +59,7 @@ export default function ZoneSettingsForm({
       const newParams: Partial<Zone> =
         zone.zoneType === formZoneType
           ? { params: zone.params }
-          : { params: getNeededInputDefault() };
+          : { params: defaultZoneParams() };
       const newZone = {
         id: zone.id,
         params: {
