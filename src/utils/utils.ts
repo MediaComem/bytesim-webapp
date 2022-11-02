@@ -1,6 +1,6 @@
 import { DynContentFormEntries } from "../app/types/dynContentTypes";
 import { ImageFormEntries } from "../app/types/imgTypes";
-import { ZoneType } from "../app/types/types";
+import { Zone, ZoneType } from "../app/types/types";
 import { VideoFormEntries } from "../app/types/videoTypes";
 
 export const getTypeEntries = (typeOfZone: ZoneType) => {
@@ -12,4 +12,13 @@ export const getTypeEntries = (typeOfZone: ZoneType) => {
       case ZoneType.DynamicContent:
         return DynContentFormEntries;
     }
+};
+
+// Check if the provided zone has every params filled
+export const isZoneComplete = (zone: Zone) => {
+  if (zone.params && zone.zoneType) {
+    return Object.keys(zone.params).length === Object.keys(getTypeEntries(zone.zoneType)).length;
+  } else {
+    return false;
+  }
 };

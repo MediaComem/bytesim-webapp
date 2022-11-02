@@ -1,4 +1,5 @@
-import { Flex, ListItem, Text, UnorderedList } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
+import { ReactComponent as WarningIcon } from "../../assets/Warning.svg";
 import * as React from "react";
 
 interface RecoWarningProps {
@@ -10,14 +11,17 @@ export default function RecoWarning({ uncompleteZoneNames }: RecoWarningProps) {
   }); */
   return (
     <Flex align={"center"} p={2}>
-      <Text fontSize="sm" color="tomato">
-        Some zones are not complete and therefore not taken into account in the
-        the calculation:
-        <UnorderedList spacing={10}>
-          {uncompleteZoneNames.map((name, index) => (
-            <ListItem key={index}>{name}</ListItem>
-          ))}
-        </UnorderedList>
+      <Text>
+        <WarningIcon></WarningIcon>
+      </Text>
+      <Text fontSize="sm" ml={2} color="tomato">
+        Uncomplete zones are not taken into account in the the
+        calculation:&nbsp;
+        <Text as="b">
+          {uncompleteZoneNames.map((name, index) =>
+            index ? `, ${name}` : name
+          )}
+        </Text>
       </Text>
     </Flex>
   );

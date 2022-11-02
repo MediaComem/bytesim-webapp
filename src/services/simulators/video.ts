@@ -62,7 +62,6 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
   recommandations() {
     const recommandations: Recommandation< EVideoQuality | EVideoDuration>[] = [];
     const currentImpact = this.simulate();
-    // TODO check all parameters
     const recommandationsQuality = this.recommandations4Parameter(currentImpact, EVideoQuality, this.video, 'quality');
     recommandations.push(...recommandationsQuality);
     const recommandationsDuration = this.recommandations4Parameter(currentImpact, EVideoDuration, this.video, 'duration');

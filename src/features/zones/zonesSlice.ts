@@ -2,7 +2,7 @@ import { createSlice, nanoid } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import { Zone, ZoneStatus } from "../../app/types/types";
-import { getTypeEntries } from "../../utils/utils";
+import { isZoneComplete } from "../../utils/utils";
 
 const initialState: Zone[] = [];
 
@@ -108,7 +108,7 @@ export const getSelectedZoneIndex = (state: RootState) => {
 export const getUncompleteZones = (state: RootState) => {
   const uncompleteZones: Array<string> = [];
   Object.values(state.zones).forEach(zone => {
-      if (zone.zoneType === undefined || zone.params === undefined || Object.keys(zone.params).length !== Object.keys(getTypeEntries(zone.zoneType)).length) {
+      if (zone.zoneType === undefined || zone.params === undefined || !isZoneComplete(zone)) {
         uncompleteZones.push(zone.name);
       }
   });
