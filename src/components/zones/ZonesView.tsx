@@ -78,7 +78,10 @@ export default function ZonesView({
       grow={1}
       alignSelf="stretch"
     >
-      <Flex opacity={0.5} width="400px" minWidth="400" maxWidth="400">
+      <Flex
+        opacity={0.5}
+        //  width="400px" minWidth="400" maxWidth="400"
+      >
         <Routes>
           <Route
             path="bytesim-webapp/figma/*"
