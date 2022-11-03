@@ -12,7 +12,8 @@ import {
 import REHome from "../../assets/RE-homepage.jpg";
 import { Zone } from "../../app/types/types";
 import ConfirmModal, { confirmText } from "../layout/ConfirmModal";
-//import RightClickMenu from "../layout/RightClickMenu";
+import { useLocation } from "react-router-dom";
+import UploadButton from "../project/UploadButton";
 const brandColor = "#ea62ea";
 const resizeHandleSVG = (
   <svg
@@ -66,9 +67,11 @@ export default function ZonesView({
 }) {
   const dispatch = useDispatch();
   const zones = useAppSelector((state) => state.zones);
-  const projectScreenshot = useAppSelector(
+  const location = useLocation();
+  //Waiting for blob to be in S3 database
+  /* const projectScreenshot = useAppSelector(
     (state) => state.project.screenshotBlob
-  );
+  ); */
   const selectedZone = useSelectedZone();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const handleDelete = (e: KeyboardEvent) => {
@@ -103,15 +106,22 @@ export default function ZonesView({
           onClose();
         }}
       />
-      <Flex opacity={0.5} width="400" minWidth="400" maxWidth="400">
-        <Flex>
-          {projectScreenshot ? (
+      {location.pathname === "/bytesim-webapp/new" ? (
+          <UploadButton />
+      ) : (
+        <Flex opacity={0.5} width="400" minWidth="400" maxWidth="400">
+          <Flex>
+            <img src={REHome} alt="RE homepage" />
+          </Flex>
+        </Flex>
+      )}
+      {/* {projectScreenshot ? (
             <img src={projectScreenshot} alt="screenshot" />
           ) : (
             <img src={REHome} alt="RE homepage" />
-          )}
-        </Flex>
-        {/* <Routes>
+       )} */}
+      {/*
+         <Routes>
           <Route
             path="bytesim-webapp/1/*"
             element={
@@ -153,7 +163,7 @@ export default function ZonesView({
             }
           />
         </Routes> */}
-      </Flex>
+
       {zones.map((z) => {
         return (
           <ZoneFrame key={z.id} zone={z} disableEdition={disableEdition} />

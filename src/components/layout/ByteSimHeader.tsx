@@ -4,6 +4,7 @@ import { useAppSelector } from "../../app/hooks";
 import { useDispatch } from "react-redux";
 import { setName } from "../../features/project/projectSlice";
 import ButtonWithIconCustom from "./ButtonWithIconCustom";
+import NewProjectButton from "../project/NewProjectButton";
 
 export default function BytesimeHeader() {
   const projectName = useAppSelector((state) => state.project.name);
@@ -30,6 +31,7 @@ export default function BytesimeHeader() {
             width='auto'
           />
         </Heading>
+        <NewProjectButton />
       </Flex>
       <ButtonWithIconCustom
             icon={<></>}

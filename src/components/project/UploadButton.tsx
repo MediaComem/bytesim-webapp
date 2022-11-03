@@ -1,5 +1,6 @@
 import {
   Button,
+  Flex,
   Input,
   Modal,
   ModalBody,
@@ -12,6 +13,8 @@ import {
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { projectUpdated } from "../../features/project/projectSlice";
+import { ReactComponent as AddIcon } from "../../assets/BigPlus.svg";
+import { colorTheme } from "../..";
 
 export default function UploadButton() {
   const dispatch = useDispatch();
@@ -19,11 +22,24 @@ export default function UploadButton() {
   const [file, setFile] = React.useState<string | undefined>();
   return (
     <>
-      <Button onClick={onOpen}>Upoad new screenshot</Button>
+      <Flex
+        grow={1}
+        direction={"column"}
+        align="center"
+        justifyContent={"center"}
+        alignSelf="stretch"
+        onClick={onOpen}
+        _hover={{ backgroundColor: colorTheme[50], cursor: 'pointer' }}
+      >
+        <Flex direction="column" align="center">
+          <AddIcon />
+          Import an Artwork
+        </Flex>
+      </Flex>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay bg="blackAlpha.300" />
         <ModalContent>
-          <ModalHeader>Upload new screenshot</ModalHeader>
+          <ModalHeader>Upload artwork</ModalHeader>
           <ModalBody>
             <Input
               type="file"
@@ -47,6 +63,7 @@ export default function UploadButton() {
                   screenshotBlob: file,
                 };
                 dispatch(projectUpdated(newScreenshot));
+                onClose();
               }}
             >
               OK

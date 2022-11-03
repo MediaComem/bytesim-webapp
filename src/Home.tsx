@@ -17,7 +17,6 @@ import { ReactComponent as ResetIcon } from "./assets/ResetIcon_Active_MouseOver
 import ExportButton from "./components/recommandations/ExportButton";
 import "react-reflex/styles.css";
 import { ReflexContainer, ReflexElement, ReflexSplitter } from "react-reflex";
-import UploadButton from "./components/project/UploadButton";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -122,7 +121,6 @@ export default function Home() {
                   4
                 </Button> */}
               </Flex>
-              <UploadButton />
               <Button
                 onClick={() => {
                   dispatch(zoneAdded());
