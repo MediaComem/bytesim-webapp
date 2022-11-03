@@ -3,9 +3,10 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { ChakraProvider, theme } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
+import theme from "./theme";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

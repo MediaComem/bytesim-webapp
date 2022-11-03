@@ -14,12 +14,9 @@ import { useDispatch } from "react-redux";
 import { drawnZoneSelector, useAppSelector } from "../../app/hooks";
 //import { PrettyZoneTypes } from "../../app/types";
 import {
-  zoneActiveToggled,
   allZonesReset,
   zoneDeleted,
   allZonesDeleted,
-  getSelectedZoneIndex,
-  //allZonesReset,
 } from "../../features/zones/zonesSlice";
 import AccordionItemTitleCustom from "../layout/AccordionItemTitleCustom";
 import ConfirmModal from "../layout/ConfirmModal";
@@ -29,9 +26,8 @@ import { ReactComponent as TrashIcon } from "../../assets/TEMP_trash.svg";
 import { css } from "@emotion/css";
 import AccordionCustomTitle from "../layout/AccordionCustomTitle";
 import { recommandationsReset } from "../../features/recommandations/recommandationsSlice";
-import { ImageFormEntries } from "../../app/types/imgTypes";
-import { DynContentFormEntries } from "../../app/types/dynContentTypes";
 import { ZoneListButton } from "./ZoneListButton";
+import { Fragment } from "react";
 
 export default function ZonesList() {
   const dispatch = useDispatch();
@@ -40,7 +36,6 @@ export default function ZonesList() {
   const zones = useAppSelector(drawnZoneSelector);
   const project = state.project;
   const ZONE_TAB_INDEX = 0;
-  const openedZoneIndex = useAppSelector(getSelectedZoneIndex);
   const [modalContent, setModalContent] = React.useState<{
     modal: string;
     buttonLabel: string;
@@ -112,12 +107,8 @@ export default function ZonesList() {
               <Accordion allowToggle>
                 {zones.map((z, i) => {
                   return (
-                    <>
-                      <AccordionItem
-                        key={i}
-                        onClick={() => dispatch(zoneSelected(z.id))}
-                        border="none"
-                      >
+                    <Fragment key={`${z.id}_${i}`}>
+                      <AccordionItem key={`${z.id}_${i}`} border="none">
                         {({ isExpanded }) => (
                           <>
                             <ZoneListButton
@@ -134,7 +125,6 @@ export default function ZonesList() {
                                 onOpen();
                               }}
                               isExpanded={isExpanded}
-                              closseAllItems={() => setIndex([])}
                               //setOpen={() => toggleAccordion(i)}
                             />
                             <AccordionPanel p={0} bg={"brand.50"}>
@@ -144,16 +134,12 @@ export default function ZonesList() {
                                   Specific settings on the page
                                 </Text>
                               </Box>
-                              <ZoneParams
-                                zone={z}
-                                index={index}
-                                setIndex={setIndex}
-                              />
+                              <ZoneParams zone={z} />
                             </AccordionPanel>
                           </>
                         )}
                       </AccordionItem>
-                    </>
+                    </Fragment>
                   );
                 })}
               </Accordion>
@@ -173,125 +159,5 @@ export default function ZonesList() {
         )}
       </AccordionItem>
     </Accordion>
-  );
-}
-
-interface ZoneListButtonProps {
-  zone: Zone;
-  onOpen: () => void;
-  isExpanded: boolean;
-  closseAllItems: () => void;
-  //setOpen: () => void;
-}
-function ZoneListButton({
-  zone,
-  isExpanded,
-  onOpen,
-  closseAllItems,
-}: ZoneListButtonProps) {
-  const dispatch = useDispatch();
-  const projectStatus = useAppSelector((state) => state.project.status);
-  const [value, setValue] = React.useState(zone.name);
-  const [editNameMode, setEditNameMode] = React.useState(false);
-  return (
-    <>
-      <Box
-        display="flex"
-        alignItems="center"
-        justifyContent="space-between"
-        flexWrap="nowrap"
-        pl={5}
-        _hover={{
-          backgroundColor: "brand.100",
-          ".visibleOnHover": {
-            visibility: "visible",
-          },
-        }}
-        style={
-          zone.status === "EDITING"
-            ? { backgroundColor: colorTheme[100] }
-            : undefined
-        }
-      >
-        <Flex align="center" justify="flex-start">
-          <AccordionButton p={1} width="auto">
-            <AccordionChevron isExpanded={isExpanded} />
-          </AccordionButton>
-          <AccordionCustomTitle
-            label={
-              <>
-                {editNameMode ? (
-                  <Input
-                    value={value}
-                    onChange={(e) => {
-                      setValue(e.target.value);
-                    }}
-                    onBlur={() => {
-                      const newName = {
-                        id: zone.id,
-                        name: value,
-                      };
-                      dispatch(zoneUpdated(newName));
-                      setEditNameMode(false);
-                    }}
-                    autoFocus
-                    p={1}
-                    whiteSpace={"nowrap"}
-                    minW="100px"
-                  />
-                ) : (
-                  <Text
-                    ml={1}
-                    //fontStyle={zone.zoneType ? "initial" : "italic"}
-                    whiteSpace={"nowrap"}
-                    onDoubleClick={() => setEditNameMode(true)}
-                  >
-                    {value}
-                  </Text>
-                )}
-              </>
-            }
-            icon={"drawnZone"}
-            iconClassName={css({ transform: "scale(0.8)" })}
-          />
-          <Text fontSize={"sm"} color={"gray"} whiteSpace="nowrap" ml={2}>
-            {zone.zoneType
-              ? Object.entries(ZoneType).find(
-                  (s) => s[0] === zone.zoneType
-                )?.[1]
-              : "- undefined"}
-          </Text>
-          {zone.zoneType && (
-            <ProgressPoints
-              completeObject={
-                zone.zoneType === "Video" ? VideoFormEntries : { text: true }
-              }
-              params={zone.zoneType === "Video" ? zone.params : { text: true }}
-            />
-          )}
-        </Flex>
-        <Flex className={cx("visibleOnHover ", css({ visibility: "hidden" }))}>
-          <Button
-            variant={"ghost"}
-            title="Reset zone"
-            onClick={() => {
-              dispatch(zoneReset(zone.id));
-              closseAllItems();
-            }}
-            isDisabled={projectStatus === "SIMULATION"}
-          >
-            <ResetIcon className={css({ margin: "3px" })} stroke="black" />
-          </Button>
-          <Button
-            variant={"ghost"}
-            onClick={onOpen}
-            title="Delete zone"
-            isDisabled={projectStatus === "SIMULATION"}
-          >
-            <TrashIcon className={css({ margin: "3px" })} fill="black" />
-          </Button>
-        </Flex>
-      </Box>
-    </>
   );
 }

@@ -5,11 +5,9 @@ import {
   AccordionPanel,
   Box,
   Button,
-  css,
   ExpandedIndex,
   Heading,
   Text,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -17,10 +15,8 @@ import { figmaZoneSelector, useAppSelector } from "../../app/hooks";
 import { FigmaTreeEl, ZoneFigma } from "../../app/types/types";
 import { highlightFigmaZone } from "../../features/figma/utils";
 import { zoneFigmaToggleHidden } from "../../features/figma/zonesFigmaSlice";
-import { zoneSelected } from "../../features/zones/zonesSlice";
 import AccordionChevron from "../layout/AccordionChevron";
 import AccordionCustomTitle from "../layout/AccordionCustomTitle";
-import ConfirmModal from "../layout/ConfirmModal";
 import { ZoneListButton } from "./ZoneListButton";
 import ZoneParams from "./ZoneParams";
 
@@ -81,7 +77,6 @@ const HiddenZone = ({ z }: { z: ZoneFigma }) => {
         // }}
         isExpanded={false}
         hiddenMode={true}
-        closseAllItems={() => {}}
         buttonDelete={
           <Button
             variant={"ghost"}
@@ -128,8 +123,7 @@ const AccordionZones = ({
             <AccordionItem
               _hover={{ border: `1px solid ${colorTheme[100]}` }}
               border={`1px solid transparent`}
-              key={z.id}
-              onClick={() => dispatch(zoneSelected(z.id))}
+              key={z.id + "_hidden"}
             >
               {({ isExpanded }) => (
                 <Box
@@ -149,7 +143,6 @@ const AccordionZones = ({
                       </Button>
                     }
                     isExpanded={isExpanded}
-                    closseAllItems={() => setIndex([])}
                     //setOpen={() => toggleAccordion(i)}
                   />
                   <AccordionPanel p={0} bg={"brand.50"}>
@@ -157,7 +150,7 @@ const AccordionZones = ({
                       <Heading size={"xs"}>Type</Heading>
                       <Text fontSize={"xs"}>Specific settings on the page</Text>
                     </Box>
-                    <ZoneParams zone={z} index={index} setIndex={setIndex} />
+                    <ZoneParams zone={z} />
                   </AccordionPanel>
                   {children}
                 </Box>

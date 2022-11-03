@@ -24,15 +24,12 @@ import { ReactComponent as TrashIcon } from "../../assets/TEMP_trash.svg";
 import {
   zoneFigmaReset,
   zoneFigmaUpdated,
-  zonesFigmaUpdated,
 } from "../../features/figma/zonesFigmaSlice";
 
 interface ZoneListButtonProps {
   zone: Zone | ZoneFigma;
   onOpen?: () => void;
   isExpanded: boolean;
-  closseAllItems: () => void;
-  //setOpen: () => void;
   buttonDelete?: any;
   hiddenMode?: boolean;
 }
@@ -45,7 +42,6 @@ export function ZoneListButton({
   zone,
   isExpanded,
   onOpen,
-  closseAllItems,
   buttonDelete,
   hiddenMode = false,
 }: ZoneListButtonProps) {
@@ -150,7 +146,6 @@ export function ZoneListButton({
                 dispatch(
                   isDrawnZone ? zoneReset(zone.id) : zoneFigmaReset(zone.id)
                 );
-                closseAllItems();
               }}
               isDisabled={projectStatus === "SIMULATION"}
             >
