@@ -2,7 +2,7 @@ export enum EImgFormat {
   "PNG",
   "JPG",
   "SVG",
-  "OTHER",
+  "Other",
 }
 
 export enum EImgQuality {
@@ -11,7 +11,13 @@ export enum EImgQuality {
   "> 500ko",
 }
 
-export interface ImagesParameters {
+export const ImageFormEntries: {[key: string]: any} = {
+    format: EImgFormat,
+    quantity: 1,
+    quality: EImgQuality
+};
+
+export interface ImageParameters {
     format: EImgFormat;
     quantity: number;
     quality: EImgQuality;

@@ -16,7 +16,7 @@ export default function ReloadRecoButton() {
   const recosGeneric = useCalculateGenericRecommandations();
   const recos = useCalculateAllRecommandations();
   const reloadSimulation = React.useCallback(() => {
-    dispatch(recommandationsPopulated([...recos, ...recosGeneric]));
+    dispatch(recommandationsPopulated([...recosGeneric, ...recos]));
   }, [dispatch, recos]);
   //const currentDisplayedRecos = useAppSelector((state) => state.recommandations);
   /*   const newRecos = React.useEffect(() => {
@@ -43,7 +43,4 @@ export default function ReloadRecoButton() {
       </Button>
     </>
   );
-}
-function recommandationsGeneric() {
-  throw new Error("Function not implemented.");
 }

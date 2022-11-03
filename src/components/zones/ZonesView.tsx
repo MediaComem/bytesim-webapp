@@ -4,13 +4,14 @@ import { useDispatch } from "react-redux";
 import { Rnd } from "react-rnd";
 import { Route, Routes } from "react-router-dom";
 import { drawnZoneSelector, useAppSelector } from "../../app/hooks";
-import { zoneSelected, zoneUpdated } from "../../features/zones/zonesSlice";
+
 import TestSVG from "../layout/TestSVG";
 import RemoteSVG from "../../features/figma/components/remoteSvg";
 import REHome from "../../assets/RE-homepage.jpg";
 import REabout from "../../assets/RE-about.jpg";
 import REmap from "../../assets/RE-map.jpg";
-const brandColor = "#ea62ea";
+import { colorTheme } from "../../theme";
+const brandColor = colorTheme[400];
 const resizeHandleSVG = (
   <svg
     width="15"
@@ -73,16 +74,8 @@ export default function ZonesView({
       grow={1}
       alignSelf="stretch"
     >
-      <Flex opacity={0.5} width="400" minWidth="400">
+      <Flex opacity={0.5} width="400px" minWidth="400" maxWidth="400">
         <Routes>
-          <Route
-            path="bytesim-webapp/figma/*"
-            element={
-              <Flex>
-                <RemoteSVG />
-              </Flex>
-            }
-          />
           <Route
             path="bytesim-webapp/1/*"
             element={
@@ -138,7 +131,7 @@ export default function ZonesView({
             className={cx(zoneStyle, {
               [selectedZoneStyle]: z.status === "EDITING",
             })}
-            onMouseDown={() => dispatch(zoneSelected(z.id))}
+            onMouseDown={() => dispatch(zoneActiveToggled(z.id))}
             enableResizing={z.status === "EDITING" && !disableEdition}
             disableDragging={disableEdition}
             onResizeStop={(e, direction, ref, delta, position) => {

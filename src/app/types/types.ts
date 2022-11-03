@@ -1,7 +1,8 @@
 import { GenericParameters } from "./generalFormTypes";
 
-import { ImagesParameters } from "./imgTypes";
+import { ImageParameters } from "./imgTypes";
 import { VideoParameters } from "./videoTypes";
+import { DynContentParameters } from "./dynContentTypes";
 
 export interface Project {
   id: number;
@@ -19,7 +20,6 @@ export interface User {
 export interface ZoneInfo {
   id: string;
   name: string;
-  index?: number;
   x: number;
   y: number;
   width: number;
@@ -40,7 +40,7 @@ export interface ZoneVideo extends ZoneInfo {
 
 export interface ZoneImages extends ZoneInfo {
   zoneType: ZoneType.Images;
-  params?: ImagesParameters;
+  params?: ImageParameters;
 }
 
 export interface ZoneText extends ZoneInfo {
@@ -78,12 +78,15 @@ export type UserStatus = "CONNECTED" | "AFK" | "LOADING";
 export enum ZoneType {
   Video = "Video",
   Images = "Images",
-  Text = "Text",
   DynamicContent = "DynamicContent",
+  Text = "Text",
 }
 
 export type FormsType = ZoneParamsType | GenericParameters;
-export type ZoneParamsType = VideoParameters | ImagesParameters;
+export type ZoneParamsType =
+  | VideoParameters
+  | ImageParameters
+  | DynContentParameters;
 
 export enum EBoolean {
   YES = "Yes",
@@ -95,5 +98,5 @@ export enum EBoolean {
 // Reco dans le store
 // Modele de calcul -> video pour le POC, 1 par type
 // Modele de reco
-//Zone View à adapter pour différents formats d'image svg de base
+// Zone View à adapter pour différents formats d'image svg de base
 // création de PDF
