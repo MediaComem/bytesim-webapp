@@ -1,7 +1,6 @@
 import * as React from "react";
 import { css, cx } from "@emotion/css";
 import { ReactComponent as OpenIcon } from "../../assets/Fleche_Fermee.svg";
-
 interface AccordionChevronProps {
   isExpanded: boolean;
   setOpen?: () => void;

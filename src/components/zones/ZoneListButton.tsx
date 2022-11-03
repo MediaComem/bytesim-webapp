@@ -15,6 +15,8 @@ import { VideoFormEntries } from "../../app/types/videoTypes";
 import { zoneUpdated, zoneReset } from "../../features/zones/zonesSlice";
 import { colorTheme } from "../../theme";
 import AccordionChevron from "../layout/AccordionChevron";
+import { ReactComponent as OpenIcon } from "../../assets/Fleche_Fermee.svg";
+
 import AccordionCustomTitle from "../layout/AccordionCustomTitle";
 import ProgressPoints from "../layout/ProgressPoints";
 import { ReactComponent as ResetIcon } from "../../assets/ResetIcon_Active_MouseOver.svg";
@@ -27,22 +29,31 @@ import {
 
 interface ZoneListButtonProps {
   zone: Zone | ZoneFigma;
-  onOpen: () => void;
+  onOpen?: () => void;
   isExpanded: boolean;
   closseAllItems: () => void;
   //setOpen: () => void;
+  buttonDelete?: any;
+  hiddenMode?: boolean;
 }
+const isFigmaZone = (zone: Zone | ZoneFigma): zone is ZoneFigma => {
+  return (
+    (zone as ZoneFigma).elementId !== undefined || zone.createdFrom === "figma"
+  );
+};
 export function ZoneListButton({
   zone,
   isExpanded,
   onOpen,
   closseAllItems,
+  buttonDelete,
+  hiddenMode = false,
 }: ZoneListButtonProps) {
   const dispatch = useDispatch();
   const projectStatus = useAppSelector((state) => state.project.status);
   const [value, setValue] = React.useState(zone.name);
   const [editNameMode, setEditNameMode] = React.useState(false);
-  const isDrawnZone = zone.createdFrom !== "figma";
+  const isDrawnZone = !isFigmaZone(zone);
   return (
     <>
       <Box
@@ -50,7 +61,7 @@ export function ZoneListButton({
         alignItems="center"
         justifyContent="space-between"
         flexWrap="nowrap"
-        pl={5}
+        pl={isDrawnZone ? 5 : 0}
         _hover={{
           backgroundColor: "brand.100",
           ".visibleOnHover": {
@@ -64,9 +75,15 @@ export function ZoneListButton({
         }
       >
         <Flex align="center" justify="flex-start">
-          <AccordionButton p={1} width="auto">
-            <AccordionChevron isExpanded={isExpanded} />
-          </AccordionButton>
+          {hiddenMode ? (
+            <Box p={1}>
+              <OpenIcon />
+            </Box>
+          ) : (
+            <AccordionButton p={1} width="auto">
+              <AccordionChevron isExpanded={isExpanded} />
+            </AccordionButton>
+          )}
           <AccordionCustomTitle
             label={
               <>
@@ -125,27 +142,31 @@ export function ZoneListButton({
           )}
         </Flex>
         <Flex className={cx("visibleOnHover ", css({ visibility: "hidden" }))}>
-          <Button
-            variant={"ghost"}
-            title="Reset zone"
-            onClick={() => {
-              dispatch(
-                isDrawnZone ? zoneReset(zone.id) : zoneFigmaReset(zone.id)
-              );
-              closseAllItems();
-            }}
-            isDisabled={projectStatus === "SIMULATION"}
-          >
-            <ResetIcon className={css({ margin: "3px" })} stroke="black" />
-          </Button>
-          <Button
-            variant={"ghost"}
-            onClick={onOpen}
-            title="Delete zone"
-            isDisabled={projectStatus === "SIMULATION"}
-          >
-            <TrashIcon className={css({ margin: "3px" })} fill="black" />
-          </Button>
+          {!hiddenMode && (
+            <Button
+              variant={"ghost"}
+              title="Reset zone"
+              onClick={() => {
+                dispatch(
+                  isDrawnZone ? zoneReset(zone.id) : zoneFigmaReset(zone.id)
+                );
+                closseAllItems();
+              }}
+              isDisabled={projectStatus === "SIMULATION"}
+            >
+              <ResetIcon className={css({ margin: "3px" })} stroke="black" />
+            </Button>
+          )}
+          {buttonDelete ?? (
+            <Button
+              variant={"ghost"}
+              onClick={onOpen}
+              title="Delete zone"
+              isDisabled={projectStatus === "SIMULATION"}
+            >
+              <TrashIcon className={css({ margin: "3px" })} fill="black" />
+            </Button>
+          )}
         </Flex>
       </Box>
     </>

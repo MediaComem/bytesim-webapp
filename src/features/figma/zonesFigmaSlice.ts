@@ -69,27 +69,26 @@ const zonesSlice = createSlice({
     zonesFigmaSetTree(state, action: PayloadAction<FigmaTreeEl[]>) {
       return { ...state, tree: action.payload };
     },
-    zoneFigmaDeleted(state, action: PayloadAction<string>) {
+    zoneFigmaToggleHidden(state, action: PayloadAction<string>) {
       const zones = state.zones;
       // delete the zone and update the tree
       const zoneFound = zones.find((zone) => zone.id === action.payload);
       if (zoneFound) {
-        const zoneIndex = zones.indexOf(zoneFound);
-        zones.splice(zoneIndex, 1);
+        zoneFound.hidden = !zoneFound.hidden;
       }
-      // crawl through all the children of the zoneFound in the tree and delete theses zones
+      // // crawl through all the children of the zoneFound in the tree and delete theses zones
 
-      const tree = state.tree?.[0];
-      getChildrenIdsOfTree(zoneFound?.elementId!, tree).forEach((id) => {
-        const zoneFound = zones.find((zone) => zone.elementId === id);
-        if (zoneFound) {
-          const zoneIndex = zones.indexOf(zoneFound);
-          zones.splice(zoneIndex, 1);
-        }
-      });
+      // const tree = state.tree?.[0];
+      // getChildrenIdsOfTree(zoneFound?.elementId!, tree).forEach((id) => {
+      //   const zoneFound = zones.find((zone) => zone.elementId === id);
+      //   if (zoneFound) {
+      //     const zoneIndex = zones.indexOf(zoneFound);
+      //     zones.splice(zoneIndex, 1);
+      //   }
+      // });
 
-      // update the tree by removing the node containing the zoneFound
-      removeSubTree(zoneFound?.elementId!, tree, tree);
+      // // update the tree by removing the node containing the zoneFound
+      // removeSubTree(zoneFound?.elementId!, tree, tree);
     },
 
     allZonesFigmaDeleted(state) {
@@ -101,7 +100,7 @@ const zonesSlice = createSlice({
 
 export const {
   zoneFigmaReset,
-  zoneFigmaDeleted,
+  zoneFigmaToggleHidden,
   zoneFigmaUpdated,
   zonesFigmaUpdated,
   zonesFigmaSetTree,

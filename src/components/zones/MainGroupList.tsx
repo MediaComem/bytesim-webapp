@@ -4,6 +4,8 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
+  Button,
+  css,
   ExpandedIndex,
   Heading,
   Text,
@@ -14,13 +16,16 @@ import { useDispatch } from "react-redux";
 import { figmaZoneSelector, useAppSelector } from "../../app/hooks";
 import { FigmaTreeEl, ZoneFigma } from "../../app/types/types";
 import { highlightFigmaZone } from "../../features/figma/utils";
-import { zoneFigmaDeleted } from "../../features/figma/zonesFigmaSlice";
-import { zoneDeleted, zoneSelected } from "../../features/zones/zonesSlice";
+import { zoneFigmaToggleHidden } from "../../features/figma/zonesFigmaSlice";
+import { zoneSelected } from "../../features/zones/zonesSlice";
 import AccordionChevron from "../layout/AccordionChevron";
 import AccordionCustomTitle from "../layout/AccordionCustomTitle";
 import ConfirmModal from "../layout/ConfirmModal";
 import { ZoneListButton } from "./ZoneListButton";
 import ZoneParams from "./ZoneParams";
+
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { colorTheme } from "../../theme";
 
 export default function MainGroupList() {
   const figmaZones = useAppSelector(figmaZoneSelector);
@@ -29,7 +34,7 @@ export default function MainGroupList() {
   const tree = figmaZones.tree;
 
   return (
-    <AccordionItem isDisabled={false}>
+    <AccordionItem isDisabled={false} pb={2}>
       <AccordionButton _hover={{ backgroundColor: "brand.100" }} pl={2}>
         <AccordionChevron isExpanded={false} />
         <Box flex="1" textAlign="left">
@@ -43,6 +48,10 @@ export default function MainGroupList() {
 }
 const unfoldTree = (tree: FigmaTreeEl[], zones: ZoneFigma[]) => {
   return tree.map((t) => {
+    const parentZone = zones.find((z) => z.id === t.id);
+    if (parentZone?.hidden) {
+      return <HiddenZone key={`${parentZone.id}_hidden`} z={parentZone} />;
+    }
     return (
       <AccordionZones
         key={t.id}
@@ -53,6 +62,41 @@ const unfoldTree = (tree: FigmaTreeEl[], zones: ZoneFigma[]) => {
     );
   });
 };
+
+const HiddenZone = ({ z }: { z: ZoneFigma }) => {
+  const dispatch = useDispatch();
+
+  return (
+    <Box
+      css={{
+        filter: "contrast(0) opacity(0.3)",
+      }}
+      onMouseEnter={() => highlightFigmaZone(z.elementId)}
+      onMouseLeave={() => highlightFigmaZone(z.elementId, false)}
+    >
+      <ZoneListButton
+        zone={z}
+        // onOpen={() => {
+        //   dispatch(zoneFigmaToggleHidden(z.id));
+        // }}
+        isExpanded={false}
+        hiddenMode={true}
+        closseAllItems={() => {}}
+        buttonDelete={
+          <Button
+            variant={"ghost"}
+            onClick={() => dispatch(zoneFigmaToggleHidden(z.id))}
+            title="Delete zone"
+            _hover={{}}
+            isDisabled={false}
+          >
+            <ViewIcon css={{ margin: "3px" }} fill="black" />
+          </Button>
+        }
+      />
+    </Box>
+  );
+};
 const AccordionZones = ({
   zones,
   children = null,
@@ -61,29 +105,31 @@ const AccordionZones = ({
   children?: any;
 }) => {
   const [index, setIndex] = useState<ExpandedIndex>([]);
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const dispatch = useDispatch();
 
-  const [modalContent, setModalContent] = useState<{
-    modal: string;
-    buttonLabel: string;
-    onConfirm: () => void;
-  }>({
-    modal: "",
-    buttonLabel: "Confirm",
-    onConfirm: () => {},
-  });
-
   return (
-    <AccordionPanel p={0}>
+    <AccordionPanel
+      p={0}
+      pl={4}
+      pr={0}
+      overflow="auto"
+      css={{
+        "&::-webkit-scrollbar": {
+          display: "none",
+        },
+        scrollbarWidth: "none",
+      }}
+    >
       <Accordion allowToggle>
-        {zones?.map((z, i) => {
+        {zones?.map((z) => {
+          if (z.hidden) return <HiddenZone key={z.id + "_hidden"} z={z} />;
           return (
             <AccordionItem
+              _hover={{ border: `1px solid ${colorTheme[100]}` }}
+              border={`1px solid transparent`}
               key={z.id}
               onClick={() => dispatch(zoneSelected(z.id))}
-              border="none"
             >
               {({ isExpanded }) => (
                 <Box
@@ -92,17 +138,16 @@ const AccordionZones = ({
                 >
                   <ZoneListButton
                     zone={z}
-                    onOpen={() => {
-                      setModalContent({
-                        modal:
-                          "Are you sure you want to delete the zone? It will delete the associated form too.",
-                        buttonLabel: "Delete zone",
-                        onConfirm: () => {
-                          dispatch(zoneFigmaDeleted(z.id));
-                        },
-                      });
-                      onOpen();
-                    }}
+                    buttonDelete={
+                      <Button
+                        variant={"ghost"}
+                        onClick={() => dispatch(zoneFigmaToggleHidden(z.id))}
+                        title="Delete zone"
+                        isDisabled={false}
+                      >
+                        <ViewOffIcon css={{ margin: "3px" }} fill="black" />
+                      </Button>
+                    }
                     isExpanded={isExpanded}
                     closseAllItems={() => setIndex([])}
                     //setOpen={() => toggleAccordion(i)}
@@ -121,17 +166,6 @@ const AccordionZones = ({
           );
         })}
       </Accordion>
-      <ConfirmModal
-        headerText={modalContent.buttonLabel}
-        message={modalContent.modal}
-        buttonLabel={modalContent.buttonLabel}
-        isOpen={isOpen}
-        onClose={onClose}
-        onConfirm={() => {
-          modalContent.onConfirm();
-          onClose();
-        }}
-      />
     </AccordionPanel>
   );
 };

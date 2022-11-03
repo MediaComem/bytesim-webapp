@@ -64,6 +64,7 @@ export type ZoneFigma = Partial<Omit<Zone, "createdFrom">> & {
   id: string;
   createdFrom: "figma";
   elementId: string;
+  hidden?: boolean;
 };
 export type FigmaTreeEl = {
   id: string;
