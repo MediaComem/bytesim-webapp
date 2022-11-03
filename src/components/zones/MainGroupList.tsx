@@ -7,15 +7,18 @@ import {
   ExpandedIndex,
   Heading,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { figmaZoneSelector, useAppSelector } from "../../app/hooks";
 import { FigmaTreeEl, ZoneFigma } from "../../app/types/types";
 import { highlightFigmaZone } from "../../features/figma/utils";
-import { zoneSelected } from "../../features/zones/zonesSlice";
+import { zoneFigmaDeleted } from "../../features/figma/zonesFigmaSlice";
+import { zoneDeleted, zoneSelected } from "../../features/zones/zonesSlice";
 import AccordionChevron from "../layout/AccordionChevron";
 import AccordionCustomTitle from "../layout/AccordionCustomTitle";
+import ConfirmModal from "../layout/ConfirmModal";
 import { ZoneListButton } from "./ZoneListButton";
 import ZoneParams from "./ZoneParams";
 
@@ -39,10 +42,10 @@ export default function MainGroupList() {
   );
 }
 const unfoldTree = (tree: FigmaTreeEl[], zones: ZoneFigma[]) => {
-  return tree.map((t, index) => {
+  return tree.map((t) => {
     return (
       <AccordionZones
-        key={index}
+        key={t.id}
         zones={zones.filter((z) => z.elementId === t.id)}
       >
         {t?.children?.length !== 0 && unfoldTree(t.children!, zones)}
@@ -58,7 +61,19 @@ const AccordionZones = ({
   children?: any;
 }) => {
   const [index, setIndex] = useState<ExpandedIndex>([]);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const dispatch = useDispatch();
+
+  const [modalContent, setModalContent] = useState<{
+    modal: string;
+    buttonLabel: string;
+    onConfirm: () => void;
+  }>({
+    modal: "",
+    buttonLabel: "Confirm",
+    onConfirm: () => {},
+  });
 
   return (
     <AccordionPanel p={0}>
@@ -66,7 +81,7 @@ const AccordionZones = ({
         {zones?.map((z, i) => {
           return (
             <AccordionItem
-              key={i}
+              key={z.id}
               onClick={() => dispatch(zoneSelected(z.id))}
               border="none"
             >
@@ -78,15 +93,15 @@ const AccordionZones = ({
                   <ZoneListButton
                     zone={z}
                     onOpen={() => {
-                      // setModalContent({
-                      //   modal:
-                      //     "Are you sure you want to delete the zone? It will delete the associated form too.",
-                      //   buttonLabel: "Delete zone",
-                      //   onConfirm: () => {
-                      //     dispatch(zoneDeleted(z.id));
-                      //   },
-                      // });
-                      // onOpen();
+                      setModalContent({
+                        modal:
+                          "Are you sure you want to delete the zone? It will delete the associated form too.",
+                        buttonLabel: "Delete zone",
+                        onConfirm: () => {
+                          dispatch(zoneFigmaDeleted(z.id));
+                        },
+                      });
+                      onOpen();
                     }}
                     isExpanded={isExpanded}
                     closseAllItems={() => setIndex([])}
@@ -106,6 +121,17 @@ const AccordionZones = ({
           );
         })}
       </Accordion>
+      <ConfirmModal
+        headerText={modalContent.buttonLabel}
+        message={modalContent.modal}
+        buttonLabel={modalContent.buttonLabel}
+        isOpen={isOpen}
+        onClose={onClose}
+        onConfirm={() => {
+          modalContent.onConfirm();
+          onClose();
+        }}
+      />
     </AccordionPanel>
   );
 };

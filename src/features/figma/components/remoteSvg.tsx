@@ -2,11 +2,15 @@ import React, { useEffect } from "react";
 import SVG from "react-inlinesvg";
 import { useDispatch } from "react-redux";
 import {
-  allZonesDeleted as allZonesFigmaDeleted,
+  allZonesFigmaDeleted,
   zonesFigmaSetTree,
   zonesFigmaUpdated,
 } from "../zonesFigmaSlice";
-import { hashCode, registerHoverEventsOnFigmaEls } from "../utils";
+import {
+  getTreeHierarchyFromDOM,
+  hashCode,
+  registerHoverEventsOnFigmaEls,
+} from "../utils";
 import { colorTheme } from "../../../theme";
 import { FigmaTreeEl } from "../../../app/types/types";
 
@@ -35,7 +39,7 @@ const RemoteSVG = ({
         registerHoverEventsOnFigmaEls(ids);
 
         // get tree hierarchy
-        const tree = getTreeHierarchy(ids);
+        const tree = getTreeHierarchyFromDOM(ids);
 
         dispatch(
           zonesFigmaUpdated(
@@ -87,39 +91,3 @@ const RemoteSVG = ({
   );
 };
 export default RemoteSVG;
-
-function getTreeHierarchy(idsToIndex: string[]) {
-  const rootId = idsToIndex?.[0];
-  const resultTree: FigmaTreeEl[] = [
-    {
-      id: rootId,
-      children: [],
-    },
-  ];
-
-  scrollThroughChildren(resultTree[0], idsToIndex, rootId);
-  return resultTree;
-}
-
-const scrollThroughChildren = (
-  resultTreeEl: FigmaTreeEl,
-  idsToIndex: string | string[],
-  parent: string
-) => {
-  const children = document?.getElementById(parent)?.children;
-  if (!children) return;
-  const chidrenIds = Array.from(children).map((child) => child.id);
-  // if no childrenIds is included in idsToIndex, return
-  if (!chidrenIds.some((id) => idsToIndex.includes(id))) return;
-  //else add parent to id and recurse over
-  chidrenIds?.forEach((id) => {
-    if (id) {
-      const newTreeEl = {
-        id,
-        children: [],
-      };
-      resultTreeEl.children?.push(newTreeEl);
-      scrollThroughChildren(newTreeEl, idsToIndex, id);
-    }
-  });
-};

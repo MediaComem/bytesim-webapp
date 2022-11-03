@@ -19,6 +19,11 @@ import AccordionCustomTitle from "../layout/AccordionCustomTitle";
 import ProgressPoints from "../layout/ProgressPoints";
 import { ReactComponent as ResetIcon } from "../../assets/ResetIcon_Active_MouseOver.svg";
 import { ReactComponent as TrashIcon } from "../../assets/TEMP_trash.svg";
+import {
+  zoneFigmaReset,
+  zoneFigmaUpdated,
+  zonesFigmaUpdated,
+} from "../../features/figma/zonesFigmaSlice";
 
 interface ZoneListButtonProps {
   zone: Zone | ZoneFigma;
@@ -37,6 +42,7 @@ export function ZoneListButton({
   const projectStatus = useAppSelector((state) => state.project.status);
   const [value, setValue] = React.useState(zone.name);
   const [editNameMode, setEditNameMode] = React.useState(false);
+  const isDrawnZone = zone.createdFrom !== "figma";
   return (
     <>
       <Box
@@ -75,7 +81,11 @@ export function ZoneListButton({
                         id: zone.id,
                         name: value,
                       };
-                      dispatch(zoneUpdated(newName));
+                      dispatch(
+                        isDrawnZone
+                          ? zoneUpdated(newName)
+                          : zoneFigmaUpdated(newName)
+                      );
                       setEditNameMode(false);
                     }}
                     autoFocus
@@ -119,7 +129,9 @@ export function ZoneListButton({
             variant={"ghost"}
             title="Reset zone"
             onClick={() => {
-              dispatch(zoneReset(zone.id));
+              dispatch(
+                isDrawnZone ? zoneReset(zone.id) : zoneFigmaReset(zone.id)
+              );
               closseAllItems();
             }}
             isDisabled={projectStatus === "SIMULATION"}
