@@ -11,6 +11,10 @@ import REHome from "../../assets/RE-homepage.jpg";
 import REabout from "../../assets/RE-about.jpg";
 import REmap from "../../assets/RE-map.jpg";
 import { colorTheme } from "../../theme";
+import {
+  zoneActiveToggled,
+  zoneUpdated,
+} from "../../features/zones/zonesSlice";
 const brandColor = colorTheme[400];
 const resizeHandleSVG = (
   <svg
@@ -77,6 +81,14 @@ export default function ZonesView({
       <Flex opacity={0.5} width="400px" minWidth="400" maxWidth="400">
         <Routes>
           <Route
+            path="bytesim-webapp/figma/*"
+            element={
+              <Flex>
+                <RemoteSVG />
+              </Flex>
+            }
+          />
+          <Route
             path="bytesim-webapp/1/*"
             element={
               <Flex>
@@ -118,7 +130,7 @@ export default function ZonesView({
           />
         </Routes>
       </Flex>
-      {/* {zones.map((z) => {
+      {zones.map((z) => {
         return (
           <Rnd
             key={z.id}
@@ -157,7 +169,7 @@ export default function ZonesView({
             <p className={aboveZoneStyle}>{z.name}</p>
           </Rnd>
         );
-      })} */}
+      })}
     </Flex>
   );
 }
