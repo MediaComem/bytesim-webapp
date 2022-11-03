@@ -12,10 +12,26 @@ import {
   registerHoverEventsOnFigmaEls,
 } from "../utils";
 import { colorTheme } from "../../../theme";
-import { FigmaTreeEl } from "../../../app/types/types";
+
+const getSvgUrlFromCurrentUrl = () => {
+  // get current url
+  const url = window.location.href;
+  // find in the url bytesimBucket, region and key
+  const bytesimBucket = url.match(/bytesimBucket=([^&]*)/)?.[1];
+  const region = url.match(/region=([^&]*)/)?.[1];
+  const key = url.match(/key=([^&]*)/)?.[1];
+
+  // if some of the object are not defined return the default test url
+  const defaultUrl =
+    "https://bytesim-bucket.s3.eu-west-3.amazonaws.com/1350067722696166.5_bytesimname_bytesim_dev___Page_1.svg";
+  if (!bytesimBucket || !region || !key) return defaultUrl;
+
+  // the url is formed like this https://bucket-name.s3.Region.amazonaws.com/key-name
+  return `https://${bytesimBucket}.s3.${region}.amazonaws.com/${key}`;
+};
 
 const RemoteSVG = ({
-  url = "https://bytesim-bucket.s3.eu-west-3.amazonaws.com/0%253A1_Page%25201.svg",
+  url = getSvgUrlFromCurrentUrl(), // "https://bytesim-bucket.s3.eu-west-3.amazonaws.com/0%253A1_Page%25201.svg",
 }: {
   url?: string;
 }) => {
