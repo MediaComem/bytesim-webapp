@@ -14,6 +14,7 @@ import { Zone } from "../../app/types/types";
 import ConfirmModal, { confirmText } from "../layout/ConfirmModal";
 import { useLocation } from "react-router-dom";
 import UploadButton from "../project/UploadButton";
+
 const brandColor = "#ea62ea";
 const resizeHandleSVG = (
   <svg
@@ -62,8 +63,10 @@ const aboveZoneStyle = css({
 
 export default function ZonesView({
   disableEdition,
+  zoom,
 }: {
   disableEdition: boolean;
+  zoom: number;
 }) {
   const dispatch = useDispatch();
   const zones = useAppSelector((state) => state.zones);
@@ -90,7 +93,7 @@ export default function ZonesView({
       align={"flex-start"}
       justify={"flex-start"}
       pos={"relative"}
-      p={6}
+      p={1}
       overflow={"auto"}
       grow={1}
       alignSelf="stretch"
@@ -107,13 +110,27 @@ export default function ZonesView({
         }}
       />
       {location.pathname === "/bytesim-webapp/new" ? (
-          <UploadButton />
+        <UploadButton />
       ) : (
-        <Flex opacity={0.5} width="400" minWidth="400" maxWidth="400">
-          <Flex>
-            <img src={REHome} alt="RE homepage" />
-          </Flex>
-        </Flex>
+        <div>
+          <img
+            src={REHome}
+            alt="RE homepage"
+            className={css({
+              //objectFit: "scale-down",
+              transform: `scale(${zoom})`,
+              transformOrigin: "top left",
+              display: "block",
+              maxWidth: "300px",
+              maxHeight: "550px",
+              width: "auto",
+              height: "auto",
+              padding: "10px",
+              boxSizing: "border-box",
+              opacity: 0.5
+            })}
+          />
+        </div>
       )}
       {/* {projectScreenshot ? (
             <img src={projectScreenshot} alt="screenshot" />
@@ -166,7 +183,12 @@ export default function ZonesView({
 
       {zones.map((z) => {
         return (
-          <ZoneFrame key={z.id} zone={z} disableEdition={disableEdition} />
+          <ZoneFrame
+            key={z.id}
+            zone={z}
+            disableEdition={disableEdition}
+            zoom={zoom}
+          />
         );
       })}
     </Flex>
@@ -177,11 +199,13 @@ interface ZoneFrameProps {
   //RCmenustate:RightClickMenuState;
   zone: Zone;
   disableEdition: boolean;
+  zoom: number;
 }
 function ZoneFrame({
   //RCmenustate,
   zone,
   disableEdition,
+  zoom,
 }: ZoneFrameProps) {
   const dispatch = useDispatch();
   const handleClick = (e: MouseEvent, z: Zone) => {
@@ -212,6 +236,14 @@ function ZoneFrame({
         width: zone.width,
         height: zone.height,
       }}
+      size={{
+        width: zone.width * zoom,
+        height: zone.height * zoom,
+      }}
+      position={{
+        x: zone.x * zoom,
+        y: zone.y * zoom,
+      }}
       className={
         "rightClickable " +
         cx(zoneStyle, {
@@ -222,26 +254,30 @@ function ZoneFrame({
       enableResizing={zone.status === "EDITING" && !disableEdition}
       disableDragging={disableEdition}
       onResizeStop={(e, direction, ref, delta, position) => {
+        console.log('width ' + delta.width + ' height ' + delta.height);
+        console.log('X ' + position.x + ' Y ' + position.y);
         const newZone = {
           id: zone.id,
-          x: position.x,
-          y: position.y,
-          width: zone.width + delta.width,
-          height: zone.height + delta.height,
+          x: position.x / zoom,
+          y: position.y / zoom,
+          width: zone.width + (delta.width / zoom),
+          height: zone.height + (delta.height / zoom),
         };
         dispatch(zoneUpdated(newZone));
       }}
       onDragStop={(e, d) => {
         const newPos = {
           id: zone.id,
-          x: d.x,
-          y: d.y,
+          x: d.x / zoom,
+          y: d.y / zoom,
         };
         dispatch(zoneUpdated(newPos));
       }}
       resizeHandleComponent={handleComp}
     >
-      <p className={aboveZoneStyle}>{zone.name}</p>
+      <p className={aboveZoneStyle}>
+        {zone.name}
+      </p>
     </Rnd>
   );
 }

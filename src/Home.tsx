@@ -1,4 +1,14 @@
-import { Accordion, Button, Flex, useDisclosure } from "@chakra-ui/react";
+import {
+  Accordion,
+  Button,
+  Flex,
+  Slider,
+  SliderFilledTrack,
+  SliderThumb,
+  SliderTrack,
+  Tooltip,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { css } from "@emotion/css";
 import * as React from "react";
 import { useDispatch } from "react-redux";
@@ -23,6 +33,8 @@ export default function Home() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const state = useAppSelector((s) => s);
   const project = state.project;
+  const [zoom, setZoom] = React.useState<number>(100);
+  const [showTooltip, setShowTooltip] = React.useState(false);
   return (
     <ReflexContainer
       orientation="vertical"
@@ -92,6 +104,63 @@ export default function Home() {
           toolbarButton={
             <>
               <Flex alignItems={"center"}>
+                <Flex align="center">
+                  <Button
+                    variant={"ghost"}
+                    size={"sm"}
+                    padding={0}
+                    onClick={() => {
+                      if (zoom > 100) {
+                        setZoom(zoom - 1);
+                      }
+                    }}
+                    alignItems="center"
+                  >
+                    -
+                  </Button>
+                  <Slider
+                    aria-label="slider-zoom"
+                    defaultValue={1}
+                    colorScheme={"brand"}
+                    min={100}
+                    max={1000}
+                    onChange={setZoom}
+                    width="100px"
+                    step={1}
+                    onMouseEnter={() => setShowTooltip(true)}
+                    onMouseLeave={() => setShowTooltip(false)}
+                  >
+                    <SliderTrack>
+                      <SliderFilledTrack />
+                    </SliderTrack>
+                    <Tooltip
+                      hasArrow
+                      bg="teal.500"
+                      color="white"
+                      placement="top"
+                      isOpen={showTooltip}
+                      label={`${zoom}%`}
+                    >
+                      <SliderThumb
+                      className={css({ boxShadow: "none" })}
+                      width="10px"
+                      height="10px"
+                    />
+                    </Tooltip>
+                  </Slider>
+                  <Button
+                    variant={"ghost"}
+                    size={"sm"}
+                    padding={0}
+                    onClick={() => {
+                      if (zoom < 1000) {
+                        setZoom(zoom + 1);
+                      }
+                    }}
+                  >
+                    +
+                  </Button>
+                </Flex>
                 {/* <Button
                   variant={"outline"}
                   size="xs"
@@ -135,7 +204,10 @@ export default function Home() {
             </>
           }
         >
-          <ZonesView disableEdition={project.status === "SIMULATION"} />
+          <ZonesView
+            disableEdition={project.status === "SIMULATION"}
+            zoom={zoom / 100}
+          />
         </Panel>
       </ReflexElement>
       <ReflexSplitter />
