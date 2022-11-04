@@ -1,6 +1,7 @@
 import { useAppSelector } from "../app/hooks";
 import { Image as ChakraImage, Box } from "@chakra-ui/react";
 import { useState } from "react";
+import { getSvgUrlFromCurrentUrl } from "../features/figma/components/remoteSvg";
 
 //GET image loaded into project
 //Link project to S3 url -> one img/ project
@@ -26,10 +27,7 @@ export const useZone = () => {
     const width = zone.width > 0 ? zone.width : 0;
     const height = zone.height > 0 ? zone.height : 0;
 
-    const imageUrl =
-      "https://bytesim-bucket.s3.eu-west-3.amazonaws.com/1220690060407143.8_bytesimname_bytesim_dev___Page_1.svg";
-    // const imageUrl =
-    //   "https://bytesim-bucket.s3.eu-west-3.amazonaws.com/RE-about.jpg";
+    const imageUrl = getSvgUrlFromCurrentUrl();
 
     const img = new Image();
     img.src = imageUrl;
@@ -43,6 +41,7 @@ export const useZone = () => {
     return (
       <Box py={2}>
         <ChakraImage
+          objectFit="contain"
           src={`//images.weserv.nl/?url=${imageUrl}&w=${imgWidth}&cx=${xPosition}&cy=${yPosition}&cw=${width}&ch=${height}"`}
           height="80px" /* fallbackSrc="/assets/placeholder.gif" */
         />

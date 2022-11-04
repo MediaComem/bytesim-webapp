@@ -14,7 +14,7 @@ import {
 } from "../utils";
 import { colorTheme } from "../../../theme";
 
-const getSvgUrlFromCurrentUrl = () => {
+export const getSvgUrlFromCurrentUrl = () => {
   // get current url
   const url = window.location.href;
   // find in the url bytesimBucket, region and key

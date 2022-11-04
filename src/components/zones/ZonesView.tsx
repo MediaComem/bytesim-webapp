@@ -15,6 +15,7 @@ import {
   zoneActiveToggled,
   zoneUpdated,
 } from "../../features/zones/zonesSlice";
+import { ZONES_MAX_WIDTH } from "../../services/conts";
 const brandColor = colorTheme[400];
 const resizeHandleSVG = (
   <svg
@@ -80,7 +81,9 @@ export default function ZonesView({
     >
       <Flex
         opacity={0.5}
-        //  width="400px" minWidth="400" maxWidth="400"
+        width={`${ZONES_MAX_WIDTH}px`}
+        minWidth={ZONES_MAX_WIDTH}
+        maxWidth={ZONES_MAX_WIDTH}
       >
         <Routes>
           <Route
