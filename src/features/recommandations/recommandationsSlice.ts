@@ -7,6 +7,7 @@ import {
 } from "../../app/types/recommandations";
 import { FormsType } from "../../app/types/types";
 import { VideoParameters } from "../../app/types/videoTypes";
+import { cloneDeep } from "lodash";
 
 const initialState: RecommandationWithZone<
   | VideoParameters[keyof VideoParameters]
@@ -37,14 +38,16 @@ const recommandationsSlice = createSlice({
         >[]
       >
     ) {
-      action.payload.forEach((r) => {
-        const existingReco = state.find((reco) => (reco.zoneId === r.zoneId && reco.parameter === r.parameter));
-        if (!existingReco) {
-          state.push(r);
-        } else if (existingReco.currentValue !== r.currentValue) {
-          Object.assign(existingReco, r);
+      const newState = cloneDeep(action.payload);
+      newState.forEach((r: any) => {
+        const existingReco = state.find(
+          (reco) => reco.zoneId === r.zoneId && reco.parameter === r.parameter
+        );
+        if (existingReco) {
+          r.id = existingReco.id;
         }
       });
+      return newState;
     },
     recommandationsReset: (state) => {
       state.length = 0;

@@ -25,8 +25,10 @@ import AccordionChevron from "../layout/AccordionChevron";
 
 interface RecommandationDisplayProps {
   recommandation: RecommandationWithZone<
-    VideoParameters[keyof VideoParameters] | GenericParameters[keyof GenericParameters]
-  >;}
+    | VideoParameters[keyof VideoParameters]
+    | GenericParameters[keyof GenericParameters]
+  >;
+}
 
 export default function RecommandationDisplay({
   recommandation,
@@ -41,8 +43,8 @@ export default function RecommandationDisplay({
     },
     [recommandation]
   );
-  return (
-    <AccordionItem key={recommandation.id}>
+  return recommandation.betterValue ? (
+    <AccordionItem>
       {({ isExpanded }) => (
         <>
           <AccordionButton _hover={{ backgroundColor: "brand.100" }} pl={2}>
@@ -71,16 +73,16 @@ export default function RecommandationDisplay({
                 <Radio colorScheme={"brand"} value={"better"} size="sm">
                   More sober:&nbsp;{recommandation.betterValue}
                 </Radio>
-                {recommandation.bestValue &&
+                {recommandation.bestValue && (
                   <Radio colorScheme={"brand"} value={"optimal"} size="sm">
                     Most sober:&nbsp;{recommandation.bestValue}
                   </Radio>
-                }
+                )}
               </Stack>
             </RadioGroup>
           </AccordionPanel>
         </>
       )}
     </AccordionItem>
-  );
+  ) : null;
 }

@@ -20,6 +20,7 @@ import { useAppSelector } from "../../app/hooks";
 import {
   GeneralFormEntries,
   GenericParameters,
+  getGeneralEntryLabel,
 } from "../../app/types/generalFormTypes";
 import { Project } from "../../app/types/types";
 import {
@@ -38,7 +39,7 @@ export default function GeneralFormAccordion() {
   const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <AccordionItem borderTop={'none'}>
+    <AccordionItem borderTop={"none"}>
       {({ isExpanded }) => (
         <>
           <AccordionItemTitleCustom
@@ -46,7 +47,7 @@ export default function GeneralFormAccordion() {
             label={
               <>
                 <Flex align={"center"}>
-                  <AccordionCustomTitle label='General' icon="settings" />
+                  <AccordionCustomTitle label="General" icon="settings" />
                   <ProgressPoints
                     completeObject={GeneralFormEntries}
                     params={project.params}
@@ -62,7 +63,8 @@ export default function GeneralFormAccordion() {
               onClick={onOpen}
               disabled={project.status === "SIMULATION"}
             >
-              Reset <ResetIcon className={css({ margin: "3px" })} stroke='black'/>
+              Reset{" "}
+              <ResetIcon className={css({ margin: "3px" })} stroke="black" />
             </Button>
           </AccordionItemTitleCustom>
           <AccordionPanel>
@@ -92,13 +94,14 @@ function GeneralForm({ project }: { project: Project }) {
           return (
             <div key={key}>
               <Heading size="sm" my={2}>
-                {key}
+                {getGeneralEntryLabel(key)}
               </Heading>
               {typeof data === "number" && (
                 <NumberInputCustom
                   defaultValue={0}
                   value={
-                    project.params && project.params[key as keyof GenericParameters]
+                    project.params &&
+                    project.params[key as keyof GenericParameters]
                       ? Number(project.params[key as keyof GenericParameters])
                       : 0
                   }

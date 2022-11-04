@@ -45,7 +45,7 @@ export function ReportBody({
   const projectGeneralParams = useAppSelector((state) => state.project.params);
   React.useEffect(() => {
     dispatch(
-      recommandationsPopulated([...recommandations, ...genericRecomandations])
+      recommandationsPopulated([...genericRecomandations, ...recommandations])
     );
   }, [zones, projectGeneralParams]);
   const recos = useAppSelector((state) => state.recommandations);

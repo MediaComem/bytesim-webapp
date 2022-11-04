@@ -6,7 +6,7 @@ import { Rnd } from "react-rnd";
 import { useAppSelector, useSelectedZone } from "../../app/hooks";
 import {
   zoneDeleted,
-  zoneSelected,
+  zoneActiveToggled,
   zoneUpdated,
 } from "../../features/zones/zonesSlice";
 import REHome from "../../assets/RE-homepage.jpg";
@@ -208,23 +208,6 @@ function ZoneFrame({
   zoom,
 }: ZoneFrameProps) {
   const dispatch = useDispatch();
-  const handleClick = (e: MouseEvent, z: Zone) => {
-    dispatch(zoneSelected(z.id));
-    /*     console.log(e.button);
-    if (e.button === 2) {
-      e.preventDefault();
-      setState({
-        showMenu: true,
-        xPos: e.pageX,
-        yPos: e.pageY,
-      });
-    } else {
-      setState({
-        ...state,
-        showMenu: false,
-      });
-    } */
-  };
 
   return (
     <Rnd
@@ -250,8 +233,8 @@ function ZoneFrame({
           [selectedZoneStyle]: zone.status === "EDITING",
         })
       }
-      onMouseDown={(e) => handleClick(e, zone)}
-      enableResizing={zone.status === "EDITING" && !disableEdition}
+      onMouseDown={() => dispatch(zoneActiveToggled(zone.id))}
+      enableResizoneing={zone.status === "EDITING" && !disableEdition}
       disableDragging={disableEdition}
       onResizeStop={(e, direction, ref, delta, position) => {
         console.log('width ' + delta.width + ' height ' + delta.height);
@@ -275,9 +258,7 @@ function ZoneFrame({
       }}
       resizeHandleComponent={handleComp}
     >
-      <p className={aboveZoneStyle}>
-        {zone.name}
-      </p>
+      <p className={aboveZoneStyle}>{zone.name}</p>
     </Rnd>
   );
 }

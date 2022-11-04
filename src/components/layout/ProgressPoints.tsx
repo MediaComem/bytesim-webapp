@@ -1,7 +1,10 @@
 import { Flex } from "@chakra-ui/react";
 import * as React from "react";
-import { ReactComponent as EmptyPointIcon } from "../../assets/RondCompletion_NonComplete.svg";
-import { ReactComponent as FullPointIcon } from "../../assets/RondCompletion_complete.svg";
+import { ReactComponent as TickIcon } from "../../assets/Tick.svg";
+
+//! To be removed if the points are not used anymore
+// import { ReactComponent as EmptyPointIcon } from "../../assets/RondCompletion_NonComplete.svg";
+// import { ReactComponent as FullPointIcon } from "../../assets/RondCompletion_complete.svg";
 
 interface ProgressPointsProps {
   completeObject: Object;
@@ -16,13 +19,15 @@ export default function ProgressPoints({
   const total = Object.keys(completeObject).length;
   let completed = 0;
   if (params) {
-    Object.values(params).forEach(param => {
+    Object.values(params).forEach((param) => {
       if (param !== undefined) {
-        completed++
+        completed++;
       }
     });
   }
-  const points = [];
+
+  //! To be removed if the points are not used anymore
+  /*const points = [];
   for (let i = 0; i < completed; i++) {
     points.push(
       <span key={i + "completed"}>
@@ -36,12 +41,22 @@ export default function ProgressPoints({
         <EmptyPointIcon />
       </span>
     );
-  }
+  }*/
   return (
-    <Flex mx={2} fontSize="sm" color={"gray.500"}>
-    {/* <Flex mx={2} fontSize="xs" color={"gray.400"}> */}
+    <Flex
+      mx={2}
+      fontSize="sm"
+      color={completed < total ? "red.500" : "green.500"}
+    >
+      {/* <Flex mx={2} fontSize="xs" color={"gray.400"}> */}
       {/* {points} */}
-      {completed}/{total}
+      {completed < total ? (
+        <span>
+          {completed}/{total}
+        </span>
+      ) : (
+        <TickIcon />
+      )}
     </Flex>
   );
 }

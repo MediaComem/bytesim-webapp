@@ -11,19 +11,19 @@ import {
   Input,
   Text,
   Heading,
-  ExpandedIndex,
 } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/hooks";
 import { Zone, ZoneType } from "../../app/types/types";
 //import { PrettyZoneTypes } from "../../app/types";
 import {
-  zoneSelected,
+  zoneActiveToggled,
   allZonesReset,
   zoneDeleted,
   allZonesDeleted,
   zoneReset,
   zoneUpdated,
+  getSelectedZoneIndex,
   //allZonesReset,
 } from "../../features/zones/zonesSlice";
 import AccordionItemTitleCustom from "../layout/AccordionItemTitleCustom";
@@ -38,6 +38,8 @@ import ProgressPoints from "../layout/ProgressPoints";
 import { VideoFormEntries } from "../../app/types/videoTypes";
 import { colorTheme } from "../..";
 import { recommandationsReset } from "../../features/recommandations/recommandationsSlice";
+import { ImageFormEntries } from "../../app/types/imgTypes";
+import { DynContentFormEntries } from "../../app/types/dynContentTypes";
 
 export interface DynamicModalParams extends ModalParams {
   onConfirm: () => void;
@@ -52,118 +54,118 @@ export default function ZonesList() {
   const [modalContent, setModalContent] = React.useState<DynamicModalParams>({
     title: "",
     text: "",
-    onConfirm: () => {},
+    onConfirm: () => {}
   });
-  const [index, setIndex] = React.useState<ExpandedIndex>([]);
+  const ZONE_TAB_INDEX = 0;
+  const openedZoneIndex = useAppSelector(getSelectedZoneIndex);
   return (
-    <AccordionItem>
-      {({ isExpanded }) => (
-        <>
-          <AccordionItemTitleCustom
-            label={
-              <AccordionCustomTitle label="Drawn zones" icon="drawnZone" />
-            }
-            p={2}
-            isExpanded={isExpanded}
-          >
-            <Flex>
-              <Button
-                variant={"ghost"}
-                size="sm"
-                onClick={() => {
-                  setModalContent({
-                    ...confirmText.resetAllZones,
-                    onConfirm: () => {
-                      dispatch(allZonesReset());
-                      dispatch(recommandationsReset());
-                    },
-                  });
-                  onOpen();
-                }}
-                isDisabled={project.status === "SIMULATION"}
-              >
-                Reset{" "}
-                <ResetIcon className={css({ margin: "3px" })} stroke="black" />
-              </Button>
-              <Button
-                variant={"ghost"}
-                size="sm"
-                onClick={() => {
+    //default index is set to 0 to open zone tab by default
+    <Accordion allowToggle defaultIndex={[ZONE_TAB_INDEX]}>
+      <AccordionItem>
+        {({ isExpanded }) => (
+          <>
+            <AccordionItemTitleCustom
+              label={
+                <AccordionCustomTitle label="Drawn zones" icon="drawnZone" />
+              }
+              p={2}
+              isExpanded={isExpanded}
+            >
+              <Flex>
+                <Button
+                  variant={"ghost"}
+                  size="sm"
+                  onClick={() => {
+                    setModalContent({
+                      ...confirmText.resetAllZones,
+                      onConfirm: () => {
+                        dispatch(allZonesReset());
+                        dispatch(recommandationsReset());
+                      },
+                    });
+                    onOpen();
+                  }}
+                  isDisabled={project.status === "SIMULATION"}
+                >
+                  Reset{" "}
+                  <ResetIcon
+                    className={css({ margin: "3px" })}
+                    stroke="black"
+                  />
+                </Button>
+                <Button
+                  variant={"ghost"}
+                  size="sm"
+                  onClick={() => {
                   setModalContent({
                     ...confirmText.deleteAllZones,
                     onConfirm: () => {
                       dispatch(allZonesDeleted());
+                      //dispatch(recommandationsReset());
                     },
                   });
                   onOpen();
                 }}
-                isDisabled={project.status === "SIMULATION"}
-              >
-                Delete all
-                <TrashIcon className={css({ margin: "3px" })} fill="black" />
-              </Button>
-            </Flex>
-          </AccordionItemTitleCustom>
-          <AccordionPanel p={0}>
-            <Accordion allowToggle>
-              {zones.map((z) => {
-                return (
-                  <>
-                    <AccordionItem
-                      key={'zone' + z.id}
-                      onClick={() => dispatch(zoneSelected(z.id))}
-                      border="none"
-                    >
-                      {({ isExpanded }) => (
-                        <>
-                          <ZoneListButton
-                            zone={z}
-                            onOpen={() => {
-                              setModalContent({
-                                ...confirmText.deleteZone,
-                                onConfirm: () => {
-                                  dispatch(zoneDeleted(z.id));
-                                },
-                              });
-                              onOpen();
-                            }}
-                            isExpanded={isExpanded}
-                            closseAllItems={() => setIndex([])}
-                            //setOpen={() => toggleAccordion(i)}
-                          />
-                          <AccordionPanel p={0} bg={"brand.50"}>
-                            <Box p={2} pl={12}>
-                              <Heading size={"xs"}>Type</Heading>
-                              <Text fontSize={"xs"}>
-                                Specific settings on the page
-                              </Text>
-                            </Box>
-                            <ZoneParams
+                  isDisabled={project.status === "SIMULATION"}
+                >
+                  Delete all
+                  <TrashIcon className={css({ margin: "3px" })} fill="black" />
+                </Button>
+              </Flex>
+            </AccordionItemTitleCustom>
+            <AccordionPanel p={0}>
+              <Accordion allowToggle index={[openedZoneIndex]}>
+                {zones.map((z) => {
+                  return (
+                    <>
+                      <AccordionItem key={z.id} border="none">
+                        {({ isExpanded }) => (
+                          <>
+                            <ZoneListButton
                               zone={z}
-                              index={index}
-                              setIndex={setIndex}
+                              onOpen={() => {
+                                setModalContent({
+                                  ...confirmText.deleteZone,
+                                  onConfirm: () => {
+                                    dispatch(zoneDeleted(z.id));
+                                    dispatch(recommandationsReset());
+                                  },
+                                });
+                                onOpen();
+                              }}
+                              isExpanded={isExpanded}
+                              //setOpen={() => toggleAccordion(i)}
                             />
-                          </AccordionPanel>
-                        </>
-                      )}
-                    </AccordionItem>
-                  </>
-                );
-              })}
-            </Accordion>
-          </AccordionPanel>
-          <ConfirmModal
-            texts={modalContent}
-            isOpen={isOpen}
-            onClose={onClose}
-            onConfirm={() => {
-              modalContent.onConfirm();
-              onClose();
-            }}
-          />
-        </>
-      )}
-    </AccordionItem>
+                            <AccordionPanel p={0} bg={"brand.50"}>
+                              <Box p={2} pl={12}>
+                                <Heading size={"xs"}>Type</Heading>
+                                <Text fontSize={"xs"}>
+                                  Specific settings on the page
+                                </Text>
+                              </Box>
+                              <ZoneParams zone={z} />
+                            </AccordionPanel>
+                          </>
+                        )}
+                      </AccordionItem>
+                    </>
+                  );
+                })}
+              </Accordion>
+            </AccordionPanel>
+            <ConfirmModal
+              texts={modalContent}
+              isOpen={isOpen}
+              onClose={onClose}
+              onConfirm={() => {
+                modalContent.onConfirm();
+                onClose();
+              }}
+            />
+          </>
+        )}
+      </AccordionItem>
+    </Accordion>
   );
 }
 
@@ -171,19 +173,37 @@ interface ZoneListButtonProps {
   zone: Zone;
   onOpen: () => void;
   isExpanded: boolean;
-  closseAllItems: () => void;
   //setOpen: () => void;
 }
-function ZoneListButton({
-  zone,
-  isExpanded,
-  onOpen,
-  closseAllItems,
-}: ZoneListButtonProps) {
+function ZoneListButton({ zone, isExpanded, onOpen }: ZoneListButtonProps) {
   const dispatch = useDispatch();
   const projectStatus = useAppSelector((state) => state.project.status);
   const [value, setValue] = React.useState(zone.name);
   const [editNameMode, setEditNameMode] = React.useState(false);
+  const [oldZoneName, setOldZoneName] = React.useState(zone.name);
+  const updateZoneName = (newName: string) => {
+    const newNameObject = {
+      id: zone.id,
+      name: newName,
+    };
+    if (value !== "") {
+      setOldZoneName(newName);
+      dispatch(zoneUpdated(newNameObject));
+    } else {
+      setValue(oldZoneName);
+    }
+    setEditNameMode(false);
+  };
+  const getCompleteObject = (typeOfZone: ZoneType) => {
+    switch (typeOfZone) {
+      case ZoneType.Video:
+        return VideoFormEntries;
+      case ZoneType.Images:
+        return ImageFormEntries;
+      case ZoneType.DynamicContent:
+        return DynContentFormEntries;
+    }
+  };
   return (
     <>
       <Box
@@ -203,6 +223,7 @@ function ZoneListButton({
             ? { backgroundColor: colorTheme[100] }
             : undefined
         }
+        onClick={() => dispatch(zoneActiveToggled(zone.id))}
       >
         <Flex align="center" justify="flex-start">
           <AccordionButton p={1} width="auto">
@@ -214,16 +235,16 @@ function ZoneListButton({
                 {editNameMode ? (
                   <Input
                     value={value}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        updateZoneName(value);
+                      }
+                    }}
                     onChange={(e) => {
                       setValue(e.target.value);
                     }}
                     onBlur={() => {
-                      const newName = {
-                        id: zone.id,
-                        name: value,
-                      };
-                      dispatch(zoneUpdated(newName));
-                      setEditNameMode(false);
+                      updateZoneName(value);
                     }}
                     autoFocus
                     p={1}
@@ -254,10 +275,8 @@ function ZoneListButton({
           </Text>
           {zone.zoneType && (
             <ProgressPoints
-              completeObject={
-                zone.zoneType === "Video" ? VideoFormEntries : { text: true }
-              }
-              params={zone.zoneType === "Video" ? zone.params : { text: true }}
+              completeObject={getCompleteObject(zone.zoneType)}
+              params={zone.params}
             />
           )}
         </Flex>
@@ -267,7 +286,6 @@ function ZoneListButton({
             title="Reset zone"
             onClick={() => {
               dispatch(zoneReset(zone.id));
-              closseAllItems();
             }}
             isDisabled={projectStatus === "SIMULATION"}
           >
