@@ -11,8 +11,6 @@ import { GenericParameters } from "../../app/types/generalFormTypes";
 import { RecommandationWithZone } from "../../app/types/recommandations";
 import { VideoParameters } from "../../app/types/videoTypes";
 import { recommandationsPopulated } from "../../features/recommandations/recommandationsSlice";
-import usePrev from "../../hooks/usePrev";
-import { areArraysEqual } from "../../services/utils";
 import RecommandationsList from "./RecommandationsList";
 import ReportGeneralInfo from "./ReportGeneralInfo";
 import ReportToolBar from "./ReportToolBar";
@@ -42,7 +40,6 @@ export function ReportBody({
   const recommandations = useCalculateAllRecommandations();
   const genericRecomandations = useCalculateGenericRecommandations();
   const zones = useAppZones();
-  const prevZones = usePrev(zones) ?? [];
 
   /* const zonesParams = useAppSelector((state) => {
     return Object.values(state.zones).filter((zone) => zone.filter());
@@ -52,7 +49,7 @@ export function ReportBody({
     dispatch(
       recommandationsPopulated([...genericRecomandations, ...recommandations])
     );
-  }, [areArraysEqual(zones, prevZones), projectGeneralParams]);
+  }, [zones, projectGeneralParams]);
   const recos = useAppSelector((state) => state.recommandations);
   return (
     <Flex direction={"column"} id="TO_EXPORT" className={className}>

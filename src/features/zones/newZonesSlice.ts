@@ -3,7 +3,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import { TreeZoneEl, Zone, ZoneStatus } from "../../app/types/types";
 import { isZoneComplete } from "../../utils/utils";
-import { getChildrenIdsOfTree, getNodeSubTree } from "../figma/utils";
+import { getChildrenIdsOfTree } from "../figma/utils";
 
 type ZoneStore = { zones: Zone[]; tree: TreeZoneEl[] };
 const initialState: ZoneStore = {

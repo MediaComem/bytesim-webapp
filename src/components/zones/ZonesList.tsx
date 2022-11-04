@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
   Accordion,
   AccordionItem,
@@ -11,7 +10,7 @@ import {
   Heading,
 } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
-import { zoneSelector, useAppSelector } from "../../app/hooks";
+import { useAppSelector } from "../../app/hooks";
 
 import AccordionItemTitleCustom from "../layout/AccordionItemTitleCustom";
 import ConfirmModal from "../layout/ConfirmModal";
