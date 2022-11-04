@@ -11,9 +11,9 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
   renewable: boolean;
   zone: Zone;
 
-  constructor(zone: Zone, parameters: VideoParameters, renewable: boolean) {
+  constructor(zone: Zone, renewable: boolean) {
     super(zone.id);
-    this.video = parameters;
+    this.video = zone.params;
     this.renewable = renewable;
     this.zone_id = zone.id;
     this.zone = zone;

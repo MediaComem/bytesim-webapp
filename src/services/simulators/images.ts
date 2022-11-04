@@ -8,9 +8,9 @@ export class ImageSimulator extends ZoneSimulator implements SimulatorImages {
   images: ImageParameters;
   renewable: boolean;
 
-  constructor(zone: Zone, parameters: ImageParameters, renewable: boolean) {
+  constructor(zone: Zone, renewable: boolean) {
     super(zone.id);
-    this.images = parameters;
+    this.images = zone.params;
     this.renewable = renewable;
   }
 
