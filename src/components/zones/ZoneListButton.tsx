@@ -25,6 +25,7 @@ import {
   zoneFigmaReset,
   zoneFigmaUpdated,
 } from "../../features/figma/zonesFigmaSlice";
+import { getTypeEntries } from "../../utils/utils";
 
 interface ZoneListButtonProps {
   zone: Zone | ZoneFigma;
@@ -49,7 +50,26 @@ export function ZoneListButton({
   const projectStatus = useAppSelector((state) => state.project.status);
   const [value, setValue] = React.useState(zone.name);
   const [editNameMode, setEditNameMode] = React.useState(false);
+  const [oldZoneName, setOldZoneName] = React.useState(zone.name);
+  const updateZoneName = (newName: string) => {
+    const newNameObject = {
+      id: zone.id,
+      name: newName,
+    };
+    if (value !== "") {
+      setOldZoneName(newName);
+      dispatch(zoneUpdated(newNameObject));
+    } else {
+      setValue(oldZoneName);
+    }
+    setEditNameMode(false);
+  };
   const isDrawnZone = !isFigmaZone(zone);
+  const updateZone = (newZone: Partial<Zone | ZoneFigma>) => {
+    return isDrawnZone
+      ? zoneUpdated(newZone as Zone)
+      : zoneFigmaUpdated(newZone as ZoneFigma);
+  };
   return (
     <>
       <Box
@@ -86,19 +106,20 @@ export function ZoneListButton({
                 {editNameMode ? (
                   <Input
                     value={value}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        updateZoneName(value ?? "");
+                      }
+                    }}
                     onChange={(e) => {
                       setValue(e.target.value);
                     }}
                     onBlur={() => {
-                      const newName = {
+                      const newNameZone = {
                         id: zone.id,
                         name: value,
                       };
-                      dispatch(
-                        isDrawnZone
-                          ? zoneUpdated(newName)
-                          : zoneFigmaUpdated(newName)
-                      );
+                      dispatch(updateZone(newNameZone));
                       setEditNameMode(false);
                     }}
                     autoFocus
@@ -130,10 +151,8 @@ export function ZoneListButton({
           </Text>
           {zone.zoneType && (
             <ProgressPoints
-              completeObject={
-                zone.zoneType === "Video" ? VideoFormEntries : { text: true }
-              }
-              params={zone.zoneType === "Video" ? zone.params : { text: true }}
+              completeObject={getTypeEntries(zone.zoneType)}
+              params={zone.params}
             />
           )}
         </Flex>
