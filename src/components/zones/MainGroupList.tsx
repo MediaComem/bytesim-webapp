@@ -25,7 +25,7 @@ export default function MainGroupList() {
   const zonesSlices = useAppSelector((store) => store.zonesSlice);
 
   const zones = zonesSlices?.zones.filter((z) => z.createdFrom === "figma");
-  const tree = zonesSlices.tree;
+  const firstChildrenTree = zonesSlices.tree?.[0]?.children;
 
   return (
     <AccordionItem isDisabled={false} pb={2}>
@@ -36,7 +36,7 @@ export default function MainGroupList() {
         </Box>
       </AccordionButton>
 
-      {tree && unfoldTree(tree, zones)}
+      {firstChildrenTree && unfoldTree(firstChildrenTree, zones)}
     </AccordionItem>
   );
 }

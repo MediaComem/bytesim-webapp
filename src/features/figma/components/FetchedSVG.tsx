@@ -61,9 +61,10 @@ const FetchedSVG = ({
         // get tree hierarchy
         const tree = getTreeHierarchyFromDOM(ids);
 
+        const allIdsWithourFirstElement = ids.slice(1);
         dispatch(
           zonesUpdated(
-            ids.map((elementId) => ({
+            allIdsWithourFirstElement.map((elementId) => ({
               ...defaultFigmaZone,
               elementId,
               name: elementId?.replace(`__${uniqueHash}`, ""),
