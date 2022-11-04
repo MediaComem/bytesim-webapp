@@ -1,16 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import projectReducer from "../features/project/projectSlice";
-import zonesSlice from "../features/zones/zonesSlice";
+import zonesSlice from "../features/zones/newZonesSlice";
 import { debounce } from "debounce";
 import browserStorage from "../services/browserStorage";
 import recommandationsSlice from "../features/recommandations/recommandationsSlice";
-import zonesFigmaSlice from "../features/figma/zonesFigmaSlice";
 
 export const store = configureStore({
   reducer: {
     project: projectReducer,
-    zones: zonesSlice,
-    zonesFigma: zonesFigmaSlice,
+    zonesSlice,
+    // zonesFigma: zonesFigmaSlice,
     recommandations: recommandationsSlice,
   },
   preloadedState: browserStorage.loadState(), // load state from local storage

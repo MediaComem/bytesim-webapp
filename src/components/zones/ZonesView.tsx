@@ -3,24 +3,21 @@ import { css, cx } from "@emotion/css";
 import { useDispatch } from "react-redux";
 import { Rnd } from "react-rnd";
 import { Route, Routes } from "react-router-dom";
-import {
-  drawnZoneSelector,
-  useAppAllZones,
-  useAppSelector,
-} from "../../app/hooks";
+import { useAppZones } from "../../app/hooks";
 
 import TestSVG from "../layout/TestSVG";
-import RemoteSVG from "../../features/figma/components/remoteSvg";
+import FetchedSVG from "../../features/figma/components/FetchedSVG";
 import REHome from "../../assets/RE-homepage.jpg";
 import REabout from "../../assets/RE-about.jpg";
 import REmap from "../../assets/RE-map.jpg";
 import { colorTheme } from "../../theme";
+
+import { ZONES_MAX_WIDTH } from "../../services/conts";
+import { ZONES_CONTAINER_PADDING } from "../../features/figma/utils";
 import {
   zoneActiveToggled,
   zoneUpdated,
-} from "../../features/zones/zonesSlice";
-import { ZONES_MAX_WIDTH } from "../../services/conts";
-import { ZONES_CONTAINER_PADDING } from "../../features/figma/utils";
+} from "../../features/zones/newZonesSlice";
 const brandColor = colorTheme[400];
 const resizeHandleSVG = (
   <svg
@@ -73,7 +70,7 @@ export default function ZonesView({
   disableEdition: boolean;
 }) {
   const dispatch = useDispatch();
-  const zones = useAppAllZones();
+  const zones = useAppZones()?.filter((z) => !z.hidden);
   return (
     <Flex
       align={"flex-start"}
@@ -95,7 +92,7 @@ export default function ZonesView({
             path="bytesim-webapp/figma/*"
             element={
               <Flex>
-                <RemoteSVG />
+                <FetchedSVG />
               </Flex>
             }
           />

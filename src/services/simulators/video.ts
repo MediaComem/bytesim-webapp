@@ -1,4 +1,3 @@
-import { ZoneFigma } from "./../../app/types/types";
 import { Recommandation } from "../../app/types/recommandations";
 import { Zone } from "../../app/types/types";
 import {
@@ -15,9 +14,9 @@ import { ZoneSimulator } from "./zoneSimulator";
 export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
   video: VideoParameters;
   renewable: boolean;
-  zone: Zone | ZoneFigma;
+  zone: Zone;
 
-  constructor(zone: Zone | ZoneFigma, renewable: boolean) {
+  constructor(zone: Zone, renewable: boolean) {
     super(zone.id);
     this.video = zone.params;
     this.renewable = renewable;

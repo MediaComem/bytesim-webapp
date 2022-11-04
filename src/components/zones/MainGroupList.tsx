@@ -9,10 +9,9 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
-import { figmaZoneSelector, useAppSelector } from "../../app/hooks";
-import { FigmaTreeEl, ZoneFigma } from "../../app/types/types";
+import { useAppSelector } from "../../app/hooks";
+import { TreeZoneEl, Zone } from "../../app/types/types";
 import { highlightFigmaZone } from "../../features/figma/utils";
-import { zoneFigmaToggleHidden } from "../../features/figma/zonesFigmaSlice";
 import AccordionChevron from "../layout/AccordionChevron";
 import AccordionCustomTitle from "../layout/AccordionCustomTitle";
 import { ZoneListButton } from "./ZoneListButton";
@@ -20,12 +19,13 @@ import ZoneParams from "./ZoneParams";
 
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { colorTheme } from "../../theme";
+import { zoneToggleHidden } from "../../features/zones/newZonesSlice";
 
 export default function MainGroupList() {
-  const figmaZones = useAppSelector(figmaZoneSelector);
+  const zonesSlices = useAppSelector((store) => store.zonesSlice);
 
-  const zones = figmaZones?.zones;
-  const tree = figmaZones.tree;
+  const zones = zonesSlices?.zones.filter((z) => z.createdFrom === "figma");
+  const tree = zonesSlices.tree;
 
   return (
     <AccordionItem isDisabled={false} pb={2}>
@@ -40,7 +40,7 @@ export default function MainGroupList() {
     </AccordionItem>
   );
 }
-const unfoldTree = (tree: FigmaTreeEl[], zones: ZoneFigma[]) => {
+const unfoldTree = (tree: TreeZoneEl[], zones: Zone[]) => {
   return tree.map((t) => {
     const parentZone = zones.find((z) => z.id === t.id);
     if (parentZone?.hidden) {
@@ -57,13 +57,13 @@ const unfoldTree = (tree: FigmaTreeEl[], zones: ZoneFigma[]) => {
   });
 };
 
-const HiddenZone = ({ z }: { z: ZoneFigma }) => {
+const HiddenZone = ({ z }: { z: Zone }) => {
   const dispatch = useDispatch();
 
   return (
     <Box
       css={{
-        filter: "contrast(0) opacity(0.3)",
+        filter: "opacity(0.3)",
       }}
       onMouseEnter={() => highlightFigmaZone(z.elementId)}
       onMouseLeave={() => highlightFigmaZone(z.elementId, false)}
@@ -75,7 +75,7 @@ const HiddenZone = ({ z }: { z: ZoneFigma }) => {
         buttonDelete={
           <Button
             variant={"ghost"}
-            onClick={() => dispatch(zoneFigmaToggleHidden(z.id))}
+            onClick={() => dispatch(zoneToggleHidden(z.id))}
             title="Delete zone"
             _hover={{}}
             isDisabled={false}
@@ -91,7 +91,7 @@ const AccordionZones = ({
   zones,
   children = null,
 }: {
-  zones: ZoneFigma[];
+  zones: Zone[];
   children?: any;
 }) => {
   const dispatch = useDispatch();
@@ -128,8 +128,8 @@ const AccordionZones = ({
                     buttonDelete={
                       <Button
                         variant={"ghost"}
-                        onClick={() => dispatch(zoneFigmaToggleHidden(z.id))}
-                        title="Delete zone"
+                        onClick={() => dispatch(zoneToggleHidden(z.id))}
+                        title="Hide zone and its children"
                         isDisabled={false}
                       >
                         <ViewOffIcon css={{ margin: "3px" }} fill="black" />

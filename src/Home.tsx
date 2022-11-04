@@ -11,16 +11,17 @@ import GeneralFormAccordion from "./components/zones/GeneralForm";
 import ZonesList from "./components/zones/ZonesList";
 import ZonesView from "./components/zones/ZonesView";
 import { projectReset } from "./features/project/projectSlice";
-import {
-  allZonesReset,
-  getUncompleteZones,
-  zoneAdded,
-} from "./features/zones/zonesSlice";
+
 import { ReactComponent as ResetIcon } from "./assets/ResetIcon_Active_MouseOver.svg";
 import ExportButton from "./components/recommandations/ExportButton";
 import { useNavigate } from "react-router-dom";
 import { colorTheme } from "./theme";
 import RecoWarning from "./components/recommandations/RecoWarning";
+import {
+  allZonesReset,
+  getUncompleteZones,
+  zoneAdded,
+} from "./features/zones/newZonesSlice";
 
 export default function Home() {
   const dispatch = useDispatch();

@@ -1,4 +1,4 @@
-import { FigmaTreeEl } from "../../app/types/types";
+import { TreeZoneEl } from "../../app/types/types";
 import { colorTheme } from "../../theme";
 
 // simple hash function, do not use for sensitive data
@@ -65,7 +65,8 @@ export const registerHoverEventsOnFigmaEls = (ids: string[]) => {
   });
 };
 
-export const highlightFigmaZone = (elementId: string, highlight?: boolean) => {
+export const highlightFigmaZone = (elementId?: string, highlight?: boolean) => {
+  if (!elementId) return;
   document.getElementById(elementId)?.dispatchEvent(
     new MouseEvent(highlight !== false ? "mouseover" : "mouseout", {
       view: window,
@@ -77,7 +78,7 @@ export const highlightFigmaZone = (elementId: string, highlight?: boolean) => {
 
 export function getTreeHierarchyFromDOM(idsToIndex: string[]) {
   const rootId = idsToIndex?.[0];
-  const resultTree: FigmaTreeEl[] = [
+  const resultTree: TreeZoneEl[] = [
     {
       id: rootId,
       children: [],
@@ -89,7 +90,7 @@ export function getTreeHierarchyFromDOM(idsToIndex: string[]) {
 }
 
 const findChildrenWithIdsOfParentInDOM = (
-  resultTreeEl: FigmaTreeEl,
+  resultTreeEl: TreeZoneEl,
   idsToIndex: string | string[],
   parent: string
 ) => {
@@ -113,8 +114,8 @@ const findChildrenWithIdsOfParentInDOM = (
 
 export const getNodeSubTree = (
   id: string,
-  tree: FigmaTreeEl
-): FigmaTreeEl | null => {
+  tree: TreeZoneEl
+): TreeZoneEl | null => {
   if (tree.id === id) return tree;
   if (!tree.children || tree.children?.length === 0) return null;
   for (const child of tree.children) {
@@ -125,9 +126,10 @@ export const getNodeSubTree = (
 };
 
 export const getChildrenIdsOfTree = (
-  id: string,
-  tree: FigmaTreeEl
+  id?: string,
+  tree?: TreeZoneEl
 ): string[] => {
+  if (!id || !tree) return [];
   const subTree = getNodeSubTree(id, tree);
   // crawl through all chilfren
   return (
@@ -139,10 +141,10 @@ export const getChildrenIdsOfTree = (
 
 export const removeSubTree = (
   id: string,
-  tree: FigmaTreeEl,
-  parentTree: FigmaTreeEl,
+  tree: TreeZoneEl,
+  parentTree: TreeZoneEl,
   isNested?: boolean // first call
-): FigmaTreeEl | undefined => {
+): TreeZoneEl | undefined => {
   // return something if the id to remove is found
   if (tree.id === id) {
     if (!isNested) {

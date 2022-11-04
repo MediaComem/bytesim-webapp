@@ -1,7 +1,7 @@
-import { useAppAllZones } from "../app/hooks";
+import { useAppZones } from "../app/hooks";
 import { Image as ChakraImage, Box } from "@chakra-ui/react";
 import { useState } from "react";
-import { getSvgUrlFromCurrentUrl } from "../features/figma/components/remoteSvg";
+import { getSvgUrlFromCurrentUrl } from "../features/figma/components/FetchedSVG";
 
 //GET image loaded into project
 //Link project to S3 url -> one img/ project
@@ -9,7 +9,7 @@ type ZoneScreenshotProps = {
   zoneId: string;
 };
 const useZoneScreenshot = () => {
-  const zones = useAppAllZones();
+  const zones = useAppZones();
 
   const getZoneById = (zoneId: string) => {
     return zones.find((z) => z.id === zoneId);

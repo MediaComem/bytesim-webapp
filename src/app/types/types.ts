@@ -25,7 +25,9 @@ export interface ZoneInfo {
   width: number;
   height: number;
   status: ZoneStatus;
-  createdFrom?: "user";
+  createdFrom?: "user" | "figma";
+  hidden?: boolean;
+  elementId?: string; // only for figma
 }
 
 export interface ZoneUnknown extends ZoneInfo {
@@ -66,9 +68,9 @@ export type ZoneFigma = Omit<Zone, "createdFrom"> & {
   elementId: string;
   hidden?: boolean;
 };
-export type FigmaTreeEl = {
+export type TreeZoneEl = {
   id: string;
-  children?: FigmaTreeEl[];
+  children?: TreeZoneEl[];
 };
 
 export type ProjectStatus = "EDITING" | "SIMULATION" | "LOADING";

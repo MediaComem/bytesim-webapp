@@ -13,8 +13,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../app/hooks";
 import { Zone, ZoneType } from "../../../app/types/types";
-import { zoneFigmaUpdated } from "../../../features/figma/zonesFigmaSlice";
-import { zoneUpdated } from "../../../features/zones/zonesSlice";
+import { zoneUpdated } from "../../../features/zones/newZonesSlice";
 import ConfirmModal from "../../layout/ConfirmModal";
 
 interface VideoFormProps {
@@ -33,7 +32,7 @@ export default function ZoneSettingsForm({
   const DEFAULT_NUMBER_INPUT: number = 1;
   const dispatch = useDispatch();
   const zone = useAppSelector((state) =>
-    [...state.zonesFigma.zones, ...state.zones].find((z) => z.id === zoneId)
+    state.zonesSlice.zones.find((z) => z.id === zoneId)
   );
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [pendingKey, setPendingKey] = React.useState("");
@@ -71,11 +70,7 @@ export default function ZoneSettingsForm({
         },
         zoneType: formZoneType,
       };
-      dispatch(
-        zone.createdFrom === "figma"
-          ? zoneFigmaUpdated(newZone)
-          : zoneUpdated(newZone)
-      );
+      dispatch(zoneUpdated(newZone));
     };
     useEffect(() => {
       if (pendingKey !== "") {

@@ -10,9 +10,7 @@ import { css, cx } from "@emotion/css";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/hooks";
-import { Zone, ZoneFigma, ZoneType } from "../../app/types/types";
-import { VideoFormEntries } from "../../app/types/videoTypes";
-import { zoneUpdated, zoneReset } from "../../features/zones/zonesSlice";
+import { Zone, ZoneType } from "../../app/types/types";
 import { colorTheme } from "../../theme";
 import AccordionChevron from "../layout/AccordionChevron";
 import { ReactComponent as OpenIcon } from "../../assets/Fleche_Fermee.svg";
@@ -21,24 +19,18 @@ import AccordionCustomTitle from "../layout/AccordionCustomTitle";
 import ProgressPoints from "../layout/ProgressPoints";
 import { ReactComponent as ResetIcon } from "../../assets/ResetIcon_Active_MouseOver.svg";
 import { ReactComponent as TrashIcon } from "../../assets/TEMP_trash.svg";
-import {
-  zoneFigmaReset,
-  zoneFigmaUpdated,
-} from "../../features/figma/zonesFigmaSlice";
+
 import { getTypeEntries } from "../../utils/utils";
+import { zoneReset, zoneUpdated } from "../../features/zones/newZonesSlice";
 
 interface ZoneListButtonProps {
-  zone: Zone | ZoneFigma;
+  zone: Zone;
   onOpen?: () => void;
   isExpanded: boolean;
   buttonDelete?: any;
   hiddenMode?: boolean;
 }
-const isFigmaZone = (zone: Zone | ZoneFigma): zone is ZoneFigma => {
-  return (
-    (zone as ZoneFigma).elementId !== undefined || zone.createdFrom === "figma"
-  );
-};
+
 export function ZoneListButton({
   zone,
   isExpanded,
@@ -64,11 +56,8 @@ export function ZoneListButton({
     }
     setEditNameMode(false);
   };
-  const isDrawnZone = !isFigmaZone(zone);
-  const updateZone = (newZone: Partial<Zone | ZoneFigma>) => {
-    return isDrawnZone
-      ? zoneUpdated(newZone as Zone)
-      : zoneFigmaUpdated(newZone as ZoneFigma);
+  const updateZone = (newZone: Partial<Zone>) => {
+    return zoneUpdated(newZone);
   };
   return (
     <>
@@ -77,7 +66,7 @@ export function ZoneListButton({
         alignItems="center"
         justifyContent="space-between"
         flexWrap="nowrap"
-        pl={isDrawnZone ? 5 : 0}
+        pl={zone.createdFrom === "figma" ? 0 : 5}
         _hover={{
           backgroundColor: "brand.100",
           ".visibleOnHover": {
@@ -162,9 +151,7 @@ export function ZoneListButton({
               variant={"ghost"}
               title="Reset zone"
               onClick={() => {
-                dispatch(
-                  isDrawnZone ? zoneReset(zone.id) : zoneFigmaReset(zone.id)
-                );
+                dispatch(zoneReset(zone.id));
               }}
               isDisabled={projectStatus === "SIMULATION"}
             >

@@ -11,13 +11,8 @@ import {
   Heading,
 } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
-import { drawnZoneSelector, useAppSelector } from "../../app/hooks";
-//import { PrettyZoneTypes } from "../../app/types";
-import {
-  allZonesReset,
-  zoneDeleted,
-  allZonesDeleted,
-} from "../../features/zones/zonesSlice";
+import { zoneSelector, useAppSelector } from "../../app/hooks";
+
 import AccordionItemTitleCustom from "../layout/AccordionItemTitleCustom";
 import ConfirmModal from "../layout/ConfirmModal";
 import ZoneParams from "./ZoneParams";
@@ -28,13 +23,20 @@ import AccordionCustomTitle from "../layout/AccordionCustomTitle";
 import { recommandationsReset } from "../../features/recommandations/recommandationsSlice";
 import { ZoneListButton } from "./ZoneListButton";
 import { Fragment, useState } from "react";
+import {
+  allZonesDeleted,
+  allZonesReset,
+  zoneDeleted,
+} from "../../features/zones/newZonesSlice";
 
 export default function ZonesList() {
   const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const state = useAppSelector((state) => state);
-  const zones = useAppSelector(drawnZoneSelector);
-  const project = state.project;
+  const project = useAppSelector((state) => state.project);
+  const drawnZones = useAppSelector((state) =>
+    state.zonesSlice.zones.filter((zone) => zone.createdFrom === "user")
+  );
+
   const ZONE_TAB_INDEX = 0;
   const [modalContent, setModalContent] = useState<{
     modal: string;
@@ -105,7 +107,7 @@ export default function ZonesList() {
             </AccordionItemTitleCustom>
             <AccordionPanel p={0}>
               <Accordion allowToggle>
-                {zones.map((z, i) => {
+                {drawnZones.map((z, i) => {
                   return (
                     <Fragment key={`${z.id}_${i}`}>
                       <AccordionItem key={`${z.id}_${i}`} border="none">

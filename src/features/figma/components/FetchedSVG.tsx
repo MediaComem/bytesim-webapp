@@ -1,12 +1,7 @@
 import React, { useEffect } from "react";
 import SVG from "react-inlinesvg";
 import { useDispatch } from "react-redux";
-import {
-  allZonesFigmaDeleted,
-  defaultFigmaZone,
-  zonesFigmaSetTree,
-  zonesFigmaUpdated,
-} from "../zonesFigmaSlice";
+
 import {
   getRelativePosition,
   getTreeHierarchyFromDOM,
@@ -15,6 +10,12 @@ import {
   REMOTE_PARENT_SVG_ID,
 } from "../utils";
 import { colorTheme } from "../../../theme";
+import {
+  allZonesDeleted,
+  defaultFigmaZone,
+  zonesSetTree,
+  zonesUpdated,
+} from "../../zones/newZonesSlice";
 
 export const getSvgUrlFromCurrentUrl = () => {
   // get current url
@@ -33,7 +34,7 @@ export const getSvgUrlFromCurrentUrl = () => {
   return `https://${bytesimBucket}.s3.${region}.amazonaws.com/${key}`;
 };
 
-const RemoteSVG = ({
+const FetchedSVG = ({
   url = getSvgUrlFromCurrentUrl(), // "https://bytesim-bucket.s3.eu-west-3.amazonaws.com/0%253A1_Page%25201.svg",
 }: {
   url?: string;
@@ -44,7 +45,7 @@ const RemoteSVG = ({
   const uniqueHash = `${hashCode(url)}`;
 
   useEffect(() => {
-    dispatch(allZonesFigmaDeleted());
+    dispatch(allZonesDeleted());
   }, [url, dispatch]);
 
   return (
@@ -61,7 +62,7 @@ const RemoteSVG = ({
         const tree = getTreeHierarchyFromDOM(ids);
 
         dispatch(
-          zonesFigmaUpdated(
+          zonesUpdated(
             ids.map((elementId) => ({
               ...defaultFigmaZone,
               elementId,
@@ -70,7 +71,7 @@ const RemoteSVG = ({
             }))
           )
         );
-        dispatch(zonesFigmaSetTree(tree));
+        dispatch(zonesSetTree(tree));
       }}
       preProcessor={(code) => {
         // code is a svg string
@@ -113,4 +114,4 @@ const RemoteSVG = ({
     />
   );
 };
-export default RemoteSVG;
+export default FetchedSVG;

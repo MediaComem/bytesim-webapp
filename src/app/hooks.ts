@@ -8,35 +8,23 @@ import {
   Recommandation,
   RecommandationWithZone,
 } from "./types/recommandations";
-import { Zone, ZoneFigma } from "./types/types";
+import { Zone } from "./types/types";
 import { VideoParameters } from "./types/videoTypes";
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-const selectZones = (state: RootState) => state.zones;
-export const drawnZoneSelector = createDraftSafeSelector(
+const selectZones = (state: RootState) => state.zonesSlice.zones;
+export const zoneSelector = createDraftSafeSelector(
   selectZones,
   (state) => state
 );
-const selectZonesFigma = (state: RootState) => state.zonesFigma;
-export const figmaZoneSelector = createDraftSafeSelector(
-  selectZonesFigma,
-  (state) => state
-);
-const selectAllZones = (state: RootState) => [
-  ...state.zonesFigma.zones,
-  ...state.zones,
-];
-export const allZoneSelector = createDraftSafeSelector(
-  selectAllZones,
-  (state) => state
-);
-export const useAppAllZones = () => useAppSelector(allZoneSelector);
+
+export const useAppZones = () => useAppSelector(zoneSelector);
 
 export function useCalculateImpact(): { energy: number; co2: number } {
-  const zones = useAppSelector(drawnZoneSelector);
+  const zones = useAppSelector(zoneSelector);
   const renewable = useAppSelector(
     (state) => state.project.params.server === ServerType.RENEWABLE
   );
@@ -64,7 +52,7 @@ export function useCalculateRecommandationsImpact(): {
   energy: number;
   co2: number;
 } {
-  const zones = useAppSelector(drawnZoneSelector);
+  const zones = useAppSelector(zoneSelector);
   const recommandations = useAppSelector((state) => state.recommandations);
   const nbVisits = useAppSelector((state) => state.project.params.nbVisit) ?? 1; // if no visitor impact per visit
   let renewable = useAppSelector(
@@ -79,7 +67,7 @@ export function useCalculateRecommandationsImpact(): {
     renewable = recommandationRenewable.selectedValue === "better";
   }
   zones.forEach((zone) => {
-      if (isZoneComplete(zone)) {
+    if (isZoneComplete(zone)) {
       // TODO optimize code + architecture
       const zoneRecommandations = recommandations.filter(
         (rec) => rec.zone_id === zone.id
@@ -140,7 +128,7 @@ export function useCalculateGenericRecommandations(): RecommandationWithZone<
 export function useCalculateAllRecommandations(): RecommandationWithZone<
   VideoParameters[keyof VideoParameters]
 >[] {
-  const zones = useAppAllZones();
+  const zones = useAppZones();
   const genericParameters = useAppSelector((state) => state.project.params);
   const renewable = genericParameters === ServerType.RENEWABLE;
   const recommandations: RecommandationWithZone<
@@ -159,7 +147,7 @@ export function useCalculateAllRecommandations(): RecommandationWithZone<
 }
 
 export function useCalculateRecommandationsForZone(
-  zone: Zone | ZoneFigma,
+  zone: Zone,
   renewable: boolean
 ): Recommandation<VideoParameters[keyof VideoParameters]>[] {
   let recommandations: Recommandation<any>[] = [];
