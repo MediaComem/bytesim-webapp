@@ -8,9 +8,11 @@ import {
   zonesFigmaUpdated,
 } from "../zonesFigmaSlice";
 import {
+  getRelativePosition,
   getTreeHierarchyFromDOM,
   hashCode,
   registerHoverEventsOnFigmaEls,
+  REMOTE_PARENT_SVG_ID,
 } from "../utils";
 import { colorTheme } from "../../../theme";
 
@@ -64,6 +66,7 @@ const RemoteSVG = ({
               ...defaultFigmaZone,
               elementId,
               name: elementId?.replace(`__${uniqueHash}`, ""),
+              ...getRelativePosition(elementId),
             }))
           )
         );
@@ -73,6 +76,8 @@ const RemoteSVG = ({
         // code is a svg string
         // replace width parameter of svg tag by width="100%"
         const newCode = code
+          // add id = removeSvgId to parent svg element
+          .replace(/<svg/g, `<svg id=${REMOTE_PARENT_SVG_ID}`)
           .replace(/width="[^"]+"/, 'width="100%"')
           //add svg tag attribute preserveAspectRatio="xMinYMin meet"
           .replace(/<svg/, '<svg preserveAspectRatio="xMinYMin meet"')

@@ -27,7 +27,11 @@ export const defaultFigmaZone: ZoneFigma = {
   id: "0",
   elementId: "0",
   name: "defaultZone",
-
+  width: 100,
+  height: 100,
+  x: 100,
+  y: 100,
+  status: "EDITING",
   zoneType: undefined,
   params: undefined,
   createdFrom: "figma",

@@ -20,7 +20,7 @@ import {
 } from "../../app/types/recommandations";
 import { VideoParameters } from "../../app/types/videoTypes";
 import { recommandationUpdated } from "../../features/recommandations/recommandationsSlice";
-import { useZone } from "../../hooks/useZone";
+import useZoneScreenshot from "../../hooks/useZoneScreenshot";
 import AccordionChevron from "../layout/AccordionChevron";
 //import { ReportCTX } from "./RecoReport";
 
@@ -36,7 +36,7 @@ export default function RecommandationDisplay({
 }: RecommandationDisplayProps) {
   //const { totalBenefits, setTotalBenefits } = React.useContext(ReportCTX);
   const dispatch = useDispatch();
-  const { ZoneScreenshot } = useZone();
+  const { ZoneScreenshot } = useZoneScreenshot();
 
   const onChangeParams = React.useCallback(
     (v: RecommandationOption) => {

@@ -60,7 +60,7 @@ export type Zone =
   | ZoneText
   | ZoneDynamic;
 
-export type ZoneFigma = Partial<Omit<Zone, "createdFrom">> & {
+export type ZoneFigma = Omit<Zone, "createdFrom"> & {
   id: string;
   createdFrom: "figma";
   elementId: string;
