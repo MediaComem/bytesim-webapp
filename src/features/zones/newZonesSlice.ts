@@ -11,14 +11,20 @@ const initialState: ZoneStore = {
   tree: [],
 };
 
-const updateZone = (state: ZoneStore, zoneToAdd: Partial<Zone>) => {
-  const zoneFound = state?.zones?.find((zone) => zone.id === zoneToAdd?.id);
+const updateZoneBy = (
+  state: ZoneStore,
+  zoneToAdd: Partial<Zone>,
+  by: "elementId" | "id"
+) => {
+  const zoneFound = state?.zones?.find(
+    (zone) => zone[by] && zone?.[by] === zoneToAdd?.[by]
+  );
   const existingZone = zoneFound ?? {
     ...zoneToAdd,
     id: nanoid(),
   };
   if (zoneFound) {
-    return Object.assign(existingZone, zoneToAdd);
+    return Object.assign(existingZone, { ...zoneToAdd, ...existingZone });
   }
   if (!state.zones) state.zones = [];
   state?.zones.push(existingZone as Zone);
@@ -118,11 +124,11 @@ const zonesSlice = createSlice({
       };
 
       Object.assign(existingZone, action.payload);
-      updateZone(state, action.payload);
+      updateZoneBy(state, action.payload, "id");
     },
-    zonesUpdated(state, action: PayloadAction<Partial<Zone>[]>) {
+    zonesUpdatedByElementId(state, action: PayloadAction<Partial<Zone>[]>) {
       action.payload?.forEach((zoneToAdd) => {
-        if (zoneToAdd) updateZone(state, zoneToAdd);
+        if (zoneToAdd) updateZoneBy(state, zoneToAdd, "elementId");
       });
     },
     zonesSetTree(state, action: PayloadAction<TreeZoneEl[]>) {
@@ -162,7 +168,7 @@ export const {
   zoneReset,
   zoneToggleHidden,
   zoneUpdated,
-  zonesUpdated,
+  zonesUpdatedByElementId,
   zonesSetTree,
 } = zonesSlice.actions;
 

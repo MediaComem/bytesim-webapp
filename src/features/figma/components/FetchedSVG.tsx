@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { memo, useEffect } from "react";
 import SVG from "react-inlinesvg";
 import { useDispatch } from "react-redux";
 
@@ -14,7 +14,7 @@ import {
   allZonesDeleted,
   defaultFigmaZone,
   zonesSetTree,
-  zonesUpdated,
+  zonesUpdatedByElementId,
 } from "../../zones/newZonesSlice";
 
 export const getSvgUrlFromCurrentUrl = () => {
@@ -33,6 +33,9 @@ export const getSvgUrlFromCurrentUrl = () => {
   // the url is formed like this https://bucket-name.s3.Region.amazonaws.com/key-name
   return `https://${bytesimBucket}.s3.${region}.amazonaws.com/${key}`;
 };
+const defaultFigmaZoneWithoutId = { ...defaultFigmaZone };
+//@ts-ignore
+delete defaultFigmaZoneWithoutId["id"];
 
 const FetchedSVG = ({
   url = getSvgUrlFromCurrentUrl(), // "https://bytesim-bucket.s3.eu-west-3.amazonaws.com/0%253A1_Page%25201.svg",
@@ -44,9 +47,9 @@ const FetchedSVG = ({
 
   const uniqueHash = `${hashCode(url)}`;
 
-  useEffect(() => {
-    dispatch(allZonesDeleted());
-  }, [url, dispatch]);
+  // useEffect(() => {
+  //   dispatch(allZonesDeleted());
+  // }, [url, dispatch]);
 
   return (
     <SVG
@@ -62,10 +65,11 @@ const FetchedSVG = ({
         const tree = getTreeHierarchyFromDOM(ids);
 
         const allIdsWithourFirstElement = ids.slice(1);
+
         dispatch(
-          zonesUpdated(
+          zonesUpdatedByElementId(
             allIdsWithourFirstElement.map((elementId) => ({
-              ...defaultFigmaZone,
+              ...defaultFigmaZoneWithoutId,
               elementId,
               name: elementId?.replace(`__${uniqueHash}`, ""),
               ...getRelativePosition(elementId),
@@ -115,4 +119,4 @@ const FetchedSVG = ({
     />
   );
 };
-export default FetchedSVG;
+export default memo(FetchedSVG);
