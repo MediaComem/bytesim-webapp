@@ -21,7 +21,7 @@ import {
   allZonesReset,
   getUncompleteZones,
   zoneAdded,
-} from "./features/zones/newZonesSlice";
+} from "./features/zones/zonesSlice";
 
 export default function Home() {
   const dispatch = useDispatch();

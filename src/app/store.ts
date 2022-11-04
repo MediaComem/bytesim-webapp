@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import projectReducer from "../features/project/projectSlice";
-import zonesSlice from "../features/zones/newZonesSlice";
+import zonesSlice from "../features/zones/zonesSlice";
 import { debounce } from "debounce";
 import browserStorage from "../services/browserStorage";
 import recommandationsSlice from "../features/recommandations/recommandationsSlice";

@@ -26,7 +26,7 @@ import {
   allZonesDeleted,
   allZonesReset,
   zoneDeleted,
-} from "../../features/zones/newZonesSlice";
+} from "../../features/zones/zonesSlice";
 
 export default function ZonesList() {
   const dispatch = useDispatch();

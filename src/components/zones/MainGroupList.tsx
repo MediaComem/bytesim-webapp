@@ -19,7 +19,7 @@ import ZoneParams from "./ZoneParams";
 
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { colorTheme } from "../../theme";
-import { zoneToggleHidden } from "../../features/zones/newZonesSlice";
+import { zoneToggleHidden } from "../../features/zones/zonesSlice";
 
 export default function MainGroupList() {
   const zonesSlices = useAppSelector((store) => store.zonesSlice);

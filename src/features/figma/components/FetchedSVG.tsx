@@ -14,7 +14,7 @@ import {
   defaultFigmaZone,
   zonesSetTree,
   zonesUpdatedByElementId,
-} from "../../zones/newZonesSlice";
+} from "../../zones/zonesSlice";
 
 export const getSvgUrlFromCurrentUrl = () => {
   // get current url

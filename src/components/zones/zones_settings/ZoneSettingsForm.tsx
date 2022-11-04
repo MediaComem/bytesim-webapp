@@ -13,7 +13,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../app/hooks";
 import { Zone, ZoneType } from "../../../app/types/types";
-import { zoneUpdated } from "../../../features/zones/newZonesSlice";
+import { zoneUpdated } from "../../../features/zones/zonesSlice";
 import ConfirmModal from "../../layout/ConfirmModal";
 
 interface VideoFormProps {

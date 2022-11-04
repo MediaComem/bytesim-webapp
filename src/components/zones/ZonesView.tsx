@@ -17,7 +17,7 @@ import { ZONES_CONTAINER_PADDING } from "../../features/figma/utils";
 import {
   zoneActiveToggled,
   zoneUpdated,
-} from "../../features/zones/newZonesSlice";
+} from "../../features/zones/zonesSlice";
 const brandColor = colorTheme[400];
 const resizeHandleSVG = (
   <svg
