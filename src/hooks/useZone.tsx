@@ -27,7 +27,7 @@ export const useZone = () => {
     const height = zone.height > 0 ? zone.height : 0;
 
     const imageUrl =
-      "https://bytesim-bucket.s3.eu-west-3.amazonaws.com/test.svg";
+      "https://bytesim-bucket.s3.eu-west-3.amazonaws.com/1220690060407143.8_bytesimname_bytesim_dev___Page_1.svg";
     // const imageUrl =
     //   "https://bytesim-bucket.s3.eu-west-3.amazonaws.com/RE-about.jpg";
 
