@@ -141,7 +141,7 @@ export default function ZonesView({
       {zones.map((z) => {
         return (
           <Rnd
-            key={z.id}
+            key={`${z.id}_${z.x}_${z.y}_${z.width}_${z.height}`}
             default={{
               x: z.x,
               y: z.y,

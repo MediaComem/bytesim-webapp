@@ -26,8 +26,13 @@ export interface ZoneInfo {
   height: number;
   status: ZoneStatus;
   createdFrom?: "user" | "figma";
+  // only for figma fields
   hidden?: boolean;
-  elementId?: string; // only for figma
+  elementId?: string;
+  initWidth?: number;
+  initHeight?: number;
+  initX?: number;
+  initY?: number;
 }
 
 export interface ZoneUnknown extends ZoneInfo {

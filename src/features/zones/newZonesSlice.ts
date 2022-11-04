@@ -108,10 +108,22 @@ const zonesSlice = createSlice({
       }
     },
     allZonesReset(state) {
-      state.zones.forEach((z) => {
-        z.params = undefined;
-        z.zoneType = undefined;
-      });
+      return {
+        ...state,
+        zones: state.zones.map((z) => {
+          return {
+            ...z,
+            zoneType: undefined,
+            params: undefined,
+            ...(z.createdFrom === "figma" && {
+              width: z.initWidth!,
+              height: z.initHeight!,
+              x: z.initX!,
+              y: z.initY!,
+            }),
+          };
+        }),
+      };
     },
     zoneUpdated(state, action: PayloadAction<Partial<Zone>>) {
       const zoneFound = state.zones.find(

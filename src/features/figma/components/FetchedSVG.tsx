@@ -11,7 +11,6 @@ import {
 } from "../utils";
 import { colorTheme } from "../../../theme";
 import {
-  allZonesDeleted,
   defaultFigmaZone,
   zonesSetTree,
   zonesUpdatedByElementId,
@@ -46,10 +45,6 @@ const FetchedSVG = ({
   const dispatch = useDispatch();
 
   const uniqueHash = `${hashCode(url)}`;
-
-  // useEffect(() => {
-  //   dispatch(allZonesDeleted());
-  // }, [url, dispatch]);
 
   return (
     <SVG

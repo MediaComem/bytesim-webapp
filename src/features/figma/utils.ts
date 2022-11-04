@@ -24,11 +24,17 @@ export const getRelativePosition = (elementId: string) => {
   if (!element || !parent) return;
   const { top, left, width, height } = element.getBoundingClientRect();
   const { top: parentTop, left: parentLeft } = parent.getBoundingClientRect();
+  const x = left - parentLeft + ZONES_CONTAINER_PADDING * 4;
+  const y = top - parentTop + ZONES_CONTAINER_PADDING * 4;
   return {
-    y: top - parentTop + ZONES_CONTAINER_PADDING * 4,
-    x: left - parentLeft + ZONES_CONTAINER_PADDING * 4,
+    y,
+    x,
     width,
     height,
+    initWidth: width,
+    initHeight: height,
+    initX: x,
+    initY: y,
   };
 };
 
