@@ -23,7 +23,7 @@ const initialState: ZoneFigmaStore = {
   tree: [],
 };
 
-const defaultZone: ZoneFigma = {
+export const defaultFigmaZone: ZoneFigma = {
   id: "0",
   elementId: "0",
   name: "defaultZone",
@@ -42,7 +42,7 @@ const zonesSlice = createSlice({
         (zone) => zone.id === action.payload?.id
       );
       const existingZone = zoneFound ?? {
-        ...defaultZone,
+        ...defaultFigmaZone,
         ...action.payload,
         id: nanoid(),
       };
@@ -76,19 +76,6 @@ const zonesSlice = createSlice({
       if (zoneFound) {
         zoneFound.hidden = !zoneFound.hidden;
       }
-      // // crawl through all the children of the zoneFound in the tree and delete theses zones
-
-      // const tree = state.tree?.[0];
-      // getChildrenIdsOfTree(zoneFound?.elementId!, tree).forEach((id) => {
-      //   const zoneFound = zones.find((zone) => zone.elementId === id);
-      //   if (zoneFound) {
-      //     const zoneIndex = zones.indexOf(zoneFound);
-      //     zones.splice(zoneIndex, 1);
-      //   }
-      // });
-
-      // // update the tree by removing the node containing the zoneFound
-      // removeSubTree(zoneFound?.elementId!, tree, tree);
     },
 
     allZonesFigmaDeleted(state) {

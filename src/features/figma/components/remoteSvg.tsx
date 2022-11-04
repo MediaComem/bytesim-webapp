@@ -3,6 +3,7 @@ import SVG from "react-inlinesvg";
 import { useDispatch } from "react-redux";
 import {
   allZonesFigmaDeleted,
+  defaultFigmaZone,
   zonesFigmaSetTree,
   zonesFigmaUpdated,
 } from "../zonesFigmaSlice";
@@ -60,6 +61,7 @@ const RemoteSVG = ({
         dispatch(
           zonesFigmaUpdated(
             ids.map((elementId) => ({
+              ...defaultFigmaZone,
               elementId,
               name: elementId?.replace(`__${uniqueHash}`, ""),
             }))

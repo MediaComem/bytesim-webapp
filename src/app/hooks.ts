@@ -24,6 +24,15 @@ export const figmaZoneSelector = createDraftSafeSelector(
   selectZonesFigma,
   (state) => state
 );
+const selectAllZones = (state: RootState) => [
+  ...state.zonesFigma.zones,
+  ...state.zones,
+];
+export const allZoneSelector = createDraftSafeSelector(
+  selectAllZones,
+  (state) => state
+);
+export const useAppAllZones = () => useAppSelector(allZoneSelector);
 
 export function useCalculateImpact(): { energy: number; co2: number } {
   const zones = useAppSelector(drawnZoneSelector);

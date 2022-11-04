@@ -9,9 +9,11 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import * as React from "react";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../app/hooks";
 import { Zone, ZoneType } from "../../../app/types/types";
+import { zoneFigmaUpdated } from "../../../features/figma/zonesFigmaSlice";
 import { zoneUpdated } from "../../../features/zones/zonesSlice";
 import ConfirmModal from "../../layout/ConfirmModal";
 
@@ -31,7 +33,7 @@ export default function ZoneSettingsForm({
   const DEFAULT_NUMBER_INPUT: number = 1;
   const dispatch = useDispatch();
   const zone = useAppSelector((state) =>
-    state.zones.find((z) => z.id === zoneId)
+    [...state.zonesFigma.zones, ...state.zones].find((z) => z.id === zoneId)
   );
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [pendingKey, setPendingKey] = React.useState("");
@@ -48,6 +50,7 @@ export default function ZoneSettingsForm({
         if (
           key in formEntries &&
           typeof formEntries[key] === "number" &&
+          zone.params &&
           !Object.keys(zone.params).includes(key)
         ) {
           inputsToAdd[key] = DEFAULT_NUMBER_INPUT;
@@ -68,9 +71,13 @@ export default function ZoneSettingsForm({
         },
         zoneType: formZoneType,
       };
-      dispatch(zoneUpdated(newZone));
+      dispatch(
+        zone.createdFrom === "figma"
+          ? zoneFigmaUpdated(newZone)
+          : zoneUpdated(newZone)
+      );
     };
-    React.useEffect(() => {
+    useEffect(() => {
       if (pendingKey !== "") {
         if (zone.zoneType !== formZoneType && zone.zoneType !== undefined) {
           onOpen();

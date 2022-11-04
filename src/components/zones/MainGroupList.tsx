@@ -5,11 +5,9 @@ import {
   AccordionPanel,
   Box,
   Button,
-  ExpandedIndex,
   Heading,
   Text,
 } from "@chakra-ui/react";
-import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { figmaZoneSelector, useAppSelector } from "../../app/hooks";
 import { FigmaTreeEl, ZoneFigma } from "../../app/types/types";
@@ -72,9 +70,6 @@ const HiddenZone = ({ z }: { z: ZoneFigma }) => {
     >
       <ZoneListButton
         zone={z}
-        // onOpen={() => {
-        //   dispatch(zoneFigmaToggleHidden(z.id));
-        // }}
         isExpanded={false}
         hiddenMode={true}
         buttonDelete={
@@ -99,8 +94,6 @@ const AccordionZones = ({
   zones: ZoneFigma[];
   children?: any;
 }) => {
-  const [index, setIndex] = useState<ExpandedIndex>([]);
-
   const dispatch = useDispatch();
 
   return (
