@@ -1,8 +1,8 @@
 import { Divider, Flex } from "@chakra-ui/react";
-import * as React from "react";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import {
-  drawnZoneSelector,
+  allZoneSelector,
   useAppSelector,
   useCalculateAllRecommandations,
   useCalculateGenericRecommandations,
@@ -11,6 +11,8 @@ import { GenericParameters } from "../../app/types/generalFormTypes";
 import { RecommandationWithZone } from "../../app/types/recommandations";
 import { VideoParameters } from "../../app/types/videoTypes";
 import { recommandationsPopulated } from "../../features/recommandations/recommandationsSlice";
+import usePrev from "../../hooks/usePrev";
+import { areArraysEqual } from "../../services/utils";
 import RecommandationsList from "./RecommandationsList";
 import ReportGeneralInfo from "./ReportGeneralInfo";
 import ReportToolBar from "./ReportToolBar";
@@ -39,16 +41,18 @@ export function ReportBody({
   const dispatch = useDispatch();
   const recommandations = useCalculateAllRecommandations();
   const genericRecomandations = useCalculateGenericRecommandations();
-  const zones = useAppSelector(drawnZoneSelector);
+  const zones = useAppSelector(allZoneSelector);
+  const prevZones = usePrev(zones) ?? [];
+
   /* const zonesParams = useAppSelector((state) => {
     return Object.values(state.zones).filter((zone) => zone.filter());
   }); */
   const projectGeneralParams = useAppSelector((state) => state.project.params);
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch(
       recommandationsPopulated([...genericRecomandations, ...recommandations])
     );
-  }, [zones, projectGeneralParams]);
+  }, [areArraysEqual(zones, prevZones), projectGeneralParams]);
   const recos = useAppSelector((state) => state.recommandations);
   return (
     <Flex direction={"column"} id="TO_EXPORT" className={className}>

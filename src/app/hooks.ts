@@ -7,7 +7,7 @@ import {
   Recommandation,
   RecommandationWithZone,
 } from "./types/recommandations";
-import { Zone } from "./types/types";
+import { Zone, ZoneFigma } from "./types/types";
 import { VideoParameters } from "./types/videoTypes";
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
@@ -135,7 +135,7 @@ export function useCalculateGenericRecommandations(): RecommandationWithZone<
 export function useCalculateAllRecommandations(): RecommandationWithZone<
   VideoParameters[keyof VideoParameters]
 >[] {
-  const zones = useAppSelector(drawnZoneSelector);
+  const zones = useAppAllZones();
   const genericParameters = useAppSelector((state) => state.project.params);
   const renewable = genericParameters === ServerType.RENEWABLE;
   const recommandations: RecommandationWithZone<
@@ -154,7 +154,7 @@ export function useCalculateAllRecommandations(): RecommandationWithZone<
 }
 
 export function useCalculateRecommandationsForZone(
-  zone: Zone,
+  zone: Zone | ZoneFigma,
   renewable: boolean
 ): Recommandation<VideoParameters[keyof VideoParameters]>[] {
   let recommandations: Recommandation<any>[] = [];
