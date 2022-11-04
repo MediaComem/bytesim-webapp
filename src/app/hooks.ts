@@ -1,6 +1,7 @@
 import { createDraftSafeSelector } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import simulationService from "../services/simulationService";
+import { isZoneComplete } from "../utils/utils";
 import { AppDispatch, RootState } from "./store";
 import { GenericParameters, ServerType } from "./types/generalFormTypes";
 import {
@@ -43,15 +44,17 @@ export function useCalculateImpact(): { energy: number; co2: number } {
   let energyTotal = 0;
   let co2Total = 0;
   zones.forEach((zone) => {
-    try {
-      const simulator = simulationService.simulator(zone, renewable);
-      if (simulator) {
-        const { energy, co2 } = simulator.simulate();
-        energyTotal += energy;
-        co2Total += co2;
+    if (isZoneComplete(zone)) {
+      try {
+        const simulator = simulationService.simulator(zone, renewable);
+        if (simulator) {
+          const { energy, co2 } = simulator.simulate();
+          energyTotal += energy;
+          co2Total += co2;
+        }
+      } catch (e) {
+        console.log(e);
       }
-    } catch (e) {
-      console.log(e);
     }
   });
   return { energy: nbVisits * energyTotal, co2: nbVisits * co2Total };
@@ -76,35 +79,37 @@ export function useCalculateRecommandationsImpact(): {
     renewable = recommandationRenewable.selectedValue === "better";
   }
   zones.forEach((zone) => {
-    // TODO optimize code + architecture
-    const zoneRecommandations = recommandations.filter(
-      (rec) => rec.zone_id === zone.id
-    );
-    const zoneParameters = { ...zone.params };
-    const simulatedZone = {
-      ...zone,
-      id: `simulated_${zone.id}`,
-      type: zone.zoneType,
-      params: zoneParameters,
-    };
-    for (const recommandation of zoneRecommandations) {
-      if (recommandation.selectedValue === "better") {
-        simulatedZone.params[recommandation.parameter] =
-          recommandation.betterValue;
-      } else if (recommandation.selectedValue === "optimal") {
-        simulatedZone.params[recommandation.parameter] =
-          recommandation.bestValue;
+      if (isZoneComplete(zone)) {
+      // TODO optimize code + architecture
+      const zoneRecommandations = recommandations.filter(
+        (rec) => rec.zone_id === zone.id
+      );
+      const zoneParameters = { ...zone.params };
+      const simulatedZone = {
+        ...zone,
+        id: `simulated_${zone.id}`,
+        type: zone.zoneType,
+        params: zoneParameters,
+      };
+      for (const recommandation of zoneRecommandations) {
+        if (recommandation.selectedValue === "better") {
+          simulatedZone.params[recommandation.parameter] =
+            recommandation.betterValue;
+        } else if (recommandation.selectedValue === "optimal") {
+          simulatedZone.params[recommandation.parameter] =
+            recommandation.bestValue;
+        }
       }
-    }
-    try {
-      const simulator = simulationService.simulator(simulatedZone, renewable);
-      if (simulator) {
-        const { energy, co2 } = simulator.simulate();
-        energyTotal += energy;
-        co2Total += co2;
+      try {
+        const simulator = simulationService.simulator(simulatedZone, renewable);
+        if (simulator) {
+          const { energy, co2 } = simulator.simulate();
+          energyTotal += energy;
+          co2Total += co2;
+        }
+      } catch (e) {
+        console.log(e);
       }
-    } catch (e) {
-      console.log(e);
     }
   });
   return { energy: nbVisits * energyTotal, co2: nbVisits * co2Total };

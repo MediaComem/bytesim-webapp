@@ -27,7 +27,7 @@ import { css } from "@emotion/css";
 import AccordionCustomTitle from "../layout/AccordionCustomTitle";
 import { recommandationsReset } from "../../features/recommandations/recommandationsSlice";
 import { ZoneListButton } from "./ZoneListButton";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 
 export default function ZonesList() {
   const dispatch = useDispatch();
@@ -36,7 +36,7 @@ export default function ZonesList() {
   const zones = useAppSelector(drawnZoneSelector);
   const project = state.project;
   const ZONE_TAB_INDEX = 0;
-  const [modalContent, setModalContent] = React.useState<{
+  const [modalContent, setModalContent] = useState<{
     modal: string;
     buttonLabel: string;
     onConfirm: () => void;
