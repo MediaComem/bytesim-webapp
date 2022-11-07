@@ -11,6 +11,7 @@ import { ImageFormEntries } from "../../app/types/imgTypes";
 import { Zone, ZoneType } from "../../app/types/types";
 import { VideoFormEntries } from "../../app/types/videoTypes";
 import AccordionChevron from "../layout/AccordionChevron";
+//import ConfirmModal, { confirmText } from "../layout/ConfirmModal";
 import ZoneSettingsForm from "./zones_settings/ZoneSettingsForm";
 
 interface ZoneParamsProps {
@@ -44,6 +45,7 @@ export default function ZoneParams({ zone }: ZoneParamsProps) {
     </>
   );
 }
+
 interface ZoneParamsFormProps {
   zoneId: string;
   zoneType: ZoneType;

@@ -1,17 +1,20 @@
-import { Flex } from "@chakra-ui/react";
+import { Flex, useDisclosure } from "@chakra-ui/react";
+import * as React from "react";
 import { css, cx } from "@emotion/css";
 import { useDispatch } from "react-redux";
 import { Rnd } from "react-rnd";
-import { Route, Routes } from "react-router-dom";
-import { useAppSelector } from "../../app/hooks";
+import { useAppSelector, useSelectedZone } from "../../app/hooks";
 import {
+  zoneDeleted,
   zoneActiveToggled,
   zoneUpdated,
 } from "../../features/zones/zonesSlice";
-import TestSVG from "../layout/TestSVG";
 import REHome from "../../assets/RE-homepage.jpg";
-import REabout from "../../assets/RE-about.jpg";
-import REmap from "../../assets/RE-map.jpg";
+import { Zone } from "../../app/types/types";
+import ConfirmModal, { confirmText } from "../layout/ConfirmModal";
+import { useLocation } from "react-router-dom";
+import UploadButton from "../project/UploadButton";
+
 const brandColor = "#ea62ea";
 const resizeHandleSVG = (
   <svg
@@ -60,23 +63,82 @@ const aboveZoneStyle = css({
 
 export default function ZonesView({
   disableEdition,
+  zoom,
 }: {
   disableEdition: boolean;
+  zoom: number;
 }) {
   const dispatch = useDispatch();
   const zones = useAppSelector((state) => state.zones);
+  const location = useLocation();
+  //Waiting for blob to be in S3 database
+  /* const projectScreenshot = useAppSelector(
+    (state) => state.project.screenshotBlob
+  ); */
+  const selectedZone = useSelectedZone();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const handleDelete = (e: KeyboardEvent) => {
+    if (e.key === "Backspace" || e.key === "Delete") {
+      onOpen();
+    }
+  };
+  React.useEffect(() => {
+    document.addEventListener("keydown", handleDelete);
+    return () => {
+      document.removeEventListener("keydown", handleDelete);
+    };
+  }, []);
   return (
     <Flex
       align={"flex-start"}
       justify={"flex-start"}
       pos={"relative"}
-      p={6}
+      p={1}
       overflow={"auto"}
       grow={1}
       alignSelf="stretch"
     >
-      <Flex opacity={0.5} width="400px" minWidth="400" maxWidth="400">
-        <Routes>
+      <ConfirmModal
+        texts={confirmText.deleteZone}
+        isOpen={isOpen}
+        onClose={onClose}
+        onConfirm={() => {
+          if (selectedZone) {
+            dispatch(zoneDeleted(selectedZone.id));
+          }
+          onClose();
+        }}
+      />
+      {location.pathname === "/bytesim-webapp/new" ? (
+        <UploadButton />
+      ) : (
+        <div>
+          <img
+            src={REHome}
+            alt="RE homepage"
+            className={css({
+              //objectFit: "scale-down",
+              transform: `scale(${zoom})`,
+              transformOrigin: "top left",
+              display: "block",
+              maxWidth: "300px",
+              maxHeight: "550px",
+              width: "auto",
+              height: "auto",
+              padding: "10px",
+              boxSizing: "border-box",
+              opacity: 0.5,
+            })}
+          />
+        </div>
+      )}
+      {/* {projectScreenshot ? (
+            <img src={projectScreenshot} alt="screenshot" />
+          ) : (
+            <img src={REHome} alt="RE homepage" />
+       )} */}
+      {/*
+         <Routes>
           <Route
             path="bytesim-webapp/1/*"
             element={
@@ -117,48 +179,95 @@ export default function ZonesView({
               </Flex>
             }
           />
-        </Routes>
-      </Flex>
+        </Routes> */}
+
       {zones.map((z) => {
         return (
-          <Rnd
+          <ZoneFrame
             key={z.id}
-            default={{
-              x: z.x,
-              y: z.y,
-              width: z.width,
-              height: z.height,
-            }}
-            className={cx(zoneStyle, {
-              [selectedZoneStyle]: z.status === "EDITING",
-            })}
-            onMouseDown={() => dispatch(zoneActiveToggled(z.id))}
-            enableResizing={z.status === "EDITING" && !disableEdition}
-            disableDragging={disableEdition}
-            onResizeStop={(e, direction, ref, delta, position) => {
-              const newZone = {
-                id: z.id,
-                x: position.x,
-                y: position.y,
-                width: z.width + delta.width,
-                height: z.height + delta.height,
-              };
-              dispatch(zoneUpdated(newZone));
-            }}
-            onDragStop={(e, d) => {
-              const newPos = {
-                id: z.id,
-                x: d.x,
-                y: d.y,
-              };
-              dispatch(zoneUpdated(newPos));
-            }}
-            resizeHandleComponent={handleComp}
-          >
-            <p className={aboveZoneStyle}>{z.name}</p>
-          </Rnd>
+            zone={z}
+            disableEdition={disableEdition}
+            zoom={zoom}
+          />
         );
       })}
     </Flex>
+  );
+}
+
+interface ZoneFrameProps {
+  //RCmenustate:RightClickMenuState;
+  zone: Zone;
+  disableEdition: boolean;
+  zoom: number;
+}
+function ZoneFrame({
+  //RCmenustate,
+  zone,
+  disableEdition,
+  zoom,
+}: ZoneFrameProps) {
+  const dispatch = useDispatch();
+  const selectedZone = useSelectedZone();
+  return (
+    <Rnd
+      key={zone.id}
+      id={zone.id}
+      default={{
+        x: zone.x,
+        y: zone.y,
+        width: zone.width,
+        height: zone.height,
+      }}
+      size={{
+        width: zone.width * zoom,
+        height: zone.height * zoom,
+      }}
+      position={{
+        x: zone.x * zoom,
+        y: zone.y * zoom,
+      }}
+      className={
+        "rightClickable " +
+        cx(zoneStyle, {
+          [selectedZoneStyle]: zone.status === "EDITING",
+        })
+      }
+      onMouseDown={(e) => {
+        const MOUSE_MAIN_BUTTON = 0;
+        const MOUSE_RIGHT_BUTTON = 2;
+        if (
+          e.button === MOUSE_MAIN_BUTTON ||
+          (e.button === MOUSE_RIGHT_BUTTON && zone.id !== selectedZone?.id)
+        ) {
+          dispatch(zoneActiveToggled(zone.id));
+        }
+      }}
+      enableResizoneing={zone.status === "EDITING" && !disableEdition}
+      disableDragging={disableEdition}
+      onResizeStop={(e, direction, ref, delta, position) => {
+        console.log("width " + delta.width + " height " + delta.height);
+        console.log("X " + position.x + " Y " + position.y);
+        const newZone = {
+          id: zone.id,
+          x: position.x / zoom,
+          y: position.y / zoom,
+          width: zone.width + delta.width / zoom,
+          height: zone.height + delta.height / zoom,
+        };
+        dispatch(zoneUpdated(newZone));
+      }}
+      onDragStop={(e, d) => {
+        const newPos = {
+          id: zone.id,
+          x: d.x / zoom,
+          y: d.y / zoom,
+        };
+        dispatch(zoneUpdated(newPos));
+      }}
+      resizeHandleComponent={handleComp}
+    >
+      <p className={aboveZoneStyle}>{zone.name}</p>
+    </Rnd>
   );
 }

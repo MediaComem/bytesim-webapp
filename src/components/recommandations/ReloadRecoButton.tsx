@@ -44,6 +44,3 @@ export default function ReloadRecoButton() {
     </>
   );
 }
-function recommandationsGeneric() {
-  throw new Error("Function not implemented.");
-}

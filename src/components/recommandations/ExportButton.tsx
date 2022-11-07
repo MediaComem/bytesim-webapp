@@ -13,6 +13,7 @@ const navigate = useNavigate();
             navigate('/bytesim-webapp/export');
         }}
         size='sm'
+        minWidth='min-content'
       >
         Export
       </Button>
