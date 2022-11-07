@@ -8,19 +8,27 @@ import ReportExportTemplate from "./components/recommandations/ReportExportTempl
 function App() {
   return (
     <BrowserRouter>
-    <div
-      className={
-        "App " +
-        css({ display: "flex", flexDirection: "column", height: "100vh", overflow: 'hidden' })
-      }
-    >
-      <BytesimeHeader />
-      <Routes>
-        <Route path="/*" element={<Home />}/>
-        <Route path="export" element={<ReportExportTemplate/>}/>
-        <Route path="bytesim-webapp/export" element={<ReportExportTemplate/>}/>
-      </Routes>
-    </div>
+      <div
+        className={
+          "App " +
+          css({
+            display: "flex",
+            flexDirection: "column",
+            height: "100vh",
+            overflow: "hidden",
+          })
+        }
+      >
+        <BytesimeHeader />
+        <Routes>
+          <Route path="/*" element={<Home />} />
+          <Route path="export" element={<ReportExportTemplate />} />
+          <Route
+            path="bytesim-webapp/export"
+            element={<ReportExportTemplate />}
+          />
+        </Routes>
+      </div>
     </BrowserRouter>
   );
 }

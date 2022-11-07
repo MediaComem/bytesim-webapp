@@ -8,6 +8,10 @@ import { store } from "./app/store";
 import { Provider } from "react-redux";
 import theme from "./theme";
 
+import { createStandaloneToast } from "@chakra-ui/toast";
+
+const { ToastContainer, toast } = createStandaloneToast();
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -16,6 +20,7 @@ root.render(
     <Provider store={store}>
       <ChakraProvider theme={theme}>
         <App />
+        <ToastContainer />
       </ChakraProvider>
     </Provider>
   </React.StrictMode>
@@ -25,3 +30,6 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+
+// export toast
+export { toast };

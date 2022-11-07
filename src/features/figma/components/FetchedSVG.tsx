@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from "react";
+import React, { memo } from "react";
 import SVG from "react-inlinesvg";
 import { useDispatch } from "react-redux";
 
@@ -15,7 +15,18 @@ import {
   zonesSetTree,
   zonesUpdatedByElementId,
 } from "../../zones/zonesSlice";
+import { toast } from "../../..";
+import { debounce } from "lodash";
 
+const displayToastWarning = debounce(() => {
+  toast({
+    title: "Warning",
+    description: "The url to import the file is not valid",
+    status: "warning",
+    duration: 3000,
+    isClosable: true,
+  });
+}, 1000);
 export const getSvgUrlFromCurrentUrl = () => {
   // get current url
   const url = window.location.href;
@@ -27,6 +38,11 @@ export const getSvgUrlFromCurrentUrl = () => {
   // if some of the object are not defined return the default test url
   const defaultUrl =
     "https://bytesim-bucket.s3.eu-west-3.amazonaws.com/1350067722696166.5_bytesimname_bytesim_dev___Page_1.svg";
+  // // TODO: to display a warning instead of using the default url after tests
+  // if (!bytesimBucket || !region || !key) {
+  //   displayToastWarning();
+  //   return "";
+  // }
   if (!bytesimBucket || !region || !key) return defaultUrl;
 
   // the url is formed like this https://bucket-name.s3.Region.amazonaws.com/key-name
