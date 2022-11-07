@@ -35,11 +35,9 @@ import { css, cx } from "@emotion/css";
 import AccordionCustomTitle from "../layout/AccordionCustomTitle";
 import AccordionChevron from "../layout/AccordionChevron";
 import ProgressPoints from "../layout/ProgressPoints";
-import { VideoFormEntries } from "../../app/types/videoTypes";
 import { colorTheme } from "../..";
 import { recommandationsReset } from "../../features/recommandations/recommandationsSlice";
-import { ImageFormEntries } from "../../app/types/imgTypes";
-import { DynContentFormEntries } from "../../app/types/dynContentTypes";
+import { getTypeEntries } from "../../utils/utils";
 
 export interface DynamicModalParams extends ModalParams {
   onConfirm: () => void;
@@ -194,16 +192,6 @@ function ZoneListButton({ zone, isExpanded, onOpen }: ZoneListButtonProps) {
     }
     setEditNameMode(false);
   };
-  const getCompleteObject = (typeOfZone: ZoneType) => {
-    switch (typeOfZone) {
-      case ZoneType.Video:
-        return VideoFormEntries;
-      case ZoneType.Images:
-        return ImageFormEntries;
-      case ZoneType.DynamicContent:
-        return DynContentFormEntries;
-    }
-  };
   return (
     <>
       <Box
@@ -275,7 +263,7 @@ function ZoneListButton({ zone, isExpanded, onOpen }: ZoneListButtonProps) {
           </Text>
           {zone.zoneType && (
             <ProgressPoints
-              completeObject={getCompleteObject(zone.zoneType)}
+              completeObject={getTypeEntries(zone.zoneType)}
               params={zone.params}
             />
           )}

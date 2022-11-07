@@ -22,11 +22,16 @@ import GeneralFormAccordion from "./components/project/GeneralForm";
 import ZonesList from "./components/zones/ZonesList";
 import ZonesView from "./components/zones/ZonesView";
 import { projectReset } from "./features/project/projectSlice";
-import { allZonesReset, zoneAdded } from "./features/zones/zonesSlice";
+import {
+  allZonesReset,
+  getUncompleteZones,
+  zoneAdded,
+} from "./features/zones/zonesSlice";
 import { ReactComponent as ResetIcon } from "./assets/ResetIcon_Active_MouseOver.svg";
 import ExportButton from "./components/recommandations/ExportButton";
 import "react-reflex/styles.css";
 import { ReflexContainer, ReflexElement, ReflexSplitter } from "react-reflex";
+import RecoWarning from "./components/recommandations/RecoWarning";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -35,6 +40,8 @@ export default function Home() {
   const project = state.project;
   const [zoom, setZoom] = React.useState<number>(100);
   const [showTooltip, setShowTooltip] = React.useState(false);
+  //const navigate = useNavigate();
+  const uncompleteZones = useAppSelector(getUncompleteZones);
   return (
     <ReflexContainer
       orientation="vertical"
@@ -231,6 +238,9 @@ export default function Home() {
             </Flex>
           }
         >
+          {uncompleteZones.length !== 0 && (
+          <RecoWarning uncompleteZoneNames={uncompleteZones} />
+        )}
           <RecoReport />
         </Panel>
       </ReflexElement>

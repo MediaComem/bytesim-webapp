@@ -127,7 +127,7 @@ export default function ZonesView({
               height: "auto",
               padding: "10px",
               boxSizing: "border-box",
-              opacity: 0.5
+              opacity: 0.5,
             })}
           />
         </div>
@@ -208,7 +208,7 @@ function ZoneFrame({
   zoom,
 }: ZoneFrameProps) {
   const dispatch = useDispatch();
-
+  const selectedZone = useSelectedZone();
   return (
     <Rnd
       key={zone.id}
@@ -233,18 +233,27 @@ function ZoneFrame({
           [selectedZoneStyle]: zone.status === "EDITING",
         })
       }
-      onMouseDown={() => dispatch(zoneActiveToggled(zone.id))}
+      onMouseDown={(e) => {
+        const MOUSE_MAIN_BUTTON = 0;
+        const MOUSE_RIGHT_BUTTON = 2;
+        if (
+          e.button === MOUSE_MAIN_BUTTON ||
+          (e.button === MOUSE_RIGHT_BUTTON && zone.id !== selectedZone?.id)
+        ) {
+          dispatch(zoneActiveToggled(zone.id));
+        }
+      }}
       enableResizoneing={zone.status === "EDITING" && !disableEdition}
       disableDragging={disableEdition}
       onResizeStop={(e, direction, ref, delta, position) => {
-        console.log('width ' + delta.width + ' height ' + delta.height);
-        console.log('X ' + position.x + ' Y ' + position.y);
+        console.log("width " + delta.width + " height " + delta.height);
+        console.log("X " + position.x + " Y " + position.y);
         const newZone = {
           id: zone.id,
           x: position.x / zoom,
           y: position.y / zoom,
-          width: zone.width + (delta.width / zoom),
-          height: zone.height + (delta.height / zoom),
+          width: zone.width + delta.width / zoom,
+          height: zone.height + delta.height / zoom,
         };
         dispatch(zoneUpdated(newZone));
       }}
