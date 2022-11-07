@@ -12,7 +12,7 @@ import REabout from "../../assets/RE-about.jpg";
 import REmap from "../../assets/RE-map.jpg";
 import { colorTheme } from "../../theme";
 
-import { ZONES_MAX_WIDTH } from "../../services/conts";
+import { ZONES_MAX_WIDTH } from "../../services/const";
 import { ZONES_CONTAINER_PADDING } from "../../features/figma/utils";
 import {
   zoneActiveToggled,
