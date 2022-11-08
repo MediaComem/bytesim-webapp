@@ -9,6 +9,7 @@ export interface Project {
   name: string;
   status: ProjectStatus;
   params: GenericParameters;
+  screenshotBlob?: string;
 }
 
 export interface User {

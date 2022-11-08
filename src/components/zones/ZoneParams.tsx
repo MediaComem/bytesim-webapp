@@ -10,6 +10,7 @@ import { VideoFormEntries } from "../../app/types/videoTypes";
 import { DynContentFormEntries } from "../../app/types/dynContentTypes";
 import { ImageFormEntries } from "../../app/types/imgTypes";
 import AccordionChevron from "../layout/AccordionChevron";
+//import ConfirmModal, { confirmText } from "../layout/ConfirmModal";
 import ZoneSettingsForm from "./zones_settings/ZoneSettingsForm";
 
 interface ZoneParamsProps {
@@ -43,6 +44,7 @@ export default function ZoneParams({ zone }: ZoneParamsProps) {
     </>
   );
 }
+
 interface ZoneParamsFormProps {
   zoneId: string;
   zoneType: ZoneType;
