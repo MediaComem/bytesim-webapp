@@ -108,7 +108,10 @@ export default function ZonesList() {
               <Accordion allowToggle>
                 {drawnZones.map((z, i) => {
                   return (
-                    <Fragment key={`${z.id}_${i}`}>
+                    <Fragment
+                      key={z.id}
+                      // key={`${z.id}_${i}`} //TODO: @audreyhuguenin https://github.com/MediaComem/bytesim-webapp/pull/56#discussion_r1015274263
+                    >
                       <AccordionItem key={`${z.id}_${i}`} border="none">
                         {({ isExpanded }) => (
                           <>
