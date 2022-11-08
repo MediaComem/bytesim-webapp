@@ -1,4 +1,4 @@
-import { Button, Divider, Flex, Heading } from "@chakra-ui/react";
+import { Box, Button, Divider, Flex, Heading } from "@chakra-ui/react";
 //import html2canvas from "html2canvas";
 //import JsPDF from "jspdf";
 import { useRef } from "react";
@@ -10,6 +10,7 @@ export default function ReportExportTemplate() {
   const navigate = useNavigate();
   const HTML_TO_EXPORT = useRef<any>(null);
   const recos = useAppSelector((state) => state.recommandations);
+  const projectName = useAppSelector((state) => state.project.name);
   // export function with libs html2Canvas and jsPdf if wanted in future
   /* const generatePDF = () => {
     html2canvas(HTML_TO_EXPORT.current, {
@@ -43,8 +44,20 @@ export default function ReportExportTemplate() {
   }; */
   return (
     <>
-      <Flex direction="column" p={4} w={"180mm"} alignSelf="center" id='reportToPrint' overflow={'hidden'}>
-        <Flex justify={"space-between"} align={"flex-end"} pb={4} id='exportToolbox'>
+      <Flex
+        direction="column"
+        p={4}
+        w={"180mm"}
+        alignSelf="center"
+        id="reportToPrint"
+        overflow={"hidden"}
+      >
+        <Flex
+          justify={"space-between"}
+          align={"flex-end"}
+          pb={4}
+          id="exportToolbox"
+        >
           <Heading size={"md"}>Report export</Heading>
           <div>
             <Button
@@ -55,7 +68,12 @@ export default function ReportExportTemplate() {
             >
               Cancel
             </Button>
-            <Button onClick={() => { window.print() }} colorScheme="brand">
+            <Button
+              onClick={() => {
+                window.print();
+              }}
+              colorScheme="brand"
+            >
               Export in PDF
             </Button>
           </div>
@@ -66,15 +84,23 @@ export default function ReportExportTemplate() {
           p={4}
           ref={HTML_TO_EXPORT}
           direction="column"
-          overflow={'auto'}
+          overflow={"auto"}
         >
-          <Heading
-            size={"md"}
-            borderBottom="1px solid lightgrey"
-            lineHeight={10}
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
           >
-            ByteSim report
-          </Heading>
+            <Heading
+              size={"md"}
+              borderBottom="1px solid lightgrey"
+              lineHeight={10}
+            >
+              ByteSim report
+            </Heading>
+            <Box>{projectName}</Box>
+          </Box>
+
           <Divider />
           <ReportBody allOpen={true} customRecos={recos} />
         </Flex>

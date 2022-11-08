@@ -1,4 +1,4 @@
-import { Divider, Flex } from "@chakra-ui/react";
+import { Box, Divider, Flex } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import {
@@ -51,10 +51,12 @@ export function ReportBody({
     );
   }, [zones, projectGeneralParams]);
   const recos = useAppSelector((state) => state.recommandations);
+  const project = useAppSelector((state) => state.project);
   return (
     <Flex direction={"column"} id="TO_EXPORT" className={className}>
       <ReportGeneralInfo />
       <Divider />
+      <Box p={2}>Estimated visit/month : {project.params.nbVisit}</Box>
       <ReportToolBar />
       <Divider />
       {recos.length > 0 ? (
