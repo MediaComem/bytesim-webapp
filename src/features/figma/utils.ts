@@ -16,7 +16,6 @@ const HIGHLIGHT_STYLE = {
 };
 
 export const REMOTE_PARENT_SVG_ID = "REMOTE_PARENT_SVG_ID";
-export const ZONES_CONTAINER_PADDING = 6; // rem
 
 export const getRelativePosition = (elementId: string) => {
   const parent = document.getElementById(REMOTE_PARENT_SVG_ID);
@@ -24,8 +23,8 @@ export const getRelativePosition = (elementId: string) => {
   if (!element || !parent) return;
   const { top, left, width, height } = element.getBoundingClientRect();
   const { top: parentTop, left: parentLeft } = parent.getBoundingClientRect();
-  const x = left - parentLeft + ZONES_CONTAINER_PADDING * 4;
-  const y = top - parentTop + ZONES_CONTAINER_PADDING * 4;
+  const x = left - parentLeft;
+  const y = top - parentTop;
   return {
     y,
     x,

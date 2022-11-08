@@ -88,7 +88,7 @@ class simulationService {
     renewable: boolean
   ): SimulatorVideo | SimulatorImages | undefined {
     if (!zone.params) {
-      console.log(`No parameters for Zone ${zone.id}`);
+      // console.log(`No parameters for Zone ${zone.id}`);
       return undefined;
     }
     switch (zone.zoneType) {
