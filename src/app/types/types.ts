@@ -1,4 +1,3 @@
-
 import { GenericParameters } from "./generalFormTypes";
 
 import { ImageParameters } from "./imgTypes";
@@ -27,6 +26,14 @@ export interface ZoneInfo {
   width: number;
   height: number;
   status: ZoneStatus;
+  createdFrom?: "user" | "figma";
+  // only for figma fields
+  hidden?: boolean;
+  elementId?: string;
+  initWidth?: number;
+  initHeight?: number;
+  initX?: number;
+  initY?: number;
 }
 
 export interface ZoneUnknown extends ZoneInfo {
@@ -44,12 +51,33 @@ export interface ZoneImages extends ZoneInfo {
   params?: ImageParameters;
 }
 
-export interface ZoneDynamic extends ZoneInfo {
-  zoneType: ZoneType.DynamicContent;
-  params?: any
+export interface ZoneText extends ZoneInfo {
+  zoneType: ZoneType.Text;
+  params?: any;
 }
 
-export type Zone = ZoneUnknown | ZoneVideo | ZoneImages | ZoneDynamic;
+export interface ZoneDynamic extends ZoneInfo {
+  zoneType: ZoneType.DynamicContent;
+  params?: any;
+}
+
+export type Zone =
+  | ZoneUnknown
+  | ZoneVideo
+  | ZoneImages
+  | ZoneText
+  | ZoneDynamic;
+
+export type ZoneFigma = Omit<Zone, "createdFrom"> & {
+  id: string;
+  createdFrom: "figma";
+  elementId: string;
+  hidden?: boolean;
+};
+export type TreeZoneEl = {
+  id: string;
+  children?: TreeZoneEl[];
+};
 
 export type ProjectStatus = "EDITING" | "SIMULATION" | "LOADING";
 export type ZoneStatus = "EDITING" | "ACTIVE" | "LOADING";
@@ -59,10 +87,14 @@ export enum ZoneType {
   Video = "Video",
   Images = "Images",
   DynamicContent = "DynamicContent",
+  Text = "Text",
 }
 
 export type FormsType = ZoneParamsType | GenericParameters;
-export type ZoneParamsType = VideoParameters | ImageParameters | DynContentParameters;
+export type ZoneParamsType =
+  | VideoParameters
+  | ImageParameters
+  | DynContentParameters;
 
 export enum EBoolean {
   YES = "Yes",

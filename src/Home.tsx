@@ -12,7 +12,6 @@ import {
 import { css } from "@emotion/css";
 import * as React from "react";
 import { useDispatch } from "react-redux";
-import { colorTheme } from ".";
 import { useAppSelector } from "./app/hooks";
 import ConfirmModal, { confirmText } from "./components/layout/ConfirmModal";
 import Panel from "./components/layout/Panel";
@@ -22,16 +21,18 @@ import GeneralFormAccordion from "./components/project/GeneralForm";
 import ZonesList from "./components/zones/ZonesList";
 import ZonesView from "./components/zones/ZonesView";
 import { projectReset } from "./features/project/projectSlice";
+
+import { ReactComponent as ResetIcon } from "./assets/ResetIcon_Active_MouseOver.svg";
+import ExportButton from "./components/recommandations/ExportButton";
+import { colorTheme } from "./theme";
+import RecoWarning from "./components/recommandations/RecoWarning";
 import {
   allZonesReset,
   getUncompleteZones,
   zoneAdded,
 } from "./features/zones/zonesSlice";
-import { ReactComponent as ResetIcon } from "./assets/ResetIcon_Active_MouseOver.svg";
-import ExportButton from "./components/recommandations/ExportButton";
 import "react-reflex/styles.css";
 import { ReflexContainer, ReflexElement, ReflexSplitter } from "react-reflex";
-import RecoWarning from "./components/recommandations/RecoWarning";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -149,10 +150,10 @@ export default function Home() {
                       label={`${zoom}%`}
                     >
                       <SliderThumb
-                      className={css({ boxShadow: "none" })}
-                      width="10px"
-                      height="10px"
-                    />
+                        className={css({ boxShadow: "none" })}
+                        width="10px"
+                        height="10px"
+                      />
                     </Tooltip>
                   </Slider>
                   <Button
@@ -239,8 +240,8 @@ export default function Home() {
           }
         >
           {uncompleteZones.length !== 0 && (
-          <RecoWarning uncompleteZoneNames={uncompleteZones} />
-        )}
+            <RecoWarning uncompleteZoneNames={uncompleteZones} />
+          )}
           <RecoReport />
         </Panel>
       </ReflexElement>

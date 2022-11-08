@@ -2,13 +2,13 @@ import { Button } from "@chakra-ui/react";
 import { css } from "@emotion/css";
 import * as React from "react";
 import { useDispatch } from "react-redux";
-import { colorTheme } from "../..";
 import {
   useCalculateAllRecommandations,
   useCalculateGenericRecommandations,
 } from "../../app/hooks";
 import { ReactComponent as ResetIcon } from "../../assets/ResetIcon_Active_MouseOver.svg";
 import { recommandationsPopulated } from "../../features/recommandations/recommandationsSlice";
+import { colorTheme } from "../../theme";
 //import { useNavigate } from "react-router-dom";
 
 export default function ReloadRecoButton() {

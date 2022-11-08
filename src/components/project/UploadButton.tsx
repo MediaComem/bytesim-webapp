@@ -14,7 +14,7 @@ import * as React from "react";
 import { useDispatch } from "react-redux";
 import { projectUpdated } from "../../features/project/projectSlice";
 import { ReactComponent as AddIcon } from "../../assets/BigPlus.svg";
-import { colorTheme } from "../..";
+import { colorTheme } from "../../theme";
 
 export default function UploadButton() {
   const dispatch = useDispatch();
@@ -29,7 +29,7 @@ export default function UploadButton() {
         justifyContent={"center"}
         alignSelf="stretch"
         onClick={onOpen}
-        _hover={{ backgroundColor: colorTheme[50], cursor: 'pointer' }}
+        _hover={{ backgroundColor: colorTheme[50], cursor: "pointer" }}
       >
         <Flex direction="column" align="center">
           <AddIcon />
