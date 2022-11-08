@@ -26,6 +26,7 @@ import { zoneReset, zoneUpdated } from "../../features/zones/zonesSlice";
 interface ZoneListButtonProps {
   zone: Zone;
   onOpen?: () => void;
+  onToggleExpend?: () => void;
   isExpanded: boolean;
   buttonDelete?: any;
   hiddenMode?: boolean;
@@ -35,6 +36,7 @@ export function ZoneListButton({
   zone,
   isExpanded,
   onOpen,
+  onToggleExpend,
   buttonDelete,
   hiddenMode = false,
 }: ZoneListButtonProps) {
@@ -85,7 +87,7 @@ export function ZoneListButton({
               <OpenIcon />
             </Box>
           ) : (
-            <AccordionButton p={1} width="auto">
+            <AccordionButton p={1} width="auto" onClick={onToggleExpend}>
               <AccordionChevron isExpanded={isExpanded} />
             </AccordionButton>
           )}

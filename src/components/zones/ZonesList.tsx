@@ -26,6 +26,7 @@ import {
   allZonesDeleted,
   allZonesReset,
   getSelectedZoneIndex,
+  zoneActiveToggled,
   zoneDeleted,
 } from "../../features/zones/zonesSlice";
 
@@ -115,6 +116,9 @@ export default function ZonesList() {
                           <>
                             <ZoneListButton
                               zone={z}
+                              onToggleExpend={() =>
+                                dispatch(zoneActiveToggled(z.id))
+                              }
                               onOpen={() => {
                                 setModalContent({
                                   ...confirmText.deleteZone,
