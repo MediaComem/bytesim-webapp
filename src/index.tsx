@@ -3,12 +3,10 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { ChakraProvider } from "@chakra-ui/react";
+import { createStandaloneToast, ChakraProvider } from "@chakra-ui/react";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
 import theme from "./theme";
-
-import { createStandaloneToast } from "@chakra-ui/toast";
 
 const { ToastContainer, toast } = createStandaloneToast();
 
