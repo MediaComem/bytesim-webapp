@@ -13,7 +13,7 @@ import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/hooks";
 
 import AccordionItemTitleCustom from "../layout/AccordionItemTitleCustom";
-import ConfirmModal from "../layout/ConfirmModal";
+import ConfirmModal, { confirmText, ModalParams } from "../layout/ConfirmModal";
 import ZoneParams from "./ZoneParams";
 import { ReactComponent as ResetIcon } from "../../assets/ResetIcon_Active_MouseOver.svg";
 import { ReactComponent as TrashIcon } from "../../assets/TEMP_trash.svg";
@@ -25,8 +25,13 @@ import { Fragment, useState } from "react";
 import {
   allZonesDeleted,
   allZonesReset,
+  getSelectedZoneIndex,
   zoneDeleted,
 } from "../../features/zones/zonesSlice";
+
+export interface DynamicModalParams extends ModalParams {
+  onConfirm: () => void;
+}
 
 export default function ZonesList() {
   const dispatch = useDispatch();
@@ -35,17 +40,13 @@ export default function ZonesList() {
   const drawnZones = useAppSelector((state) =>
     state.zonesSlice.zones.filter((zone) => zone.createdFrom === "user")
   );
-
-  const ZONE_TAB_INDEX = 0;
-  const [modalContent, setModalContent] = useState<{
-    modal: string;
-    buttonLabel: string;
-    onConfirm: () => void;
-  }>({
-    modal: "",
-    buttonLabel: "Confirm",
+  const [modalContent, setModalContent] = useState<DynamicModalParams>({
+    title: "",
+    text: "",
     onConfirm: () => {},
   });
+  const ZONE_TAB_INDEX = 0;
+  const openedZoneIndex = useAppSelector(getSelectedZoneIndex);
   return (
     //default index is set to 0 to open zone tab by default
     <Accordion allowToggle defaultIndex={[ZONE_TAB_INDEX]}>
@@ -65,9 +66,7 @@ export default function ZonesList() {
                   size="sm"
                   onClick={() => {
                     setModalContent({
-                      modal:
-                        "Are you sure you want to reset all zones? It will delete all provided data.",
-                      buttonLabel: "Reset all zones",
+                      ...confirmText.resetAllZones,
                       onConfirm: () => {
                         dispatch(allZonesReset());
                         dispatch(recommandationsReset());
@@ -88,11 +87,10 @@ export default function ZonesList() {
                   size="sm"
                   onClick={() => {
                     setModalContent({
-                      modal:
-                        "Are you sure you want to delete all zones? It will delete all drawn zones on the view panel and all data.",
-                      buttonLabel: "Delete all zones",
+                      ...confirmText.deleteAllZones,
                       onConfirm: () => {
                         dispatch(allZonesDeleted());
+                        //dispatch(recommandationsReset());
                       },
                     });
                     onOpen();
@@ -105,7 +103,7 @@ export default function ZonesList() {
               </Flex>
             </AccordionItemTitleCustom>
             <AccordionPanel p={0}>
-              <Accordion allowToggle>
+              <Accordion allowToggle index={[openedZoneIndex]}>
                 {drawnZones.map((z, i) => {
                   return (
                     <Fragment
@@ -119,11 +117,10 @@ export default function ZonesList() {
                               zone={z}
                               onOpen={() => {
                                 setModalContent({
-                                  modal:
-                                    "Are you sure you want to delete the zone? It will delete the associated form too.",
-                                  buttonLabel: "Delete zone",
+                                  ...confirmText.deleteZone,
                                   onConfirm: () => {
                                     dispatch(zoneDeleted(z.id));
+                                    dispatch(recommandationsReset());
                                   },
                                 });
                                 onOpen();
@@ -149,9 +146,7 @@ export default function ZonesList() {
               </Accordion>
             </AccordionPanel>
             <ConfirmModal
-              headerText={modalContent.buttonLabel}
-              message={modalContent.modal}
-              buttonLabel={modalContent.buttonLabel}
+              texts={modalContent}
               isOpen={isOpen}
               onClose={onClose}
               onConfirm={() => {

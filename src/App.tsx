@@ -4,6 +4,7 @@ import BytesimeHeader from "./components/layout/ByteSimHeader";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./Home";
 import ReportExportTemplate from "./components/recommandations/ReportExportTemplate";
+import RightClickMenu from "./components/layout/RightClickMenu";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           })
         }
       >
+        <RightClickMenu />
         <BytesimeHeader />
         <Routes>
           <Route path="/*" element={<Home />} />

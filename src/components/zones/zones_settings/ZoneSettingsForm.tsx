@@ -14,7 +14,7 @@ import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../app/hooks";
 import { Zone, ZoneType } from "../../../app/types/types";
 import { zoneUpdated } from "../../../features/zones/zonesSlice";
-import ConfirmModal from "../../layout/ConfirmModal";
+import ConfirmModal, { confirmText } from "../../layout/ConfirmModal";
 
 interface VideoFormProps {
   zoneId: string;
@@ -34,7 +34,7 @@ export default function ZoneSettingsForm({
   const zone = useAppSelector((state) =>
     state.zonesSlice.zones.find((z) => z.id === zoneId)
   );
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { onOpen, onClose } = useDisclosure();
   const [pendingKey, setPendingKey] = React.useState("");
   const [pendingValue, setPendingValue] = React.useState("");
   if (zone) {
@@ -83,21 +83,14 @@ export default function ZoneSettingsForm({
     }, [pendingKey, pendingValue]);
     return (
       <Flex direction={"column"} pl={14}>
-        <ConfirmModal
-          headerText={"Change zone type"}
-          message={`Are you sure you want to change the type of ${zone.name}? It will delete all the provided data in other type.`}
-          buttonLabel={"Change type"}
-          isOpen={isOpen}
-          onClose={() => {
+        <ConfirmModalChangeType onConfirm={() => {
+            setParamValue();
+            onClose();
+          }} onClose={() => {
             setPendingKey("");
             setPendingValue("");
             onClose();
-          }}
-          onConfirm={() => {
-            setParamValue();
-            onClose();
-          }}
-        />
+          }}/>
         <div>
           {Object.entries(formEntries).map(([key, value]) => {
             const handleValueChange = (value: string) => {
@@ -170,4 +163,20 @@ export default function ZoneSettingsForm({
   } else {
     return <></>;
   }
+}
+
+function ConfirmModalChangeType({ onConfirm, onClose }: { onConfirm?: () => void, onClose: () => void }) {
+  const { isOpen } = useDisclosure();
+  return (
+    <ConfirmModal
+      texts={confirmText.changeZoneType}
+      isOpen={isOpen}
+      onClose={onClose}
+      onConfirm={() => {
+        if (onConfirm) {
+          onConfirm();
+        }
+      }}
+    />
+  );
 }

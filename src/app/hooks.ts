@@ -161,3 +161,12 @@ export function useCalculateRecommandationsForZone(
   }
   return recommandations;
 }
+
+export function useSelectedZone(): Zone | undefined {
+  let zone;
+  const zones = useAppSelector((state) => state.zones);
+  zones.forEach((z) => {
+    if (z.status === "EDITING") zone = z;
+  });
+  return zone;
+}

@@ -53,7 +53,7 @@ export default function RecommandationDisplay({
           <AccordionButton _hover={{ backgroundColor: "brand.100" }} pl={2}>
             <Box flex="1" textAlign="left">
               <Heading mr={1} size="sm">
-                {recommandation.zoneName} - {recommandation.id}
+                {recommandation.zoneName}
               </Heading>
               <ZoneScreenshot zoneId={recommandation.zoneId} />
               <Flex>
