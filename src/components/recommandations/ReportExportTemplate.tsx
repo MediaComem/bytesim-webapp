@@ -85,6 +85,7 @@ export default function ReportExportTemplate() {
           ref={HTML_TO_EXPORT}
           direction="column"
           overflow={"auto"}
+          id="report"
         >
           <Box
             display="flex"

@@ -1,4 +1,6 @@
 @media print {
+.App {overflow: inherit !important}
 #header { display: none;}
+#reportToPrint {overflow: inherit}
 #reportToPrint #exportToolbox { display: none;}
 }
