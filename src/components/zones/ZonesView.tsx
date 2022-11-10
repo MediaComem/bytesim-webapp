@@ -4,7 +4,7 @@ import { useAppZones } from "../../app/hooks";
 import FetchedSVG from "../../features/figma/components/FetchedSVG";
 import { ZONES_MAX_WIDTH } from "../../services/const";
 import ZoneFrame from "./ZoneFrame";
-import REHome from "../../assets/RE-homepage.jpg"
+import REHome from "../../assets/RE-homepage.jpg";
 import { css } from "@emotion/css";
 import UploadButton from "../project/UploadButton";
 
@@ -27,7 +27,6 @@ export default function ZonesView({
       alignSelf="stretch"
     >
       <Flex
-        opacity={0.5}
         width={`${ZONES_MAX_WIDTH * zoom}px`}
         minWidth={`${ZONES_MAX_WIDTH * zoom}px`}
         maxWidth={`${ZONES_MAX_WIDTH * zoom}px`}
@@ -37,37 +36,36 @@ export default function ZonesView({
           <Route
             path="bytesim-webapp/figma/*"
             element={
-              <Flex>
+              <Flex opacity={0.5}>
                 <FetchedSVG />
               </Flex>
             }
           />
-          <Route path="bytesim-webapp/*"
+          <Route
+            path="bytesim-webapp/"
             element={
-              <Flex>
-                 <img
-            src={REHome}
-            alt="RE homepage"
-            className={css({
-              //objectFit: "scale-down",
-              transform: `scale(${zoom})`,
-              transformOrigin: "top left",
-              display: "block",
-              maxWidth: "300px",
-              maxHeight: "550px",
-              width: "auto",
-              height: "auto",
-              padding: "10px",
-              boxSizing: "border-box",
-              opacity: 0.5,
-            })}
-          />
+              <Flex opacity={0.5}>
+                <img
+                  src={REHome}
+                  alt="RE homepage"
+                  className={css({
+                    //objectFit: "scale-down",
+                    transform: `scale(${zoom})`,
+                    transformOrigin: "top left",
+                    display: "block",
+                    maxWidth: "300px",
+                    maxHeight: "550px",
+                    width: "auto",
+                    height: "auto",
+                    padding: "10px",
+                    boxSizing: "border-box",
+                    opacity: 0.5,
+                  })}
+                />
               </Flex>
-            }/>
-            <Route path="bytesim-webapp/new/*"
-            element={
-              <UploadButton />
-            }/>
+            }
+          />
+          <Route path="bytesim-webapp/new" element={<UploadButton />} />
         </Routes>
 
         {zones.map((z) => {
