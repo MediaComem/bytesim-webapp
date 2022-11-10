@@ -4,6 +4,9 @@ import { useAppZones } from "../../app/hooks";
 import FetchedSVG from "../../features/figma/components/FetchedSVG";
 import { ZONES_MAX_WIDTH } from "../../services/const";
 import ZoneFrame from "./ZoneFrame";
+import REHome from "../../assets/RE-homepage.jpg"
+import { css } from "@emotion/css";
+import UploadButton from "../project/UploadButton";
 
 export default function ZonesView({
   disableEdition,
@@ -39,46 +42,32 @@ export default function ZonesView({
               </Flex>
             }
           />
-          {/* <Route
-            path="bytesim-webapp/1/*"
+          <Route path="bytesim-webapp/*"
             element={
               <Flex>
-                <TestSVG />
-              </Flex>
-            }
+                 <img
+            src={REHome}
+            alt="RE homepage"
+            className={css({
+              //objectFit: "scale-down",
+              transform: `scale(${zoom})`,
+              transformOrigin: "top left",
+              display: "block",
+              maxWidth: "300px",
+              maxHeight: "550px",
+              width: "auto",
+              height: "auto",
+              padding: "10px",
+              boxSizing: "border-box",
+              opacity: 0.5,
+            })}
           />
-          <Route
-            path="bytesim-webapp/2/*"
-            element={
-              <Flex>
-                <img src={REHome} alt="RE homepage" />
               </Flex>
-            }
-          />
-          <Route
-            path="bytesim-webapp/3/*"
+            }/>
+            <Route path="bytesim-webapp/new/*"
             element={
-              <Flex>
-                <img src={REabout} alt="RE about page" />
-              </Flex>
-            }
-          />
-          <Route
-            path="bytesim-webapp/4/*"
-            element={
-              <Flex>
-                <img src={REmap} alt="RE network map" />
-              </Flex>
-            }
-          />
-          <Route
-            path="bytesim-webapp/*"
-            element={
-              <Flex>
-                <TestSVG />
-              </Flex>
-            }
-          /> */}
+              <UploadButton />
+            }/>
         </Routes>
 
         {zones.map((z) => {
