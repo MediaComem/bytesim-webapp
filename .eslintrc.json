@@ -34,8 +34,8 @@
     "multiline-ternary": "off",
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": [
-        "error",
-        { "argsIgnorePattern": "^_" }
+      "warn",
+      { "argsIgnorePattern": "^_" }
     ],
     "dot-notation": "off",
     "func-call-spacing": "off"

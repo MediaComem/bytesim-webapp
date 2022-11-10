@@ -1,38 +1,42 @@
 import { GenericParameters } from "../app/types/generalFormTypes";
-import { Zone, ZoneType } from "../app/types/types";
+import { Zone, ZoneFigma, ZoneType } from "../app/types/types";
 import { GenericParametersSimulator } from "./simulators/generic";
 import { ImageSimulator } from "./simulators/images";
 import { SimulatorImages, SimulatorVideo } from "./simulators/type";
 import { VideoSimulator } from "./simulators/video";
 
 /* Service to simulate the impact of a specific zone
-*  Create simulator for the give zone
-*    const simulator = simulationService.simulator(zone);
-*  Estimate impact of zone
-*    const { energy, co2 } = simulator.simulate();
-*  Get recommandations
-*    const recommandations = simulator.recommandations();
-*/
+ *  Create simulator for the give zone
+ *    const simulator = simulationService.simulator(zone);
+ *  Estimate impact of zone
+ *    const { energy, co2 } = simulator.simulate();
+ *  Get recommandations
+ *    const recommandations = simulator.recommandations();
+ */
 class simulationService {
   // medium voltage CH electricity factor (data center + core network)
   private static electricityCHMediumNRE = 6.7217031; // Non renewable primary energy (MJp) part per KWh
   private static electricityCHMediumRE = 2.1383485; // Renewable primary energy (MJp) part per KWh
-  private static electricityMJPerKWh = this.electricityCHMediumNRE + this.electricityCHMediumRE;
+  private static electricityMJPerKWh =
+    this.electricityCHMediumNRE + this.electricityCHMediumRE;
+
   private static electricityGWPPerKWh = 0.1203783; // Global Warming Potential (GWP) in kg CO2eq
   private static electricityGreenMediumNRE = 0.43113971; // Green energy still use minimal primary non renewable energy in full LCA
   private static electricityGreenMediumRE = 3.9240857;
-  private static electricityGreenMJPerKWh = this.electricityCHMediumNRE + this.electricityCHMediumRE;
+  private static electricityGreenMJPerKWh =
+    this.electricityCHMediumNRE + this.electricityCHMediumRE;
+
   private static electricityGreenGWPPerKWh = 0.03481005; // Global Warming Potential (GWP) in kg CO2eq
 
-  private static dataCenterKWhPerByte = 6.16E-11;
-  private static coreNetworkKWhPerByte = 8.39E-11;
+  private static dataCenterKWhPerByte = 6.16e-11;
+  private static coreNetworkKWhPerByte = 8.39e-11;
 
   private static dataCenterEnergyMJ(bytes: number) {
     return this.electricityMJPerKWh * this.dataCenterKWhPerByte * bytes;
   }
 
   private static dataCenterRenewableEnergyMJ(bytes: number) {
-    return this.electricityGreenMJPerKWh * this.dataCenterKWhPerByte * bytes
+    return this.electricityGreenMJPerKWh * this.dataCenterKWhPerByte * bytes;
   }
 
   private static networkEnergyMJ(bytes: number) {
@@ -42,7 +46,9 @@ class simulationService {
 
   static energyMJ(bytes: number, renewable: boolean) {
     if (renewable) {
-      return this.dataCenterRenewableEnergyMJ(bytes) + this.networkEnergyMJ(bytes);
+      return (
+        this.dataCenterRenewableEnergyMJ(bytes) + this.networkEnergyMJ(bytes)
+      );
     } else {
       return this.dataCenterEnergyMJ(bytes) + this.networkEnergyMJ(bytes);
     }
@@ -53,7 +59,7 @@ class simulationService {
   }
 
   private static dataCenterRenewableGWP(bytes: number) {
-    return this.electricityGreenGWPPerKWh * this.dataCenterKWhPerByte * bytes
+    return this.electricityGreenGWPPerKWh * this.dataCenterKWhPerByte * bytes;
   }
 
   private static networkGWP(bytes: number) {
@@ -77,7 +83,10 @@ class simulationService {
     return new GenericParametersSimulator(parameters);
   }
 
-  static simulator(zone: Zone, renewable: boolean): SimulatorVideo | SimulatorImages | undefined {
+  static simulator(
+    zone: Zone | ZoneFigma,
+    renewable: boolean
+  ): SimulatorVideo | SimulatorImages | undefined {
     if (!zone.params) {
       console.log(`No parameters for Zone ${zone.id}`);
       return undefined;

@@ -3,7 +3,7 @@ import * as React from "react";
 import { css, cx } from "@emotion/css";
 import { useDispatch } from "react-redux";
 import { Rnd } from "react-rnd";
-import { useAppSelector, useSelectedZone } from "../../app/hooks";
+import { useSelectedZone, useAppZones } from "../../app/hooks";
 import {
   zoneDeleted,
   zoneActiveToggled,
@@ -12,10 +12,16 @@ import {
 import REHome from "../../assets/RE-homepage.jpg";
 import { Zone } from "../../app/types/types";
 import ConfirmModal, { confirmText } from "../layout/ConfirmModal";
-import { useLocation } from "react-router-dom";
 import UploadButton from "../project/UploadButton";
 
-const brandColor = "#ea62ea";
+import { Route, Routes } from "react-router-dom";
+import FetchedSVG from "../../features/figma/components/FetchedSVG";
+import { colorTheme } from "../../theme";
+
+import { ZONES_MAX_WIDTH } from "../../services/const";
+import { ZONES_CONTAINER_PADDING } from "../../features/figma/utils";
+
+const brandColor = colorTheme[400];
 const resizeHandleSVG = (
   <svg
     width="15"
@@ -69,8 +75,7 @@ export default function ZonesView({
   zoom: number;
 }) {
   const dispatch = useDispatch();
-  const zones = useAppSelector((state) => state.zones);
-  const location = useLocation();
+  //const zones = useAppSelector((state) => state.zones);
   //Waiting for blob to be in S3 database
   /* const projectScreenshot = useAppSelector(
     (state) => state.project.screenshotBlob
@@ -88,12 +93,13 @@ export default function ZonesView({
       document.removeEventListener("keydown", handleDelete);
     };
   }, []);
+  const zones = useAppZones()?.filter((z) => !z.hidden);
   return (
     <Flex
       align={"flex-start"}
       justify={"flex-start"}
       pos={"relative"}
-      p={1}
+      p={ZONES_CONTAINER_PADDING}
       overflow={"auto"}
       grow={1}
       alignSelf="stretch"
@@ -109,10 +115,34 @@ export default function ZonesView({
           onClose();
         }}
       />
-      {location.pathname === "/bytesim-webapp/new" ? (
-        <UploadButton />
-      ) : (
-        <div>
+      <Flex
+        opacity={0.5}
+        width={`${ZONES_MAX_WIDTH}px`}
+        minWidth={ZONES_MAX_WIDTH}
+        maxWidth={ZONES_MAX_WIDTH}
+      >
+      <Routes>
+      <Route
+            path="bytesim-webapp/figma/*"
+            element={
+              <Flex>
+                <FetchedSVG />
+              </Flex>
+            }
+          />
+          <Route
+            path="bytesim-webapp/new"
+            element={
+              <Flex>
+                <UploadButton />
+              </Flex>
+            }
+          />
+          <Route
+            path="bytesim-webapp"
+            element={
+              <Flex>
+                <div>
           <img
             src={REHome}
             alt="RE homepage"
@@ -131,7 +161,11 @@ export default function ZonesView({
             })}
           />
         </div>
-      )}
+              </Flex>
+            }
+          />
+      </Routes>
+      </Flex>
       {/* {projectScreenshot ? (
             <img src={projectScreenshot} alt="screenshot" />
           ) : (
@@ -139,6 +173,15 @@ export default function ZonesView({
        )} */}
       {/*
          <Routes>
+        <Routes>
+          <Route
+            path="bytesim-webapp/figma/*"
+            element={
+              <Flex>
+                <FetchedSVG />
+              </Flex>
+            }
+          />
           <Route
             path="bytesim-webapp/1/*"
             element={
@@ -184,7 +227,7 @@ export default function ZonesView({
       {zones.map((z) => {
         return (
           <ZoneFrame
-            key={z.id}
+            key={`${z.id}_${z.x}_${z.y}_${z.width}_${z.height}`}
             zone={z}
             disableEdition={disableEdition}
             zoom={zoom}
@@ -243,11 +286,9 @@ function ZoneFrame({
           dispatch(zoneActiveToggled(zone.id));
         }
       }}
-      enableResizoneing={zone.status === "EDITING" && !disableEdition}
+      enableResizing={zone.status === "EDITING" && !disableEdition}
       disableDragging={disableEdition}
       onResizeStop={(e, direction, ref, delta, position) => {
-        console.log("width " + delta.width + " height " + delta.height);
-        console.log("X " + position.x + " Y " + position.y);
         const newZone = {
           id: zone.id,
           x: position.x / zoom,

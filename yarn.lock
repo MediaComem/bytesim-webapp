@@ -1254,12 +1254,26 @@
     "compute-scroll-into-view" "1.0.14"
     "copy-to-clipboard" "3.3.1"
 
+"@chakra-ui/icon@3.0.11":
+  "integrity" "sha512-RG4jf/XmBdaxOYI5J5QstEtTCPoVlmrQ/XiWhvN0LTgAnmZIqVwFl3Uw+satArdStHAs0GmJZg/E/soFTWuFmw=="
+  "resolved" "https://registry.npmjs.org/@chakra-ui/icon/-/icon-3.0.11.tgz"
+  "version" "3.0.11"
+  dependencies:
+    "@chakra-ui/shared-utils" "2.0.2"
+
 "@chakra-ui/icon@3.0.9":
   "integrity" "sha512-P2Pwm/za6m1W1oqL2kGHH6XrrymsBjqYAFwOW2lB5Q6mI1e+RYe/iMxDoPSLHMYhqdfH7vyib/ffE3Vv3a5oTA=="
   "resolved" "https://registry.npmjs.org/@chakra-ui/icon/-/icon-3.0.9.tgz"
   "version" "3.0.9"
   dependencies:
     "@chakra-ui/shared-utils" "2.0.1"
+
+"@chakra-ui/icons@^2.0.11":
+  "integrity" "sha512-WjxrFMt9hHpuZlnBh4fhtGOkIVlwYwHNmwq4sJGxYWlg8UnEhVJMoOojheJDy/d3Gp9+ApetlK3vt8fV/rZamg=="
+  "resolved" "https://registry.npmjs.org/@chakra-ui/icons/-/icons-2.0.11.tgz"
+  "version" "2.0.11"
+  dependencies:
+    "@chakra-ui/icon" "3.0.11"
 
 "@chakra-ui/image@2.0.10":
   "integrity" "sha512-Atc1bdog4V5xv7IbpF2F2UkKWfgG/TD74cIac09JuSpQcYyh7lrJ7iVvhTkeP+LDdCs+QCD7SnTUM4Y0ZlaHbA=="
@@ -1639,6 +1653,11 @@
   "integrity" "sha512-NXDBl/u4wrSNp0ON5R3r3evkRurrAz2yuO7neooaG+O5HEenVouGqm4CsXd6lUAPmjwiGzA0LQFNCt0Hj92dXg=="
   "resolved" "https://registry.npmjs.org/@chakra-ui/shared-utils/-/shared-utils-2.0.1.tgz"
   "version" "2.0.1"
+
+"@chakra-ui/shared-utils@2.0.2":
+  "integrity" "sha512-wC58Fh6wCnFFQyiebVZ0NI7PFW9+Vch0QE6qN7iR+bLseOzQY9miYuzPJ1kMYiFd6QTOmPJkI39M3wHqrPYiOg=="
+  "resolved" "https://registry.npmjs.org/@chakra-ui/shared-utils/-/shared-utils-2.0.2.tgz"
+  "version" "2.0.2"
 
 "@chakra-ui/skeleton@2.0.15":
   "integrity" "sha512-QVMkXwrH9jLfim8uJTZcjHeGjzoquNcHGXD5wapd7eDqp9BygvmMXAHBxFm8eEJLHuvIqLX94P6DLeiieYwX7Q=="
@@ -6052,6 +6071,11 @@
     "signal-exit" "^3.0.3"
     "strip-final-newline" "^2.0.0"
 
+"exenv@^1.2.2":
+  "integrity" "sha512-Z+ktTxTwv9ILfgKCk32OX3n/doe+OcLTRtqK9pcL+JsP3J1/VW8Uvl4ZjLlKqeW4rzK4oesDOGMEMRIZqtP4Iw=="
+  "resolved" "https://registry.npmjs.org/exenv/-/exenv-1.2.2.tgz"
+  "version" "1.2.2"
+
 "exit@^0.1.2":
   "integrity" "sha512-Zk/eNKV2zbjpKzrsQ+n1G6poVbErQxJ0LBOJXaKZ1EViLzH+hrLu9cdXI4zw9dBQJslwBEpbQ2P1oS7nDxs6jQ=="
   "resolved" "https://registry.npmjs.org/exit/-/exit-0.1.2.tgz"
@@ -9980,6 +10004,13 @@
     "regenerator-runtime" "^0.13.9"
     "whatwg-fetch" "^3.6.2"
 
+"react-app-rewired@^2.2.1":
+  "integrity" "sha512-uFQWTErXeLDrMzOJHKp0h8P1z0LV9HzPGsJ6adOtGlA/B9WfT6Shh4j2tLTTGlXOfiVx6w6iWpp7SOC5pvk+gA=="
+  "resolved" "https://registry.npmjs.org/react-app-rewired/-/react-app-rewired-2.2.1.tgz"
+  "version" "2.2.1"
+  dependencies:
+    "semver" "^5.6.0"
+
 "react-clientside-effect@^1.2.6":
   "integrity" "sha512-XGGGRQAKY+q25Lz9a/4EPqom7WRjz3z9R2k4jhVKA/puQFH/5Nt27vFZYql4m4NVNdUvX8PS3O7r/Zzm7cjUlg=="
   "resolved" "https://registry.npmjs.org/react-clientside-effect/-/react-clientside-effect-1.2.6.tgz"
@@ -10080,6 +10111,19 @@
     "react-clientside-effect" "^1.2.6"
     "use-callback-ref" "^1.3.0"
     "use-sidecar" "^1.1.2"
+
+"react-from-dom@^0.6.2":
+  "integrity" "sha512-qvWWTL/4xw4k/Dywd41RBpLQUSq97csuv15qrxN+izNeLYlD9wn5W8LspbfYe5CWbaSdkZ72BsaYBPQf2x4VbQ=="
+  "resolved" "https://registry.npmjs.org/react-from-dom/-/react-from-dom-0.6.2.tgz"
+  "version" "0.6.2"
+
+"react-inlinesvg@^3.0.1":
+  "integrity" "sha512-cBfoyfseNI2PkDA7ZKIlDoHq0eMfpoC3DhKBQNC+/X1M4ZQB+aXW+YiNPUDDDKXUsGDUIZWWiZWNFeauDIVdoA=="
+  "resolved" "https://registry.npmjs.org/react-inlinesvg/-/react-inlinesvg-3.0.1.tgz"
+  "version" "3.0.1"
+  dependencies:
+    "exenv" "^1.2.2"
+    "react-from-dom" "^0.6.2"
 
 "react-is@^16.13.1", "react-is@^16.7.0":
   "integrity" "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ=="
@@ -10183,7 +10227,7 @@
   dependencies:
     "@remix-run/router" "1.0.0"
 
-"react-scripts@5.0.1":
+"react-scripts@>=2.1.3", "react-scripts@5.0.1":
   "integrity" "sha512-8VAmEm/ZAwQzJ+GOMLbBsTdDKOpuZh7RPs0UymvBR2vRk4iZWCskjbFnxqjrzoIvlNNRZ3QJFx6/qDSi6zSnaQ=="
   "resolved" "https://registry.npmjs.org/react-scripts/-/react-scripts-5.0.1.tgz"
   "version" "5.0.1"

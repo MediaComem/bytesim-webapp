@@ -1,3 +1,4 @@
+import { createDraftSafeSelector } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import simulationService from "../services/simulationService";
 import { isZoneComplete } from "../utils/utils";
@@ -14,8 +15,16 @@ import { VideoParameters } from "./types/videoTypes";
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
+const selectZones = (state: RootState) => state.zonesSlice.zones;
+export const zoneSelector = createDraftSafeSelector(
+  selectZones,
+  (state) => state
+);
+
+export const useAppZones = () => useAppSelector(zoneSelector);
+
 export function useCalculateImpact(): { energy: number; co2: number } {
-  const zones = useAppSelector((state) => state.zones);
+  const zones = useAppSelector(zoneSelector);
   const renewable = useAppSelector(
     (state) => state.project.params.server === ServerType.RENEWABLE
   );
@@ -43,7 +52,7 @@ export function useCalculateRecommandationsImpact(): {
   energy: number;
   co2: number;
 } {
-  const zones = useAppSelector((state) => state.zones);
+  const zones = useAppSelector(zoneSelector);
   const recommandations = useAppSelector((state) => state.recommandations);
   const nbVisits = useAppSelector((state) => state.project.params.nbVisit) ?? 1; // if no visitor impact per visit
   let renewable = useAppSelector(
@@ -58,7 +67,7 @@ export function useCalculateRecommandationsImpact(): {
     renewable = recommandationRenewable.selectedValue === "better";
   }
   zones.forEach((zone) => {
-      if (isZoneComplete(zone)) {
+    if (isZoneComplete(zone)) {
       // TODO optimize code + architecture
       const zoneRecommandations = recommandations.filter(
         (rec) => rec.zone_id === zone.id
@@ -119,7 +128,7 @@ export function useCalculateGenericRecommandations(): RecommandationWithZone<
 export function useCalculateAllRecommandations(): RecommandationWithZone<
   VideoParameters[keyof VideoParameters]
 >[] {
-  const zones = useAppSelector((state) => state.zones);
+  const zones = useAppZones();
   const genericParameters = useAppSelector((state) => state.project.params);
   const renewable = genericParameters === ServerType.RENEWABLE;
   const recommandations: RecommandationWithZone<
@@ -130,7 +139,7 @@ export function useCalculateAllRecommandations(): RecommandationWithZone<
     recos.forEach((reco) => {
       const rec: RecommandationWithZone<
         VideoParameters[keyof VideoParameters]
-      > = { ...reco, zoneId: zone.id, zoneName: zone.name };
+      > = { ...reco, zoneId: zone.id!, zoneName: zone.name! };
       recommandations.push(rec);
     });
   });
@@ -155,7 +164,7 @@ export function useCalculateRecommandationsForZone(
 
 export function useSelectedZone(): Zone | undefined {
   let zone;
-  const zones = useAppSelector((state) => state.zones);
+  const zones = useAppSelector((state) => state.zonesSlice.zones);
   zones.forEach((z) => {
     if (z.status === "EDITING") zone = z;
   });

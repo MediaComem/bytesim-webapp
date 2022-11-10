@@ -5,17 +5,16 @@ import {
   AccordionPanel,
   Flex,
 } from "@chakra-ui/react";
-import * as React from "react";
+import { Zone, ZoneFigma, ZoneType } from "../../app/types/types";
+import { VideoFormEntries } from "../../app/types/videoTypes";
 import { DynContentFormEntries } from "../../app/types/dynContentTypes";
 import { ImageFormEntries } from "../../app/types/imgTypes";
-import { Zone, ZoneType } from "../../app/types/types";
-import { VideoFormEntries } from "../../app/types/videoTypes";
 import AccordionChevron from "../layout/AccordionChevron";
 //import ConfirmModal, { confirmText } from "../layout/ConfirmModal";
 import ZoneSettingsForm from "./zones_settings/ZoneSettingsForm";
 
 interface ZoneParamsProps {
-  zone: Zone;
+  zone: Zone | ZoneFigma;
 }
 export default function ZoneParams({ zone }: ZoneParamsProps) {
   const defaultIndex = Object.keys(ZoneType).indexOf(zone.zoneType!);
@@ -24,7 +23,7 @@ export default function ZoneParams({ zone }: ZoneParamsProps) {
       <Accordion allowToggle defaultIndex={[defaultIndex]}>
         {(Object.keys(ZoneType) as Array<keyof typeof ZoneType>).map((z, i) => {
           return (
-            <AccordionItem key={i} border="none">
+            <AccordionItem key={`${z}_${i}`} border="none">
               {({ isExpanded }) => (
                 <>
                   <Flex align="center">

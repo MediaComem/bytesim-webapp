@@ -12,7 +12,6 @@ import {
 import { css } from "@emotion/css";
 import * as React from "react";
 import { useDispatch } from "react-redux";
-import { colorTheme } from ".";
 import { useAppSelector } from "./app/hooks";
 import ConfirmModal, { confirmText } from "./components/layout/ConfirmModal";
 import Panel from "./components/layout/Panel";
@@ -22,16 +21,19 @@ import GeneralFormAccordion from "./components/project/GeneralForm";
 import ZonesList from "./components/zones/ZonesList";
 import ZonesView from "./components/zones/ZonesView";
 import { projectReset } from "./features/project/projectSlice";
+
+import { ReactComponent as ResetIcon } from "./assets/ResetIcon_Active_MouseOver.svg";
+import ExportButton from "./components/recommandations/ExportButton";
+//import { useNavigate } from "react-router-dom";
+import { colorTheme } from "./theme";
+import RecoWarning from "./components/recommandations/RecoWarning";
 import {
   allZonesReset,
   getUncompleteZones,
   zoneAdded,
 } from "./features/zones/zonesSlice";
-import { ReactComponent as ResetIcon } from "./assets/ResetIcon_Active_MouseOver.svg";
-import ExportButton from "./components/recommandations/ExportButton";
 import "react-reflex/styles.css";
 import { ReflexContainer, ReflexElement, ReflexSplitter } from "react-reflex";
-import RecoWarning from "./components/recommandations/RecoWarning";
 
 export default function Home() {
   const dispatch = useDispatch();
