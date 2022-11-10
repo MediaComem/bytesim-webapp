@@ -3,7 +3,7 @@ import { css, cx } from "@emotion/css";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { useSelectedZone } from "../../app/hooks";
-import { zoneDeleted, zoneReset } from "../../features/zones/zonesSlice";
+import { zoneDeleted, zoneDuplicated, zoneReset } from "../../features/zones/zonesSlice";
 import { DynamicModalParams } from "../zones/ZonesList";
 import ConfirmModal, { confirmText } from "./ConfirmModal";
 
@@ -100,6 +100,13 @@ export default function RightClickMenu({ className }: RightClickMenuProps) {
                 }}
               >
                 Reset
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                      dispatch(zoneDuplicated(selectedZone));
+                }}
+              >
+                Duplicate
               </MenuItem>
               <MenuItem
                 onClick={() => {

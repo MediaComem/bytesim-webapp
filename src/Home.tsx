@@ -169,34 +169,6 @@ export default function Home() {
                     +
                   </Button>
                 </Flex>
-                {/* <Button
-                  variant={"outline"}
-                  size="xs"
-                  onClick={() => navigate("./bytesim-webapp/1")}
-                >
-                  1
-                </Button>
-                <Button
-                  variant={"outline"}
-                  size="xs"
-                  onClick={() => navigate("./bytesim-webapp/2")}
-                >
-                  2
-                </Button>
-                <Button
-                  variant={"outline"}
-                  size="xs"
-                  onClick={() => navigate("./bytesim-webapp/3")}
-                >
-                  3
-                </Button>
-                <Button
-                  variant={"outline"}
-                  size="xs"
-                  onClick={() => navigate("./bytesim-webapp/4")}
-                >
-                  4
-                </Button> */}
               </Flex>
               <Button
                 onClick={() => {

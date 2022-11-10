@@ -71,6 +71,17 @@ const zonesSlice = createSlice({
         };
       },
     },
+    zoneDuplicated(state, action: PayloadAction<Zone>) {
+        const newZone: Zone = {
+          ...action.payload,
+          name: `${action.payload.name} - copy `,
+          id: nanoid(),
+        };
+        state.zones.forEach((zone) => {
+          zone.status = "ACTIVE";
+        });
+        state.zones.push(newZone);
+      },
     zoneReset(state, action: PayloadAction<string>) {
       const existingZone = state.zones.find(
         (zone) => zone.id === action.payload
@@ -182,6 +193,7 @@ export const {
   zoneUpdated,
   zonesUpdatedByElementId,
   zonesSetTree,
+  zoneDuplicated,
 } = zonesSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
