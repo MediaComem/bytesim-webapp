@@ -21,7 +21,11 @@ import { ReactComponent as ResetIcon } from "../../assets/ResetIcon_Active_Mouse
 import { ReactComponent as TrashIcon } from "../../assets/TEMP_trash.svg";
 
 import { getTypeEntries } from "../../utils/utils";
-import { zoneReset, zoneUpdated } from "../../features/zones/zonesSlice";
+import {
+  zoneActiveToggled,
+  zoneReset,
+  zoneUpdated,
+} from "../../features/zones/zonesSlice";
 
 interface ZoneListButtonProps {
   zone: Zone;
@@ -78,6 +82,7 @@ export function ZoneListButton({
             ? { backgroundColor: colorTheme[100] }
             : undefined
         }
+        onClick={() => dispatch(zoneActiveToggled(zone.id))}
       >
         <Flex align="center" justify="flex-start">
           {hiddenMode ? (
