@@ -18,7 +18,7 @@ import { Route, Routes } from "react-router-dom";
 import FetchedSVG from "../../features/figma/components/FetchedSVG";
 import { colorTheme } from "../../theme";
 
-import { ZONES_MAX_WIDTH } from "../../services/const";
+import { ZONES_CONTAINER_WIDTH } from "../../services/const";
 import { ZONES_CONTAINER_PADDING } from "../../features/figma/utils";
 import { useEffect } from "react";
 
@@ -76,6 +76,7 @@ export default function ZonesView({
   zoom: number;
 }) {
   const dispatch = useDispatch();
+  const containerDim = `${ZONES_CONTAINER_WIDTH * zoom}px`;
 
   const selectedZone = useSelectedZone();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -114,10 +115,10 @@ export default function ZonesView({
       />
       <Flex
         opacity={0.5}
-        width={`${ZONES_MAX_WIDTH * zoom}px`}
-        minWidth={`${ZONES_MAX_WIDTH * zoom}px`}
-        maxWidth={`${ZONES_MAX_WIDTH * zoom}px`}
-        height={`${ZONES_MAX_WIDTH * zoom}px`}
+        width={containerDim}
+        minWidth={containerDim}
+        maxWidth={containerDim}
+        height={containerDim}
         // transform={`scale(${zoom})`}
       >
         <Routes>

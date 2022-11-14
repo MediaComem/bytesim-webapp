@@ -1,1 +1,1 @@
-export const ZONES_MAX_WIDTH = 400;
+export const ZONES_CONTAINER_WIDTH = 400;

@@ -5,10 +5,10 @@ import {
   Box,
   Heading,
 } from "@chakra-ui/react";
-import useZoneScreenshot from "../../hooks/useZoneScreenshot";
 import AccordionChevron from "../layout/AccordionChevron";
 import Recommandation from "./Recommandation";
 import { RecommandationType } from "./RecommandationsList";
+import ZoneScreenshot from "../zones/ZoneScreenshot";
 
 interface RecommandationDisplayProps {
   zoneRecommandations: RecommandationType[];
@@ -20,7 +20,6 @@ export default function RecommandationsByZone({
   zoneId,
 }: RecommandationDisplayProps) {
   //const { totalBenefits, setTotalBenefits } = React.useContext(ReportCTX);
-  const { ZoneScreenshot } = useZoneScreenshot();
 
   const showZone = zoneRecommandations.find((reco) => reco.betterValue);
 
