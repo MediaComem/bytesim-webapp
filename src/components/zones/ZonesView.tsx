@@ -20,6 +20,7 @@ import { colorTheme } from "../../theme";
 
 import { ZONES_MAX_WIDTH } from "../../services/const";
 import { ZONES_CONTAINER_PADDING } from "../../features/figma/utils";
+import { useEffect } from "react";
 
 const brandColor = colorTheme[400];
 const resizeHandleSVG = (
@@ -75,11 +76,7 @@ export default function ZonesView({
   zoom: number;
 }) {
   const dispatch = useDispatch();
-  //const zones = useAppSelector((state) => state.zones);
-  //Waiting for blob to be in S3 database
-  /* const projectScreenshot = useAppSelector(
-    (state) => state.project.screenshotBlob
-  ); */
+
   const selectedZone = useSelectedZone();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const handleDelete = (e: KeyboardEvent) => {
@@ -87,7 +84,7 @@ export default function ZonesView({
       onOpen();
     }
   };
-  React.useEffect(() => {
+  useEffect(() => {
     document.addEventListener("keydown", handleDelete);
     return () => {
       document.removeEventListener("keydown", handleDelete);
@@ -117,12 +114,14 @@ export default function ZonesView({
       />
       <Flex
         opacity={0.5}
-        width={`${ZONES_MAX_WIDTH}px`}
-        minWidth={ZONES_MAX_WIDTH}
-        maxWidth={ZONES_MAX_WIDTH}
+        width={`${ZONES_MAX_WIDTH * zoom}px`}
+        minWidth={`${ZONES_MAX_WIDTH * zoom}px`}
+        maxWidth={`${ZONES_MAX_WIDTH * zoom}px`}
+        height={`${ZONES_MAX_WIDTH * zoom}px`}
+        // transform={`scale(${zoom})`}
       >
-      <Routes>
-      <Route
+        <Routes>
+          <Route
             path="bytesim-webapp/figma/*"
             element={
               <Flex>
@@ -143,97 +142,41 @@ export default function ZonesView({
             element={
               <Flex>
                 <div>
-          <img
-            src={REHome}
-            alt="RE homepage"
-            className={css({
-              //objectFit: "scale-down",
-              transform: `scale(${zoom})`,
-              transformOrigin: "top left",
-              display: "block",
-              maxWidth: "300px",
-              maxHeight: "550px",
-              width: "auto",
-              height: "auto",
-              padding: "10px",
-              boxSizing: "border-box",
-              opacity: 0.5,
-            })}
-          />
-        </div>
+                  <img
+                    src={REHome}
+                    alt="RE homepage"
+                    className={css({
+                      //objectFit: "scale-down",
+                      transform: `scale(${zoom})`,
+                      transformOrigin: "top left",
+                      display: "block",
+                      maxWidth: "300px",
+                      maxHeight: "550px",
+                      width: "auto",
+                      height: "auto",
+                      padding: "10px",
+                      boxSizing: "border-box",
+                      opacity: 0.5,
+                    })}
+                  />
+                </div>
               </Flex>
             }
           />
-      </Routes>
+        </Routes>
       </Flex>
-      {/* {projectScreenshot ? (
-            <img src={projectScreenshot} alt="screenshot" />
-          ) : (
-            <img src={REHome} alt="RE homepage" />
-       )} */}
-      {/*
-         <Routes>
-        <Routes>
-          <Route
-            path="bytesim-webapp/figma/*"
-            element={
-              <Flex>
-                <FetchedSVG />
-              </Flex>
-            }
-          />
-          <Route
-            path="bytesim-webapp/1/*"
-            element={
-              <Flex>
-                <TestSVG />
-              </Flex>
-            }
-          />
-          <Route
-            path="bytesim-webapp/2/*"
-            element={
-              <Flex>
-                <img src={REHome} alt="RE homepage" />
-              </Flex>
-            }
-          />
-          <Route
-            path="bytesim-webapp/3/*"
-            element={
-              <Flex>
-                <img src={REabout} alt="RE about page" />
-              </Flex>
-            }
-          />
-          <Route
-            path="bytesim-webapp/4/*"
-            element={
-              <Flex>
-                <img src={REmap} alt="RE network map" />
-              </Flex>
-            }
-          />
-          <Route
-            path="bytesim-webapp/*"
-            element={
-              <Flex>
-                <TestSVG />
-              </Flex>
-            }
-          />
-        </Routes> */}
-
-      {zones.map((z) => {
-        return (
-          <ZoneFrame
-            key={`${z.id}_${z.x}_${z.y}_${z.width}_${z.height}`}
-            zone={z}
-            disableEdition={disableEdition}
-            zoom={zoom}
-          />
-        );
-      })}
+      <Flex position="absolute">
+        {zones.map((z) => {
+          return (
+            <ZoneFrame
+              key={`${z.id}_${z.x}_${z.y}_${z.width}_${z.height}`}
+              zone={z}
+              disableEdition={disableEdition}
+              zoom={zoom}
+            />
+          );
+        })}
+      </Flex>
     </Flex>
   );
 }

@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React from "react";
 import SVG from "react-inlinesvg";
 import { useDispatch } from "react-redux";
 
@@ -6,7 +6,6 @@ import {
   getRelativePosition,
   getTreeHierarchyFromDOM,
   hashCode,
-  registerHoverEventsOnFigmaEls,
   REMOTE_PARENT_SVG_ID,
 } from "../utils";
 import { colorTheme } from "../../../theme";
@@ -64,13 +63,14 @@ const FetchedSVG = ({
 
   return (
     <SVG
+      style={{ minWidth: "100%" }}
       cacheRequests={true}
       loader={<span>Loading...</span>}
       onError={(error) => console.log(error.message)}
       onLoad={(src, hasCache) => {
         const ids = idsRefs.current;
-        // register all events on ids
-        registerHoverEventsOnFigmaEls(ids);
+        // register all events on ids --> not needed anymore
+        // registerHoverEventsOnFigmaEls(ids);
 
         // get tree hierarchy
         const tree = getTreeHierarchyFromDOM(ids);
@@ -98,6 +98,8 @@ const FetchedSVG = ({
           .replace(/width="[^"]+"/, 'width="100%"')
           //add svg tag attribute preserveAspectRatio="xMinYMin meet"
           .replace(/<svg/, '<svg preserveAspectRatio="xMinYMin meet"')
+          // remove height parameter of svg tag
+          .replace(/height="[^"]+"/, "")
           // add to the first g tag of svg tag a light gray border
           .replace(
             /<g/,
@@ -130,4 +132,4 @@ const FetchedSVG = ({
     />
   );
 };
-export default memo(FetchedSVG);
+export default FetchedSVG;
