@@ -48,17 +48,17 @@ export function ZoneListButton({
   const [editNameMode, setEditNameMode] = React.useState(false);
   const [oldZoneName, setOldZoneName] = React.useState(zone.name);
   const updateZoneName = (newName: string) => {
-    // const newNameObject = {
-    //   id: zone.id,
-    //   name: newName,
-    // };
-    // if (value !== "") {
-    //   setOldZoneName(newName);
-    //   dispatch(zoneUpdated(newNameObject));
-    // } else {
-    //   setValue(oldZoneName);
-    // }
-    // setEditNameMode(false);
+    const newNameObject = {
+      id: zone.id,
+      name: newName,
+    };
+    if (value !== "") {
+      setOldZoneName(newName);
+      dispatch(zoneUpdated(newNameObject));
+    } else {
+      setValue(oldZoneName);
+    }
+    setEditNameMode(false);
   };
   const updateZone = (newZone: Partial<Zone>) => {
     return zoneUpdated(newZone);
