@@ -8,38 +8,27 @@ import {
 import { FormsType } from "../../app/types/types";
 import { VideoParameters } from "../../app/types/videoTypes";
 import { cloneDeep } from "lodash";
-
-const initialState: RecommandationWithZone<
+type RecommandationZone = RecommandationWithZone<
   | VideoParameters[keyof VideoParameters]
   | GenericParameters[keyof GenericParameters]
->[] = [];
+>;
+type RecommandationZonesState = RecommandationZone[];
+
+const initialState: RecommandationZonesState = [];
 
 const recommandationsSlice = createSlice({
   name: "recommandations",
   initialState,
   reducers: {
-    recommandationAdded(
-      state,
-      action: PayloadAction<
-        RecommandationWithZone<
-          | VideoParameters[keyof VideoParameters]
-          | GenericParameters[keyof GenericParameters]
-        >
-      >
-    ) {
+    recommandationAdded(state, action: PayloadAction<RecommandationZone>) {
       state.push(action.payload);
     },
     recommandationsPopulated(
       state,
-      action: PayloadAction<
-        RecommandationWithZone<
-          | VideoParameters[keyof VideoParameters]
-          | GenericParameters[keyof GenericParameters]
-        >[]
-      >
+      action: PayloadAction<RecommandationZonesState>
     ) {
       const newState = cloneDeep(action.payload);
-      newState.forEach((r: any) => {
+      newState?.forEach((r: any) => {
         const existingReco = state.find(
           (reco) => reco.zoneId === r.zoneId && reco.parameter === r.parameter
         );
@@ -47,6 +36,7 @@ const recommandationsSlice = createSlice({
           r.id = existingReco.id;
         }
       });
+
       return newState;
     },
     recommandationsReset: (state) => {

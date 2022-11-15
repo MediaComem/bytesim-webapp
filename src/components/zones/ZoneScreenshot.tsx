@@ -55,7 +55,6 @@ const ZoneScreenshot = ({ zoneId }: ZoneScreenshotProps) => {
   }, [zone]);
   if (!zone) return <div />;
 
-  console.log("zoneDim", zoneDim);
   return (
     <Box py={2}>
       <ChakraImage

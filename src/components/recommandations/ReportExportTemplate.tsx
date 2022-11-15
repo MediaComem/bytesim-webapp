@@ -43,8 +43,20 @@ export default function ReportExportTemplate() {
   }; */
   return (
     <>
-      <Flex direction="column" p={4} w={"180mm"} alignSelf="center" id='reportToPrint' overflow={'hidden'}>
-        <Flex justify={"space-between"} align={"flex-end"} pb={4} id='exportToolbox'>
+      <Flex
+        direction="column"
+        p={4}
+        w={"180mm"}
+        alignSelf="center"
+        id="reportToPrint"
+        overflow={"hidden"}
+      >
+        <Flex
+          justify={"space-between"}
+          align={"flex-end"}
+          pb={4}
+          id="exportToolbox"
+        >
           <Heading size={"md"}>Report export</Heading>
           <div>
             <Button
@@ -55,7 +67,12 @@ export default function ReportExportTemplate() {
             >
               Cancel
             </Button>
-            <Button onClick={() => { window.print() }} colorScheme="brand">
+            <Button
+              onClick={() => {
+                window.print();
+              }}
+              colorScheme="brand"
+            >
               Export in PDF
             </Button>
           </div>
@@ -66,7 +83,7 @@ export default function ReportExportTemplate() {
           p={4}
           ref={HTML_TO_EXPORT}
           direction="column"
-          overflow={'auto'}
+          overflow={"auto"}
         >
           <Heading
             size={"md"}
