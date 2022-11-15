@@ -104,6 +104,9 @@ export function ZoneListButton({
                       if (e.key === "Enter") {
                         updateZoneName(value ?? "");
                       }
+                      if (e.key === "Backspace") {
+                        e.stopPropagation();
+                      }
                     }}
                     onChange={(e) => {
                       setValue(e.target.value);
