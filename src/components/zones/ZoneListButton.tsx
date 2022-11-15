@@ -103,6 +103,10 @@ export function ZoneListButton({
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         updateZoneName(value ?? "");
+                        setEditNameMode(false);
+                      }
+                      if (e.key === "Backspace") {
+                        e.stopPropagation();
                       }
                     }}
                     onChange={(e) => {
