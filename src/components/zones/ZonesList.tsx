@@ -25,7 +25,7 @@ import { ZoneListButton } from "./ZoneListButton";
 import {
   allZonesDeleted,
   allZonesReset,
-  getSelectedZoneIndex,
+  getSelectedDrawnZoneIndex,
   zoneDeleted,
 } from "../../features/zones/zonesSlice";
 import { Fragment } from "react";
@@ -44,7 +44,7 @@ export default function ZonesList() {
     onConfirm: () => {},
   });
   const ZONE_TAB_INDEX = 0;
-  const openedZoneIndex = useAppSelector(getSelectedZoneIndex);
+  const openedZoneIndex = useAppSelector(getSelectedDrawnZoneIndex);
   const project = useAppSelector((state) => state.project);
   const drawnZones = useAppSelector((state) =>
     state.zonesSlice.zones.filter((zone) => zone.createdFrom === "user")
