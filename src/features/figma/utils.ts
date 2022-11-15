@@ -24,8 +24,8 @@ export const getRelativePosition = (elementId: string) => {
   if (!element || !parent) return;
   const { top, left, width, height } = element.getBoundingClientRect();
   const { top: parentTop, left: parentLeft } = parent.getBoundingClientRect();
-  const x = left - parentLeft + ZONES_CONTAINER_PADDING * 4;
-  const y = top - parentTop + ZONES_CONTAINER_PADDING * 4;
+  const x = left - parentLeft;
+  const y = top - parentTop;
   return {
     y,
     x,
