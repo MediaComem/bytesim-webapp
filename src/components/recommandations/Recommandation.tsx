@@ -32,14 +32,22 @@ export default function RecommandationDisplay({
     [recommandation]
   );
 
+  //TODO recommandation mapped to corresponding articles
+  const bestPracticesTest = {
+    title: "Is a video the only solution for the expected illustration ?",
+    link: "https://gr491.isit-europe.org/en/crit.php?id=9-5073-frontend-in-digital-service-uses-video-streams-are",
+  };
+
   return (
     <Box mb={2}>
       <Box flex="1" textAlign="left">
         <Flex>
-          <Text>{recommandation.parameter}</Text>
-          <Tooltip label="Biblio de reco + best practices" hasArrow>
-            ⓘ
-          </Tooltip>
+          <Text mr={1}>{recommandation.parameter}</Text>
+          <a target="_blank" rel="noreferrer" href={bestPracticesTest.link}>
+            <Tooltip label={bestPracticesTest.title} hasArrow>
+              ⓘ
+            </Tooltip>
+          </a>
         </Flex>
       </Box>
       <RadioGroup
