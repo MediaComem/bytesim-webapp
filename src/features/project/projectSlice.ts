@@ -7,7 +7,7 @@ const initialState: Project = {
   name: "Main project",
   status: "EDITING",
   params: {
-    nbVisit: undefined,
+    nbVisit: 1000,
     genericFont: undefined,
     infiniteScroll: undefined,
     plugins: undefined,

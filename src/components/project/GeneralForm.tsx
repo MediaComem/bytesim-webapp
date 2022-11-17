@@ -98,14 +98,14 @@ function GeneralForm({ project }: { project: Project }) {
               </Heading>
               {typeof data === "number" && (
                 <NumberInputCustom
-                  defaultValue={0}
+                  defaultValue={1000}
                   value={
                     project.params &&
                     project.params[key as keyof GenericParameters]
                       ? Number(project.params[key as keyof GenericParameters])
-                      : 0
+                      : 1000
                   }
-                  min={0}
+                  min={1}
                   step={100}
                   onChange={(n) => {
                     const newParams = {

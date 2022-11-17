@@ -7,7 +7,7 @@ export enum ServerType {
 }
 
 export const GeneralFormEntries = {
-  nbVisit: 0,
+  nbVisit: 1000,
   server: ServerType,
   plugins: EBoolean,
   genericFont: EBoolean,

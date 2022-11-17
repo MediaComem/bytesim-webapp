@@ -28,13 +28,13 @@ export function useCalculateImpact(): { energy: number; co2: number } {
   const renewable = useAppSelector(
     (state) => state.project.params.server === ServerType.RENEWABLE
   );
-  const nbVisits = useAppSelector((state) => state.project.params.nbVisit) ?? 0;
+  const nbVisits = useAppSelector((state) => state.project.params.nbVisit) ?? 1;
   let energyTotal = 0;
   let co2Total = 0;
   zones.forEach((zone) => {
     if (isZoneComplete(zone)) {
       try {
-        const simulator = simulationService.simulator(zone, renewable);
+        const simulator = simulationService.simulator(zone, renewable, nbVisits);
         if (simulator) {
           const { energy, co2 } = simulator.simulate();
           energyTotal += energy;
@@ -45,7 +45,7 @@ export function useCalculateImpact(): { energy: number; co2: number } {
       }
     }
   });
-  return { energy: nbVisits * energyTotal, co2: nbVisits * co2Total };
+  return { energy: energyTotal, co2: co2Total };
 }
 
 export function useCalculateRecommandationsImpact(): {
@@ -89,7 +89,7 @@ export function useCalculateRecommandationsImpact(): {
         }
       }
       try {
-        const simulator = simulationService.simulator(simulatedZone, renewable);
+        const simulator = simulationService.simulator(simulatedZone, renewable, nbVisits);
         if (simulator) {
           const { energy, co2 } = simulator.simulate();
           energyTotal += energy;
@@ -100,7 +100,7 @@ export function useCalculateRecommandationsImpact(): {
       }
     }
   });
-  return { energy: nbVisits * energyTotal, co2: nbVisits * co2Total };
+  return { energy: energyTotal, co2: co2Total };
 }
 
 export function useCalculateGenericRecommandations(): RecommandationWithZone<
@@ -150,9 +150,12 @@ export function useCalculateRecommandationsForZone(
   zone: Zone,
   renewable: boolean
 ): Recommandation<VideoParameters[keyof VideoParameters]>[] {
+  const nbVisits = useAppSelector(
+    (state) => state.project.params.nbVisit
+  )!;
   let recommandations: Recommandation<any>[] = [];
   try {
-    const simulator = simulationService.simulator(zone, renewable);
+    const simulator = simulationService.simulator(zone, renewable, nbVisits);
     if (simulator) {
       recommandations = simulator.recommandations();
     }

@@ -1,5 +1,5 @@
 import { Recommandation } from "../../app/types/recommandations";
-import { Zone } from "../../app/types/types";
+import { EBoolean, Zone } from "../../app/types/types";
 import {
   VideoParameters,
   EVideoQuality,
@@ -8,6 +8,7 @@ import {
 } from "../../app/types/videoTypes";
 import { isZoneComplete } from "../../utils/utils";
 import simulationService from "../simulationService";
+import { videoWarnings } from "./messages";
 import { SimulatorVideo } from "./type";
 import { ZoneSimulator } from "./zoneSimulator";
 
@@ -15,9 +16,11 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
   video: VideoParameters;
   renewable: boolean;
   zone: Zone;
+  numberOfVisits: number;
 
-  constructor(zone: Zone, renewable: boolean) {
-    super(zone.id);
+  constructor(zone: Zone, renewable: boolean, numberOfVisits: number) {
+    super(zone.id, numberOfVisits);
+    this.numberOfVisits = numberOfVisits;
     this.video = zone.params;
     this.renewable = renewable;
     this.zone_id = zone.id;
@@ -62,8 +65,8 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
     co2: number;
   } {
     const videoSize = this.videoSize(params);
-    const energy = simulationService.energyMJ(videoSize, this.renewable);
-    const co2 = simulationService.gwp(videoSize, this.renewable);
+    const energy = simulationService.energyMJ(videoSize, this.renewable) * this.numberOfVisits;
+    const co2 = simulationService.gwp(videoSize, this.renewable) * this.numberOfVisits;
     return { energy, co2 };
   }
 
@@ -77,27 +80,43 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
     const currentImpact = this.simulate();
     //show recommandations only if the zone params are fully filled
     if (isZoneComplete(this.zone)) {
-      const recommandationsQuality = this.recommandations4Parameter(
+      const recommandationsQuality = this.betterOptionsRecommandations(
         currentImpact,
         EVideoQuality,
         this.video,
         "quality"
       );
       recommandations.push(...recommandationsQuality);
-      const recommandationsDuration = this.recommandations4Parameter(
+      const recommandationsDuration = this.betterOptionsRecommandations(
         currentImpact,
         EVideoDuration,
         this.video,
         "duration"
       );
       recommandations.push(...recommandationsDuration);
-      const recommandationsFormat = this.recommandations4Parameter(
+      const recommandationsFormat = this.betterOptionsRecommandations(
         currentImpact,
         EVideoFormat,
         this.video,
         "format"
       );
       recommandations.push(...recommandationsFormat);
+      const recommandationsAutoplay = this.badPracticeRecommandations(
+        currentImpact,
+        EBoolean,
+        this.video,
+        "autoplay",
+        videoWarnings.autoplay
+      );
+      recommandations.push(...recommandationsAutoplay);
+      const recommandationsLoop = this.badPracticeRecommandations(
+        currentImpact,
+        EBoolean,
+        this.video,
+        "loop",
+        videoWarnings.loop
+      );
+      recommandations.push(...recommandationsLoop);
     }
     return recommandations;
   }

@@ -97,8 +97,8 @@ export type ZoneParamsType =
   | DynContentParameters;
 
 export enum EBoolean {
-  YES = "Yes",
   NO = "No",
+  YES = "Yes",
 }
 
 // not complete form zone + general

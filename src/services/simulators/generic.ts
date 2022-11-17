@@ -17,6 +17,7 @@ export class GenericParametersSimulator implements SimulatorGeneric {
     if (this.parameters.server !== ServerType.RENEWABLE) {
       return [{
         id: 'energy',
+        type: 'betterValue',
         zone_id: 'generic',
         parameter: 'server',
         currentValue: this.parameters.server,

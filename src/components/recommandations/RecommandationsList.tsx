@@ -2,7 +2,6 @@ import { Accordion } from "@chakra-ui/react";
 import { GenericParameters } from "../../app/types/generalFormTypes";
 import { RecommandationWithZone } from "../../app/types/recommandations";
 import { VideoParameters } from "../../app/types/videoTypes";
-import RecommandationDisplay from "./Recommandation";
 import RecommandationsByZone from "./RecommandationsByZone";
 
 export type RecommandationType = RecommandationWithZone<

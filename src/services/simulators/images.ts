@@ -7,11 +7,13 @@ import { ZoneSimulator } from "./zoneSimulator";
 export class ImageSimulator extends ZoneSimulator implements SimulatorImages {
   images: ImageParameters;
   renewable: boolean;
+  numberOfVisits: number;
 
-  constructor(zone: Zone | ZoneFigma, renewable: boolean) {
-    super(zone.id);
+  constructor(zone: Zone | ZoneFigma, renewable: boolean, numberOfVisits: number) {
+    super(zone.id, numberOfVisits);
     this.images = zone.params;
     this.renewable = renewable;
+    this.numberOfVisits = numberOfVisits;
   }
 
   simulate() {

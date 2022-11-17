@@ -41,7 +41,7 @@ export default function ZonesList() {
   const [modalContent, setModalContent] = React.useState<DynamicModalParams>({
     title: "",
     text: "",
-    onConfirm: () => {}
+    onConfirm: () => {},
   });
   const ZONE_TAB_INDEX = 0;
   const openedZoneIndex = useAppSelector(getSelectedZoneIndex);
@@ -88,15 +88,15 @@ export default function ZonesList() {
                   variant={"ghost"}
                   size="sm"
                   onClick={() => {
-                  setModalContent({
-                    ...confirmText.deleteAllZones,
-                    onConfirm: () => {
-                      dispatch(allZonesDeleted());
-                      //dispatch(recommandationsReset());
-                    },
-                  });
-                  onOpen();
-                }}
+                    setModalContent({
+                      ...confirmText.deleteAllZones,
+                      onConfirm: () => {
+                        dispatch(allZonesDeleted());
+                        //dispatch(recommandationsReset());
+                      },
+                    });
+                    onOpen();
+                  }}
                   isDisabled={project.status === "SIMULATION"}
                 >
                   Delete all
@@ -107,7 +107,6 @@ export default function ZonesList() {
             <AccordionPanel p={0}>
               <Accordion allowToggle index={[openedZoneIndex]}>
                 {drawnZones.map((z, i) => {
-                  console.log(openedZoneIndex);
                   return (
                     <Fragment
                       key={z.id}

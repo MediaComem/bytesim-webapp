@@ -13,13 +13,13 @@ import { RecommandationOption } from "../../app/types/recommandations";
 import { recommandationUpdated } from "../../features/recommandations/recommandationsSlice";
 import { RecommandationType } from "./RecommandationsList";
 
-interface RecommandationDisplayProps {
+interface BetterChoicesRecommandationProps {
   recommandation: RecommandationType;
 }
 
-export default function RecommandationDisplay({
+export function BetterChoicesRecommandation({
   recommandation,
-}: RecommandationDisplayProps) {
+}: BetterChoicesRecommandationProps) {
   //const { totalBenefits, setTotalBenefits } = React.useContext(ReportCTX);
   const dispatch = useDispatch();
 
@@ -60,6 +60,42 @@ export default function RecommandationDisplay({
           )}
         </Stack>
       </RadioGroup>
+    </Box>
+  );
+}
+
+interface BadPracticeRecommandationProps {
+  recommandation: RecommandationType;
+}
+
+export function BadPracticeRecommandation({
+  recommandation,
+}: BadPracticeRecommandationProps) {
+  //const { totalBenefits, setTotalBenefits } = React.useContext(ReportCTX);
+  const dispatch = useDispatch();
+
+  const onChangeParams = React.useCallback(
+    (v: RecommandationOption) => {
+      dispatch(
+        recommandationUpdated({ id: recommandation.id, selectedValue: v })
+      );
+    },
+    [recommandation]
+  );
+
+  return (
+    <Box mb={2}>
+      <Box flex="1" textAlign="left">
+        <Flex>
+          <Text>{recommandation.parameter}</Text>
+          <Tooltip label="Biblio de reco + best practices" hasArrow>
+            ⓘ
+          </Tooltip>
+        </Flex>
+      </Box>
+      <Text fontSize="sm" mt={1} color="tomato">
+        Warning: {recommandation.warningMessage}
+      </Text>
     </Box>
   );
 }
