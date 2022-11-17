@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import projectReducer from "../features/project/projectSlice";
+import projectsReducer from "../features/project/projectsSlice";
 import zonesSlice from "../features/zones/zonesSlice";
 import { debounce } from "debounce";
 import browserStorage from "../services/browserStorage";
@@ -7,7 +7,7 @@ import recommandationsSlice from "../features/recommandations/recommandationsSli
 
 export const store = configureStore({
   reducer: {
-    project: projectReducer,
+    projects: projectsReducer,
     zonesSlice,
     // zonesFigma: zonesFigmaSlice,
     recommandations: recommandationsSlice,

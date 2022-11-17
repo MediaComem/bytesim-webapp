@@ -74,6 +74,6 @@ export const {
   recommandationsReset,
 } = recommandationsSlice.actions;
 // Other code such as selectors can use the imported `RootState` type
-export const selectRecommandations = (state: RootState) => state.project;
+export const selectRecommandations = (state: RootState) => state.recommandations;
 
 export default recommandationsSlice.reducer;

@@ -45,7 +45,6 @@ export default function ZonesList() {
   });
   const ZONE_TAB_INDEX = 0;
   const openedZoneIndex = useAppSelector(getSelectedZoneIndex);
-  const project = useAppSelector((state) => state.project);
   const drawnZones = useAppSelector((state) =>
     state.zonesSlice.zones.filter((zone) => zone.createdFrom === "user")
   );
@@ -76,7 +75,6 @@ export default function ZonesList() {
                     });
                     onOpen();
                   }}
-                  isDisabled={project.status === "SIMULATION"}
                 >
                   Reset{" "}
                   <ResetIcon
@@ -97,7 +95,6 @@ export default function ZonesList() {
                   });
                   onOpen();
                 }}
-                  isDisabled={project.status === "SIMULATION"}
                 >
                   Delete all
                   <TrashIcon className={css({ margin: "3px" })} fill="black" />

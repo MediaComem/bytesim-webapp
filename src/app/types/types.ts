@@ -5,7 +5,7 @@ import { VideoParameters } from "./videoTypes";
 import { DynContentParameters } from "./dynContentTypes";
 
 export interface Project {
-  id: number;
+  id: string;
   name: string;
   status: ProjectStatus;
   params: GenericParameters;

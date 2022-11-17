@@ -11,12 +11,13 @@ import {
   NumberInputStepper,
   Radio,
   RadioGroup,
+  Spinner,
   Stack,
   useDisclosure,
 } from "@chakra-ui/react";
 import * as React from "react";
 import { useDispatch } from "react-redux";
-import { useAppSelector } from "../../app/hooks";
+import { useCurrentProject } from "../../app/hooks";
 import {
   GeneralFormEntries,
   GenericParameters,
@@ -26,7 +27,7 @@ import { Project } from "../../app/types/types";
 import {
   projectReset,
   projectUpdated,
-} from "../../features/project/projectSlice";
+} from "../../features/project/projectsSlice";
 import AccordionItemTitleCustom from "../layout/AccordionItemTitleCustom";
 import ConfirmModal, { confirmText } from "../layout/ConfirmModal";
 import ProgressPoints from "../layout/ProgressPoints";
@@ -35,54 +36,57 @@ import { css } from "@emotion/css";
 import AccordionCustomTitle from "../layout/AccordionCustomTitle";
 
 export default function GeneralFormAccordion() {
-  const project = useAppSelector((state) => state.project);
+  const currentProject = useCurrentProject();
   const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  return (
-    <AccordionItem borderTop={"none"}>
-      {({ isExpanded }) => (
-        <>
-          <AccordionItemTitleCustom
-            p={2}
-            label={
-              <>
-                <Flex align={"center"}>
-                  <AccordionCustomTitle label="General" icon="settings" />
-                  <ProgressPoints
-                    completeObject={GeneralFormEntries}
-                    params={project.params}
-                  />
-                </Flex>
-              </>
-            }
-            isExpanded={isExpanded}
-          >
-            <Button
-              variant={"ghost"}
-              size="sm"
-              onClick={onOpen}
-              disabled={project.status === "SIMULATION"}
+  if (currentProject) {
+    return (
+      <AccordionItem borderTop={"none"}>
+        {({ isExpanded }) => (
+          <>
+            <AccordionItemTitleCustom
+              p={2}
+              label={
+                <>
+                  <Flex align={"center"}>
+                    <AccordionCustomTitle label="General" icon="settings" />
+                    <ProgressPoints
+                      completeObject={GeneralFormEntries}
+                      params={currentProject.params}
+                    />
+                  </Flex>
+                </>
+              }
+              isExpanded={isExpanded}
             >
-              Reset{" "}
-              <ResetIcon className={css({ margin: "3px" })} stroke="black" />
-            </Button>
-          </AccordionItemTitleCustom>
-          <AccordionPanel>
-            <GeneralForm project={project} />
-          </AccordionPanel>
-          <ConfirmModal
-            texts={confirmText.resetGeneral}
-            isOpen={isOpen}
-            onClose={onClose}
-            onConfirm={() => {
-              dispatch(projectReset());
-              onClose();
-            }}
-          />
-        </>
-      )}
-    </AccordionItem>
-  );
+              <Button variant={"ghost"} size="sm" onClick={onOpen}>
+                Reset{" "}
+                <ResetIcon className={css({ margin: "3px" })} stroke="black" />
+              </Button>
+            </AccordionItemTitleCustom>
+            <AccordionPanel>
+              <GeneralForm project={currentProject} />
+            </AccordionPanel>
+            <ConfirmModal
+              texts={confirmText.resetGeneral}
+              isOpen={isOpen}
+              onClose={onClose}
+              onConfirm={() => {
+                dispatch(projectReset(currentProject.id));
+                onClose();
+              }}
+            />
+          </>
+        )}
+      </AccordionItem>
+    );
+  } else {
+    return (
+      <>
+        <Spinner />
+      </>
+    );
+  }
 }
 
 function GeneralForm({ project }: { project: Project }) {

@@ -9,7 +9,6 @@ import {
 import { css, cx } from "@emotion/css";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { useAppSelector } from "../../app/hooks";
 import { Zone, ZoneType } from "../../app/types/types";
 import { colorTheme } from "../../theme";
 import AccordionChevron from "../layout/AccordionChevron";
@@ -43,7 +42,6 @@ export function ZoneListButton({
   hiddenMode = false,
 }: ZoneListButtonProps) {
   const dispatch = useDispatch();
-  const projectStatus = useAppSelector((state) => state.project.status);
   const [value, setValue] = React.useState(zone.name);
   const [editNameMode, setEditNameMode] = React.useState(false);
   const [oldZoneName, setOldZoneName] = React.useState(zone.name);
@@ -158,7 +156,6 @@ export function ZoneListButton({
               onClick={() => {
                 dispatch(zoneReset(zone.id));
               }}
-              isDisabled={projectStatus === "SIMULATION"}
             >
               <ResetIcon className={css({ margin: "3px" })} stroke="black" />
             </Button>
@@ -168,7 +165,6 @@ export function ZoneListButton({
               variant={"ghost"}
               onClick={onOpen}
               title="Delete zone"
-              isDisabled={projectStatus === "SIMULATION"}
             >
               <TrashIcon className={css({ margin: "3px" })} fill="black" />
             </Button>

@@ -1,20 +1,21 @@
 import { Button } from "@chakra-ui/react";
 import * as React from "react";
+import { useDispatch } from "react-redux";
+import { projectAdded } from "../../features/project/projectsSlice";
 
 export default function NewProjectButton() {
-  //const dispatch = useDispatch();
-  const createNewProject = () => {
-    console.log("new project created in store");
+  const dispatch = useDispatch();
+  const createNewProject = async () => {
+    return dispatch(projectAdded()).payload.id;
   };
   return (
     <>
       <Button
         onClick={() => {
-          createNewProject();
-          window.open("./bytesim-webapp/new", "_blank");
+            createNewProject().then((value) => {
+            window.open(`./bytesim-webapp/${value}`, "_blank");
+          });
         }}
-        // FOR NOW DISABLED AS NEW PROJECT IS WIND
-      //disabled
       >
         New project
       </Button>

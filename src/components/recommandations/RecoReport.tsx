@@ -6,6 +6,7 @@ import {
   useAppZones,
   useCalculateAllRecommandations,
   useCalculateGenericRecommandations,
+  useCurrentProject,
 } from "../../app/hooks";
 import { GenericParameters } from "../../app/types/generalFormTypes";
 import { RecommandationWithZone } from "../../app/types/recommandations";
@@ -40,11 +41,8 @@ export function ReportBody({
   const recommandations = useCalculateAllRecommandations();
   const genericRecomandations = useCalculateGenericRecommandations();
   const zones = useAppZones();
-
-  /* const zonesParams = useAppSelector((state) => {
-    return Object.values(state.zones).filter((zone) => zone.filter());
-  }); */
-  const projectGeneralParams = useAppSelector((state) => state.project.params);
+  const currentProject = useCurrentProject();
+  const projectGeneralParams = currentProject ? currentProject.params : undefined;
   useEffect(() => {
     dispatch(
       recommandationsPopulated([...genericRecomandations, ...recommandations])

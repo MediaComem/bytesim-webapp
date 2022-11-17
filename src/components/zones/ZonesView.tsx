@@ -72,7 +72,7 @@ export default function ZonesView({
   disableEdition,
   zoom,
 }: {
-  disableEdition: boolean;
+  disableEdition?: boolean;
   zoom: number;
 }) {
   const dispatch = useDispatch();
@@ -82,7 +82,9 @@ export default function ZonesView({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const handleDelete = (e: KeyboardEvent) => {
     if (e.key === "Backspace" || e.key === "Delete") {
-      onOpen();
+      if (selectedZone) {
+        onOpen();
+      }
     }
   };
   useEffect(() => {
@@ -90,7 +92,7 @@ export default function ZonesView({
     return () => {
       document.removeEventListener("keydown", handleDelete);
     };
-  }, []);
+  }, [selectedZone]);
   const zones = useAppZones()?.filter((z) => !z.hidden);
   return (
     <Flex
@@ -185,7 +187,7 @@ export default function ZonesView({
 interface ZoneFrameProps {
   //RCmenustate:RightClickMenuState;
   zone: Zone;
-  disableEdition: boolean;
+  disableEdition?: boolean;
   zoom: number;
 }
 function ZoneFrame({

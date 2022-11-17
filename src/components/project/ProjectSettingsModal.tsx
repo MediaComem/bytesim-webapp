@@ -12,12 +12,13 @@ import {
 } from "@chakra-ui/react";
 import * as React from "react";
 import { useDispatch } from "react-redux";
-import { useAppSelector } from "../../app/hooks";
-import { setName } from "../../features/project/projectSlice";
+import { useCurrentProject } from "../../app/hooks";
+import { projectUpdated } from "../../features/project/projectsSlice";
 
 export default function ProjectSettingsModal() {
   const dispatch = useDispatch();
-  const projectName = useAppSelector((state) => state.project.name);
+  const currentProject = useCurrentProject();
+  const projectName = currentProject ? currentProject.name : 'Undefined';
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [projectNameI, setProjectNameI] = React.useState<string>(projectName);
   return (
@@ -40,7 +41,7 @@ export default function ProjectSettingsModal() {
             <Button variant="ghost" mr={3} onClick={onClose}>
               Close
             </Button>
-            <Button onClick={() => dispatch(setName(projectNameI))}>
+            <Button onClick={() => dispatch(projectUpdated({ name: projectNameI }))}>
               Update
             </Button>
           </ModalFooter>

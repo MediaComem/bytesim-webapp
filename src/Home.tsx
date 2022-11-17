@@ -20,7 +20,7 @@ import MainGroupList from "./components/zones/MainGroupList";
 import GeneralFormAccordion from "./components/project/GeneralForm";
 import ZonesList from "./components/zones/ZonesList";
 import ZonesView from "./components/zones/ZonesView";
-import { projectReset } from "./features/project/projectSlice";
+import { projectReset } from "./features/project/projectsSlice";
 
 import { ReactComponent as ResetIcon } from "./assets/ResetIcon_Active_MouseOver.svg";
 import ExportButton from "./components/recommandations/ExportButton";
@@ -35,11 +35,9 @@ import {
 import "react-reflex/styles.css";
 import { ReflexContainer, ReflexElement, ReflexSplitter } from "react-reflex";
 
-export default function Home() {
+export default function Home({ projectId } : {projectId: string}) {
   const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const state = useAppSelector((s) => s);
-  const project = state.project;
   const [zoom, setZoom] = React.useState<number>(100);
   const [showTooltip, setShowTooltip] = React.useState(false);
   //const navigate = useNavigate();
@@ -62,7 +60,6 @@ export default function Home() {
               onClick={onOpen}
               size="sm"
               variant="ghost"
-              disabled={project.status === "SIMULATION"}
               minWidth="min-content"
             >
               Reset all{" "}
@@ -81,7 +78,8 @@ export default function Home() {
             isOpen={isOpen}
             onClose={onClose}
             onConfirm={() => {
-              dispatch(projectReset());
+              // TO DO !!
+              dispatch(projectReset(projectId));
               dispatch(allZonesReset());
               onClose();
             }}
@@ -205,7 +203,6 @@ export default function Home() {
                 }}
                 size="sm"
                 colorScheme={"brand"}
-                disabled={project.status === "SIMULATION"}
                 minWidth="min-content"
               >
                 + Create Zone
@@ -214,7 +211,6 @@ export default function Home() {
           }
         >
           <ZonesView
-            disableEdition={project.status === "SIMULATION"}
             zoom={zoom / 100}
           />
         </Panel>

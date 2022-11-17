@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import * as React from "react";
 import { useDispatch } from "react-redux";
-import { projectUpdated } from "../../features/project/projectSlice";
+import { projectUpdated } from "../../features/project/projectsSlice";
 import { ReactComponent as AddIcon } from "../../assets/BigPlus.svg";
 import { colorTheme } from "../../theme";
 

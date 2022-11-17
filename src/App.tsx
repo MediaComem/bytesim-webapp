@@ -23,7 +23,7 @@ function App() {
         <RightClickMenu />
         <BytesimeHeader />
         <Routes>
-          <Route path="/*" element={<Home />} />
+          <Route path="/*" element={<Home projectId={'1'}/>} />
           <Route path="export" element={<ReportExportTemplate />} />
           <Route
             path="bytesim-webapp/export"

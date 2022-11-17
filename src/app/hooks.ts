@@ -1,5 +1,6 @@
 import { createDraftSafeSelector } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import simulationService from "../services/simulationService";
 import { isZoneComplete } from "../utils/utils";
 import { AppDispatch, RootState } from "./store";
@@ -8,7 +9,7 @@ import {
   Recommandation,
   RecommandationWithZone,
 } from "./types/recommandations";
-import { Zone } from "./types/types";
+import { Project, Zone } from "./types/types";
 import { VideoParameters } from "./types/videoTypes";
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
@@ -25,10 +26,11 @@ export const useAppZones = () => useAppSelector(zoneSelector);
 
 export function useCalculateImpact(): { energy: number; co2: number } {
   const zones = useAppSelector(zoneSelector);
-  const renewable = useAppSelector(
-    (state) => state.project.params.server === ServerType.RENEWABLE
-  );
-  const nbVisits = useAppSelector((state) => state.project.params.nbVisit) ?? 0;
+  const currentProject = useCurrentProject();
+  const nbVisits = currentProject?.params.nbVisit
+    ? currentProject.params.nbVisit
+    : 0;
+  const renewable = currentProject?.params.server === ServerType.RENEWABLE;
   let energyTotal = 0;
   let co2Total = 0;
   zones.forEach((zone) => {
@@ -54,10 +56,15 @@ export function useCalculateRecommandationsImpact(): {
 } {
   const zones = useAppSelector(zoneSelector);
   const recommandations = useAppSelector((state) => state.recommandations);
-  const nbVisits = useAppSelector((state) => state.project.params.nbVisit) ?? 1; // if no visitor impact per visit
-  let renewable = useAppSelector(
+  const currentProject = useCurrentProject();
+  const nbVisits = currentProject?.params.nbVisit
+    ? currentProject.params.nbVisit
+    : 1;
+  //const nbVisits = useAppSelector((state) => state.project.params.nbVisit) ?? 1; // if no visitor impact per visit
+  /* let renewable = useAppSelector(
     (state) => state.project.params.server === ServerType.RENEWABLE
-  );
+  ); */
+  let renewable = currentProject?.params.server === ServerType.RENEWABLE;
   let energyTotal = 0;
   let co2Total = 0;
   const recommandationRenewable = recommandations.find(
@@ -106,21 +113,25 @@ export function useCalculateRecommandationsImpact(): {
 export function useCalculateGenericRecommandations(): RecommandationWithZone<
   GenericParameters[keyof GenericParameters]
 >[] {
-  const genericParameters = useAppSelector((state) => state.project.params);
+  const currentProject = useCurrentProject();
+  //const genericParameters = useAppSelector((state) => state.project.params);
+  const genericParameters = currentProject?.params;
   const recommandations: RecommandationWithZone<
     GenericParameters[keyof GenericParameters]
   >[] = [];
-  // Generic recommandations
-  const simulator =
-    simulationService.genericParametersSimulator(genericParameters);
-  if (simulator) {
-    const recos = simulator.recommandations();
-    recos.forEach((reco) => {
-      const rec: RecommandationWithZone<
-        GenericParameters[keyof GenericParameters]
-      > = { ...reco, zoneId: "generic", zoneName: "Generic" };
-      recommandations.push(rec);
-    });
+  if (genericParameters) {
+    // Generic recommandations
+    const simulator =
+      simulationService.genericParametersSimulator(genericParameters);
+    if (simulator) {
+      const recos = simulator.recommandations();
+      recos.forEach((reco) => {
+        const rec: RecommandationWithZone<
+          GenericParameters[keyof GenericParameters]
+        > = { ...reco, zoneId: "generic", zoneName: "Generic" };
+        recommandations.push(rec);
+      });
+    }
   }
   return recommandations;
 }
@@ -129,7 +140,10 @@ export function useCalculateAllRecommandations(): RecommandationWithZone<
   VideoParameters[keyof VideoParameters]
 >[] {
   const zones = useAppZones();
-  const genericParameters = useAppSelector((state) => state.project.params);
+  // pas sûre de pouvoir faire ça
+  const currentProject = useCurrentProject();
+  //const genericParameters = useAppSelector((state) => state.project.params);
+  const genericParameters = currentProject ? currentProject.params : undefined;
   const renewable = genericParameters === ServerType.RENEWABLE;
   const recommandations: RecommandationWithZone<
     VideoParameters[keyof VideoParameters]
@@ -169,4 +183,25 @@ export function useSelectedZone(): Zone | undefined {
     if (z.status === "EDITING") zone = z;
   });
   return zone;
+}
+
+export function useCurrentProject(): Project | undefined {
+  let location = useLocation().pathname;
+  if (location.includes("/bytesim-webapp/")) {
+    location = location.replace("/bytesim-webapp/", "");
+  } else {
+    location.replace("/", "")
+  }
+  console.log(location);
+    const currentProject = useAppSelector((state) =>
+      state.projects.find((p) => {
+        if (location === "/bytesim-webapp" || location === '/') {
+          return p.id === "1";
+        } else {
+          return p.id === location;
+        }
+      })
+    );
+
+  return currentProject;
 }

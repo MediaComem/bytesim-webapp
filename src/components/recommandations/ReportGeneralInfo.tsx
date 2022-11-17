@@ -1,8 +1,8 @@
 import { Flex, Spacer, Text } from "@chakra-ui/react";
 import {
-  useAppSelector,
   useCalculateImpact,
   useCalculateRecommandationsImpact,
+  useCurrentProject,
 } from "../../app/hooks";
 
 export default function ReportGeneralInfo() {
@@ -12,8 +12,8 @@ export default function ReportGeneralInfo() {
     energy: impact.energy - impactWithRecommandations.energy,
     co2: impact.co2 - impactWithRecommandations.co2,
   };
-  const nbOfVisit =
-    useAppSelector((state) => state.project.params.nbVisit) ?? 0;
+  const currentProject = useCurrentProject();
+  const nbOfVisit = currentProject ? currentProject.params.nbVisit : 0;
   const nbOfVisitDefined = nbOfVisit && nbOfVisit > 0;
   const totalCO2Benef = `-${benefits.co2.toFixed(0)} ${
     nbOfVisitDefined ? "" : "/visit"
