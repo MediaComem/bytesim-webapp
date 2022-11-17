@@ -48,14 +48,32 @@ export default function RecommandationDisplay({
       >
         <Stack>
           <Radio colorScheme={"brand"} value={"current"} size="sm">
-            Current:&nbsp;{recommandation.currentValue}
+            {`Current: ${recommandation.currentValue}`}
           </Radio>
-          <Radio colorScheme={"brand"} value={"better"} size="sm">
-            More sober:&nbsp;{recommandation.betterValue}
-          </Radio>
+          {recommandation.betterValue && (
+            <Radio colorScheme={"brand"} value={"better"} size="sm">
+              <Flex>
+                <Text>{`More sober: ${recommandation.betterValue}`}</Text>
+                <Text
+                  ml={2}
+                  color="green.600"
+                >{`-${recommandation.benefitsBetter?.co2.toFixed(
+                  0
+                )}kg Co2eq`}</Text>
+              </Flex>
+            </Radio>
+          )}
           {recommandation.bestValue && (
             <Radio colorScheme={"brand"} value={"optimal"} size="sm">
-              Most sober:&nbsp;{recommandation.bestValue}
+              <Flex>
+                <Text>{`Most sober: ${recommandation.bestValue}`}</Text>
+                <Text
+                  ml={2}
+                  color="green.600"
+                >{`-${recommandation.benefitsBest?.co2.toFixed(
+                  0
+                )}kg Co2eq`}</Text>
+              </Flex>
             </Radio>
           )}
         </Stack>
