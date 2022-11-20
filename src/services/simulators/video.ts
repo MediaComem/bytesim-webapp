@@ -1,4 +1,4 @@
-import { Recommandation } from "../../app/types/recommandations";
+import { Recommandation, RecommandationTypes } from "../../app/types/recommandations";
 import { EBoolean, Zone } from "../../app/types/types";
 import {
   VideoParameters,
@@ -52,12 +52,12 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
     const quality = params.quality;
     const durationSec = durations[params.duration];
 
-    const sizeMb = (1000000 * bitratesMbps[quality] * durationSec) / 8;
+    const sizeBytes = (1000000 * bitratesMbps[quality] * durationSec) / 8;
     if (params.format === EVideoFormat.FORMAT_GIF) {
       // GIF approximated to 3 times size of MP4
-      return 3 * sizeMb;
+      return 3 * sizeBytes;
     }
-    return sizeMb;
+    return sizeBytes;
   }
 
   protected simulateParameters(params: VideoParameters): {
@@ -101,19 +101,19 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
         "format"
       );
       recommandations.push(...recommandationsFormat);
-      const recommandationsAutoplay = this.badPracticeRecommandations(
-        currentImpact,
+      const recommandationsAutoplay = this.messageRecommandations(
         EBoolean,
         this.video,
         "autoplay",
+        RecommandationTypes.WARNING,
         videoWarnings.autoplay
       );
       recommandations.push(...recommandationsAutoplay);
-      const recommandationsLoop = this.badPracticeRecommandations(
-        currentImpact,
+      const recommandationsLoop = this.messageRecommandations(
         EBoolean,
         this.video,
         "loop",
+        RecommandationTypes.WARNING,
         videoWarnings.loop
       );
       recommandations.push(...recommandationsLoop);

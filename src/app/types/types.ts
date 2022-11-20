@@ -38,27 +38,27 @@ export interface ZoneInfo {
 
 export interface ZoneUnknown extends ZoneInfo {
   zoneType?: undefined;
-  params?: undefined;
+  params?: undefined | {};
 }
 
 export interface ZoneVideo extends ZoneInfo {
   zoneType: ZoneType.Video;
-  params?: VideoParameters;
+  params?: VideoParameters | {};
 }
 
 export interface ZoneImages extends ZoneInfo {
   zoneType: ZoneType.Images;
-  params?: ImageParameters;
+  params?: ImageParameters | {};
 }
 
 export interface ZoneText extends ZoneInfo {
   zoneType: ZoneType.Text;
-  params?: any;
+  params?: any | {};
 }
 
 export interface ZoneDynamic extends ZoneInfo {
   zoneType: ZoneType.DynamicContent;
-  params?: any;
+  params?: any | {};
 }
 
 export type Zone =

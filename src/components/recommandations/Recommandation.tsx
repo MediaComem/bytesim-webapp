@@ -71,18 +71,6 @@ interface BadPracticeRecommandationProps {
 export function BadPracticeRecommandation({
   recommandation,
 }: BadPracticeRecommandationProps) {
-  //const { totalBenefits, setTotalBenefits } = React.useContext(ReportCTX);
-  const dispatch = useDispatch();
-
-  const onChangeParams = React.useCallback(
-    (v: RecommandationOption) => {
-      dispatch(
-        recommandationUpdated({ id: recommandation.id, selectedValue: v })
-      );
-    },
-    [recommandation]
-  );
-
   return (
     <Box mb={2}>
       <Box flex="1" textAlign="left">
@@ -93,8 +81,30 @@ export function BadPracticeRecommandation({
           </Tooltip>
         </Flex>
       </Box>
-      <Text fontSize="sm" mt={1} color="tomato">
-        Warning: {recommandation.warningMessage}
+      <Text fontSize="sm" mt={1} color="red.800">
+        Warning: {recommandation.message}
+      </Text>
+    </Box>
+  );
+}
+
+interface TipRecommandationProps {
+  recommandation: RecommandationType;
+}
+
+export function TipRecommandation({ recommandation }: TipRecommandationProps) {
+  return (
+    <Box mb={2}>
+      <Box flex="1" textAlign="left">
+        <Flex>
+          <Text>{recommandation.parameter}</Text>
+          <Tooltip label="Biblio de reco + best practices" hasArrow>
+            ⓘ
+          </Tooltip>
+        </Flex>
+      </Box>
+      <Text fontSize="sm" mt={1} color="yellow.700">
+        Tip: {recommandation.message}
       </Text>
     </Box>
   );

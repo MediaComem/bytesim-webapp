@@ -130,12 +130,15 @@ export function useCalculateAllRecommandations(): RecommandationWithZone<
 >[] {
   const zones = useAppZones();
   const genericParameters = useAppSelector((state) => state.project.params);
+  const nbVisits = useAppSelector(
+    (state) => state.project.params.nbVisit
+  ) ?? 1;
   const renewable = genericParameters === ServerType.RENEWABLE;
   const recommandations: RecommandationWithZone<
     VideoParameters[keyof VideoParameters]
   >[] = [];
   zones.forEach((zone) => {
-    const recos = useCalculateRecommandationsForZone(zone, renewable);
+    const recos = useCalculateRecommandationsForZone(zone, renewable, nbVisits);
     recos.forEach((reco) => {
       const rec: RecommandationWithZone<
         VideoParameters[keyof VideoParameters]
@@ -148,11 +151,9 @@ export function useCalculateAllRecommandations(): RecommandationWithZone<
 
 export function useCalculateRecommandationsForZone(
   zone: Zone,
-  renewable: boolean
+  renewable: boolean,
+  nbVisits: number
 ): Recommandation<VideoParameters[keyof VideoParameters]>[] {
-  const nbVisits = useAppSelector(
-    (state) => state.project.params.nbVisit
-  )!;
   let recommandations: Recommandation<any>[] = [];
   try {
     const simulator = simulationService.simulator(zone, renewable, nbVisits);

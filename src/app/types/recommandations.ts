@@ -4,8 +4,7 @@ export interface Recommandation<T> {
   zone_id: string;
   parameter: string;
   bestPracticeMessage?: string;
-  tipsMessage?: string;
-  warningMessage?: string;
+  message?: string;
   currentValue?: T;
   betterValue?: T;
   bestValue?: T;
@@ -14,9 +13,15 @@ export interface Recommandation<T> {
   selectedValue?:RecommandationOption;
 }
 
+export enum RecommandationTypes {
+  BETTER_VALUE = 'betterValue',
+  TIP = 'tip',
+  WARNING = 'warning'
+}
+
 export type Benefits = { energy: number, co2: number};
 export type RecommandationOption = 'current' | 'better' | 'optimal';
-export type RecommandationType = 'betterValue' | 'tip' | 'warning';
+export type RecommandationType = RecommandationTypes.BETTER_VALUE | RecommandationTypes.TIP | RecommandationTypes.WARNING;
 
 export interface RecommandationWithZone<T> extends Recommandation<T> {
   zoneId: string;

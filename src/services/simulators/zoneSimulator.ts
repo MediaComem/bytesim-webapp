@@ -1,6 +1,5 @@
 import { nanoid } from "@reduxjs/toolkit";
-import { Recommandation } from "../../app/types/recommandations";
-import { EBoolean } from "../../app/types/types";
+import { Recommandation, RecommandationTypes } from "../../app/types/recommandations";
 
 export class ZoneSimulator {
   zone_id: string;
@@ -30,22 +29,6 @@ export class ZoneSimulator {
     if (currentChoice) {
       const choices = Object.values(options);
       const idx = choices.findIndex((option) => option === currentChoice);
-      //Best choice - need this to keep track of previous recommendations
-      /*if (idx === 0) {
-        const bestOption: Recommandation<any> = {
-          id: nanoid(),
-          type: 'betterValue',
-          zone_id: this.zone_id,
-          parameter: key,
-          currentValue: currentChoice,
-          betterValue: null,
-          benefitsBetter: {
-            energy: 0,
-            co2: 0,
-          },
-        };
-        recommandations.push(bestOption);
-      }*/
       if (idx > 0) {
         // better choice
         const better = choices[idx - 1];
@@ -57,7 +40,7 @@ export class ZoneSimulator {
           this.simulateParameters(betterParams);
         const recommandation: Recommandation<any> = {
           id: nanoid(),
-          type: 'betterValue',
+          type: RecommandationTypes.BETTER_VALUE,
           zone_id: this.zone_id,
           parameter: key,
           currentValue: currentChoice,
@@ -90,32 +73,63 @@ export class ZoneSimulator {
   }
 
   /**
-   * @note assume that the params should be set to false for positive impact
-   * @param currentImpact
-   * @param currentParameters
+   * @note assume that the best param is a the first position
+   * @param options choices for the user
+   * @param currentParameters params of the zone
+   * @param key key of the param to create recommandation
+   * @param type type of
    * @param warningMessage the warning displayed to the user
-   * @param key
-   * @returns
+   * @returns a warning or tip message recommandation
    */
-  badPracticeRecommandations(
-    currentImpact: { energy: number; co2: number },
+  messageRecommandations(
     options: { [s: string]: unknown } | ArrayLike<unknown>,
     currentParameters: { [x: string]: any },
     key: string,
-    warningMessage: string
+    type: RecommandationTypes.WARNING | RecommandationTypes.TIP,
+    message: string
   ) {
     const recommandations: Recommandation<any>[] = [];
     const currentChoice = currentParameters[key];
     if (Object.values(options).findIndex(option => option === currentChoice) > 0) {
-      //Best choice - need this to keep track of previous recommendations
-        const bestOption: Recommandation<any> = {
+        const reco: Recommandation<any> = {
           id: nanoid(),
-          type: 'warning',
+          type,
           zone_id: this.zone_id,
           parameter: key,
-          warningMessage
+          message
         };
-        recommandations.push(bestOption);
+        recommandations.push(reco);
+    }
+    return recommandations;
+  }
+
+  /**
+   * @param currentParameters params of the zone
+   * @param key key of the param to create recommandation
+   * @param threshold the threshold after which the recommendation is created
+   * @param type type of
+   * @param warningMessage the warning displayed to the user
+   * @returns a warning or tip message recommandation
+   */
+  quantityMessageRecommandations(
+    currentParameters: { [x: string]: any },
+    key: string,
+    threshold: number,
+    type: RecommandationTypes.WARNING | RecommandationTypes.TIP,
+    message: string
+  ) {
+    const recommandations: Recommandation<any>[] = [];
+    const currentChoice = currentParameters[key];
+    if (currentChoice > threshold) {
+      console.warn(currentChoice, threshold);
+      const reco: Recommandation<any> = {
+          id: nanoid(),
+          type,
+          zone_id: this.zone_id,
+          parameter: key,
+          message
+        };
+        recommandations.push(reco);
     }
     return recommandations;
   }

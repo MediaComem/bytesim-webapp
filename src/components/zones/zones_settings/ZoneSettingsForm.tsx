@@ -48,7 +48,8 @@ export default function ZoneSettingsForm({
       Object.keys(formEntries).forEach((key) => {
         if (
           key in formEntries &&
-          typeof formEntries[key] === "number" && zone.params &&
+          typeof formEntries[key] === "number" &&
+          zone.params &&
           !Object.keys(zone.params).includes(key)
         ) {
           inputsToAdd[key] = DEFAULT_NUMBER_INPUT;
@@ -74,7 +75,6 @@ export default function ZoneSettingsForm({
     useEffect(() => {
       if (pendingKey !== "") {
         if (zone.zoneType !== formZoneType && zone.zoneType !== undefined) {
-          console.log(pendingValue);
           onOpen();
         } else {
           setParamValue();

@@ -151,10 +151,10 @@ export default function Home() {
                       label={`${zoom}%`}
                     >
                       <SliderThumb
-                      className={css({ boxShadow: "none" })}
-                      width="10px"
-                      height="10px"
-                    />
+                        className={css({ boxShadow: "none" })}
+                        width="10px"
+                        height="10px"
+                      />
                     </Tooltip>
                   </Slider>
                   <Button
@@ -241,8 +241,8 @@ export default function Home() {
           }
         >
           {uncompleteZones.length !== 0 && (
-          <RecoWarning uncompleteZoneNames={uncompleteZones} />
-        )}
+            <RecoWarning uncompleteZoneNames={uncompleteZones} />
+          )}
           <RecoReport />
         </Panel>
       </ReflexElement>

@@ -9,6 +9,7 @@ import AccordionChevron from "../layout/AccordionChevron";
 import {
   BetterChoicesRecommandation,
   BadPracticeRecommandation,
+  TipRecommandation,
 } from "./Recommandation";
 import { RecommandationType } from "./RecommandationsList";
 import ZoneScreenshot from "../zones/ZoneScreenshot";
@@ -23,8 +24,6 @@ export default function RecommandationsByZone({
   zoneId,
 }: RecommandationDisplayProps) {
   //const { totalBenefits, setTotalBenefits } = React.useContext(ReportCTX);
-
-  const showZone = zoneRecommandations.find((reco) => reco.betterValue);
   const defineRecommandationType = (reco: RecommandationType) => {
     switch (reco.type) {
       case "betterValue":
@@ -35,12 +34,14 @@ export default function RecommandationsByZone({
         return (
           <BadPracticeRecommandation recommandation={reco} key={reco.id} />
         );
+      case "tip":
+        return <TipRecommandation recommandation={reco} key={reco.id} />;
       default:
         return null;
     }
   };
 
-  return showZone ? (
+  return zoneRecommandations ? (
     <AccordionItem>
       {({ isExpanded }) => (
         <>
