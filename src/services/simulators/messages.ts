@@ -4,7 +4,7 @@
  * loop: https://gr491.isit-europe.org/crit.php?id=3-4026-contenus-la-presentation-dun-service-est-rarement-contenue
  **/
 export const videoWarnings = {
-    autoplay: "Autoplay disturbs users and uses data even if the video is not seen.",
+    autoplay: "Autoplay disturbs users and uses data even if the video is not watched.",
     loop: "Looping videos conduct to unnecessary consumption when users have already seen the video."
 }
 

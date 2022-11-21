@@ -11,7 +11,6 @@ export class ImageSimulator extends ZoneSimulator implements SimulatorImages {
   image: ImageParameters;
   renewable: boolean;
   zone: Zone;
-  numberOfVisits: number;
   MAX_IMAGE_THRESHOLD: number = 5;
 
   constructor(zone: Zone, renewable: boolean, numberOfVisits: number) {
