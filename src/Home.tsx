@@ -34,9 +34,12 @@ import {
 } from "./features/zones/zonesSlice";
 import "react-reflex/styles.css";
 import { ReflexContainer, ReflexElement, ReflexSplitter } from "react-reflex";
+import { useParams } from "react-router-dom";
 
-export default function Home({ projectId } : {projectId: string}) {
+export default function Home() {
   const dispatch = useDispatch();
+  const id = useParams<'id'>();
+  const projectId = id.id!;
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [zoom, setZoom] = React.useState<number>(100);
   const [showTooltip, setShowTooltip] = React.useState(false);

@@ -13,6 +13,7 @@ const initialProject: Project = {
     plugins: undefined,
     server: undefined,
   },
+  zones: []
 };
 const initialState: Project[] = [{ ...initialProject }];
 
@@ -27,6 +28,7 @@ const defaultNewProject: Project = {
     plugins: undefined,
     server: undefined,
   },
+  zones: []
 };
 
 const projectsSlice = createSlice({
