@@ -46,7 +46,7 @@ export default function ProgressPoints({
     <Flex
       mx={2}
       fontSize="sm"
-      color={completed < total ? "red.500" : "green.500"}
+      color={completed < total ? "red.600" : "green.500"}
     >
       {/* <Flex mx={2} fontSize="xs" color={"gray.400"}> */}
       {/* {points} */}

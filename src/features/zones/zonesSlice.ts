@@ -39,7 +39,7 @@ export const defaultZone: Zone = {
   y: 100,
   status: "EDITING",
   zoneType: undefined,
-  params: undefined,
+  params: {},
   createdFrom: "user",
 };
 export const defaultFigmaZone: Zone = {

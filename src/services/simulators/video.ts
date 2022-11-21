@@ -1,5 +1,5 @@
-import { Recommandation } from "../../app/types/recommandations";
-import { Zone } from "../../app/types/types";
+import { Recommandation, RecommandationTypes } from "../../app/types/recommandations";
+import { EBoolean, Zone } from "../../app/types/types";
 import {
   VideoParameters,
   EVideoQuality,
@@ -8,6 +8,7 @@ import {
 } from "../../app/types/videoTypes";
 import { isZoneComplete } from "../../utils/utils";
 import simulationService from "../simulationService";
+import { videoWarnings } from "./messages";
 import { SimulatorVideo } from "./type";
 import { ZoneSimulator } from "./zoneSimulator";
 
@@ -16,8 +17,8 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
   renewable: boolean;
   zone: Zone;
 
-  constructor(zone: Zone, renewable: boolean) {
-    super(zone.id);
+  constructor(zone: Zone, renewable: boolean, numberOfVisits: number) {
+    super(zone.id, numberOfVisits);
     this.video = zone.params;
     this.renewable = renewable;
     this.zone_id = zone.id;
@@ -49,12 +50,12 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
     const quality = params.quality;
     const durationSec = durations[params.duration];
 
-    const sizeMb = (1000000 * bitratesMbps[quality] * durationSec) / 8;
+    const sizeBytes = (1000000 * bitratesMbps[quality] * durationSec) / 8;
     if (params.format === EVideoFormat.FORMAT_GIF) {
       // GIF approximated to 3 times size of MP4
-      return 3 * sizeMb;
+      return 3 * sizeBytes;
     }
-    return sizeMb;
+    return sizeBytes;
   }
 
   protected simulateParameters(params: VideoParameters): {
@@ -62,8 +63,8 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
     co2: number;
   } {
     const videoSize = this.videoSize(params);
-    const energy = simulationService.energyMJ(videoSize, this.renewable);
-    const co2 = simulationService.gwp(videoSize, this.renewable);
+    const energy = simulationService.energyMJ(videoSize, this.renewable) * this.numberOfVisits;
+    const co2 = simulationService.gwp(videoSize, this.renewable) * this.numberOfVisits;
     return { energy, co2 };
   }
 
@@ -77,27 +78,43 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
     const currentImpact = this.simulate();
     //show recommandations only if the zone params are fully filled
     if (isZoneComplete(this.zone)) {
-      const recommandationsQuality = this.recommandations4Parameter(
+      const recommandationsQuality = this.betterOptionsRecommandations(
         currentImpact,
         EVideoQuality,
         this.video,
         "quality"
       );
       recommandations.push(...recommandationsQuality);
-      const recommandationsDuration = this.recommandations4Parameter(
+      const recommandationsDuration = this.betterOptionsRecommandations(
         currentImpact,
         EVideoDuration,
         this.video,
         "duration"
       );
       recommandations.push(...recommandationsDuration);
-      const recommandationsFormat = this.recommandations4Parameter(
+      const recommandationsFormat = this.betterOptionsRecommandations(
         currentImpact,
         EVideoFormat,
         this.video,
         "format"
       );
       recommandations.push(...recommandationsFormat);
+      const recommandationsAutoplay = this.messageRecommandations(
+        EBoolean,
+        this.video,
+        "autoplay",
+        RecommandationTypes.WARNING,
+        videoWarnings.autoplay
+      );
+      recommandations.push(...recommandationsAutoplay);
+      const recommandationsLoop = this.messageRecommandations(
+        EBoolean,
+        this.video,
+        "loop",
+        RecommandationTypes.WARNING,
+        videoWarnings.loop
+      );
+      recommandations.push(...recommandationsLoop);
     }
     return recommandations;
   }

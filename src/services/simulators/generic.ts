@@ -1,5 +1,5 @@
 import { GenericParameters, ServerType } from "../../app/types/generalFormTypes";
-import { Recommandation } from "../../app/types/recommandations";
+import { Recommandation, RecommandationTypes } from "../../app/types/recommandations";
 import { SimulatorGeneric } from "./type";
 
 export class GenericParametersSimulator implements SimulatorGeneric {
@@ -17,6 +17,7 @@ export class GenericParametersSimulator implements SimulatorGeneric {
     if (this.parameters.server !== ServerType.RENEWABLE) {
       return [{
         id: 'energy',
+        type: RecommandationTypes.BETTER_VALUE,
         zone_id: 'generic',
         parameter: 'server',
         currentValue: this.parameters.server,

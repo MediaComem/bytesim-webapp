@@ -85,17 +85,17 @@ class simulationService {
 
   static simulator(
     zone: Zone | ZoneFigma,
-    renewable: boolean
+    renewable: boolean,
+    numberOfVisits: number
   ): SimulatorVideo | SimulatorImages | undefined {
     if (!zone.params) {
-      // console.log(`No parameters for Zone ${zone.id}`);
       return undefined;
     }
     switch (zone.zoneType) {
       case ZoneType.Video:
-        return new VideoSimulator(zone, renewable);
+        return new VideoSimulator(zone, renewable, numberOfVisits);
       case ZoneType.Images:
-        return new ImageSimulator(zone, renewable);
+        return new ImageSimulator(zone, renewable, numberOfVisits);
     }
   }
 }

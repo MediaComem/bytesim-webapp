@@ -107,7 +107,6 @@ export default function ZonesList() {
             <AccordionPanel p={0}>
               <Accordion allowToggle index={[openedZoneIndex]}>
                 {drawnZones.map((z, i) => {
-                  console.log(openedZoneIndex);
                   return (
                     <Fragment key={z.id}>
                       <AccordionItem key={`${z.id}_${i}`} border="none">

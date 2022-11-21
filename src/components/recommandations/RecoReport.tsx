@@ -45,12 +45,12 @@ export function ReportBody({
     return Object.values(state.zones).filter((zone) => zone.filter());
   }); */
   const projectGeneralParams = useAppSelector((state) => state.project.params);
+  const recos = useAppSelector((state) => state.recommandations);
   useEffect(() => {
     dispatch(
       recommandationsPopulated([...genericRecomandations, ...recommandations])
     );
   }, [zones, projectGeneralParams]);
-  const recos = useAppSelector((state) => state.recommandations);
   return (
     <Flex direction={"column"} id="TO_EXPORT" className={className}>
       <ReportGeneralInfo />

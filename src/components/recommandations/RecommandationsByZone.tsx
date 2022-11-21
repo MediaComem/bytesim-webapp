@@ -6,7 +6,11 @@ import {
   Heading,
 } from "@chakra-ui/react";
 import AccordionChevron from "../layout/AccordionChevron";
-import Recommandation from "./Recommandation";
+import {
+  BetterChoicesRecommandation,
+  BadPracticeRecommandation,
+  TipRecommandation,
+} from "./Recommandation";
 import { RecommandationType } from "./RecommandationsList";
 import ZoneScreenshot from "../zones/ZoneScreenshot";
 
@@ -20,10 +24,24 @@ export default function RecommandationsByZone({
   zoneId,
 }: RecommandationDisplayProps) {
   //const { totalBenefits, setTotalBenefits } = React.useContext(ReportCTX);
+  const defineRecommandationType = (reco: RecommandationType) => {
+    switch (reco.type) {
+      case "betterValue":
+        return (
+          <BetterChoicesRecommandation recommandation={reco} key={reco.id} />
+        );
+      case "warning":
+        return (
+          <BadPracticeRecommandation recommandation={reco} key={reco.id} />
+        );
+      case "tip":
+        return <TipRecommandation recommandation={reco} key={reco.id} />;
+      default:
+        return null;
+    }
+  };
 
-  const showZone = zoneRecommandations.find((reco) => reco.betterValue);
-
-  return showZone ? (
+  return zoneRecommandations ? (
     <AccordionItem>
       {({ isExpanded }) => (
         <>
@@ -37,9 +55,7 @@ export default function RecommandationsByZone({
             <AccordionChevron isExpanded={isExpanded} />
           </AccordionButton>
           <AccordionPanel>
-            {zoneRecommandations?.map((reco) => (
-              <Recommandation recommandation={reco} key={reco.id} />
-            ))}
+            {zoneRecommandations?.map((reco) => defineRecommandationType(reco))}
           </AccordionPanel>
         </>
       )}
