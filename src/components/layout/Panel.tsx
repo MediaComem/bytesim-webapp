@@ -9,6 +9,7 @@ interface PanelProps {
   grow?: 1 | 0;
   children: React.ReactNode;
   id?: string;
+  spinner?: React.ReactNode;
 }
 
 export default function Panel({
@@ -16,6 +17,7 @@ export default function Panel({
   toolbarButton,
   className,
   grow = 0,
+  spinner,
   children,
   id,
 }: PanelProps) {
@@ -29,6 +31,7 @@ export default function Panel({
       overflowX="auto"
     >
       <PanelTitle
+        spinner={spinner}
         title={title}
         toolbarButton={toolbarButton}
         className={css({ overflowX: "auto" })}
@@ -44,6 +47,7 @@ interface PanelTitleProps {
     (string & {}) | "sm" | "md" | "lg" | "xl" | "2xl" | "4xl" | "3xl" | "xs"
   >;
   toolbarButton?: React.ReactNode;
+  spinner?: React.ReactNode;
   className?: string;
 }
 
@@ -51,6 +55,7 @@ function PanelTitle({
   title,
   titleSize,
   toolbarButton,
+  spinner,
   className,
 }: PanelTitleProps) {
   return (
@@ -61,9 +66,12 @@ function PanelTitle({
         alignSelf="stretch"
         justify={"space-between"}
         p={2}
-        minH='50px'
+        minH="50px"
       >
-        <Heading size={titleSize || "sm"}>{title}</Heading>
+        <>
+          <Heading size={titleSize || "sm"}>{title}</Heading>
+          {spinner}
+        </>
         {toolbarButton}
       </Flex>
       <Divider />

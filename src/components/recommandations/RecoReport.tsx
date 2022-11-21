@@ -57,7 +57,7 @@ export function ReportBody({
       <Divider />
       <ReportToolBar />
       <Divider />
-      {recos.length > 0 ? (
+      {recos?.length > 0 ? (
         <RecommandationsList
           recommandations={customRecos || recos}
           allOpen={allOpen}

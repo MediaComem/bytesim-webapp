@@ -3,7 +3,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import { TreeZoneEl, Zone, ZoneStatus } from "../../app/types/types";
 import { isZoneComplete } from "../../utils/utils";
-import { getChildrenIdsOfTree } from "../figma/utils";
+import { getChildrenIdsOfTree, getParentsOfNode } from "../figma/utils";
 
 type ZoneStore = { zones: Zone[]; tree: TreeZoneEl[] };
 const initialState: ZoneStore = {
@@ -44,7 +44,7 @@ export const defaultZone: Zone = {
 };
 export const defaultFigmaZone: Zone = {
   ...defaultZone,
-  status: 'ACTIVE',
+  status: "ACTIVE",
   createdFrom: "figma",
 };
 
@@ -186,11 +186,25 @@ export const {
 } = zonesSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
-export const getSelectedZoneIndex = (state: RootState) => {
-  const selectedZone: Zone | undefined = state.zonesSlice.zones.find(
+export const getSelectedDrawnZoneIndex = (state: RootState) => {
+  const zones = state.zonesSlice.zones.filter((z) => z.createdFrom === "user");
+  const selectedZone: Zone | undefined = zones.find(
     (zone) => zone.status === ("EDITING" as ZoneStatus)
   );
-  return selectedZone ? state.zonesSlice.zones.filter((z) => z.createdFrom === 'user').indexOf(selectedZone) : -1;
+  return selectedZone ? zones.indexOf(selectedZone) : -1;
+};
+export const getSelectedFigmaZoneIds = (state: RootState) => {
+  const selectedZone: Zone | undefined = state.zonesSlice.zones
+    .filter((z) => z.createdFrom === "figma")
+    .find((zone) => zone.status === ("EDITING" as ZoneStatus));
+  if (!selectedZone?.elementId) return [];
+
+  // get siblings
+  const parents = getParentsOfNode(
+    selectedZone?.elementId,
+    state.zonesSlice.tree[0]
+  );
+  return parents;
 };
 export const getUncompleteZones = (state: RootState) => {
   const uncompleteZones: Array<string> = [];

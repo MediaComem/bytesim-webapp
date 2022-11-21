@@ -34,6 +34,7 @@ import {
 } from "./features/zones/zonesSlice";
 import "react-reflex/styles.css";
 import { ReflexContainer, ReflexElement, ReflexSplitter } from "react-reflex";
+import RecoSpinner from "./components/recommandations/RecoSpinner";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -151,10 +152,10 @@ export default function Home() {
                       label={`${zoom}%`}
                     >
                       <SliderThumb
-                      className={css({ boxShadow: "none" })}
-                      width="10px"
-                      height="10px"
-                    />
+                        className={css({ boxShadow: "none" })}
+                        width="10px"
+                        height="10px"
+                      />
                     </Tooltip>
                   </Slider>
                   <Button
@@ -233,6 +234,7 @@ export default function Home() {
           }
           grow={1}
           id="report"
+          spinner={<RecoSpinner />}
           toolbarButton={
             <Flex gap={1}>
               {/* <ReloadRecoButton /> */}
@@ -241,8 +243,8 @@ export default function Home() {
           }
         >
           {uncompleteZones.length !== 0 && (
-          <RecoWarning uncompleteZoneNames={uncompleteZones} />
-        )}
+            <RecoWarning uncompleteZoneNames={uncompleteZones} />
+          )}
           <RecoReport />
         </Panel>
       </ReflexElement>

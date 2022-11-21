@@ -169,3 +169,17 @@ export const removeSubTree = (
     if (newTree) return newTree;
   }
 };
+
+export const getParentsOfNode = (
+  id: string,
+  tree: TreeZoneEl
+): string[] | undefined => {
+  const parents = [];
+  parents.push(tree.id);
+  if (tree.id === id) return parents;
+  if (!tree.children || tree.children?.length === 0) return;
+  for (const child of tree.children) {
+    const result = getParentsOfNode(id, child);
+    if (result) return [...parents, ...result];
+  }
+};

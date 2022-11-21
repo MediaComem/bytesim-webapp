@@ -19,28 +19,40 @@ import ZoneParams from "./ZoneParams";
 
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { colorTheme } from "../../theme";
-import { zoneToggleHidden } from "../../features/zones/zonesSlice";
+import {
+  getSelectedDrawnZoneIndex,
+  getSelectedFigmaZoneIds,
+  zoneToggleHidden,
+} from "../../features/zones/zonesSlice";
 
 export default function MainGroupList() {
   const zonesSlices = useAppSelector((store) => store.zonesSlice);
+  const openedZoneIds = useAppSelector(getSelectedFigmaZoneIds);
 
   const zones = zonesSlices?.zones.filter((z) => z.createdFrom === "figma");
   const firstChildrenTree = zonesSlices.tree?.[0]?.children;
 
   return (
-    <AccordionItem isDisabled={false} pb={2}>
-      <AccordionButton _hover={{ backgroundColor: "brand.100" }} pl={2}>
-        <AccordionChevron isExpanded={false} />
-        <Box flex="1" textAlign="left">
-          <AccordionCustomTitle label={"Main group"} icon="importedGroup" />
-        </Box>
-      </AccordionButton>
+    <Accordion allowToggle defaultIndex={[0]}>
+      <AccordionItem isDisabled={false} pb={2}>
+        <AccordionButton _hover={{ backgroundColor: "brand.100" }} pl={2}>
+          <AccordionChevron isExpanded={false} />
+          <Box flex="1" textAlign="left">
+            <AccordionCustomTitle label={"Main group"} icon="importedGroup" />
+          </Box>
+        </AccordionButton>
 
-      {firstChildrenTree && unfoldTree(firstChildrenTree, zones)}
-    </AccordionItem>
+        {firstChildrenTree &&
+          unfoldTree(firstChildrenTree, zones, openedZoneIds)}
+      </AccordionItem>
+    </Accordion>
   );
 }
-const unfoldTree = (tree: TreeZoneEl[], zones: Zone[]) => {
+const unfoldTree = (
+  tree: TreeZoneEl[],
+  zones: Zone[],
+  openedZoneIds: string[] | undefined
+) => {
   return tree.map((t) => {
     const parentZone = zones.find((z) => z.id === t.id);
     if (parentZone?.hidden) {
@@ -50,8 +62,10 @@ const unfoldTree = (tree: TreeZoneEl[], zones: Zone[]) => {
       <AccordionZones
         key={t.id}
         zones={zones.filter((z) => z.elementId === t.id)}
+        openedZoneIds={openedZoneIds}
       >
-        {t?.children?.length !== 0 && unfoldTree(t.children!, zones)}
+        {t?.children?.length !== 0 &&
+          unfoldTree(t.children!, zones, openedZoneIds)}
       </AccordionZones>
     );
   });
@@ -90,11 +104,18 @@ const HiddenZone = ({ z }: { z: Zone }) => {
 const AccordionZones = ({
   zones,
   children = null,
+  openedZoneIds,
 }: {
   zones: Zone[];
   children?: any;
+  openedZoneIds?: string[] | undefined;
 }) => {
   const dispatch = useDispatch();
+
+  // check if openedZoneIds has one element in common with zones.map(z => z.id)
+  const zoneExpanded = zones.findIndex((z) =>
+    openedZoneIds?.includes(z.elementId ?? "")
+  );
 
   return (
     <AccordionPanel
@@ -109,7 +130,11 @@ const AccordionZones = ({
         scrollbarWidth: "none",
       }}
     >
-      <Accordion allowToggle>
+      <Accordion
+        allowToggle
+        // {...(zoneExpanded !== -1 && { index: zoneExpanded })}
+        index={zoneExpanded}
+      >
         {zones?.map((z) => {
           if (z.hidden) return <HiddenZone key={z.id + "_hidden"} z={z} />;
           return (
