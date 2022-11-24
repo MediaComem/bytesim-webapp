@@ -1,5 +1,5 @@
 import { Divider, Flex } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
   useAppSelector,
@@ -31,6 +31,13 @@ interface ReportBodyProps {
     | GenericParameters[keyof GenericParameters]
   >[];
 }
+
+export enum FilterType {
+  NAME = "Name",
+  POTENTIEL_GAIN = "Potentiel gain",
+  ENERGY_COST = "Energy cost",
+}
+
 export function ReportBody({
   allOpen,
   className,
@@ -40,6 +47,7 @@ export function ReportBody({
   const recommandations = useCalculateAllRecommandations();
   const genericRecomandations = useCalculateGenericRecommandations();
   const zones = useAppZones();
+  const [filterBy, setFilterBy] = useState<FilterType>(FilterType.NAME);
 
   /* const zonesParams = useAppSelector((state) => {
     return Object.values(state.zones).filter((zone) => zone.filter());
@@ -55,12 +63,16 @@ export function ReportBody({
     <Flex direction={"column"} id="TO_EXPORT" className={className}>
       <ReportGeneralInfo />
       <Divider />
-      <ReportToolBar />
+      <ReportToolBar
+        onChangeFilter={(newFilter: FilterType) => setFilterBy(newFilter)}
+        currentFilter={filterBy}
+      />
       <Divider />
       {recos?.length > 0 ? (
         <RecommandationsList
           recommandations={customRecos || recos}
           allOpen={allOpen}
+          filterBy={filterBy}
         />
       ) : (
         <Flex p={3} color={"gray.400"}>
