@@ -124,7 +124,7 @@ export default function ZonesView({
       >
         <Routes>
           <Route
-            path="bytesim-webapp/figma/*"
+            path="figma/*"
             element={
               <Flex>
                 <FetchedSVG />
@@ -132,7 +132,7 @@ export default function ZonesView({
             }
           />
           <Route
-            path="bytesim-webapp/new"
+            path="/new"
             element={
               <Flex>
                 <UploadButton />
@@ -140,7 +140,7 @@ export default function ZonesView({
             }
           />
           <Route
-            path="bytesim-webapp"
+            path="/*"
             element={
               <Flex>
                 <div>

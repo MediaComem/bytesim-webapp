@@ -1,14 +1,14 @@
 import "./App.css";
 import { css } from "@emotion/css";
 import BytesimeHeader from "./components/layout/ByteSimHeader";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import Home from "./Home";
 import ReportExportTemplate from "./components/recommandations/ReportExportTemplate";
 import RightClickMenu from "./components/layout/RightClickMenu";
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter basename="/">
       <div
         className={
           "App " +
@@ -25,13 +25,9 @@ function App() {
         <Routes>
           <Route path="/*" element={<Home />} />
           <Route path="export" element={<ReportExportTemplate />} />
-          <Route
-            path="bytesim-webapp/export"
-            element={<ReportExportTemplate />}
-          />
         </Routes>
       </div>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
