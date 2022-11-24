@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { useSelectedZone } from "../../app/hooks";
 import { zoneDeleted, zoneReset } from "../../features/zones/zonesSlice";
 import { DynamicModalParams } from "../zones/ZonesList";
-import ConfirmModal, { confirmText } from "./ConfirmModal";
+import CustomModal, { confirmText } from "./CustomModal";
 
 export interface RightClickMenuState {
   showMenu: boolean;
@@ -65,7 +65,7 @@ export default function RightClickMenu({ className }: RightClickMenuProps) {
 
   return (
     <>
-      <ConfirmModal
+      <CustomModal
         texts={modalContent}
         isOpen={isOpen}
         onClose={onClose}

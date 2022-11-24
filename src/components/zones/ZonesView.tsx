@@ -11,7 +11,7 @@ import {
 } from "../../features/zones/zonesSlice";
 import REHome from "../../assets/RE-homepage.jpg";
 import { Zone } from "../../app/types/types";
-import ConfirmModal, { confirmText } from "../layout/ConfirmModal";
+import CustomModal, { confirmText } from "../layout/CustomModal";
 import UploadButton from "../project/UploadButton";
 
 import { Route, Routes } from "react-router-dom";
@@ -102,7 +102,7 @@ export default function ZonesView({
       grow={1}
       alignSelf="stretch"
     >
-      <ConfirmModal
+      <CustomModal
         texts={confirmText.deleteZone}
         isOpen={isOpen}
         onClose={onClose}

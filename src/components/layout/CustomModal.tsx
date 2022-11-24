@@ -11,7 +11,7 @@ import * as React from "react";
 
 export interface ModalParams {
   title: string;
-  text: string;
+  text: string | React.ReactNode;
   cancelButtonText?: string;
   confirmButtonText?: string;
 }
@@ -51,22 +51,27 @@ export const confirmText: Record<string, ModalParams> = {
     text: "Are you sure you want to change the type of the zone? It will delete all the provided data in other type.",
     confirmButtonText: "Change type",
   },
+  saveProject: {
+    title: "Save project",
+    text: "In this beta version, your project is only saved in your cache. To save your project, keep this link as favorite and do not empty your cache.",
+    cancelButtonText: "OK",
+  },
 };
 
-interface ConfirmModalProps {
+interface CustomModalProps {
   texts: ModalParams;
   confirmButtonClassName?: string;
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: () => void;
+  onConfirm?: () => void;
 }
-export default function ConfirmModal({
+export default function CustomModal({
   texts,
   confirmButtonClassName,
   isOpen,
   onClose,
   onConfirm,
-}: ConfirmModalProps) {
+}: CustomModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay bg="blackAlpha.300" />
@@ -77,14 +82,16 @@ export default function ConfirmModal({
           <Button variant="ghost" mr={3} onClick={onClose}>
             {texts.cancelButtonText ? texts.cancelButtonText : "cancel"}
           </Button>
-          <Button
-            colorScheme={"red"}
-            variant="outline"
-            onClick={onConfirm}
-            className={confirmButtonClassName}
-          >
-            {texts.confirmButtonText ? texts.confirmButtonText : "OK"}
-          </Button>
+          {onConfirm && (
+            <Button
+              colorScheme={"red"}
+              variant="outline"
+              onClick={onConfirm}
+              className={confirmButtonClassName}
+            >
+              {texts.confirmButtonText ? texts.confirmButtonText : "OK"}
+            </Button>
+          )}
         </ModalFooter>
       </ModalContent>
     </Modal>

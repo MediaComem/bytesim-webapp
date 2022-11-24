@@ -13,7 +13,7 @@ import { css } from "@emotion/css";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "./app/hooks";
-import ConfirmModal, { confirmText } from "./components/layout/ConfirmModal";
+import CustomModal, { confirmText } from "./components/layout/CustomModal";
 import Panel from "./components/layout/Panel";
 import RecoReport from "./components/recommandations/RecoReport";
 import MainGroupList from "./components/zones/MainGroupList";
@@ -77,7 +77,7 @@ export default function Home() {
             })
           }
         >
-          <ConfirmModal
+          <CustomModal
             texts={confirmText.resetProject}
             isOpen={isOpen}
             onClose={onClose}
@@ -171,34 +171,6 @@ export default function Home() {
                     +
                   </Button>
                 </Flex>
-                {/* <Button
-                  variant={"outline"}
-                  size="xs"
-                  onClick={() => navigate("./bytesim-webapp/1")}
-                >
-                  1
-                </Button>
-                <Button
-                  variant={"outline"}
-                  size="xs"
-                  onClick={() => navigate("./bytesim-webapp/2")}
-                >
-                  2
-                </Button>
-                <Button
-                  variant={"outline"}
-                  size="xs"
-                  onClick={() => navigate("./bytesim-webapp/3")}
-                >
-                  3
-                </Button>
-                <Button
-                  variant={"outline"}
-                  size="xs"
-                  onClick={() => navigate("./bytesim-webapp/4")}
-                >
-                  4
-                </Button> */}
               </Flex>
               <Button
                 onClick={() => {
