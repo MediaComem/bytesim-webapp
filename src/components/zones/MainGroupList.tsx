@@ -20,7 +20,7 @@ import ZoneParams from "./ZoneParams";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { colorTheme } from "../../theme";
 import {
-  getSelectedDrawnZoneIndex,
+  //getSelectedDrawnZoneIndex,
   getSelectedFigmaZoneIds,
   zoneToggleHidden,
 } from "../../features/zones/zonesSlice";
@@ -90,7 +90,7 @@ const HiddenZone = ({ z }: { z: Zone }) => {
           <Button
             variant={"ghost"}
             onClick={() => dispatch(zoneToggleHidden(z.id))}
-            title="Delete zone"
+            title="Hide zone"
             _hover={{}}
             isDisabled={false}
           >
