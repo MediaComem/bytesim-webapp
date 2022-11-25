@@ -10,6 +10,7 @@ import {
 } from "../utils";
 import { colorTheme } from "../../../theme";
 import {
+  allZonesReset,
   defaultFigmaZone,
   zonesSetTree,
   zonesUpdatedByElementId,
@@ -61,8 +62,17 @@ const FetchedSVG = ({
 
   const uniqueHash = `${hashCode(url)}`;
 
+  // if url includes new=true, reset all zones and remove the parameter from the url
+  if (window.location.href.includes("new=true")) {
+    dispatch(allZonesReset());
+    const displayedUrl = window.location.href?.replace("&new=true", "");
+
+    window.history.replaceState({}, "", displayedUrl);
+  }
+
   return (
     <SVG
+      id="fetched-svg"
       style={{ minWidth: "100%" }}
       cacheRequests={true}
       loader={<span>Loading...</span>}
@@ -106,17 +116,42 @@ const FetchedSVG = ({
             `<g stroke="${colorTheme[900]}" stroke-width="2" stroke-linejoin="round"`
           );
 
+        // the new code isolate the defs tag content
+        const defsContent = newCode.match(/<defs>([\s\S]*)<\/defs>/)?.[1];
+        //get all id of defs
+        const idsDefs =
+          defsContent
+            ?.match(/id="[^"]+"/g)
+            ?.map((id) => id.replace(/id="/, "").replace(/"/, "")) || [];
+
         // collect all the id of the svg element
         //remove id= and the double " at the beginning and the end of the string
         const ids = (code.match(/id="[^"]+"/g) ?? []).map((id) =>
           id.replace(/id="|"/g, "")
         );
+        // remove noise from figma aka ids starting with "pattern", "filter", "paint", "Mask", "mask", "&#", "Atoms", "Ellipse", "Rectangle", "Circle", "Arrow"
+        const filteredIds = ids
+          .filter(
+            (id) =>
+              !id.startsWith("pattern") &&
+              !id.startsWith("filter") &&
+              !id.startsWith("paint") &&
+              !id.startsWith("Mask") &&
+              !id.startsWith("mask") &&
+              !id.startsWith("&#") &&
+              !id.startsWith("Atoms") &&
+              !id.startsWith("Ellipse") &&
+              !id.startsWith("Rectangle") &&
+              !id.startsWith("Circle") &&
+              !id.startsWith("Arrow")
+          )
+          .filter((id) => !idsDefs.includes(id));
         // based on the ids create a tree structure, where each id belonging to a g tag of the svg is a parent node
         // and the ids of the children are the children of the parent node
 
         // get the ids of all the direct children of the first id
 
-        idsRefs.current = ids.map((id) => `${id}__${uniqueHash}`);
+        idsRefs.current = filteredIds.map((id) => `${id}__${uniqueHash}`);
 
         return newCode;
       }}
