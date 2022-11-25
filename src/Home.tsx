@@ -26,12 +26,7 @@ import { ReactComponent as ResetIcon } from "./assets/ResetIcon_Active_MouseOver
 import ExportButton from "./components/recommandations/ExportButton";
 //import { useNavigate } from "react-router-dom";
 import { colorTheme } from "./theme";
-import RecoWarning from "./components/recommandations/RecoWarning";
-import {
-  allZonesReset,
-  getUncompleteZones,
-  zoneAdded,
-} from "./features/zones/zonesSlice";
+import { allZonesReset, zoneAdded } from "./features/zones/zonesSlice";
 import "react-reflex/styles.css";
 import { ReflexContainer, ReflexElement, ReflexSplitter } from "react-reflex";
 import RecoSpinner from "./components/recommandations/RecoSpinner";
@@ -44,7 +39,7 @@ export default function Home() {
   const [zoom, setZoom] = React.useState<number>(100);
   const [showTooltip, setShowTooltip] = React.useState(false);
   //const navigate = useNavigate();
-  const uncompleteZones = useAppSelector(getUncompleteZones);
+
   return (
     <ReflexContainer
       orientation="vertical"
@@ -230,7 +225,11 @@ export default function Home() {
           title="Simulation"
           className={
             "pane-content " +
-            css({ backgroundColor: colorTheme[50], borderLeft: "none" })
+            css({
+              backgroundColor: colorTheme[50],
+              borderLeft: "none",
+              overflow: "hidden",
+            })
           }
           grow={1}
           id="report"
@@ -242,9 +241,6 @@ export default function Home() {
             </Flex>
           }
         >
-          {uncompleteZones.length !== 0 && (
-            <RecoWarning uncompleteZoneNames={uncompleteZones} />
-          )}
           <RecoReport />
         </Panel>
       </ReflexElement>

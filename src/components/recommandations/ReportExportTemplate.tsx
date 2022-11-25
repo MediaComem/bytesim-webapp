@@ -93,7 +93,9 @@ export default function ReportExportTemplate() {
             ByteSim report
           </Heading>
           <Divider />
-          <ReportBody allOpen={true} customRecos={recos} />
+          <Flex direction={"column"} id="TO_EXPORT">
+            <ReportBody allOpen={true} customRecos={recos} isReportPage />
+          </Flex>
         </Flex>
       </Flex>
     </>

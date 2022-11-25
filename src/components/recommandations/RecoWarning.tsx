@@ -14,7 +14,7 @@ export default function RecoWarning({ uncompleteZoneNames }: RecoWarningProps) {
       <Text>
         <WarningIcon></WarningIcon>
       </Text>
-      <Text fontSize="sm" ml={2} color="red.600">
+      <Text fontSize="xs" ml={2} color="red.600">
         Uncomplete zones are not taken into account in the the
         calculation:&nbsp;
         <Text as="b">
