@@ -49,9 +49,6 @@ const getFilteredRecoGroupedByZone = (
         return a[1].zoneName.localeCompare(b[1].zoneName);
       });
       break;
-    case FilterType.ENERGY_COST:
-      //Data are not ready yet
-      break;
     case FilterType.POTENTIEL_GAIN:
       //Data are not ready yet. Temporary
       arrZoneReco.sort((a, b) => {

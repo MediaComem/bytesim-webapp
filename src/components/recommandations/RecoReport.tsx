@@ -33,9 +33,8 @@ interface ReportBodyProps {
 }
 
 export enum FilterType {
-  NAME = "Name",
   POTENTIEL_GAIN = "Potentiel gain",
-  ENERGY_COST = "Energy cost",
+  NAME = "Name",
 }
 
 export function ReportBody({
@@ -47,11 +46,10 @@ export function ReportBody({
   const recommandations = useCalculateAllRecommandations();
   const genericRecomandations = useCalculateGenericRecommandations();
   const zones = useAppZones();
-  const [filterBy, setFilterBy] = useState<FilterType>(FilterType.NAME);
+  const [filterBy, setFilterBy] = useState<FilterType>(
+    FilterType.POTENTIEL_GAIN
+  );
 
-  /* const zonesParams = useAppSelector((state) => {
-    return Object.values(state.zones).filter((zone) => zone.filter());
-  }); */
   const projectGeneralParams = useAppSelector((state) => state.project.params);
   const recos = useAppSelector((state) => state.recommandations);
   useEffect(() => {
