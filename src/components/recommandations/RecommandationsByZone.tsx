@@ -63,16 +63,16 @@ export default function RecommandationsByZone({
             <Grid templateColumns="1fr 10fr 10fr 1fr" gap={3} w="100%">
               <AccordionChevron isExpanded={isExpanded} />
               <GridItem textAlign="start">
-                <Heading mr={1} size="sm">
+                <Text mr={1} fontSize="xs" fontWeight={700}>
                   {zoneRecommandations[0].zoneName}
-                </Heading>
-                <Text fontSize={"sm"}>{zone?.zoneType ?? "–"}</Text>
+                </Text>
+                <Text fontSize={"xs"}>{zone?.zoneType ?? "–"}</Text>
                 {zone?.zoneType ? (
                   <>
-                    <Text fontSize={"sm"}>{`Optimal: -${optimal.toFixed(
+                    <Text fontSize={"xs"}>{`Optimal: -${optimal.toFixed(
                       0
                     )} Kwh`}</Text>
-                    <Text fontSize={"sm"}>{`Current: -XXX Kwh`}</Text>
+                    <Text fontSize={"xs"}>{`Current: – Kwh`}</Text>
                   </>
                 ) : null}
               </GridItem>
