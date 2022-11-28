@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/bytesim-webapp/static/css/main.65f3f226.css",
-    "main.js": "/bytesim-webapp/static/js/main.2897f346.js",
-    "static/js/988.2e94a79a.chunk.js": "/bytesim-webapp/static/js/988.2e94a79a.chunk.js",
+    "main.css": "/bytesim-webapp/static/css/main.e316c534.css",
+    "main.js": "/bytesim-webapp/static/js/main.64eca2b2.js",
+    "static/js/787.63137bab.chunk.js": "/bytesim-webapp/static/js/787.63137bab.chunk.js",
     "static/media/RE-homepage.jpg": "/bytesim-webapp/static/media/RE-homepage.62351fec9ca46faa812f.jpg",
     "static/media/TEMP_trash.svg": "/bytesim-webapp/static/media/TEMP_trash.dc72c668146cdd51f2507770034fd5d7.svg",
     "static/media/GeneralSettings_Icon.svg": "/bytesim-webapp/static/media/GeneralSettings_Icon.675088608896b304004937abdd9c6b3a.svg",
@@ -14,12 +14,12 @@
     "static/media/BigPlus.svg": "/bytesim-webapp/static/media/BigPlus.81f41de74b8ebba84558f8ddd9a5b48f.svg",
     "static/media/ImportedGroup_Icon.svg": "/bytesim-webapp/static/media/ImportedGroup_Icon.df4d8aab0d4234760c91fd5a161b0d62.svg",
     "static/media/Fleche_Fermee.svg": "/bytesim-webapp/static/media/Fleche_Fermee.378623ecaf2ff555ba024f885ed52464.svg",
-    "main.65f3f226.css.map": "/bytesim-webapp/static/css/main.65f3f226.css.map",
-    "main.2897f346.js.map": "/bytesim-webapp/static/js/main.2897f346.js.map",
-    "988.2e94a79a.chunk.js.map": "/bytesim-webapp/static/js/988.2e94a79a.chunk.js.map"
+    "main.e316c534.css.map": "/bytesim-webapp/static/css/main.e316c534.css.map",
+    "main.64eca2b2.js.map": "/bytesim-webapp/static/js/main.64eca2b2.js.map",
+    "787.63137bab.chunk.js.map": "/bytesim-webapp/static/js/787.63137bab.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.65f3f226.css",
-    "static/js/main.2897f346.js"
+    "static/css/main.e316c534.css",
+    "static/js/main.64eca2b2.js"
   ]
 }
