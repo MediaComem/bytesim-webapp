@@ -1,5 +1,5 @@
 import { Box, Divider, Flex, Text } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
   useAppSelector,
@@ -31,6 +31,12 @@ interface ReportBodyProps {
     | GenericParameters[keyof GenericParameters]
   >[];
 }
+
+export enum FilterType {
+  POTENTIEL_GAIN = "Potentiel gain",
+  NAME = "Name",
+}
+
 export function ReportBody({
   allOpen,
   className,
@@ -40,10 +46,10 @@ export function ReportBody({
   const recommandations = useCalculateAllRecommandations();
   const genericRecomandations = useCalculateGenericRecommandations();
   const zones = useAppZones();
+  const [filterBy, setFilterBy] = useState<FilterType>(
+    FilterType.POTENTIEL_GAIN
+  );
 
-  /* const zonesParams = useAppSelector((state) => {
-    return Object.values(state.zones).filter((zone) => zone.filter());
-  }); */
   const projectGeneralParams = useAppSelector((state) => state.project.params);
   const recos = useAppSelector((state) => state.recommandations);
   useEffect(() => {
@@ -60,12 +66,16 @@ export function ReportBody({
           Estimated visit/month : {projectGeneralParams.nbVisit}
         </Text>
       </Box>
-      <ReportToolBar />
+      <ReportToolBar
+        onChangeFilter={(newFilter: FilterType) => setFilterBy(newFilter)}
+        currentFilter={filterBy}
+      />
       <Divider />
       {recos?.length > 0 ? (
         <RecommandationsList
           recommandations={customRecos || recos}
           allOpen={allOpen}
+          filterBy={filterBy}
         />
       ) : (
         <Flex p={3} color={"gray.400"}>
