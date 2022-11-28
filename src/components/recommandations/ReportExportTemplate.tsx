@@ -101,7 +101,9 @@ export default function ReportExportTemplate() {
             <Box>{projectName}</Box>
           </Box>
           <Divider />
-          <ReportBody allOpen={true} customRecos={recos} />
+          <Flex direction={"column"} id="TO_EXPORT">
+            <ReportBody allOpen={true} customRecos={recos} isReportPage />
+          </Flex>
         </Flex>
       </Flex>
     </>
