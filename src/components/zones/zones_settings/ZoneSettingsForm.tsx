@@ -14,7 +14,7 @@ import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../app/hooks";
 import { Zone, ZoneType } from "../../../app/types/types";
 import { zoneUpdated } from "../../../features/zones/zonesSlice";
-import ConfirmModal, { confirmText } from "../../layout/ConfirmModal";
+import CustomModal, { confirmText } from "../../layout/CustomModal";
 
 interface VideoFormProps {
   zoneId: string;
@@ -83,7 +83,7 @@ export default function ZoneSettingsForm({
     }, [pendingKey, pendingValue]);
     return (
       <Flex direction={"column"} pl={14}>
-        <ConfirmModal
+        <CustomModal
           texts={confirmText.changeZoneType}
           isOpen={isOpen}
           onClose={onClose}
@@ -92,14 +92,6 @@ export default function ZoneSettingsForm({
             onClose();
           }}
         />
-        {/* <ConfirmModalChangeType onConfirm={() => {
-            setParamValue();
-            onClose();
-          }} onClose={() => {
-            setPendingKey("");
-            setPendingValue("");
-            onClose();
-          }}/> */}
         <div>
           {Object.entries(formEntries).map(([key, value]) => {
             const handleValueChange = (value: string) => {

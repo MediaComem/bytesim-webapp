@@ -61,7 +61,7 @@ export default function ReportExportTemplate() {
           <Heading size={"md"}>Report export</Heading>
           <div>
             <Button
-              onClick={() => navigate("/bytesim-webapp")}
+              onClick={() => navigate("/")}
               colorScheme="brand"
               variant="outline"
               marginRight={2}
