@@ -22,18 +22,39 @@ interface VideoFormProps {
   formEntries: { [key: string]: any };
   showHeaders?: boolean;
 }
-export default function ZoneSettingsForm({
+
+export default function ZoneSettingsFormWrapper({
   zoneId,
   formZoneType,
   formEntries,
   showHeaders = true,
 }: VideoFormProps) {
-  //Match the current needs but may change in the futur
-  const DEFAULT_NUMBER_INPUT: number = 1;
-  const dispatch = useDispatch();
   const zone = useAppSelector((state) =>
     state.zonesSlice.zones.find((z) => z.id === zoneId)
   );
+
+  if (!zone) return <></>;
+  return (
+    <ZoneSettingsForm
+      {...{
+        zone,
+        formZoneType,
+        formEntries,
+        showHeaders,
+      }}
+    />
+  );
+}
+function ZoneSettingsForm({
+  zone,
+  formZoneType,
+  formEntries,
+  showHeaders = true,
+}: Omit<VideoFormProps, "zoneId"> & { zone: Zone }) {
+  //Match the current needs but may change in the futur
+  const DEFAULT_NUMBER_INPUT: number = 1;
+  const dispatch = useDispatch();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [pendingKey, setPendingKey] = React.useState("");
   const [pendingValue, setPendingValue] = React.useState("");
@@ -154,7 +175,7 @@ export default function ZoneSettingsForm({
                             type="radio"
                             name={data as string}
                             id={inputId}
-                            value={data as string}
+                            value={data ?? ("" as string)}
                             checked={zone.params && zone.params[key] === data}
                             onChange={handleEventChange}
                           />

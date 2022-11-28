@@ -46,7 +46,7 @@ export function ZoneListButton({
   const projectStatus = useAppSelector((state) => state.project.status);
   const [value, setValue] = React.useState(zone.name);
   const [editNameMode, setEditNameMode] = React.useState(false);
-  const [oldZoneName, setOldZoneName] = React.useState(zone.name);
+  // const [oldZoneName, setOldZoneName] = React.useState(zone.name);
   const updateZoneName = (newName: string) => {
     // const newNameObject = {
     //   id: zone.id,
@@ -86,11 +86,11 @@ export function ZoneListButton({
       >
         <Flex align="center" justify="flex-start">
           {hiddenMode ? (
-            <Box p={1}>
+            <Box px={"6.5px"} py={"15px"} width="auto">
               <OpenIcon />
             </Box>
           ) : (
-            <AccordionButton p={1} width="auto">
+            <AccordionButton m={0} p={1} width="auto">
               <AccordionChevron isExpanded={isExpanded} />
             </AccordionButton>
           )}

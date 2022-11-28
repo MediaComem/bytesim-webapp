@@ -85,6 +85,12 @@ const zonesSlice = createSlice({
         Object.assign(existingZone, resetParams);
       }
     },
+    zonesFilterByElementId(state, action: PayloadAction<string[]>) {
+      const elementsId = action.payload;
+      state.zones = state.zones.filter(
+        (zone) => zone.elementId && elementsId?.includes(zone.elementId)
+      );
+    },
     zoneDeleted(state, action: PayloadAction<string>) {
       const existingZone = state.zones.find(
         (zone) => zone.id === action.payload
@@ -177,6 +183,7 @@ export const {
   zoneDeleted,
   zoneActiveToggled,
   allZonesReset,
+  zonesFilterByElementId,
   allZonesDeleted,
   zoneReset,
   zoneToggleHidden,

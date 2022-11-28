@@ -1,4 +1,5 @@
-import { TreeZoneEl } from "../../app/types/types";
+import { cloneDeep } from "lodash";
+import { TreeZoneEl, Zone } from "../../app/types/types";
 import { colorTheme } from "../../theme";
 
 // simple hash function, do not use for sensitive data
@@ -182,4 +183,33 @@ export const getParentsOfNode = (
     const result = getParentsOfNode(id, child);
     if (result) return [...parents, ...result];
   }
+};
+
+export const getNewTreeWithoutHiddenZones = (
+  currentFirstChildrenTree: TreeZoneEl["children"],
+  zones: Zone[],
+  newParentTree: TreeZoneEl
+) => {
+  const clonedCurrentTree = cloneDeep(currentFirstChildrenTree);
+  if (!clonedCurrentTree || clonedCurrentTree.length === 0) return;
+  // reconstruct new tree and get and new zones wihtout hidden zones and children of hidden zones
+  clonedCurrentTree?.forEach((child) => {
+    const zoneFound = zones?.find((z) => z.elementId === child.id);
+
+    if (!zoneFound || zoneFound?.hidden) return;
+
+    const children = [...(child.children ?? [])];
+    delete child.children;
+    if (!newParentTree.children) newParentTree.children = [];
+    newParentTree.children = [...newParentTree.children, child];
+    return getNewTreeWithoutHiddenZones(children, zones, child);
+  });
+  return newParentTree;
+};
+
+export const getAllZonesIdsOfTree = (tree: TreeZoneEl): string[] => {
+  return [
+    tree?.id,
+    ...(tree?.children?.flatMap((child) => getAllZonesIdsOfTree(child)) ?? []),
+  ].filter((id) => id);
 };

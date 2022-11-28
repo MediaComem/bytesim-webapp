@@ -24,6 +24,7 @@ import {
   getSelectedFigmaZoneIds,
   zoneToggleHidden,
 } from "../../features/zones/zonesSlice";
+import { isNewImportedSvg } from "../../features/figma/components/FetchedSVG";
 
 export default function MainGroupList() {
   const zonesSlices = useAppSelector((store) => store.zonesSlice);
@@ -31,6 +32,7 @@ export default function MainGroupList() {
 
   const zones = zonesSlices?.zones.filter((z) => z.createdFrom === "figma");
   const firstChildrenTree = zonesSlices.tree?.[0]?.children;
+  // return null;
 
   return (
     <Accordion allowToggle defaultIndex={[0]}>
@@ -43,21 +45,26 @@ export default function MainGroupList() {
         </AccordionButton>
 
         {firstChildrenTree &&
-          unfoldTree(firstChildrenTree, zones, openedZoneIds)}
+          unfoldTree(
+            firstChildrenTree,
+            zones,
+            isNewImportedSvg() ? [] : openedZoneIds
+          )}
       </AccordionItem>
     </Accordion>
   );
 }
-const unfoldTree = (
+export const unfoldTree = (
   tree: TreeZoneEl[],
   zones: Zone[],
   openedZoneIds: string[] | undefined
 ) => {
-  return tree.map((t) => {
+  return tree?.map((t) => {
     const parentZone = zones.find((z) => z.id === t.id);
     if (parentZone?.hidden) {
       return <HiddenZone key={`${parentZone.id}_hidden`} z={parentZone} />;
     }
+
     return (
       <AccordionZones
         key={t.id}
@@ -89,7 +96,10 @@ const HiddenZone = ({ z }: { z: Zone }) => {
         buttonDelete={
           <Button
             variant={"ghost"}
-            onClick={() => dispatch(zoneToggleHidden(z.id))}
+            onClick={(e) => {
+              dispatch(zoneToggleHidden(z.id));
+              e?.stopPropagation();
+            }}
             title="Delete zone"
             _hover={{}}
             isDisabled={false}
@@ -116,7 +126,6 @@ const AccordionZones = ({
   const zoneExpanded = zones.findIndex((z) =>
     openedZoneIds?.includes(z.elementId ?? "")
   );
-
   return (
     <AccordionPanel
       p={0}
@@ -153,7 +162,10 @@ const AccordionZones = ({
                     buttonDelete={
                       <Button
                         variant={"ghost"}
-                        onClick={() => dispatch(zoneToggleHidden(z.id))}
+                        onClick={(e) => {
+                          dispatch(zoneToggleHidden(z.id));
+                          e?.stopPropagation();
+                        }}
                         title="Hide zone and its children"
                         isDisabled={false}
                       >
