@@ -101,14 +101,16 @@ const FetchedSVG = ({
     dispatch(zonesSetTree([newTree]));
     dispatch(zonesFilterByElementId(newZones));
 
-    const displayedUrl = window.location.href?.replace("&new=true", "");
+    const displayedUrl = window.location.href
+      ?.replace("&new=true", "")
+      .replace("new=true", "");
     window.history.pushState({}, "", displayedUrl);
     onClose();
   };
 
   return (
     <>
-      <Modal isOpen={isModalOpen} onClose={onClose}>
+      <Modal isOpen={isModalOpen} onClose={onModalCloseValidate}>
         <ModalOverlay bg={"blackAlpha.900"} />
         <ModalContent>
           <ModalHeader>{`Please hide the zones you don't want to import.`}</ModalHeader>
