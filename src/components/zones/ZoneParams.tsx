@@ -10,7 +10,6 @@ import { VideoFormEntries } from "../../app/types/videoTypes";
 import { DynContentFormEntries } from "../../app/types/dynContentTypes";
 import { ImageFormEntries } from "../../app/types/imgTypes";
 import AccordionChevron from "../layout/AccordionChevron";
-//import ConfirmModal, { confirmText } from "../layout/ConfirmModal";
 import ZoneSettingsForm from "./zones_settings/ZoneSettingsForm";
 
 interface ZoneParamsProps {

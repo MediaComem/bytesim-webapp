@@ -145,6 +145,19 @@ const zonesSlice = createSlice({
       Object.assign(existingZone, action.payload);
       updateZoneBy(state, action.payload, "id");
     },
+    zoneDuplicated(state, action: PayloadAction<Zone>) {
+      const newZone: Zone = {
+        ...action.payload,
+        name: `${action.payload.name} - copy `,
+        status: 'EDITING',
+        createdFrom: 'user',
+        id: nanoid(),
+      };
+      state.zones.forEach((zone) => {
+        zone.status = "ACTIVE";
+      });
+      state.zones.push(newZone);
+    },
     zonesUpdatedByElementId(state, action: PayloadAction<Partial<Zone>[]>) {
       action.payload?.forEach((zoneToAdd) => {
         if (zoneToAdd) updateZoneBy(state, zoneToAdd, "elementId");
@@ -188,6 +201,7 @@ export const {
   zoneReset,
   zoneToggleHidden,
   zoneUpdated,
+  zoneDuplicated,
   zonesUpdatedByElementId,
   zonesSetTree,
 } = zonesSlice.actions;

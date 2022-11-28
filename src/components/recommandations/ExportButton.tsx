@@ -10,7 +10,7 @@ const navigate = useNavigate();
         alignSelf={'center'}
         justifySelf={'flex-end'}
         onClick={() => {
-            navigate('/bytesim-webapp/export');
+            navigate('/export');
         }}
         size='sm'
         minWidth='min-content'

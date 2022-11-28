@@ -13,7 +13,7 @@ import { css } from "@emotion/css";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "./app/hooks";
-import ConfirmModal, { confirmText } from "./components/layout/ConfirmModal";
+import CustomModal, { confirmText } from "./components/layout/CustomModal";
 import Panel from "./components/layout/Panel";
 import RecoReport from "./components/recommandations/RecoReport";
 import MainGroupList from "./components/zones/MainGroupList";
@@ -26,12 +26,7 @@ import { ReactComponent as ResetIcon } from "./assets/ResetIcon_Active_MouseOver
 import ExportButton from "./components/recommandations/ExportButton";
 //import { useNavigate } from "react-router-dom";
 import { colorTheme } from "./theme";
-import RecoWarning from "./components/recommandations/RecoWarning";
-import {
-  allZonesReset,
-  getUncompleteZones,
-  zoneAdded,
-} from "./features/zones/zonesSlice";
+import { allZonesReset, zoneAdded } from "./features/zones/zonesSlice";
 import "react-reflex/styles.css";
 import { ReflexContainer, ReflexElement, ReflexSplitter } from "react-reflex";
 import RecoSpinner from "./components/recommandations/RecoSpinner";
@@ -44,7 +39,7 @@ export default function Home() {
   const [zoom, setZoom] = React.useState<number>(100);
   const [showTooltip, setShowTooltip] = React.useState(false);
   //const navigate = useNavigate();
-  const uncompleteZones = useAppSelector(getUncompleteZones);
+
   return (
     <ReflexContainer
       orientation="vertical"
@@ -77,7 +72,7 @@ export default function Home() {
             })
           }
         >
-          <ConfirmModal
+          <CustomModal
             texts={confirmText.resetProject}
             isOpen={isOpen}
             onClose={onClose}
@@ -171,34 +166,6 @@ export default function Home() {
                     +
                   </Button>
                 </Flex>
-                {/* <Button
-                  variant={"outline"}
-                  size="xs"
-                  onClick={() => navigate("./bytesim-webapp/1")}
-                >
-                  1
-                </Button>
-                <Button
-                  variant={"outline"}
-                  size="xs"
-                  onClick={() => navigate("./bytesim-webapp/2")}
-                >
-                  2
-                </Button>
-                <Button
-                  variant={"outline"}
-                  size="xs"
-                  onClick={() => navigate("./bytesim-webapp/3")}
-                >
-                  3
-                </Button>
-                <Button
-                  variant={"outline"}
-                  size="xs"
-                  onClick={() => navigate("./bytesim-webapp/4")}
-                >
-                  4
-                </Button> */}
               </Flex>
               <Button
                 onClick={() => {
@@ -230,7 +197,11 @@ export default function Home() {
           title="Simulation"
           className={
             "pane-content " +
-            css({ backgroundColor: colorTheme[50], borderLeft: "none" })
+            css({
+              backgroundColor: colorTheme[50],
+              borderLeft: "none",
+              overflow: "hidden",
+            })
           }
           grow={1}
           id="report"
@@ -242,9 +213,6 @@ export default function Home() {
             </Flex>
           }
         >
-          {uncompleteZones.length !== 0 && (
-            <RecoWarning uncompleteZoneNames={uncompleteZones} />
-          )}
           <RecoReport />
         </Panel>
       </ReflexElement>

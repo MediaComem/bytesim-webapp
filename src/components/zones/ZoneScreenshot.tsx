@@ -56,7 +56,7 @@ const ZoneScreenshot = ({ zoneId }: ZoneScreenshotProps) => {
   if (!zone) return <div />;
 
   return (
-    <Box py={2}>
+    <Box>
       <ChakraImage
         border="1px solid lightgray"
         objectFit="contain"

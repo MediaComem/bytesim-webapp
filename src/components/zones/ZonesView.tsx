@@ -8,10 +8,11 @@ import {
   zoneDeleted,
   zoneActiveToggled,
   zoneUpdated,
+  zoneToggleHidden,
 } from "../../features/zones/zonesSlice";
 import REHome from "../../assets/RE-homepage.jpg";
 import { Zone } from "../../app/types/types";
-import ConfirmModal, { confirmText } from "../layout/ConfirmModal";
+import CustomModal, { confirmText } from "../layout/CustomModal";
 import UploadButton from "../project/UploadButton";
 
 import { Route, Routes } from "react-router-dom";
@@ -80,9 +81,10 @@ export default function ZonesView({
 
   const selectedZone = useSelectedZone();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const handleDelete = (e: KeyboardEvent) => {
-    if (e.key === "Backspace" || e.key === "Delete") {
-      onOpen();
+    const handleDelete = (e: KeyboardEvent) => {
+    if ((e.key === "Backspace" || e.key === "Delete") && selectedZone) {
+        if (selectedZone.createdFrom === 'user') onOpen();
+        else dispatch(zoneToggleHidden(selectedZone.id));
     }
   };
   useEffect(() => {
@@ -90,7 +92,7 @@ export default function ZonesView({
     return () => {
       document.removeEventListener("keydown", handleDelete);
     };
-  }, []);
+  }, [selectedZone]);
   const zones = useAppZones()?.filter((z) => !z.hidden);
   return (
     <Flex
@@ -102,7 +104,7 @@ export default function ZonesView({
       grow={1}
       alignSelf="stretch"
     >
-      <ConfirmModal
+      <CustomModal
         texts={confirmText.deleteZone}
         isOpen={isOpen}
         onClose={onClose}
@@ -119,11 +121,10 @@ export default function ZonesView({
         minWidth={containerDim}
         maxWidth={containerDim}
         height={containerDim}
-        // transform={`scale(${zoom})`}
       >
         <Routes>
           <Route
-            path="bytesim-webapp/figma/*"
+            path="figma/*"
             element={
               <Flex>
                 <FetchedSVG />
@@ -131,7 +132,7 @@ export default function ZonesView({
             }
           />
           <Route
-            path="bytesim-webapp/new"
+            path="/new"
             element={
               <Flex>
                 <UploadButton />
@@ -139,7 +140,7 @@ export default function ZonesView({
             }
           />
           <Route
-            path="bytesim-webapp"
+            path="/*"
             element={
               <Flex>
                 <div>
@@ -147,7 +148,6 @@ export default function ZonesView({
                     src={REHome}
                     alt="RE homepage"
                     className={css({
-                      //objectFit: "scale-down",
                       transform: `scale(${zoom})`,
                       transformOrigin: "top left",
                       display: "block",
@@ -197,62 +197,64 @@ function ZoneFrame({
   const dispatch = useDispatch();
   const selectedZone = useSelectedZone();
   return (
-    <Rnd
-      key={zone.id}
-      id={zone.id}
-      default={{
-        x: zone.x,
-        y: zone.y,
-        width: zone.width,
-        height: zone.height,
-      }}
-      size={{
-        width: zone.width * zoom,
-        height: zone.height * zoom,
-      }}
-      position={{
-        x: zone.x * zoom,
-        y: zone.y * zoom,
-      }}
-      className={
-        "rightClickable " +
-        cx(zoneStyle, {
-          [selectedZoneStyle]: zone.status === "EDITING",
-        })
-      }
-      onMouseDown={(e) => {
-        const MOUSE_MAIN_BUTTON = 0;
-        const MOUSE_RIGHT_BUTTON = 2;
-        if (
-          e.button === MOUSE_MAIN_BUTTON ||
-          (e.button === MOUSE_RIGHT_BUTTON && zone.id !== selectedZone?.id)
-        ) {
-          dispatch(zoneActiveToggled(zone.id));
+    <>
+      <Rnd
+        key={zone.id}
+        id={zone.id}
+        default={{
+          x: zone.x,
+          y: zone.y,
+          width: zone.width,
+          height: zone.height,
+        }}
+        size={{
+          width: zone.width * zoom,
+          height: zone.height * zoom,
+        }}
+        position={{
+          x: zone.x * zoom,
+          y: zone.y * zoom,
+        }}
+        className={
+          "rightClickable " +
+          cx(zoneStyle, {
+            [selectedZoneStyle]: zone.status === "EDITING",
+          })
         }
-      }}
-      enableResizing={zone.status === "EDITING" && !disableEdition}
-      disableDragging={disableEdition}
-      onResizeStop={(e, direction, ref, delta, position) => {
-        const newZone = {
-          id: zone.id,
-          x: position.x / zoom,
-          y: position.y / zoom,
-          width: zone.width + delta.width / zoom,
-          height: zone.height + delta.height / zoom,
-        };
-        dispatch(zoneUpdated(newZone));
-      }}
-      onDragStop={(e, d) => {
-        const newPos = {
-          id: zone.id,
-          x: d.x / zoom,
-          y: d.y / zoom,
-        };
-        dispatch(zoneUpdated(newPos));
-      }}
-      resizeHandleComponent={handleComp}
-    >
-      <p className={aboveZoneStyle}>{zone.name}</p>
-    </Rnd>
+        onMouseDown={(e) => {
+          const MOUSE_MAIN_BUTTON = 0;
+          const MOUSE_RIGHT_BUTTON = 2;
+          if (
+            e.button === MOUSE_MAIN_BUTTON ||
+            (e.button === MOUSE_RIGHT_BUTTON && zone.id !== selectedZone?.id)
+          ) {
+            dispatch(zoneActiveToggled(zone.id));
+          }
+        }}
+        enableResizing={zone.status === "EDITING" && !disableEdition}
+        disableDragging={disableEdition}
+        onResizeStop={(e, direction, ref, delta, position) => {
+          const newZone = {
+            id: zone.id,
+            x: position.x / zoom,
+            y: position.y / zoom,
+            width: zone.width + delta.width / zoom,
+            height: zone.height + delta.height / zoom,
+          };
+          dispatch(zoneUpdated(newZone));
+        }}
+        onDragStop={(e, d) => {
+          const newPos = {
+            id: zone.id,
+            x: d.x / zoom,
+            y: d.y / zoom,
+          };
+          dispatch(zoneUpdated(newPos));
+        }}
+        resizeHandleComponent={handleComp}
+      >
+        <p className={aboveZoneStyle}>{zone.name}</p>
+      </Rnd>
+    </>
   );
 }

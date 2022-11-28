@@ -14,7 +14,7 @@ import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/hooks";
 
 import AccordionItemTitleCustom from "../layout/AccordionItemTitleCustom";
-import ConfirmModal, { confirmText, ModalParams } from "../layout/ConfirmModal";
+import CustomModal, { confirmText, ModalParams } from "../layout/CustomModal";
 import ZoneParams from "./ZoneParams";
 import { ReactComponent as ResetIcon } from "../../assets/ResetIcon_Active_MouseOver.svg";
 import { ReactComponent as TrashIcon } from "../../assets/TEMP_trash.svg";
@@ -144,7 +144,7 @@ export default function ZonesList() {
                 })}
               </Accordion>
             </AccordionPanel>
-            <ConfirmModal
+            <CustomModal
               texts={modalContent}
               isOpen={isOpen}
               onClose={onClose}

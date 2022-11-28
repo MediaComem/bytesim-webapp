@@ -1,4 +1,4 @@
-import { Button, Divider, Flex, Heading } from "@chakra-ui/react";
+import { Box, Button, Divider, Flex, Heading } from "@chakra-ui/react";
 //import html2canvas from "html2canvas";
 //import JsPDF from "jspdf";
 import { useRef } from "react";
@@ -10,6 +10,7 @@ export default function ReportExportTemplate() {
   const navigate = useNavigate();
   const HTML_TO_EXPORT = useRef<any>(null);
   const recos = useAppSelector((state) => state.recommandations);
+  const projectName = useAppSelector((state) => state.project.name);
   // export function with libs html2Canvas and jsPdf if wanted in future
   /* const generatePDF = () => {
     html2canvas(HTML_TO_EXPORT.current, {
@@ -60,7 +61,7 @@ export default function ReportExportTemplate() {
           <Heading size={"md"}>Report export</Heading>
           <div>
             <Button
-              onClick={() => navigate("/bytesim-webapp")}
+              onClick={() => navigate("/")}
               colorScheme="brand"
               variant="outline"
               marginRight={2}
@@ -85,15 +86,24 @@ export default function ReportExportTemplate() {
           direction="column"
           overflow={"auto"}
         >
-          <Heading
-            size={"md"}
-            borderBottom="1px solid lightgrey"
-            lineHeight={10}
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
           >
-            ByteSim report
-          </Heading>
+            <Heading
+              size={"md"}
+              borderBottom="1px solid lightgrey"
+              lineHeight={10}
+            >
+              ByteSim report
+            </Heading>
+            <Box>{projectName}</Box>
+          </Box>
           <Divider />
-          <ReportBody allOpen={true} customRecos={recos} />
+          <Flex direction={"column"} id="TO_EXPORT">
+            <ReportBody allOpen={true} customRecos={recos} isReportPage />
+          </Flex>
         </Flex>
       </Flex>
     </>

@@ -28,7 +28,7 @@ import {
   projectUpdated,
 } from "../../features/project/projectSlice";
 import AccordionItemTitleCustom from "../layout/AccordionItemTitleCustom";
-import ConfirmModal, { confirmText } from "../layout/ConfirmModal";
+import CustomModal, { confirmText } from "../layout/CustomModal";
 import ProgressPoints from "../layout/ProgressPoints";
 import { ReactComponent as ResetIcon } from "../../assets/ResetIcon_Active_MouseOver.svg";
 import { css } from "@emotion/css";
@@ -70,7 +70,7 @@ export default function GeneralFormAccordion() {
           <AccordionPanel>
             <GeneralForm project={project} />
           </AccordionPanel>
-          <ConfirmModal
+          <CustomModal
             texts={confirmText.resetGeneral}
             isOpen={isOpen}
             onClose={onClose}

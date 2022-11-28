@@ -1,6 +1,5 @@
 import {
   Accordion,
-  AccordionButton,
   AccordionItem,
   AccordionPanel,
   Box,
@@ -12,19 +11,20 @@ import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/hooks";
 import { TreeZoneEl, Zone } from "../../app/types/types";
 import { highlightFigmaZone } from "../../features/figma/utils";
-import AccordionChevron from "../layout/AccordionChevron";
 import AccordionCustomTitle from "../layout/AccordionCustomTitle";
 import { ZoneListButton } from "./ZoneListButton";
 import ZoneParams from "./ZoneParams";
 
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { SmallAddIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { colorTheme } from "../../theme";
 import {
-  getSelectedDrawnZoneIndex,
+  //getSelectedDrawnZoneIndex,
   getSelectedFigmaZoneIds,
   zoneToggleHidden,
 } from "../../features/zones/zonesSlice";
 import { isNewImportedSvg } from "../../features/figma/components/FetchedSVG";
+import AccordionItemTitleCustom from "../layout/AccordionItemTitleCustom";
+import { Link } from "react-router-dom";
 
 export default function MainGroupList() {
   const zonesSlices = useAppSelector((store) => store.zonesSlice);
@@ -36,20 +36,39 @@ export default function MainGroupList() {
 
   return (
     <Accordion allowToggle defaultIndex={[0]}>
-      <AccordionItem isDisabled={false} pb={2}>
-        <AccordionButton _hover={{ backgroundColor: "brand.100" }} pl={2}>
-          <AccordionChevron isExpanded={false} />
-          <Box flex="1" textAlign="left">
-            <AccordionCustomTitle label={"Main group"} icon="importedGroup" />
-          </Box>
-        </AccordionButton>
+      <AccordionItem isDisabled={false}>
+        {({ isExpanded }) => (
+          <>
+            {/*         <AccordionButton _hover={{ backgroundColor: "brand.100" }} pl={2}> */}
+            {/* <AccordionChevron isExpanded={false} /> */}
+            <Box flex="1" textAlign="left">
+              <AccordionItemTitleCustom
+                label={
+                  <AccordionCustomTitle
+                    label={"Main group"}
+                    icon="importedGroup"
+                  />
+                }
+                p={2}
+                isExpanded={isExpanded}
+              >
+                <Button>
+                  <Link to={"./figma"}>
+                    <SmallAddIcon />
+                  </Link>
+                </Button>
+              </AccordionItemTitleCustom>
+            </Box>
+            {/*   </AccordionButton> */}
 
-        {firstChildrenTree &&
-          unfoldTree(
-            firstChildrenTree,
-            zones,
-            isNewImportedSvg() ? [] : openedZoneIds
-          )}
+            {firstChildrenTree &&
+              unfoldTree(
+                firstChildrenTree,
+                zones,
+                isNewImportedSvg() ? [] : openedZoneIds
+              )}
+          </>
+        )}
       </AccordionItem>
     </Accordion>
   );
@@ -100,7 +119,7 @@ const HiddenZone = ({ z }: { z: Zone }) => {
               dispatch(zoneToggleHidden(z.id));
               e?.stopPropagation();
             }}
-            title="Delete zone"
+            title="Hide zone"
             _hover={{}}
             isDisabled={false}
           >
