@@ -1,4 +1,4 @@
-import { Divider, Flex } from "@chakra-ui/react";
+import { Box, Divider, Flex, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
@@ -61,6 +61,11 @@ export function ReportBody({
     <Flex direction={"column"} id="TO_EXPORT" className={className}>
       <ReportGeneralInfo />
       <Divider />
+      <Box p={2}>
+        <Text fontSize="xs">
+          Estimated visit/month : {projectGeneralParams.nbVisit}
+        </Text>
+      </Box>
       <ReportToolBar
         onChangeFilter={(newFilter: FilterType) => setFilterBy(newFilter)}
         currentFilter={filterBy}

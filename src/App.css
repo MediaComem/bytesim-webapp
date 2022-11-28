@@ -1,4 +1,6 @@
 @media print {
-#header { display: none;}
-#reportToPrint #exportToolbox { display: none;}
+    .App {overflow: inherit !important}
+    #header { display: none;}
+    #reportToPrint {overflow: inherit}
+    #reportToPrint #exportToolbox { display: none;}
 }
