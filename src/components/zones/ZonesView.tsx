@@ -81,10 +81,10 @@ export default function ZonesView({
 
   const selectedZone = useSelectedZone();
   const { isOpen, onOpen, onClose } = useDisclosure();
-    const handleDelete = (e: KeyboardEvent) => {
+  const handleDelete = (e: KeyboardEvent) => {
     if ((e.key === "Backspace" || e.key === "Delete") && selectedZone) {
-        if (selectedZone.createdFrom === 'user') onOpen();
-        else dispatch(zoneToggleHidden(selectedZone.id));
+      if (selectedZone.createdFrom === "user") onOpen();
+      else dispatch(zoneToggleHidden(selectedZone.id));
     }
   };
   useEffect(() => {
@@ -126,7 +126,7 @@ export default function ZonesView({
           <Route
             path="figma/*"
             element={
-              <Flex>
+              <Flex width={"100%"}>
                 <FetchedSVG />
               </Flex>
             }
