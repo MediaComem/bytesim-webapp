@@ -26,6 +26,7 @@ import {
   zoneReset,
   zoneUpdated,
 } from "../../features/zones/zonesSlice";
+import { isNewImportedSvg } from "../../features/figma/components/FetchedSVG";
 
 interface ZoneListButtonProps {
   zone: Zone;
@@ -63,6 +64,7 @@ export function ZoneListButton({
   const updateZone = (newZone: Partial<Zone>) => {
     return zoneUpdated(newZone);
   };
+  const fallbackTypeZoneDisplayed = !isNewImportedSvg() ? "- undefined" : "";
   return (
     <>
       <Box
@@ -97,7 +99,7 @@ export function ZoneListButton({
           <AccordionCustomTitle
             label={
               <>
-                {editNameMode ? (
+                {editNameMode && !isNewImportedSvg() ? (
                   <Input
                     value={value}
                     onKeyDown={(e) => {
@@ -128,6 +130,7 @@ export function ZoneListButton({
                 ) : (
                   <Text
                     ml={1}
+                    cursor={isNewImportedSvg() ? "default" : "auto"}
                     //fontStyle={zone.zoneType ? "initial" : "italic"}
                     whiteSpace={"nowrap"}
                     onDoubleClick={() => setEditNameMode(true)}
@@ -145,7 +148,7 @@ export function ZoneListButton({
               ? Object.entries(ZoneType).find(
                   (s) => s[0] === zone.zoneType
                 )?.[1]
-              : "- undefined"}
+              : fallbackTypeZoneDisplayed}
           </Text>
           {zone.zoneType && (
             <ProgressPoints
@@ -155,7 +158,7 @@ export function ZoneListButton({
           )}
         </Flex>
         <Flex className={cx("visibleOnHover ", css({ visibility: "hidden" }))}>
-          {!hiddenMode && (
+          {!hiddenMode && !isNewImportedSvg() && (
             <Button
               variant={"ghost"}
               title="Reset zone"
