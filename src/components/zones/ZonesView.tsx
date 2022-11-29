@@ -1,5 +1,4 @@
 import { Flex, useDisclosure } from "@chakra-ui/react";
-import * as React from "react";
 import { css, cx } from "@emotion/css";
 import { useDispatch } from "react-redux";
 import { Rnd } from "react-rnd";

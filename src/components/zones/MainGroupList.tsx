@@ -4,7 +4,9 @@ import {
   AccordionPanel,
   Box,
   Button,
+  Flex,
   Heading,
+  Spinner,
   Text,
 } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
@@ -22,9 +24,13 @@ import {
   getSelectedFigmaZoneIds,
   zoneToggleHidden,
 } from "../../features/zones/zonesSlice";
-import { isNewImportedSvg } from "../../features/figma/components/FetchedSVG";
+import {
+  isNewImportSvg,
+  useIsNewImportedSvg,
+} from "../../features/figma/components/FetchedSVG";
 import AccordionItemTitleCustom from "../layout/AccordionItemTitleCustom";
 import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 
 export default function MainGroupList() {
   const zonesSlices = useAppSelector((store) => store.zonesSlice);
@@ -61,22 +67,82 @@ export default function MainGroupList() {
             </Box>
             {/*   </AccordionButton> */}
 
-            {firstChildrenTree &&
-              unfoldTree(
-                firstChildrenTree,
-                zones,
-                isNewImportedSvg() ? [] : openedZoneIds
-              )}
+            <UnfolTreeWrapper
+              {...{ firstChildrenTree, zones, openedZoneIds }}
+            />
           </>
         )}
       </AccordionItem>
     </Accordion>
   );
 }
+
+let timeout: ReturnType<typeof setTimeout>;
+// eslint-disable-next-line react/display-name
+const UnfolTreeWrapper = React.memo(
+  ({
+    firstChildrenTree,
+    zones,
+    openedZoneIds,
+  }: {
+    firstChildrenTree: TreeZoneEl[] | undefined;
+    zones: Zone[];
+    openedZoneIds: string[] | undefined;
+  }) => {
+    const isNewImportSvgHook = useIsNewImportedSvg();
+    const [displayContent, setDisplayContent] = useState(false);
+    const [showSpinner, setShowSpinner] = useState(false);
+    // when isNewImportSvg change from true to false, wait 300ms before rendering the component (big SVG can take long to render the tree)
+    useEffect(() => {
+      if (isNewImportSvgHook) {
+        setShowSpinner(false);
+        return setDisplayContent(false);
+      }
+
+      setShowSpinner(true);
+      if (timeout) clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        setDisplayContent(true);
+        setShowSpinner(false);
+      }, 300);
+
+      return () => {
+        if (timeout) clearTimeout(timeout);
+      };
+    }, [isNewImportSvgHook]);
+
+    // first render
+    useEffect(() => {
+      if (!isNewImportSvg()) {
+        setDisplayContent(true);
+        setShowSpinner(false);
+      }
+    }, []);
+
+    return (
+      <>
+        {showSpinner && (
+          <Flex mb={5} justifyContent="center" alignItems="center">
+            <Spinner />
+          </Flex>
+        )}
+        {displayContent &&
+          firstChildrenTree &&
+          unfoldTree(
+            firstChildrenTree,
+            zones,
+            isNewImportSvgHook ? [] : openedZoneIds
+          )}
+      </>
+    );
+  }
+);
+
 export const unfoldTree = (
   tree: TreeZoneEl[],
   zones: Zone[],
-  openedZoneIds: string[] | undefined
+  openedZoneIds: string[] | undefined,
+  setOpenedZoneId?: (id: string) => void
 ) => {
   return tree?.map((t) => {
     const parentZone = zones.find((z) => z.id === t.id);
@@ -89,9 +155,10 @@ export const unfoldTree = (
         key={t.id}
         zones={zones.filter((z) => z.elementId === t.id)}
         openedZoneIds={openedZoneIds}
+        setOpenedZoneId={setOpenedZoneId}
       >
         {t?.children?.length !== 0 &&
-          unfoldTree(t.children!, zones, openedZoneIds)}
+          unfoldTree(t.children!, zones, openedZoneIds, setOpenedZoneId)}
       </AccordionZones>
     );
   });
@@ -134,10 +201,12 @@ const AccordionZones = ({
   zones,
   children = null,
   openedZoneIds,
+  setOpenedZoneId,
 }: {
   zones: Zone[];
   children?: any;
   openedZoneIds?: string[] | undefined;
+  setOpenedZoneId?: (id: string) => void;
 }) => {
   const dispatch = useDispatch();
 
@@ -151,6 +220,7 @@ const AccordionZones = ({
       pl={4}
       pr={0}
       overflow="auto"
+      w="100%"
       css={{
         "&::-webkit-scrollbar": {
           display: "none",
@@ -193,6 +263,7 @@ const AccordionZones = ({
                     }
                     isExpanded={isExpanded}
                     //setOpen={() => toggleAccordion(i)}
+                    setOpenedZoneId={setOpenedZoneId}
                   />
                   <AccordionPanel p={0} bg={"brand.50"}>
                     <Box p={2} pl={12}>

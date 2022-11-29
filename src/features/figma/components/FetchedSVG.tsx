@@ -14,7 +14,7 @@ import { colorTheme } from "../../../theme";
 import {
   allZonesReset,
   defaultFigmaZone,
-  getSelectedFigmaZoneIds,
+  setIsNew,
   zonesFilterByElementId,
   zonesSetTree,
   zonesUpdatedByElementId,
@@ -29,16 +29,16 @@ import {
   ModalHeader,
   ModalOverlay,
   useDisclosure,
-  Accordion,
   ModalBody,
-  AccordionItem,
-  AccordionButton,
 } from "@chakra-ui/react";
 import { useAppSelector } from "../../../app/hooks";
-import { unfoldTree } from "../../../components/zones/MainGroupList";
 import { TreeZoneEl } from "../../../app/types/types";
+import ModalSelectZonesContent from "./ModalSelectZonesContent";
 
-export const isNewImportedSvg = () => window.location.href.includes("new=true");
+export const useIsNewImportedSvg = () => {
+  return useAppSelector((store) => store.zonesSlice?.isNew);
+};
+export const isNewImportSvg = () => window.location.href.includes("new=true");
 const displayToastWarning = debounce(() => {
   toast({
     title: "Warning",
@@ -85,7 +85,6 @@ const FetchedSVG = ({
 
   const zones = zonesSlices?.zones.filter((z) => z.createdFrom === "figma");
   const firstChildrenTree = zonesSlices.tree?.[0]?.children;
-  const openedZoneIds = useAppSelector(getSelectedFigmaZoneIds);
 
   const uniqueHash = `${hashCode(url)}`;
   const { isOpen: isModalOpen, onClose, onOpen } = useDisclosure();
@@ -97,43 +96,30 @@ const FetchedSVG = ({
     getNewTreeWithoutHiddenZones(firstChildrenTree, zones, newTree);
     const newZones = getAllZonesIdsOfTree(newTree);
     dispatch(allZonesReset());
-
-    dispatch(zonesSetTree([newTree]));
-    dispatch(zonesFilterByElementId(newZones));
-
-    const displayedUrl = window.location.href
-      ?.replace("&new=true", "")
-      .replace("new=true", "");
-    window.history.pushState({}, "", displayedUrl);
     onClose();
+
+    setTimeout(() => {
+      dispatch(zonesSetTree([newTree]));
+      dispatch(zonesFilterByElementId(newZones));
+      const displayedUrl = window.location.href
+        ?.replace("&new=true", "")
+        .replace("new=true", "");
+      window.history.pushState({}, "", displayedUrl);
+      dispatch(setIsNew(false));
+    }, 300);
   };
 
   return (
     <>
       <Modal isOpen={isModalOpen} onClose={onModalCloseValidate}>
         <ModalOverlay bg={"blackAlpha.900"} />
-        <ModalContent>
+        <ModalContent minW="50vw">
           <ModalHeader>{`Please hide the zones you don't want to import.`}</ModalHeader>
-          <ModalBody display={"flex"} justifyContent="center" px={40}>
-            {/* <MainGroupList key={"init_select"} /> */}
-            <Accordion allowToggle defaultIndex={[0]} minW="400px" w="50vw">
-              <AccordionItem isDisabled={false} pb={2} w="100%">
-                <AccordionButton
-                  minW="100%"
-                  disabled={true}
-                  _hover={{ cursor: "default" }}
-                  _focus={{ boxShadow: "none" }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                  }}
-                  pl={2}
-                ></AccordionButton>
-
-                {firstChildrenTree &&
-                  unfoldTree(firstChildrenTree, zones, openedZoneIds)}
-              </AccordionItem>
-            </Accordion>
+          <ModalBody display={"flex"} justifyContent="center" px={2}>
+            <ModalSelectZonesContent
+              zones={zones}
+              firstChildrenTree={firstChildrenTree}
+            />
           </ModalBody>
           <ModalFooter>
             <Button onClick={() => onModalCloseValidate()}>Validate</Button>
@@ -148,7 +134,8 @@ const FetchedSVG = ({
         onError={(error) => console.log(error.message)}
         onLoad={(src, hasCache) => {
           // if new open modal select
-          if (isNewImportedSvg()) {
+          if (isNewImportSvg()) {
+            dispatch(setIsNew(true));
             onOpen();
           } else if (zones?.length !== 0) {
             return;

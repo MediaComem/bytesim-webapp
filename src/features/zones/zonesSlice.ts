@@ -5,10 +5,11 @@ import { TreeZoneEl, Zone, ZoneStatus } from "../../app/types/types";
 import { isZoneComplete } from "../../utils/utils";
 import { getChildrenIdsOfTree, getParentsOfNode } from "../figma/utils";
 
-type ZoneStore = { zones: Zone[]; tree: TreeZoneEl[] };
+type ZoneStore = { zones: Zone[]; tree: TreeZoneEl[]; isNew: boolean };
 const initialState: ZoneStore = {
   zones: [],
   tree: [],
+  isNew: false,
 };
 
 const updateZoneBy = (
@@ -149,8 +150,8 @@ const zonesSlice = createSlice({
       const newZone: Zone = {
         ...action.payload,
         name: `${action.payload.name} - copy `,
-        status: 'EDITING',
-        createdFrom: 'user',
+        status: "EDITING",
+        createdFrom: "user",
         id: nanoid(),
       };
       state.zones.forEach((zone) => {
@@ -188,6 +189,9 @@ const zonesSlice = createSlice({
       if (state.zones) state.zones.length = 0;
       if (state.tree) state.tree.length = 0;
     },
+    setIsNew(state, action: PayloadAction<boolean>) {
+      state.isNew = action.payload;
+    },
   },
 });
 
@@ -204,6 +208,7 @@ export const {
   zoneDuplicated,
   zonesUpdatedByElementId,
   zonesSetTree,
+  setIsNew,
 } = zonesSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type

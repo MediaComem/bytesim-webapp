@@ -26,7 +26,7 @@ import {
   zoneReset,
   zoneUpdated,
 } from "../../features/zones/zonesSlice";
-import { isNewImportedSvg } from "../../features/figma/components/FetchedSVG";
+import { useIsNewImportedSvg } from "../../features/figma/components/FetchedSVG";
 
 interface ZoneListButtonProps {
   zone: Zone;
@@ -34,6 +34,7 @@ interface ZoneListButtonProps {
   isExpanded: boolean;
   buttonDelete?: any;
   hiddenMode?: boolean;
+  setOpenedZoneId?: (id: string) => void;
 }
 
 export function ZoneListButton({
@@ -42,6 +43,7 @@ export function ZoneListButton({
   onOpen,
   buttonDelete,
   hiddenMode = false,
+  setOpenedZoneId,
 }: ZoneListButtonProps) {
   const dispatch = useDispatch();
   const projectStatus = useAppSelector((state) => state.project.status);
@@ -64,7 +66,8 @@ export function ZoneListButton({
   const updateZone = (newZone: Partial<Zone>) => {
     return zoneUpdated(newZone);
   };
-  const fallbackTypeZoneDisplayed = !isNewImportedSvg() ? "- undefined" : "";
+  const isNewImportSvg = useIsNewImportedSvg();
+  const fallbackTypeZoneDisplayed = !isNewImportSvg ? "- undefined" : "";
   return (
     <>
       <Box
@@ -84,7 +87,10 @@ export function ZoneListButton({
             ? { backgroundColor: colorTheme[100] }
             : undefined
         }
-        onClick={() => dispatch(zoneActiveToggled(zone.id))}
+        onClick={() => {
+          if (setOpenedZoneId) return setOpenedZoneId(zone.elementId ?? "");
+          dispatch(zoneActiveToggled(zone.id));
+        }}
       >
         <Flex align="center" justify="flex-start">
           {hiddenMode ? (
@@ -99,7 +105,7 @@ export function ZoneListButton({
           <AccordionCustomTitle
             label={
               <>
-                {editNameMode && !isNewImportedSvg() ? (
+                {editNameMode && !isNewImportSvg ? (
                   <Input
                     value={value}
                     onKeyDown={(e) => {
@@ -130,7 +136,7 @@ export function ZoneListButton({
                 ) : (
                   <Text
                     ml={1}
-                    cursor={isNewImportedSvg() ? "default" : "auto"}
+                    cursor={isNewImportSvg ? "default" : "auto"}
                     //fontStyle={zone.zoneType ? "initial" : "italic"}
                     whiteSpace={"nowrap"}
                     onDoubleClick={() => setEditNameMode(true)}
@@ -158,7 +164,7 @@ export function ZoneListButton({
           )}
         </Flex>
         <Flex className={cx("visibleOnHover ", css({ visibility: "hidden" }))}>
-          {!hiddenMode && !isNewImportedSvg() && (
+          {!hiddenMode && !isNewImportSvg && (
             <Button
               variant={"ghost"}
               title="Reset zone"
