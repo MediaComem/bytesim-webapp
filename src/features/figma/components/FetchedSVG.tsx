@@ -3,6 +3,8 @@ import SVG from "react-inlinesvg";
 import { useDispatch } from "react-redux";
 
 import {
+  getAllZonesIdsOfTree,
+  getNewTreeWithoutHiddenZones,
   getRelativePosition,
   getTreeHierarchyFromDOM,
   hashCode,
@@ -10,13 +12,33 @@ import {
 } from "../utils";
 import { colorTheme } from "../../../theme";
 import {
+  allZonesReset,
   defaultFigmaZone,
+  setIsNew,
+  zonesFilterByElementId,
   zonesSetTree,
   zonesUpdatedByElementId,
 } from "../../zones/zonesSlice";
 import { toast } from "../../..";
 import { debounce } from "lodash";
+import {
+  Button,
+  Modal,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
+  ModalBody,
+} from "@chakra-ui/react";
+import { useAppSelector } from "../../../app/hooks";
+import { TreeZoneEl } from "../../../app/types/types";
+import ModalSelectZonesContent from "./ModalSelectZonesContent";
 
+export const useIsNewImportedSvg = () => {
+  return useAppSelector((store) => store.zonesSlice?.isNew);
+};
+export const isNewImportSvg = () => window.location.href.includes("new=true");
 const displayToastWarning = debounce(() => {
   toast({
     title: "Warning",
@@ -59,77 +81,153 @@ const FetchedSVG = ({
   const idsRefs = React.useRef<string[]>([]);
   const dispatch = useDispatch();
 
+  const zonesSlices = useAppSelector((store) => store.zonesSlice);
+
+  const zones = zonesSlices?.zones.filter((z) => z.createdFrom === "figma");
+  const firstChildrenTree = zonesSlices.tree?.[0]?.children;
+
   const uniqueHash = `${hashCode(url)}`;
+  const { isOpen: isModalOpen, onClose, onOpen } = useDisclosure();
+
+  const onModalCloseValidate = () => {
+    const newTree: TreeZoneEl = {
+      id: zonesSlices.tree?.[0]?.id,
+    };
+    getNewTreeWithoutHiddenZones(firstChildrenTree, zones, newTree);
+    const newZones = getAllZonesIdsOfTree(newTree);
+    dispatch(allZonesReset());
+    onClose();
+
+    setTimeout(() => {
+      dispatch(zonesSetTree([newTree]));
+      dispatch(zonesFilterByElementId(newZones));
+      const displayedUrl = window.location.href
+        ?.replace("&new=true", "")
+        .replace("new=true", "");
+      window.history.pushState({}, "", displayedUrl);
+      dispatch(setIsNew(false));
+    }, 300);
+  };
 
   return (
-    <SVG
-      style={{ minWidth: "100%" }}
-      cacheRequests={true}
-      loader={<span>Loading...</span>}
-      onError={(error) => console.log(error.message)}
-      onLoad={(src, hasCache) => {
-        const ids = idsRefs.current;
-        // register all events on ids --> not needed anymore
-        // registerHoverEventsOnFigmaEls(ids);
+    <>
+      <Modal isOpen={isModalOpen} onClose={onModalCloseValidate}>
+        <ModalOverlay bg={"blackAlpha.900"} />
+        <ModalContent minW="50vw">
+          <ModalHeader>{`Please hide the zones you don't want to import.`}</ModalHeader>
+          <ModalBody display={"flex"} justifyContent="center" px={2}>
+            <ModalSelectZonesContent
+              zones={zones}
+              firstChildrenTree={firstChildrenTree}
+            />
+          </ModalBody>
+          <ModalFooter>
+            <Button onClick={() => onModalCloseValidate()}>Validate</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      <SVG
+        id={REMOTE_PARENT_SVG_ID}
+        style={{ minWidth: "100%" }}
+        cacheRequests={true}
+        loader={<span>Loading...</span>}
+        onError={(error) => console.log(error.message)}
+        onLoad={(src, hasCache) => {
+          // if new open modal select
+          if (isNewImportSvg()) {
+            dispatch(setIsNew(true));
+            onOpen();
+          } else if (zones?.length !== 0) {
+            return;
+          }
+          const ids = idsRefs.current;
+          // register all events on ids --> not needed anymore
+          // registerHoverEventsOnFigmaEls(ids);
 
-        // get tree hierarchy
-        const tree = getTreeHierarchyFromDOM(ids);
+          // get tree hierarchy
+          const tree = getTreeHierarchyFromDOM(ids);
 
-        const allIdsWithourFirstElement = ids.slice(1);
+          const allIdsWithourFirstElement = ids.slice(1);
 
-        dispatch(
-          zonesUpdatedByElementId(
-            allIdsWithourFirstElement.map((elementId) => ({
-              ...defaultFigmaZoneWithoutId,
-              elementId,
-              name: elementId?.replace(`__${uniqueHash}`, ""),
-              ...getRelativePosition(elementId),
-            }))
-          )
-        );
-        dispatch(zonesSetTree(tree));
-      }}
-      preProcessor={(code) => {
-        // code is a svg string
-        // replace width parameter of svg tag by width="100%"
-        const newCode = code
-          // add id = removeSvgId to parent svg element
-          .replace(/<svg/g, `<svg id=${REMOTE_PARENT_SVG_ID}`)
-          .replace(/width="[^"]+"/, 'width="100%"')
-          //add svg tag attribute preserveAspectRatio="xMinYMin meet"
-          .replace(/<svg/, '<svg preserveAspectRatio="xMinYMin meet"')
-          // remove height parameter of svg tag
-          .replace(/height="[^"]+"/, "")
-          // add to the first g tag of svg tag a light gray border
-          .replace(
-            /<g/,
-            `<g stroke="${colorTheme[900]}" stroke-width="2" stroke-linejoin="round"`
+          dispatch(
+            zonesUpdatedByElementId(
+              allIdsWithourFirstElement.map((elementId) => ({
+                ...defaultFigmaZoneWithoutId,
+                elementId,
+                name: elementId?.replace(`__${uniqueHash}`, ""),
+                ...getRelativePosition(elementId),
+              }))
+            )
           );
+          dispatch(zonesSetTree(tree));
+        }}
+        preProcessor={(code) => {
+          // code is a svg string
+          // replace width parameter of svg tag by width="100%"
+          const newCode = code
+            // add id = removeSvgId to parent svg element
+            // .replace(/<svg/g, `<svg id=${REMOTE_PARENT_SVG_ID}`)
+            .replace(/width="[^"]+"/, 'width="100%"')
+            //add svg tag attribute preserveAspectRatio="xMinYMin meet"
+            .replace(/<svg/, '<svg preserveAspectRatio="xMinYMin meet"')
+            // remove height parameter of svg tag
+            .replace(/height="[^"]+"/, "")
+            // add to the first g tag of svg tag a light gray border
+            .replace(
+              /<g/,
+              `<g stroke="${colorTheme[900]}" stroke-width="2" stroke-linejoin="round"`
+            );
 
-        // collect all the id of the svg element
-        //remove id= and the double " at the beginning and the end of the string
-        const ids = (code.match(/id="[^"]+"/g) ?? []).map((id) =>
-          id.replace(/id="|"/g, "")
-        );
-        // based on the ids create a tree structure, where each id belonging to a g tag of the svg is a parent node
-        // and the ids of the children are the children of the parent node
+          // the new code isolate the defs tag content
+          const defsContent = newCode.match(/<defs>([\s\S]*)<\/defs>/)?.[1];
+          //get all id of defs
+          const idsDefs =
+            defsContent
+              ?.match(/id="[^"]+"/g)
+              ?.map((id) => id.replace(/id="/, "").replace(/"/, "")) || [];
 
-        // get the ids of all the direct children of the first id
+          // collect all the id of the svg element
+          //remove id= and the double " at the beginning and the end of the string
+          const ids = (code.match(/id="[^"]+"/g) ?? []).map((id) =>
+            id.replace(/id="|"/g, "")
+          );
+          // remove noise from figma aka ids starting with "pattern", "filter", "paint", "Mask", "mask", "&#", "Atoms", "Ellipse", "Rectangle", "Circle", "Arrow"
+          const filteredIds = ids
+            .filter(
+              (id) =>
+                !id.startsWith("pattern") &&
+                !id.startsWith("filter") &&
+                !id.startsWith("paint") &&
+                !id.startsWith("Mask") &&
+                !id.startsWith("mask") &&
+                !id.startsWith("&#") &&
+                !id.startsWith("Atoms") &&
+                !id.startsWith("Ellipse") &&
+                !id.startsWith("Rectangle") && // do we filter these unamed ids by default?
+                !id.startsWith("Circle") &&
+                !id.startsWith("Arrow")
+            )
+            .filter((id) => !idsDefs.includes(id));
+          // based on the ids create a tree structure, where each id belonging to a g tag of the svg is a parent node
+          // and the ids of the children are the children of the parent node
 
-        idsRefs.current = ids.map((id) => `${id}__${uniqueHash}`);
+          // get the ids of all the direct children of the first id
 
-        return newCode;
-      }}
-      src={url}
-      // **
-      // unusued props
-      // **
-      // baseURL="/home"
-      // description="The React logo"
-      // title="React"
-      uniqueHash={uniqueHash}
-      uniquifyIDs={true}
-    />
+          idsRefs.current = filteredIds.map((id) => `${id}__${uniqueHash}`);
+
+          return newCode;
+        }}
+        src={url}
+        // **
+        // unusued props
+        // **
+        // baseURL="/home"
+        // description="The React logo"
+        // title="React"
+        uniqueHash={uniqueHash}
+        uniquifyIDs={true}
+      />
+    </>
   );
 };
 export default FetchedSVG;

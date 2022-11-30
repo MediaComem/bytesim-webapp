@@ -4,6 +4,7 @@ import zonesSlice from "../features/zones/zonesSlice";
 import { debounce } from "debounce";
 import browserStorage from "../services/browserStorage";
 import recommandationsSlice from "../features/recommandations/recommandationsSlice";
+import { isNewImportSvg } from "../features/figma/components/FetchedSVG";
 
 export const store = configureStore({
   reducer: {
@@ -12,7 +13,7 @@ export const store = configureStore({
     // zonesFigma: zonesFigmaSlice,
     recommandations: recommandationsSlice,
   },
-  preloadedState: browserStorage.loadState(), // load state from local storage
+  preloadedState: isNewImportSvg() ? {} : browserStorage.loadState(), // load state from local storage
 });
 
 // Subscribe to the store changes to persist to local storage

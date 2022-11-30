@@ -4,7 +4,9 @@ import {
   AccordionPanel,
   Box,
   Button,
+  Flex,
   Heading,
+  Spinner,
   Text,
 } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
@@ -22,8 +24,13 @@ import {
   getSelectedFigmaZoneIds,
   zoneToggleHidden,
 } from "../../features/zones/zonesSlice";
+import {
+  isNewImportSvg,
+  useIsNewImportedSvg,
+} from "../../features/figma/components/FetchedSVG";
 import AccordionItemTitleCustom from "../layout/AccordionItemTitleCustom";
 import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 
 export default function MainGroupList() {
   const zonesSlices = useAppSelector((store) => store.zonesSlice);
@@ -31,51 +38,129 @@ export default function MainGroupList() {
 
   const zones = zonesSlices?.zones.filter((z) => z.createdFrom === "figma");
   const firstChildrenTree = zonesSlices.tree?.[0]?.children;
+  // return null;
 
   return (
     <Accordion allowToggle defaultIndex={[0]}>
       <AccordionItem isDisabled={false}>
-      {({ isExpanded }) => (<>
-{/*         <AccordionButton _hover={{ backgroundColor: "brand.100" }} pl={2}> */}
-          {/* <AccordionChevron isExpanded={false} /> */}
-          <Box flex="1" textAlign="left">
-          <AccordionItemTitleCustom
-              label={
-                <AccordionCustomTitle label={"Main group"} icon="importedGroup" />
-              }
-              p={2}
-              isExpanded={isExpanded}
-            >
-              <Button><Link to={'./figma'}><SmallAddIcon /></Link></Button>
+        {({ isExpanded }) => (
+          <>
+            {/*         <AccordionButton _hover={{ backgroundColor: "brand.100" }} pl={2}> */}
+            {/* <AccordionChevron isExpanded={false} /> */}
+            <Box flex="1" textAlign="left">
+              <AccordionItemTitleCustom
+                label={
+                  <AccordionCustomTitle
+                    label={"Main group"}
+                    icon="importedGroup"
+                  />
+                }
+                p={2}
+                isExpanded={isExpanded}
+              >
+                <Button>
+                  <Link to={"./figma"}>
+                    <SmallAddIcon />
+                  </Link>
+                </Button>
               </AccordionItemTitleCustom>
-          </Box>
-      {/*   </AccordionButton> */}
+            </Box>
+            {/*   </AccordionButton> */}
 
-        {firstChildrenTree &&
-          unfoldTree(firstChildrenTree, zones, openedZoneIds)}
-          </>)}
+            <UnfolTreeWrapper
+              {...{ firstChildrenTree, zones, openedZoneIds }}
+            />
+          </>
+        )}
       </AccordionItem>
     </Accordion>
   );
 }
-const unfoldTree = (
+
+let timeout: ReturnType<typeof setTimeout>;
+// eslint-disable-next-line react/display-name
+const UnfolTreeWrapper = React.memo(
+  ({
+    firstChildrenTree,
+    zones,
+    openedZoneIds,
+  }: {
+    firstChildrenTree: TreeZoneEl[] | undefined;
+    zones: Zone[];
+    openedZoneIds: string[];
+  }) => {
+    const isNewImportSvgHook = useIsNewImportedSvg();
+    const [displayContent, setDisplayContent] = useState(false);
+    const [showSpinner, setShowSpinner] = useState(false);
+    // when isNewImportSvg change from true to false, wait 300ms before rendering the component (big SVG can take long to render the tree)
+    useEffect(() => {
+      if (isNewImportSvgHook) {
+        setShowSpinner(false);
+        return setDisplayContent(false);
+      }
+
+      setShowSpinner(true);
+      if (timeout) clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        setDisplayContent(true);
+        setShowSpinner(false);
+      }, 300);
+
+      return () => {
+        if (timeout) clearTimeout(timeout);
+      };
+    }, [isNewImportSvgHook]);
+
+    // first render
+    useEffect(() => {
+      if (!isNewImportSvg()) {
+        setDisplayContent(true);
+        setShowSpinner(false);
+      }
+    }, []);
+
+    return (
+      <>
+        {showSpinner && (
+          <Flex mt={2} mb={5} justifyContent="center" alignItems="center">
+            <Spinner />
+          </Flex>
+        )}
+        {displayContent &&
+          firstChildrenTree &&
+          unfoldTree(
+            firstChildrenTree,
+            zones,
+            isNewImportSvgHook ? [] : openedZoneIds
+          )}
+      </>
+    );
+  }
+);
+
+export const unfoldTree = (
   tree: TreeZoneEl[],
   zones: Zone[],
-  openedZoneIds: string[] | undefined
+  openedZoneIds: string[],
+  setOpenedZoneId?: (id: string) => void
 ) => {
-  return tree.map((t) => {
+  return tree?.map((t) => {
     const parentZone = zones.find((z) => z.id === t.id);
     if (parentZone?.hidden) {
       return <HiddenZone key={`${parentZone.id}_hidden`} z={parentZone} />;
     }
+    const isExpanded = openedZoneIds.findIndex((zId) => zId === t.id) !== -1;
+
     return (
       <AccordionZones
         key={t.id}
         zones={zones.filter((z) => z.elementId === t.id)}
         openedZoneIds={openedZoneIds}
+        setOpenedZoneId={setOpenedZoneId}
       >
-        {t?.children?.length !== 0 &&
-          unfoldTree(t.children!, zones, openedZoneIds)}
+        {isExpanded &&
+          t?.children?.length !== 0 &&
+          unfoldTree(t.children!, zones, openedZoneIds, setOpenedZoneId)}
       </AccordionZones>
     );
   });
@@ -99,7 +184,10 @@ const HiddenZone = ({ z }: { z: Zone }) => {
         buttonDelete={
           <Button
             variant={"ghost"}
-            onClick={() => dispatch(zoneToggleHidden(z.id))}
+            onClick={(e) => {
+              dispatch(zoneToggleHidden(z.id));
+              e?.stopPropagation();
+            }}
             title="Hide zone"
             _hover={{}}
             isDisabled={false}
@@ -115,10 +203,12 @@ const AccordionZones = ({
   zones,
   children = null,
   openedZoneIds,
+  setOpenedZoneId,
 }: {
   zones: Zone[];
   children?: any;
   openedZoneIds?: string[] | undefined;
+  setOpenedZoneId?: (id: string) => void;
 }) => {
   const dispatch = useDispatch();
 
@@ -126,13 +216,13 @@ const AccordionZones = ({
   const zoneExpanded = zones.findIndex((z) =>
     openedZoneIds?.includes(z.elementId ?? "")
   );
-
   return (
     <AccordionPanel
       p={0}
       pl={4}
       pr={0}
       overflow="auto"
+      w="100%"
       css={{
         "&::-webkit-scrollbar": {
           display: "none",
@@ -163,7 +253,10 @@ const AccordionZones = ({
                     buttonDelete={
                       <Button
                         variant={"ghost"}
-                        onClick={() => dispatch(zoneToggleHidden(z.id))}
+                        onClick={(e) => {
+                          dispatch(zoneToggleHidden(z.id));
+                          e?.stopPropagation();
+                        }}
                         title="Hide zone and its children"
                         isDisabled={false}
                       >
@@ -172,14 +265,19 @@ const AccordionZones = ({
                     }
                     isExpanded={isExpanded}
                     //setOpen={() => toggleAccordion(i)}
+                    setOpenedZoneId={setOpenedZoneId}
                   />
-                  <AccordionPanel p={0} bg={"brand.50"}>
-                    <Box p={2} pl={12}>
-                      <Heading size={"xs"}>Type</Heading>
-                      <Text fontSize={"xs"}>Specific settings on the page</Text>
-                    </Box>
-                    <ZoneParams zone={z} />
-                  </AccordionPanel>
+                  {!isNewImportSvg() && (
+                    <AccordionPanel p={0} bg={"brand.50"}>
+                      <Box p={2} pl={12}>
+                        <Heading size={"xs"}>Type</Heading>
+                        <Text fontSize={"xs"}>
+                          Specific settings on the page
+                        </Text>
+                      </Box>
+                      <ZoneParams zone={z} />
+                    </AccordionPanel>
+                  )}
                   {children}
                 </Box>
               )}

@@ -26,6 +26,7 @@ import {
   zoneReset,
   zoneUpdated,
 } from "../../features/zones/zonesSlice";
+import { useIsNewImportedSvg } from "../../features/figma/components/FetchedSVG";
 
 interface ZoneListButtonProps {
   zone: Zone;
@@ -33,6 +34,7 @@ interface ZoneListButtonProps {
   isExpanded: boolean;
   buttonDelete?: any;
   hiddenMode?: boolean;
+  setOpenedZoneId?: (id: string) => void;
 }
 
 export function ZoneListButton({
@@ -41,12 +43,13 @@ export function ZoneListButton({
   onOpen,
   buttonDelete,
   hiddenMode = false,
+  setOpenedZoneId,
 }: ZoneListButtonProps) {
   const dispatch = useDispatch();
   const projectStatus = useAppSelector((state) => state.project.status);
   const [value, setValue] = React.useState(zone.name);
   const [editNameMode, setEditNameMode] = React.useState(false);
-  const [oldZoneName, setOldZoneName] = React.useState(zone.name);
+  // const [oldZoneName, setOldZoneName] = React.useState(zone.name);
   const updateZoneName = (newName: string) => {
     // const newNameObject = {
     //   id: zone.id,
@@ -63,6 +66,8 @@ export function ZoneListButton({
   const updateZone = (newZone: Partial<Zone>) => {
     return zoneUpdated(newZone);
   };
+  const isNewImportSvg = useIsNewImportedSvg();
+  const fallbackTypeZoneDisplayed = !isNewImportSvg ? "- undefined" : "";
   return (
     <>
       <Box
@@ -82,22 +87,25 @@ export function ZoneListButton({
             ? { backgroundColor: colorTheme[100] }
             : undefined
         }
-        onClick={() => dispatch(zoneActiveToggled(zone.id))}
+        onClick={() => {
+          if (setOpenedZoneId) return setOpenedZoneId(zone.elementId ?? "");
+          dispatch(zoneActiveToggled(zone.id));
+        }}
       >
         <Flex align="center" justify="flex-start">
           {hiddenMode ? (
-            <Box p={1}>
+            <Box px={"6.5px"} py={"15px"} width="auto">
               <OpenIcon />
             </Box>
           ) : (
-            <AccordionButton p={1} width="auto">
+            <AccordionButton m={0} p={1} width="auto">
               <AccordionChevron isExpanded={isExpanded} />
             </AccordionButton>
           )}
           <AccordionCustomTitle
             label={
               <>
-                {editNameMode ? (
+                {editNameMode && !isNewImportSvg ? (
                   <Input
                     value={value}
                     onKeyDown={(e) => {
@@ -128,6 +136,7 @@ export function ZoneListButton({
                 ) : (
                   <Text
                     ml={1}
+                    cursor={isNewImportSvg ? "default" : "auto"}
                     //fontStyle={zone.zoneType ? "initial" : "italic"}
                     whiteSpace={"nowrap"}
                     onDoubleClick={() => setEditNameMode(true)}
@@ -145,7 +154,7 @@ export function ZoneListButton({
               ? Object.entries(ZoneType).find(
                   (s) => s[0] === zone.zoneType
                 )?.[1]
-              : "- undefined"}
+              : fallbackTypeZoneDisplayed}
           </Text>
           {zone.zoneType && (
             <ProgressPoints
@@ -155,7 +164,7 @@ export function ZoneListButton({
           )}
         </Flex>
         <Flex className={cx("visibleOnHover ", css({ visibility: "hidden" }))}>
-          {!hiddenMode && (
+          {!hiddenMode && !isNewImportSvg && (
             <Button
               variant={"ghost"}
               title="Reset zone"
