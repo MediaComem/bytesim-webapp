@@ -87,7 +87,7 @@ const UnfolTreeWrapper = React.memo(
   }: {
     firstChildrenTree: TreeZoneEl[] | undefined;
     zones: Zone[];
-    openedZoneIds: string[] | undefined;
+    openedZoneIds: string[];
   }) => {
     const isNewImportSvgHook = useIsNewImportedSvg();
     const [displayContent, setDisplayContent] = useState(false);
@@ -141,7 +141,7 @@ const UnfolTreeWrapper = React.memo(
 export const unfoldTree = (
   tree: TreeZoneEl[],
   zones: Zone[],
-  openedZoneIds: string[] | undefined,
+  openedZoneIds: string[],
   setOpenedZoneId?: (id: string) => void
 ) => {
   return tree?.map((t) => {
@@ -149,6 +149,7 @@ export const unfoldTree = (
     if (parentZone?.hidden) {
       return <HiddenZone key={`${parentZone.id}_hidden`} z={parentZone} />;
     }
+    const isExpanded = openedZoneIds.findIndex((zId) => zId === t.id) !== -1;
 
     return (
       <AccordionZones
@@ -157,7 +158,7 @@ export const unfoldTree = (
         openedZoneIds={openedZoneIds}
         setOpenedZoneId={setOpenedZoneId}
       >
-        {t?.children?.length !== 0 &&
+        {isExpanded && t?.children?.length !== 0 &&
           unfoldTree(t.children!, zones, openedZoneIds, setOpenedZoneId)}
       </AccordionZones>
     );
@@ -265,13 +266,15 @@ const AccordionZones = ({
                     //setOpen={() => toggleAccordion(i)}
                     setOpenedZoneId={setOpenedZoneId}
                   />
-                  <AccordionPanel p={0} bg={"brand.50"}>
-                    <Box p={2} pl={12}>
-                      <Heading size={"xs"}>Type</Heading>
-                      <Text fontSize={"xs"}>Specific settings on the page</Text>
-                    </Box>
-                    <ZoneParams zone={z} />
-                  </AccordionPanel>
+                  {!isNewImportSvg() &&
+                    <AccordionPanel p={0} bg={"brand.50"}>
+                      <Box p={2} pl={12}>
+                        <Heading size={"xs"}>Type</Heading>
+                        <Text fontSize={"xs"}>Specific settings on the page</Text>
+                      </Box>
+                      <ZoneParams zone={z} />
+                    </AccordionPanel>
+                  }
                   {children}
                 </Box>
               )}

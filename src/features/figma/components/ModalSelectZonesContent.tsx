@@ -18,10 +18,10 @@ const ModalSelectZonesContent = ({
   firstChildrenTree?: TreeZoneEl[];
 }) => {
   const [openedZoneIds, setOpenedZoneIds] = useState<string[]>([]);
-  const [mounted, setMouted] = useState(false);
+  const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setTimeout(() => {
-      setMouted(true);
+      setMounted(true);
     }, 300);
   }, []);
 

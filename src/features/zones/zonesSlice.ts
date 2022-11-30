@@ -230,7 +230,7 @@ export const getSelectedFigmaZoneIds = (state: RootState) => {
     selectedZone?.elementId,
     state.zonesSlice.tree[0]
   );
-  return parents;
+  return parents ?? [];
 };
 export const getUncompleteZones = (state: RootState) => {
   const uncompleteZones: Array<string> = [];
