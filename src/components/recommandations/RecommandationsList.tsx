@@ -1,4 +1,13 @@
-import { Accordion } from "@chakra-ui/react";
+import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Box,
+  Flex,
+} from "@chakra-ui/react";
+import { useState } from "react";
 import { GenericParameters } from "../../app/types/generalFormTypes";
 import { RecommandationWithZone } from "../../app/types/recommandations";
 import { VideoParameters } from "../../app/types/videoTypes";
@@ -76,22 +85,43 @@ export default function RecommandationsList({
   allOpen,
   filterBy,
 }: RecommandationsListProps) {
-  const indexes = Array.from(recommandations.keys());
+  const [zoneIdOpened, setZonesIdOpened] = useState<string | undefined>(
+    undefined
+  );
 
   const filteredRecoGroupedByZone = getFilteredRecoGroupedByZone(
     recoGroupedByZone(recommandations),
     filterBy
   );
+  const indexes = filteredRecoGroupedByZone.map((_, i) => i);
 
+  const onToggleAccordion = (zoneId: string) => {
+    const newZoneIdOpened = zoneIdOpened === zoneId ? undefined : zoneId;
+    setZonesIdOpened(newZoneIdOpened);
+  };
+
+  const getOpenIndex = () => {
+    const zoneIndex = filteredRecoGroupedByZone.findIndex(
+      (z) => z[0].zoneId === zoneIdOpened
+    );
+    return zoneIndex === -1 ? undefined : zoneIndex;
+  };
+
+  const indexOpen = (allOpen ? indexes : getOpenIndex()) ?? -1;
   return (
-    <Accordion allowToggle index={allOpen ? indexes : undefined}>
-      {filteredRecoGroupedByZone?.map((value, index) => (
-        <RecommandationsByZone
-          key={index}
-          zoneRecommandations={value as RecommandationType[]}
-          zoneId={value[0].zoneId}
-        />
-      ))}
+    <Accordion allowToggle index={indexOpen}>
+      {filteredRecoGroupedByZone?.map((value) => {
+        const isOpenAccordion = allOpen || zoneIdOpened === value[0].zoneId;
+        return (
+          <RecommandationsByZone
+            key={value[0].zoneId}
+            zoneRecommandations={value as RecommandationType[]}
+            zoneId={value[0].zoneId}
+            onToggleAccordion={onToggleAccordion}
+            isOpenAccordion={isOpenAccordion}
+          />
+        );
+      })}
     </Accordion>
   );
 }
