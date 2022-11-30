@@ -122,7 +122,7 @@ const UnfolTreeWrapper = React.memo(
     return (
       <>
         {showSpinner && (
-          <Flex mb={5} justifyContent="center" alignItems="center">
+          <Flex mt={2} mb={5} justifyContent="center" alignItems="center">
             <Spinner />
           </Flex>
         )}
@@ -158,7 +158,8 @@ export const unfoldTree = (
         openedZoneIds={openedZoneIds}
         setOpenedZoneId={setOpenedZoneId}
       >
-        {isExpanded && t?.children?.length !== 0 &&
+        {isExpanded &&
+          t?.children?.length !== 0 &&
           unfoldTree(t.children!, zones, openedZoneIds, setOpenedZoneId)}
       </AccordionZones>
     );
@@ -266,15 +267,17 @@ const AccordionZones = ({
                     //setOpen={() => toggleAccordion(i)}
                     setOpenedZoneId={setOpenedZoneId}
                   />
-                  {!isNewImportSvg() &&
+                  {!isNewImportSvg() && (
                     <AccordionPanel p={0} bg={"brand.50"}>
                       <Box p={2} pl={12}>
                         <Heading size={"xs"}>Type</Heading>
-                        <Text fontSize={"xs"}>Specific settings on the page</Text>
+                        <Text fontSize={"xs"}>
+                          Specific settings on the page
+                        </Text>
                       </Box>
                       <ZoneParams zone={z} />
                     </AccordionPanel>
-                  }
+                  )}
                   {children}
                 </Box>
               )}
