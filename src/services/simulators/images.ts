@@ -59,7 +59,7 @@ export class ImageSimulator extends ZoneSimulator implements SimulatorImages {
     const currentImpact = this.simulate();
     //show recommandations only if the zone params are fully filled
     if (isZoneComplete(this.zone)) {
-      const recommandationsFormat = this.messageRecommandations(
+      const recommandationsFormat = this.messageForBetterRecommandations(
         EImgFormat,
         this.image,
         "format",

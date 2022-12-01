@@ -17,3 +17,9 @@ export const imageTips = {
     format: "Have you considered the option of using a more optimal format such as WebP ?",
     quantity: "If it's a carousel, avoid putting more than 5 images as the last ones will probably not be seen."
 }
+
+export const dynContentTips = {
+    dynamicMap: "Have you considered the option of using a simple image ? Avoiding interaction may reduce the data usage.",
+    advertising: "You should avoid inserting ads deep in your page since the user will likely not see it and it will result in useless data consumption.",
+    analytics: "Have you tried to keep the analysis to a minimum to limit the use of data and reduce the use of personal data ?"
+}

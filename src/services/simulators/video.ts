@@ -99,7 +99,7 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
         "format"
       );
       recommandations.push(...recommandationsFormat);
-      const recommandationsAutoplay = this.messageRecommandations(
+      const recommandationsAutoplay = this.messageForBetterRecommandations(
         EBoolean,
         this.video,
         "autoplay",
@@ -107,7 +107,7 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
         videoWarnings.autoplay
       );
       recommandations.push(...recommandationsAutoplay);
-      const recommandationsLoop = this.messageRecommandations(
+      const recommandationsLoop = this.messageForBetterRecommandations(
         EBoolean,
         this.video,
         "loop",
