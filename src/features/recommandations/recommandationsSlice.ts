@@ -35,6 +35,15 @@ const recommandationsSlice = createSlice({
         if (existingReco) {
           r.id = existingReco.id;
         }
+        if (
+          existingReco &&
+          existingReco.bestValue === r.bestValue &&
+          existingReco.betterValue === r.betterValue &&
+          existingReco.currentValue === r.currentValue &&
+          !!existingReco.selectedValue
+        ) {
+          r.selectedValue = existingReco.selectedValue;
+        }
       });
 
       return newState;
