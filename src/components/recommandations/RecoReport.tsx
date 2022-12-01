@@ -1,6 +1,15 @@
-import { Box, Divider, Flex, Text } from "@chakra-ui/react";
+import {
+  Accordion,
+  AccordionButton,
+  AccordionItem,
+  AccordionPanel,
+  Box,
+  Divider,
+  Flex,
+  Text,
+} from "@chakra-ui/react";
 import { css } from "@emotion/css";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
   useAppSelector,
@@ -56,6 +65,10 @@ export function ReportBody({
   const projectGeneralParams = useAppSelector((state) => state.project.params);
   const recos = useAppSelector((state) => state.recommandations);
   const uncompleteZones = useAppSelector(getUncompleteZones);
+  const [errorPanelToggled, setErrorPanelToggled] = React.useState(false);
+  const toggleErrorPannel = (): void => {
+    setErrorPanelToggled(!errorPanelToggled);
+  };
   useEffect(() => {
     dispatch(
       recommandationsPopulated([...genericRecomandations, ...recommandations])
@@ -64,36 +77,45 @@ export function ReportBody({
 
   return (
     <>
-      <Flex direction="column">
-        {!isReportPage && uncompleteZones.length !== 0 && (
-          <RecoWarning uncompleteZoneNames={uncompleteZones} />
-        )}
-        <ReportGeneralInfo />
-        <Divider />
-        <Box p={2}>
-          <Text fontSize="xs">
-            Estimated visit/month : {projectGeneralParams.nbVisit}
-          </Text>
-        </Box>
-        <ReportToolBar
-          onChangeFilter={(newFilter: FilterType) => setFilterBy(newFilter)}
-          currentFilter={filterBy}
+      <Accordion index={errorPanelToggled ? 0 : 1}>
+        <RecoWarning
+          isHidden={!(!isReportPage && uncompleteZones.length !== 0)}
+          isToggled={errorPanelToggled}
+          uncompleteZoneNames={uncompleteZones}
+          toggleErrorPannel={toggleErrorPannel}
         />
-        <Divider />
-      </Flex>
-      <div className={css({ overflowY: "auto", overflowX: "hidden" })}>
-        {recos?.length > 0 ? (
-          <RecommandationsList
-            recommandations={customRecos || recos}
-            allOpen={!!allOpen}
-            filterBy={filterBy}
-          />
-        ) : (
-          <Flex p={3} color={"gray.400"}>
-            No recommandations. Congrats!
-          </Flex>
-        )}
-      </div>
+        <AccordionItem>
+          <AccordionButton hidden={true} />
+          <AccordionPanel p={0}>
+            <Box>
+              <ReportGeneralInfo />
+            </Box>
+            <Box p={2}>
+              <Text fontSize="xs">
+                Estimated visit/month : {projectGeneralParams.nbVisit}
+              </Text>
+            </Box>
+            <ReportToolBar
+              onChangeFilter={(newFilter: FilterType) => setFilterBy(newFilter)}
+              currentFilter={filterBy}
+            />
+            <Divider />
+            <div className={css({ overflowY: "auto", overflowX: "hidden" })}>
+              {recos?.length > 0 ? (
+                <RecommandationsList
+                  recommandations={customRecos || recos}
+                  allOpen={!!allOpen}
+                  filterBy={filterBy}
+                />
+              ) : (
+                <Flex p={3} color={"gray.400"}>
+                  No recommandations. Congrats!
+                </Flex>
+              )}
+            </div>
+          </AccordionPanel>
+        </AccordionItem>
+      </Accordion>
     </>
   );
 }

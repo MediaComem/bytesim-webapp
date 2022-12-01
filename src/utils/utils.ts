@@ -27,3 +27,12 @@ export const isZoneComplete = (zone: Zone) => {
     return false;
   }
 };
+
+export const getMissingZoneParams = (zone: Zone): string[] => {
+  if (zone.params && zone.zoneType) {
+    const zoneTypeEntries = Object.keys(getTypeEntries(zone.zoneType));
+    const zoneEntriesInParams = Object.keys(zone.params);
+    return zoneTypeEntries.filter(value => !zoneEntriesInParams.includes(value));
+  }
+  return [];
+}
