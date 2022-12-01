@@ -1,36 +1,41 @@
-import * as React from "react";
 import { css, cx } from "@emotion/css";
-import { ReactComponent as OpenIcon } from "../../assets/Fleche_Fermee.svg";
+import { AccordionChevronSVG } from "./AccordionChevronSVG";
 interface AccordionChevronProps {
   isExpanded: boolean;
   setOpen?: () => void;
   className?: string;
+  color?: string;
 }
 export default function AccordionChevron({
   isExpanded,
   setOpen,
   className,
+  color = "#000",
 }: AccordionChevronProps) {
   return (
-    <OpenIcon
+    <div
       onClick={() => {
         if (setOpen) {
           setOpen();
         }
       }}
-      className={cx(
-        {
-          [css({ transform: "rotate(90deg)", transformOrigin: "center" })]:
-            isExpanded,
-        },
-        css({
-          margin: "2px",
-          "&:hover": {
-            cursor: "pointer",
+    >
+      <AccordionChevronSVG
+        color={color}
+        className={cx(
+          {
+            [css({ transform: "rotate(90deg)", transformOrigin: "center" })]:
+              isExpanded,
           },
-        }),
-        className
-      )}
-    />
+          css({
+            margin: "2px",
+            "&:hover": {
+              cursor: "pointer",
+            },
+          }),
+          className
+        )}
+      />
+    </div>
   );
 }
