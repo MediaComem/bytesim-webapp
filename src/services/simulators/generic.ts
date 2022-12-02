@@ -13,6 +13,10 @@ export class GenericParametersSimulator implements SimulatorGeneric {
     return { energy: 0, co2: 0 };
   }
 
+  simulateOptimal() {
+    return { energy: 0, co2: 0 };
+  }
+
   recommandations(): Recommandation<GenericParameters[keyof GenericParameters]>[] {
     if (this.parameters.server !== ServerType.RENEWABLE) {
       return [{

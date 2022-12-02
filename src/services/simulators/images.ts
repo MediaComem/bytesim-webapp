@@ -53,6 +53,14 @@ export class ImageSimulator extends ZoneSimulator implements SimulatorImages {
     return this.simulateParameters(this.image);
   }
 
+  simulateOptimal() {
+    return this.simulateParameters({
+      format: EImgFormat.FORMAT_WEBP,
+      quantity: 1,
+      size: EImgSize.SIZE_100KO
+    } as ImageParameters)
+  }
+
   recommandations() {
     const recommandations: Recommandation<EImgSize>[] =
       [];

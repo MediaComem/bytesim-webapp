@@ -5,6 +5,7 @@ import { GenericParameters } from "../../app/types/generalFormTypes";
 
 export interface Simulator {
   simulate: () => { energy: number; co2: number };
+  simulateOptimal: () => { energy: number; co2: number };
 }
 
 export interface SimulatorGeneric extends Simulator {

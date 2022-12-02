@@ -48,6 +48,29 @@ export function useCalculateImpact(): { energy: number; co2: number } {
   return { energy: energyTotal, co2: co2Total };
 }
 
+export function useCalculateOptimalImpact(): { energy: number; co2: number } {
+  const zones = useAppSelector(zoneSelector);
+  const renewable = true;
+  const nbVisits = useAppSelector((state) => state.project.params.nbVisit) ?? 1;
+  let energyTotal = 0;
+  let co2Total = 0;
+  zones.forEach((zone) => {
+    if (isZoneComplete(zone)) {
+      try {
+        const simulator = simulationService.simulator(zone, renewable, nbVisits);
+        if (simulator) {
+          const { energy, co2 } = simulator.simulateOptimal();
+          energyTotal += energy;
+          co2Total += co2;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  });
+  return { energy: energyTotal, co2: co2Total };
+}
+
 export function useCalculateRecommandationsImpact(): {
   energy: number;
   co2: number;
