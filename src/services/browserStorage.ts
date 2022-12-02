@@ -1,18 +1,24 @@
 const KEY = 'redux';
 const browserStorage = {
-    loadState: () => {
+    loadState: (projectKey: string) => {
         try {
           const serializedState = localStorage.getItem(KEY);
           if (!serializedState) return undefined;
-          return JSON.parse(serializedState);
+          const projects = JSON.parse(serializedState);
+          return projects[projectKey];
         } catch (e) {
           return undefined;
         }
     },
-    saveState: (state: any) => {
+    saveState: (state: any, projectKey: string) => {
         try {
-          const serializedState = JSON.stringify(state);
-          localStorage.setItem(KEY, serializedState);
+          let bytesimProjects = {} as any;
+          const serializedState = localStorage.getItem(KEY);
+          if (serializedState) {
+            bytesimProjects = JSON.parse(serializedState);
+          };
+          bytesimProjects[projectKey] = state;
+          localStorage.setItem(KEY, JSON.stringify(bytesimProjects));
         } catch (e) {
           // Ignore
           console.error('Failed to save redux store');
