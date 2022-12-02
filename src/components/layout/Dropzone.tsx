@@ -10,6 +10,10 @@ function Dropzone(props: {
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     maxFiles: 1,
+    multiple: false,
+    accept: {
+      "image/svg": [".svg"],
+    },
   });
   const bg = useColorModeValue("gray.100", "navy.700");
   const borderColor = useColorModeValue("secondaryGray.100", "whiteAlpha.100");

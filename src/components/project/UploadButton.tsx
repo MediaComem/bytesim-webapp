@@ -39,10 +39,10 @@ export default function UploadButton() {
             <Dropzone
               onDrop={React.useCallback((acceptedFiles: any) => {
                 setFile(acceptedFiles[0]);
-                setFileName(acceptedFiles[0].name);
+                setFileName(acceptedFiles[0]?.name);
               }, [])}
               content={
-                fileName.length > 0
+                fileName && fileName.length > 0
                   ? fileName
                   : "Drag and drop a file, or click to select file"
               }
