@@ -8,6 +8,7 @@ import {
   ModalHeader,
   ModalOverlay,
   useDisclosure,
+  Text,
 } from "@chakra-ui/react";
 import * as React from "react";
 import { useDispatch } from "react-redux";
@@ -15,11 +16,13 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setIsNew } from "../../features/zones/zonesSlice";
 import { ReactS3Client } from "../../utils/s3Config";
+import Dropzone from "../layout/Dropzone";
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
 export default function UploadButton() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [file, setFile] = React.useState<File>();
+  const [fileName, setFileName] = React.useState<string>("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -33,15 +36,16 @@ export default function UploadButton() {
         <ModalContent>
           <ModalHeader>Upload artwork</ModalHeader>
           <ModalBody>
-            <Input
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                if (e.target.files) {
-                  const newFile = e.target.files[0];
-                  setFile(newFile);
-                }
-              }}
+            <Dropzone
+              onDrop={React.useCallback((acceptedFiles: any) => {
+                setFile(acceptedFiles[0]);
+                setFileName(acceptedFiles[0].name);
+              }, [])}
+              content={
+                fileName.length > 0
+                  ? fileName
+                  : "Drag and drop a file, or click to select file"
+              }
             />
           </ModalBody>
           <ModalFooter>
@@ -55,7 +59,6 @@ export default function UploadButton() {
                 ReactS3Client.uploadFile(file)
                   .then((data: any) => {
                     onClose();
-                    console.log("data", data);
                     navigate(
                       `/figma?bytesimBucket=${
                         process.env.REACT_APP_S3_BUCKET
@@ -63,6 +66,8 @@ export default function UploadButton() {
                         process.env.REACT_APP_S3_REGION
                       }&key=${encodeURIComponent(data.key)}&new=true`
                     );
+                    setFile(undefined);
+                    setFileName("");
                     dispatch(setIsNew(true));
                   })
                   .catch((err: any) => console.error("S3 upload err:", err));
