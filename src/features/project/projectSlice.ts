@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
+import { EServerType } from "../../app/types/generalFormTypes";
 import { Project } from "../../app/types/types";
 
 const initialState: Project = {
@@ -8,10 +9,10 @@ const initialState: Project = {
   status: "EDITING",
   params: {
     nbVisit: 1000,
+    server: EServerType.RENEWABLE,
     genericFont: undefined,
     infiniteScroll: undefined,
     plugins: undefined,
-    server: undefined,
   },
 };
 
@@ -26,11 +27,11 @@ const projectSlice = createSlice({
       if (state.status !== "SIMULATION") {
         Object.assign(state, {
           params: {
-            nbVisit: undefined,
+            nbVisit: 1000,
+            server: EServerType.RENEWABLE,
             genericFont: undefined,
             inifiteScroll: undefined,
             plugins: undefined,
-            server: undefined,
           },
         });
       }

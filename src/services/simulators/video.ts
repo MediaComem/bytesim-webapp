@@ -43,14 +43,10 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
       [EVideoDuration.DUR_5_MIN]: 600,
     };
 
-    if (!params.quality || !params.duration) {
-      throw new Error(`Missing some parameters for video`);
-    }
-
     const quality = params.quality;
-    const durationSec = durations[params.duration];
+    const durationSec = durations[params.duration!];
 
-    const sizeBytes = (1000000 * bitratesMbps[quality] * durationSec) / 8;
+    const sizeBytes = (1000000 * bitratesMbps[quality!] * durationSec) / 8;
     if (params.format === EVideoFormat.FORMAT_GIF) {
       // GIF approximated to 3 times size of MP4
       return 3 * sizeBytes;
