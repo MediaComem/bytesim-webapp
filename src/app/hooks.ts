@@ -3,7 +3,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import simulationService from "../services/simulationService";
 import { isZoneComplete } from "../utils/utils";
 import { AppDispatch, RootState } from "./store";
-import { GenericParameters, ServerType } from "./types/generalFormTypes";
+import { GenericParameters, EServerType } from "./types/generalFormTypes";
 import {
   Recommandation,
   RecommandationWithZone,
@@ -26,7 +26,7 @@ export const useAppZones = () => useAppSelector(zoneSelector);
 export function useCalculateImpact(): { energy: number; co2: number } {
   const zones = useAppSelector(zoneSelector);
   const renewable = useAppSelector(
-    (state) => state.project.params.server === ServerType.RENEWABLE
+    (state) => state.project.params.server === EServerType.RENEWABLE
   );
   const nbVisits = useAppSelector((state) => state.project.params.nbVisit) ?? 1;
   let energyTotal = 0;
@@ -79,7 +79,7 @@ export function useCalculateRecommandationsImpact(): {
   const recommandations = useAppSelector((state) => state.recommandations);
   const nbVisits = useAppSelector((state) => state.project.params.nbVisit) ?? 1; // if no visitor impact per visit
   let renewable = useAppSelector(
-    (state) => state.project.params.server === ServerType.RENEWABLE
+    (state) => state.project.params.server === EServerType.RENEWABLE
   );
   let energyTotal = 0;
   let co2Total = 0;
@@ -156,7 +156,7 @@ export function useCalculateAllRecommandations(): RecommandationWithZone<
   const nbVisits = useAppSelector(
     (state) => state.project.params.nbVisit
   ) ?? 1;
-  const renewable = genericParameters === ServerType.RENEWABLE;
+  const renewable = genericParameters === EServerType.RENEWABLE;
   const recommandations: RecommandationWithZone<
     VideoParameters[keyof VideoParameters]
   >[] = [];

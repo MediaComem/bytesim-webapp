@@ -31,11 +31,7 @@ export class ImageSimulator extends ZoneSimulator implements SimulatorImages {
       [EImgSize.SIZE_MORE_500KO]: 2000,
     };
 
-    if (!params.size || !params.quantity) {
-      throw new Error(`Missing some parameters for image`);
-    }
-
-    const sizeMb = (1000 * imageSize[params.size] * params.quantity);
+    const sizeMb = (1000 * imageSize[params.size!] * params.quantity!);
     return sizeMb;
   }
 
@@ -67,7 +63,7 @@ export class ImageSimulator extends ZoneSimulator implements SimulatorImages {
     const currentImpact = this.simulate();
     //show recommandations only if the zone params are fully filled
     if (isZoneComplete(this.zone)) {
-      const recommandationsFormat = this.messageRecommandations(
+      const recommandationsFormat = this.messageForBetterRecommandations(
         EImgFormat,
         this.image,
         "format",
