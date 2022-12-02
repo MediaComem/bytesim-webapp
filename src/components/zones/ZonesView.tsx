@@ -131,14 +131,6 @@ export default function ZonesView({
             }
           />
           <Route
-            path="/new"
-            element={
-              <Flex>
-                <UploadButton />
-              </Flex>
-            }
-          />
-          <Route
             path="/*"
             element={
               <Flex>

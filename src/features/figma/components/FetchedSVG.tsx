@@ -1,4 +1,4 @@
-import React from "react";
+import { useRef } from "react";
 import SVG from "react-inlinesvg";
 import { useDispatch } from "react-redux";
 
@@ -78,7 +78,7 @@ const FetchedSVG = ({
 }: {
   url?: string;
 }) => {
-  const idsRefs = React.useRef<string[]>([]);
+  const idsRefs = useRef<string[]>([]);
   const dispatch = useDispatch();
 
   const zonesSlices = useAppSelector((store) => store.zonesSlice);
@@ -86,7 +86,7 @@ const FetchedSVG = ({
   const zones = zonesSlices?.zones.filter((z) => z.createdFrom === "figma");
   const firstChildrenTree = zonesSlices.tree?.[0]?.children;
 
-  const uniqueHash = `${hashCode(url)}`;
+  const uniqueHash = `svg_elements_to_parse`;
   const { isOpen: isModalOpen, onClose, onOpen } = useDisclosure();
 
   const onModalCloseValidate = () => {

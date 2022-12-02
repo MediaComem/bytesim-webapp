@@ -1,6 +1,5 @@
 import {
   Button,
-  Flex,
   Input,
   Modal,
   ModalBody,
@@ -12,30 +11,23 @@ import {
 } from "@chakra-ui/react";
 import * as React from "react";
 import { useDispatch } from "react-redux";
-import { projectUpdated } from "../../features/project/projectSlice";
-import { ReactComponent as AddIcon } from "../../assets/BigPlus.svg";
-import { colorTheme } from "../../theme";
+
+import { useNavigate } from "react-router-dom";
+import { setIsNew } from "../../features/zones/zonesSlice";
+import { ReactS3Client } from "../../utils/s3Config";
+window.Buffer = window.Buffer || require("buffer").Buffer;
 
 export default function UploadButton() {
-  const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [file, setFile] = React.useState<string | undefined>();
+  const [file, setFile] = React.useState<File>();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   return (
     <>
-      <Flex
-        grow={1}
-        direction={"column"}
-        align="center"
-        justifyContent={"center"}
-        alignSelf="stretch"
-        onClick={onOpen}
-        _hover={{ backgroundColor: colorTheme[50], cursor: 'pointer' }}
-      >
-        <Flex direction="column" align="center">
-          <AddIcon />
-          Import an Artwork
-        </Flex>
-      </Flex>
+      <Button onClick={onOpen} size={"sm"}>
+        Import an Artwork
+      </Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay bg="blackAlpha.300" />
         <ModalContent>
@@ -46,7 +38,8 @@ export default function UploadButton() {
               accept="image/*"
               onChange={(e) => {
                 if (e.target.files) {
-                  setFile(URL.createObjectURL(e.target.files[0]));
+                  const newFile = e.target.files[0];
+                  setFile(newFile);
                 }
               }}
             />
@@ -59,11 +52,20 @@ export default function UploadButton() {
               variant="solid"
               colorScheme={"brand"}
               onClick={() => {
-                const newScreenshot = {
-                  screenshotBlob: file,
-                };
-                dispatch(projectUpdated(newScreenshot));
-                onClose();
+                ReactS3Client.uploadFile(file)
+                  .then((data: any) => {
+                    onClose();
+                    console.log("data", data);
+                    navigate(
+                      `/figma?bytesimBucket=${
+                        process.env.REACT_APP_S3_BUCKET
+                      }&region=${
+                        process.env.REACT_APP_S3_REGION
+                      }&key=${encodeURIComponent(data.key)}&new=true`
+                    );
+                    dispatch(setIsNew(true));
+                  })
+                  .catch((err: any) => console.error("S3 upload err:", err));
               }}
             >
               OK
