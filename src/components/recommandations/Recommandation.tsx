@@ -37,7 +37,7 @@ export function BetterChoicesRecommandation({
       <Box flex="1" textAlign="left">
         <Flex>
           <Text>{recommandation.parameter}</Text>
-          <Tooltip label="Biblio de reco + best practices" hasArrow>
+          <Tooltip label={recommandation.bestPracticeMessage || 'empty'} hasArrow>
             ⓘ
           </Tooltip>
         </Flex>
@@ -76,13 +76,13 @@ export function BadPracticeRecommandation({
       <Box flex="1" textAlign="left">
         <Flex>
           <Text>{recommandation.parameter}</Text>
-          <Tooltip label="Biblio de reco + best practices" hasArrow>
+          <Tooltip label={recommandation.bestPracticeMessage} hasArrow>
             ⓘ
           </Tooltip>
         </Flex>
       </Box>
       <Text fontSize="sm" mt={1} color="red.600">
-        Warning: {recommandation.message}
+         {recommandation.message}
       </Text>
     </Box>
   );
@@ -98,7 +98,7 @@ export function TipRecommandation({ recommandation }: TipRecommandationProps) {
       <Box flex="1" textAlign="left">
         <Flex>
           <Text>{recommandation.parameter}</Text>
-          <Tooltip label="Biblio de reco + best practices" hasArrow>
+          <Tooltip label={recommandation.bestPracticeMessage} hasArrow>
             ⓘ
           </Tooltip>
         </Flex>

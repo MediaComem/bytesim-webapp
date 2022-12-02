@@ -1,5 +1,6 @@
 import { nanoid } from "@reduxjs/toolkit";
-import { Recommandation, RecommandationTypes } from "../../app/types/recommandations";
+import React from "react";
+import { BestPracticeMessage, Recommandation, RecommandationTypes } from "../../app/types/recommandations";
 
 export class ZoneSimulator {
   zone_id: string;
@@ -22,8 +23,10 @@ export class ZoneSimulator {
     currentImpact: { energy: number; co2: number },
     options: { [s: string]: unknown } | ArrayLike<unknown>,
     currentParameters: { [x: string]: any },
-    key: string
+    key: string,
+    bestPracticeMessage?: BestPracticeMessage,
   ) {
+    //Why returning an array here?
     const recommandations: Recommandation<any>[] = [];
     const currentChoice = currentParameters[key];
     if (currentChoice) {

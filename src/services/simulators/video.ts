@@ -1,4 +1,7 @@
-import { Recommandation, RecommandationTypes } from "../../app/types/recommandations";
+import {
+  Recommandation,
+  RecommandationTypes,
+} from "../../app/types/recommandations";
 import { EBoolean, Zone } from "../../app/types/types";
 import {
   VideoParameters,
@@ -63,8 +66,11 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
     co2: number;
   } {
     const videoSize = this.videoSize(params);
-    const energy = simulationService.energyMJ(videoSize, this.renewable) * this.numberOfVisits;
-    const co2 = simulationService.gwp(videoSize, this.renewable) * this.numberOfVisits;
+    const energy =
+      simulationService.energyMJ(videoSize, this.renewable) *
+      this.numberOfVisits;
+    const co2 =
+      simulationService.gwp(videoSize, this.renewable) * this.numberOfVisits;
     return { energy, co2 };
   }
 
@@ -82,7 +88,8 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
         currentImpact,
         EVideoQuality,
         this.video,
-        "quality"
+        "quality",
+        { title: "hola", body: "hola", link: "hola" }
       );
       recommandations.push(...recommandationsQuality);
       const recommandationsDuration = this.betterOptionsRecommandations(

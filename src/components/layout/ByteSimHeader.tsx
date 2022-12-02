@@ -5,11 +5,13 @@ import { useDispatch } from "react-redux";
 import { setName } from "../../features/project/projectSlice";
 import ButtonWithIconCustom from "./ButtonWithIconCustom";
 import SaveProjectButton from "../project/SaveProjectButton";
+import { useNavigate } from "react-router-dom";
 
 export default function BytesimeHeader() {
   const projectName = useAppSelector((state) => state.project.name);
   const [value, setValue] = React.useState(projectName);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   return (
     <Flex
       align="center"
@@ -39,6 +41,7 @@ export default function BytesimeHeader() {
             //subLabel={"Start with ByteSim"}
             variant={'ghost'}
             iconAfter
+            onClick={() => navigate('./best-practices')}
           />
       {/* <ProjectSettingsModal /> */}
     </Flex>
