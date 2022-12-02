@@ -1,6 +1,6 @@
 import { EBoolean } from "./types";
 
-export enum ServerType {
+export enum EServerType {
   RENEWABLE = "Renewable energy",
   NON_RENEWABLE = "Non renewable energy",
   UNKNOWN = "Do not know",
@@ -8,9 +8,9 @@ export enum ServerType {
 
 export const GeneralFormEntries = {
   nbVisit: 1000,
-  server: ServerType,
+  server: EServerType,
   plugins: EBoolean,
-  genericFont: EBoolean,
+  customFonts: EBoolean,
   infiniteScroll: EBoolean,
 };
 
@@ -22,8 +22,8 @@ export const getGeneralEntryLabel = (entry: string) => {
       return "Server";
     case "plugins":
       return "Plugins";
-    case "genericFont":
-      return "Generic fonts";
+    case "customFonts":
+      return "Custom fonts";
     case "infiniteScroll":
       return "Infinite scroll";
     default:
@@ -33,7 +33,7 @@ export const getGeneralEntryLabel = (entry: string) => {
 
 export interface GenericParameters {
   nbVisit?: number;
-  server?: ServerType;
+  server?: EServerType;
   plugins?: boolean;
   genericFont?: boolean;
   infiniteScroll?: boolean;
