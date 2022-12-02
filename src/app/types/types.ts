@@ -68,6 +68,13 @@ export type ZoneFigma = Omit<Zone, "createdFrom"> & {
   elementId: string;
   hidden?: boolean;
 };
+
+export type ZoneMissingParams= {
+  zoneId: string;
+  zoneName: string;
+  zoneType: ZoneType | "undefined";
+  zoneMissingParams: string[];
+}
 export type TreeZoneEl = {
   id: string;
   children?: TreeZoneEl[];

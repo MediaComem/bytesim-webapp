@@ -1,8 +1,8 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import { TreeZoneEl, Zone, ZoneStatus } from "../../app/types/types";
-import { isZoneComplete } from "../../utils/utils";
+import { TreeZoneEl, Zone, ZoneMissingParams, ZoneStatus } from "../../app/types/types";
+import { getMissingZoneParams, isZoneComplete } from "../../utils/utils";
 import { getChildrenIdsOfTree, getParentsOfNode } from "../figma/utils";
 
 type ZoneStore = { zones: Zone[]; tree: TreeZoneEl[]; isNew: boolean };
@@ -115,6 +115,17 @@ const zonesSlice = createSlice({
         existingZone.status = "EDITING";
       }
     },
+    zoneActivate(state, action: PayloadAction<string>) {
+      const existingZone = state.zones.find(
+        (zone) => zone.id === action.payload
+      );
+      if (existingZone) {
+        state.zones.forEach((s) => {
+          s.status = "ACTIVE";
+        });
+        existingZone.status = "EDITING";
+      }
+    },
     allZonesReset(state) {
       return {
         ...state,
@@ -199,6 +210,7 @@ export const {
   zoneAdded,
   zoneDeleted,
   zoneActiveToggled,
+  zoneActivate,
   allZonesReset,
   zonesFilterByElementId,
   allZonesDeleted,
@@ -233,7 +245,7 @@ export const getSelectedFigmaZoneIds = (state: RootState) => {
   return parents ?? [];
 };
 export const getUncompleteZones = (state: RootState) => {
-  const uncompleteZones: Array<string> = [];
+  const uncompleteZones: Array<ZoneMissingParams> = [];
   Object.values(state.zonesSlice.zones).forEach((zone) => {
     if (
       zone?.hidden !== true &&
@@ -241,7 +253,12 @@ export const getUncompleteZones = (state: RootState) => {
         zone.params === undefined ||
         !isZoneComplete(zone))
     ) {
-      uncompleteZones.push(zone.name);
+      uncompleteZones.push({
+        zoneId: zone.id,
+        zoneName: zone.name,
+        zoneType: zone.zoneType || "undefined",
+        zoneMissingParams: getMissingZoneParams(zone),
+      });
     }
   });
   return uncompleteZones;

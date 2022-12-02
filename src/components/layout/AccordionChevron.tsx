@@ -2,12 +2,14 @@ import { css, cx } from "@emotion/css";
 import { AccordionChevronSVG } from "./AccordionChevronSVG";
 interface AccordionChevronProps {
   isExpanded: boolean;
+  isWarning?: true;
   setOpen?: () => void;
   className?: string;
   color?: string;
 }
 export default function AccordionChevron({
   isExpanded,
+  isWarning,
   setOpen,
   className,
   color = "#000",
@@ -27,12 +29,7 @@ export default function AccordionChevron({
             [css({ transform: "rotate(90deg)", transformOrigin: "center" })]:
               isExpanded,
           },
-          css({
-            margin: "2px",
-            "&:hover": {
-              cursor: "pointer",
-            },
-          }),
+          css({ stroke: isWarning ? "#C53030" : "black" }),
           className
         )}
       />
