@@ -23,6 +23,7 @@ export default function UploadButton() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [file, setFile] = React.useState<File>();
   const [fileName, setFileName] = React.useState<string>("");
+  const [errorMessage, setErrorMessage] = React.useState<string>("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -38,6 +39,7 @@ export default function UploadButton() {
           <ModalBody>
             <Dropzone
               onDrop={React.useCallback((acceptedFiles: any) => {
+                setErrorMessage("");
                 setFile(acceptedFiles[0]);
                 setFileName(acceptedFiles[0]?.name);
               }, [])}
@@ -47,6 +49,7 @@ export default function UploadButton() {
                   : "Drag and drop a file, or click to select file"
               }
             />
+            {errorMessage ? <Text color="red.600">{errorMessage}</Text> : null}
           </ModalBody>
           <ModalFooter>
             <Button variant="ghost" mr={3} onClick={onClose}>
@@ -70,7 +73,10 @@ export default function UploadButton() {
                     setFileName("");
                     dispatch(setIsNew(true));
                   })
-                  .catch((err: any) => console.error("S3 upload err:", err));
+                  .catch((err: any) => {
+                    setErrorMessage("Error while uploading the image");
+                    console.log(err);
+                  });
               }}
             >
               OK
