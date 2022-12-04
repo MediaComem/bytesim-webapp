@@ -42,7 +42,7 @@ export default function MainGroupList() {
 
   return (
     <Accordion allowToggle defaultIndex={[0]}>
-      <AccordionItem isDisabled={false}>
+      <AccordionItem isDisabled={false} borderBottom={"none"}>
         {({ isExpanded }) => (
           <>
             {/*         <AccordionButton _hover={{ backgroundColor: "brand.100" }} pl={2}> */}
@@ -269,11 +269,11 @@ const AccordionZones = ({
                   />
                   {!isNewImportSvg() && (
                     <AccordionPanel p={0} bg={"brand.50"}>
-                      <Box p={2} pl={12}>
-                        <Heading size={"xs"}>Type</Heading>
-                        <Text fontSize={"xs"}>
-                          Specific settings on the page
-                        </Text>
+                      <Box fontSize={12} pl={14}>
+                        <Heading size="xs" fontSize="12px">
+                          Type
+                        </Heading>
+                        <Text>Specific settings on the page</Text>
                       </Box>
                       <ZoneParams zone={z} />
                     </AccordionPanel>

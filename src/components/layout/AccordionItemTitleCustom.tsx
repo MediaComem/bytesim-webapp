@@ -41,7 +41,7 @@ export default function AccordionItemTitleCustom({
         _hover={{ backgroundColor: hoverBgColor || "brand.100" }}
         p={p}
       >
-        <AccordionChevron isExpanded={isExpanded}/>
+        <AccordionChevron isExpanded={isExpanded} />
         {label}
       </AccordionButton>
       <div className={cx("visibleOnHover ", css({ visibility: "hidden" }))}>

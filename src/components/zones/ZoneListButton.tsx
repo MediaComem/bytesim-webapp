@@ -146,14 +146,16 @@ export function ZoneListButton({
                 )}
               </>
             }
+            size={"14"}
             icon={"drawnZone"}
             iconClassName={css({ transform: "scale(0.8)" })}
           />
           <Text fontSize={"sm"} color={"gray"} whiteSpace="nowrap" ml={2}>
             {zone.zoneType
-              ? Object.entries(ZoneType).find(
-                  (s) => s[0] === zone.zoneType
-                )?.[1]
+              ? Object.entries(ZoneType)
+                  .find((s) => s[0] === zone.zoneType)?.[1]
+                  .replace(/[A-Z]/g, " $&")
+                  .trim()
               : fallbackTypeZoneDisplayed}
           </Text>
           {zone.zoneType && (

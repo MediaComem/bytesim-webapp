@@ -103,7 +103,7 @@ function ZoneSettingsForm({
       }
     }, [pendingKey, pendingValue]);
     return (
-      <Flex direction={"column"} pl={14}>
+      <Flex direction={"column"} pl={14} mt={-1} mb={-3}>
         <CustomModal
           texts={confirmText.changeZoneType}
           isOpen={isOpen}
@@ -127,7 +127,13 @@ function ZoneSettingsForm({
             return (
               <div key={key}>
                 {showHeaders ? (
-                  <Heading size="sm" mt={3} mb={1} textTransform="capitalize">
+                  <Heading
+                    size="sm"
+                    fontSize={12}
+                    mt={2}
+                    mb={1}
+                    textTransform="capitalize"
+                  >
                     {key}
                   </Heading>
                 ) : (
@@ -135,7 +141,7 @@ function ZoneSettingsForm({
                 )}
                 <form>
                   {typeof value === "number" ? (
-                    <Flex gap={10} fontSize={"sm"}>
+                    <Flex gap={10} fontSize={"12px"}>
                       <NumberInput
                         size="sm"
                         id={`${zone.id} ${key}`}
@@ -162,7 +168,7 @@ function ZoneSettingsForm({
                     .map((data, index) => {
                       const inputId = `${zone.id} ${key} ${data}`;
                       return (
-                        <Flex key={index} gap={1} fontSize={"sm"}>
+                        <Flex key={index} gap={1} fontSize={"12px"}>
                           <input
                             type="radio"
                             name={data as string}
