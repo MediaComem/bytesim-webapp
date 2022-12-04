@@ -72,7 +72,9 @@ export default function RecommandationsByZone({
           <AccordionChevron isExpanded={isOpenAccordion} />
           <GridItem textAlign="start">
             <Text mr={1} fontSize="xs" fontWeight={700}>
-              {zoneRecommandations[0].zoneName}
+              {zoneRecommandations[0].zoneName === "Generic"
+                ? "General Parameters"
+                : zoneRecommandations[0].zoneName}
             </Text>
             <Text fontSize={"xs"}>{zone?.zoneType ?? "–"}</Text>
             {zone?.zoneType ? (
