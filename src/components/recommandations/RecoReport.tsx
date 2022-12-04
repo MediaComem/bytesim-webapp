@@ -77,16 +77,37 @@ export function ReportBody({
 
   return (
     <>
-      <Accordion index={errorPanelToggled ? 0 : 1}>
+      <Accordion
+        index={errorPanelToggled ? 0 : 1}
+        flex={1}
+        overflow="hidden"
+        display={"flex"}
+        flexDirection="column"
+      >
         <RecoWarning
           isHidden={!(!isReportPage && uncompleteZones.length !== 0)}
           isToggled={errorPanelToggled}
           uncompleteZoneNames={uncompleteZones}
           toggleErrorPannel={toggleErrorPannel}
         />
-        <AccordionItem>
+        <AccordionItem
+          overflow={"hidden"}
+          display={"flex"}
+          flexDirection="column"
+          className={css({
+            ".chakra-collapse": {
+              display: "flex !important",
+              flexDirection: "column",
+            },
+          })}
+        >
           <AccordionButton hidden={true} />
-          <AccordionPanel p={0}>
+          <AccordionPanel
+            p={0}
+            overflow="hidden"
+            display={"flex"}
+            flexDirection="column"
+          >
             <Box>
               <ReportGeneralInfo />
             </Box>

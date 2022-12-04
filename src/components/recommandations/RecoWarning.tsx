@@ -14,6 +14,7 @@ import * as React from "react";
 import { ZoneMissingParams } from "../../app/types/types";
 import { useDispatch } from "react-redux";
 import { zoneActivate } from "../../features/zones/zonesSlice";
+import { css } from "@emotion/css";
 
 interface RecoWarningProps {
   isHidden: boolean;
@@ -38,7 +39,18 @@ export default function RecoWarning({
   }
 
   return (
-    <AccordionItem hidden={isHidden}>
+    <AccordionItem
+      hidden={isHidden}
+      display="flex"
+      flexDirection={"column"}
+      overflow="hidden"
+      className={css({
+        ".chakra-collapse": {
+          display: "flex !important",
+          overflow: "auto !important",
+        },
+      })}
+    >
       <h2>
         <AccordionButton
           _hover={{ backgroundColor: "brand.100" }}
@@ -49,7 +61,11 @@ export default function RecoWarning({
         >
           <Flex>
             <Center>
-              <AccordionChevron isWarning={true} isExpanded={isToggled} color="#C53030" />
+              <AccordionChevron
+                isWarning={true}
+                isExpanded={isToggled}
+                color="#C53030"
+              />
               <Box>
                 <Text
                   pl={2}
