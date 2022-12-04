@@ -4,7 +4,6 @@ import {
   AccordionPanel,
   Box,
   Center,
-  Flex,
   Link,
   Text,
 } from "@chakra-ui/react";
@@ -44,6 +43,7 @@ export default function RecoWarning({
       display="flex"
       flexDirection={"column"}
       overflow="hidden"
+      flexShrink={0}
       className={css({
         ".chakra-collapse": {
           display: "flex !important",
@@ -51,7 +51,6 @@ export default function RecoWarning({
         },
       })}
     >
-      <h2>
         <AccordionButton
           _hover={{ backgroundColor: "brand.100" }}
           pl={4}
@@ -59,7 +58,6 @@ export default function RecoWarning({
             toggleErrorPannel();
           }}
         >
-          <Flex>
             <Center>
               <AccordionChevron
                 isWarning={true}
@@ -82,9 +80,7 @@ export default function RecoWarning({
                 <WarningIcon />
               </Box>
             </Center>
-          </Flex>
         </AccordionButton>
-      </h2>
       <AccordionPanel pb={4} height={"full"}>
         {Object.values(uncompleteZoneNames).map((zone) => (
           <Box p={4} key={zone.zoneId}>
