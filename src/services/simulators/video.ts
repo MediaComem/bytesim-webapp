@@ -11,6 +11,7 @@ import {
 } from "../../app/types/videoTypes";
 import { isZoneComplete } from "../../utils/utils";
 import simulationService from "../simulationService";
+import { bestPracticesGR491 } from "./bestPractices";
 import { videoWarnings } from "./messages";
 import { SimulatorVideo } from "./type";
 import { ZoneSimulator } from "./zoneSimulator";
@@ -95,11 +96,7 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
         EVideoQuality,
         this.video,
         "quality",
-        {
-          title: "Is the definition of the image (here: video) reduced and adapted to its objective?",
-          body: "Illustrative images and images (and videos) that carry more contractual information such as the image of a product do not have the same needs for quality details. The adaptation of the level of quality to the importance of the image makes it possible to reduce the environmental footprint of the less critical needs for the service.",
-          link: "https://gr491.isit-europe.org/en/crit.php?id=9-5063-frontend-illustrative-images-and-images-that-carry-more"
-        }
+        bestPracticesGR491.Video.quality
       );
       recommandations.push(...recommandationsQuality);
       const recommandationsDuration = this.betterOptionsRecommandations(
@@ -107,11 +104,7 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
         EVideoDuration,
         this.video,
         "duration",
-        {
-          title: "Is the size of data stored on user device limited ?",
-          body: "All items transfered to user device have impact on the network, on compute time required to process. Reducing the size of these items is important.",
-          link: "https://gr491.isit-europe.org/en/crit.php?id=10-5085-frontend-all-items-transfered-to-user-device-have"
-        }
+        bestPracticesGR491.Video.duration
       );
       recommandations.push(...recommandationsDuration);
       const recommandationsFormat = this.betterOptionsRecommandations(
@@ -119,12 +112,7 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
         EVideoFormat,
         this.video,
         "format",
-        {
-          title:
-            "Have the different image/video formats available been evaluated to select only the most effective ?",
-          body: "Digital services use images/videos for illustration or information purposes. The sizes, degrees of definition, encoding formats have a significant impact on the size of the files of these images/videos. Reducing volumes makes it possible to limit environmental footprints.",
-          link: "https://gr491.isit-europe.org/en/crit.php?id=9-5061-frontend-digital-services-use-images-for-illustration-or",
-        }
+        bestPracticesGR491.Video.format
       );
       recommandations.push(...recommandationsFormat);
       const recommandationsAutoplay = this.messageForBetterRecommandations(
@@ -133,11 +121,7 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
         "autoplay",
         RecommandationTypes.WARNING,
         videoWarnings.autoplay,
-        {
-          title: 'Is it really a user action that triggers the "play" ?',
-          body: "Active content uses technical resources to function. The activity of these components should be started at the request of the user to avoid consuming energy unnecessarily.",
-          link: "https://gr491.isit-europe.org/en/crit.php?id=9-5071-frontend-active-content-uses-technical-resources-to-function."
-        }
+        bestPracticesGR491.Video.autoplay
       );
       recommandations.push(...recommandationsAutoplay);
       const recommandationsLoop = this.messageForBetterRecommandations(
@@ -146,11 +130,7 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
         "loop",
         RecommandationTypes.WARNING,
         videoWarnings.loop,
-        {
-          title: "Are videos or animations outside the active area automatically paused / stopped ?",
-          body: "The active content, animations, videos, sounds launched by the user may no longer be visible on the screen area presented to the user during navigation. Continuing to distribute this content becomes unnecessary and unnecessarily consumes resources, so it should be stopped.",
-          link: "https://gr491.isit-europe.org/en/crit.php?id=9-5072-frontend-the-active-content-animations-videos-sounds-launched"
-        }
+        bestPracticesGR491.Video.loop
       );
       recommandations.push(...recommandationsLoop);
     }

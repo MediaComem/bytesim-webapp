@@ -209,7 +209,7 @@ interface BPTooltipContentProps {
   recommandationBP: BestPracticeMessage;
   className?: string;
 }
-function BPTooltipContent({
+export function BPTooltipContent({
   recommandationBP,
   className,
 }: BPTooltipContentProps) {

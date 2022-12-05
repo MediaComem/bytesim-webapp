@@ -9,6 +9,7 @@ import {
   RecommandationTypes,
 } from "../../app/types/recommandations";
 import { EBoolean } from "../../app/types/types";
+import { bestPracticesGR491 } from "./bestPractices";
 import { genericTips, genericWarning } from "./messages";
 import { SimulatorGeneric } from "./type";
 
@@ -78,11 +79,7 @@ export class GenericParametersSimulator implements SimulatorGeneric {
           energy: 0, // TODO
           co2: 0, // TODO
         },
-        bestPracticeMessage: {
-          title: "Does the electricity come from renewable energies ?",
-          body: "The activity of a data center requires energy. The energy sources will determine the environmental footprint. Low-carbon and renewable energy solutions will reduce this impact.",
-          link: "https://gr491.isit-europe.org/en/crit.php?id=4-8039-hosting-the-activity-of-a-data-center-requires",
-        },
+        bestPracticeMessage: bestPracticesGR491.GeneralParameters.server,
       });
     }
     const recommandationsPlugins = this.messageForBetterRecommandations(
@@ -91,11 +88,7 @@ export class GenericParametersSimulator implements SimulatorGeneric {
       "plugins",
       RecommandationTypes.TIP,
       genericTips.plugins,
-      {
-        title: "Do the libraries used allow you to take only the components that are actually useful ?",
-        body: "Very often components from public libraries (open source or commercial) provide a set of functionalities which are rarely all used and drain dependencies on other components with the same characteristics. In the end, the project aggregates a large volume of the library while a small part is actually used. Favoring components whose dependencies and functionalities are controllable in relation to the needs is efficient from the sustainable IT point of view.",
-        link: "https://gr491.isit-europe.org/en/crit.php?id=3-5019-frontend-very-often-components-from-public-libraries-",
-      },
+      bestPracticesGR491.GeneralParameters.plugins,
     );
     recommendations.push(...recommandationsPlugins);
     const recommandationsCustomFont = this.messageForBetterRecommandations(
@@ -104,11 +97,7 @@ export class GenericParametersSimulator implements SimulatorGeneric {
       "customFonts",
       RecommandationTypes.TIP,
       genericTips.customFonts,
-      {
-        title: "Do you limit the number of fonts loaded for the service ?",
-        body: "Each font is encoded in a file presenting all the associated symbols, which represents a large volume of data exchanged and manipulated. The system fonts are embedded in the presentation tools and are not conveyed, the flows are therefore reduced when they are used.",
-        link: "https://gr491.isit-europe.org/en/crit.php?id=9-5075-frontend-each-font-is-encoded-in-a-file",
-      }
+      bestPracticesGR491.GeneralParameters.genericFonts
     );
     recommendations.push(...recommandationsCustomFont);
     const recommandationsInfiniteScroll = this.messageForBetterRecommandations(
@@ -117,11 +106,7 @@ export class GenericParametersSimulator implements SimulatorGeneric {
       "infiniteScroll",
       RecommandationTypes.WARNING,
       genericWarning.infiniteScroll,
-      {
-        title: "Is the size of data stored on user device limited ?",
-        body: "All items transfered to user device have impact on the network, on compute time required to process. Reducing the size of these items is important.",
-        link: "https://gr491.isit-europe.org/en/crit.php?id=10-5085-frontend-all-items-transfered-to-user-device-have",
-      }
+      bestPracticesGR491.GeneralParameters.infiniteScroll
     );
     recommendations.push(...recommandationsInfiniteScroll);
     return recommendations;
