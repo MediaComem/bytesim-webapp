@@ -1,7 +1,12 @@
 const KEY = 'redux';
 const browserStorage = {
-    loadState: (projectKey: string) => {
+    loadState: () => {
         try {
+          const url = window.location.href;
+          const projectKey = url.match(/key=([^&]*)/)?.[1];
+          if (!projectKey) {
+            return;
+          }
           const serializedState = localStorage.getItem(KEY);
           if (!serializedState) return undefined;
           const projects = JSON.parse(serializedState);
@@ -10,8 +15,13 @@ const browserStorage = {
           return undefined;
         }
     },
-    saveState: (state: any, projectKey: string) => {
+    saveState: (state: any) => {
         try {
+          const url = window.location.href;
+          const projectKey = url.match(/key=([^&]*)/)?.[1];
+          if (!projectKey) {
+            return;
+          }
           let bytesimProjects = {} as any;
           const serializedState = localStorage.getItem(KEY);
           if (serializedState) {

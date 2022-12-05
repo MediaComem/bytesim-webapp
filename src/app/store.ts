@@ -6,8 +6,6 @@ import browserStorage from "../services/browserStorage";
 import recommandationsSlice from "../features/recommandations/recommandationsSlice";
 import { isNewImportSvg } from "../features/figma/components/FetchedSVG";
 
-const url = window.location.href;
-const key = url.match(/key=([^&]*)/)?.[1] ?? 'empty';
 export const store = configureStore({
   reducer: {
     project: projectReducer,
@@ -15,7 +13,7 @@ export const store = configureStore({
     // zonesFigma: zonesFigmaSlice,
     recommandations: recommandationsSlice,
   },
-  preloadedState: isNewImportSvg() ? {} : browserStorage.loadState(key), // load state from local storage
+  preloadedState: isNewImportSvg() ? {} : browserStorage.loadState(), // load state from local storage
 });
 
 // Subscribe to the store changes to persist to local storage
@@ -23,7 +21,7 @@ store.subscribe(
   // we use debounce to save the state once each 500ms
   // for better performances in case multiple changes occur in a short time
   debounce(() => {
-    browserStorage.saveState(store.getState(), key);
+    browserStorage.saveState(store.getState());
   }, 500)
 );
 
