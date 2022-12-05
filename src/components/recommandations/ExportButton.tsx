@@ -1,7 +1,8 @@
 import { Button } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function ExportButton() {
+const { search } = useLocation(); // keep image params
 const navigate = useNavigate();
   return (
     <>
@@ -10,7 +11,7 @@ const navigate = useNavigate();
         alignSelf={'center'}
         justifySelf={'flex-end'}
         onClick={() => {
-            navigate('/export');
+            navigate(`/export${search}`); // keep url params
         }}
         size='sm'
         minWidth='min-content'

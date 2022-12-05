@@ -8,7 +8,7 @@ import {
 import { useEffect, useState } from "react";
 import { TreeZoneEl, Zone } from "../../../app/types/types";
 import { unfoldTree } from "../../../components/zones/MainGroupList";
-import { isNewImportSvg } from "./FetchedSVG";
+import { isNewImportSvg, useIsNewImportedSvg } from "./FetchedSVG";
 
 const ModalSelectZonesContent = ({
   zones,
@@ -19,6 +19,7 @@ const ModalSelectZonesContent = ({
 }) => {
   const [openedZoneIds, setOpenedZoneIds] = useState<string[]>([]);
   const [mounted, setMounted] = useState(false);
+  const isNewSvg = useIsNewImportedSvg();
   useEffect(() => {
     setTimeout(() => {
       setMounted(true);
@@ -49,7 +50,7 @@ const ModalSelectZonesContent = ({
           pl={2}
         ></AccordionButton>
         {mounted &&
-          isNewImportSvg() &&
+          isNewSvg &&
           firstChildrenTree &&
           unfoldTree(firstChildrenTree, zones, openedZoneIds, setOpenedZoneId)}
         {!mounted && (
