@@ -59,19 +59,23 @@ export default function RecommandationsByZone({
     }
   };
 
-  const optimalZoneImpact = simulationService
-    .simulator(zone!, true, nbVisits)!
-    .simulateOptimal() ?? {
-    energy: 0,
-    co2: 0,
-  };
+  const optimalZoneImpact =
+    zoneRecommandations[0].zoneName !== "Generic" && zone
+      ? simulationService.simulator(zone, true, nbVisits)!.simulateOptimal()
+      : {
+          energy: 0,
+          co2: 0,
+        };
 
-  const currentZoneImpact = simulationService
-    .simulator(zone!, serverType === EServerType.RENEWABLE, nbVisits)!
-    .simulate() ?? {
-    energy: 0,
-    co2: 0,
-  };
+  const currentZoneImpact =
+    zoneRecommandations[0].zoneName !== "Generic" && zone
+      ? simulationService
+          .simulator(zone, serverType === EServerType.RENEWABLE, nbVisits)!
+          .simulate()
+      : {
+          energy: 0,
+          co2: 0,
+        };
 
   return zoneRecommandations ? (
     <AccordionItem>
