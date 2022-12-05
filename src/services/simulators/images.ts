@@ -68,7 +68,12 @@ export class ImageSimulator extends ZoneSimulator implements SimulatorImages {
         this.image,
         "format",
         RecommandationTypes.TIP,
-        imageTips.format
+        imageTips.format,
+        {
+          title: 'Have the different image formats available been evaluated to select only the most effective ?',
+          body: 'Digital services use images for illustration or information purposes. The sizes, degrees of definition, encoding formats have a significant impact on the size of the files of these images. Reducing volumes makes it possible to limit environmental footprints.',
+          link: 'https://gr491.isit-europe.org/en/crit.php?id=9-5061-frontend-digital-services-use-images-for-illustration-or'
+        }
       );
       recommandations.push(...recommandationsFormat);
       const recommandationsQuantity = this.quantityMessageRecommandations(
@@ -76,14 +81,24 @@ export class ImageSimulator extends ZoneSimulator implements SimulatorImages {
         "quantity",
         this.MAX_IMAGE_THRESHOLD,
         RecommandationTypes.TIP,
-        imageTips.quantity
+        imageTips.quantity,
+        {
+          title: 'Are you reducing the number of pictograms used in the service ?',
+          body: 'All presentation elements have a weight greater than the characters of the alphabet. Each time a pictogram is used when the information it conveys could be presented differently, the service increases its volume. In addition, accessibility assistants do not always make it possible to render these pictograms in good conditions.',
+          link: 'https://gr491.isit-europe.org/en/crit.php?id=9-5074-frontend-all-presentation-elements-have-a-weight-greater'
+        }
       );
       recommandations.push(...recommandationsQuantity);
       const recommandationsQuality = this.betterOptionsRecommandations(
         currentImpact,
         EImgSize,
         this.image,
-        "size"
+        "size",
+        {
+          title: 'Is the definition of the image reduced and adapted to its objective (illustration, contractual, ...) ?',
+          body: 'Illustrative images and images that carry more contractual information such as the image of a product do not have the same needs for quality details. The adaptation of the level of quality to the importance of the image makes it possible to reduce the environmental footprint of the less critical needs for the service.',
+          link: 'https://gr491.isit-europe.org/en/crit.php?id=9-5063-frontend-illustrative-images-and-images-that-carry-more'
+        }
       );
       recommandations.push(...recommandationsQuality);
     }
