@@ -52,19 +52,15 @@ export const getSvgUrlFromCurrentUrl = () => {
   // get current url
   const url = window.location.href;
   // find in the url bytesimBucket, region and key
-  const bytesimBucket = url.match(/bytesimBucket=([^&]*)/)?.[1];
-  const region = url.match(/region=([^&]*)/)?.[1];
+  const bytesimBucket = process.env.REACT_APP_S3_BUCKET;
+  const region = process.env.REACT_APP_S3_REGION;
   const key = url.match(/key=([^&]*)/)?.[1];
 
-  // if some of the object are not defined return the default test url
-  const defaultUrl =
-    "https://bytesim-bucket.s3.eu-west-3.amazonaws.com/1350067722696166.5_bytesimname_bytesim_dev___Page_1.svg";
-  // // TODO: to display a warning instead of using the default url after tests
-  // if (!bytesimBucket || !region || !key) {
-  //   displayToastWarning();
-  //   return "";
-  // }
-  if (!bytesimBucket || !region || !key) return defaultUrl;
+  // ex URL "https://bytesim-bucket.s3.eu-west-3.amazonaws.com/1350067722696166.5_bytesimname_bytesim_dev___Page_1.svg";
+  if (!bytesimBucket || !region || !key) {
+    displayToastWarning();
+    return "";
+  }
 
   // the url is formed like this https://bucket-name.s3.Region.amazonaws.com/key-name
   return `https://${bytesimBucket}.s3.${region}.amazonaws.com/${key}`;

@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import * as React from "react";
 import { useDispatch } from "react-redux";
+import shortId from 'short-uuid';
 
 import { useNavigate } from "react-router-dom";
 import { setIsNew } from "../../features/zones/zonesSlice";
@@ -59,15 +60,14 @@ export default function UploadButton() {
               variant="solid"
               colorScheme={"brand"}
               onClick={() => {
-                ReactS3Client.uploadFile(file)
+                 // create file name with key and extension + ensure no special characters
+                const fileNameParts = fileName.split('.');
+                ReactS3Client.uploadFile(file,
+                  `${shortId.generate()}_${fileNameParts[0].replace(/[^a-zA-Z0-9 ]/g, '')}.${fileNameParts.pop()}`)
                   .then((data: any) => {
                     onClose();
                     navigate(
-                      `/figma?bytesimBucket=${
-                        process.env.REACT_APP_S3_BUCKET
-                      }&region=${
-                        process.env.REACT_APP_S3_REGION
-                      }&key=${encodeURIComponent(data.key)}&new=true`
+                      `/figma?key=${encodeURIComponent(data.key)}&new=true`
                     );
                     setFile(undefined);
                     setFileName("");
