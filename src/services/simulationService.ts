@@ -1,8 +1,9 @@
 import { GenericParameters } from "../app/types/generalFormTypes";
 import { Zone, ZoneFigma, ZoneType } from "../app/types/types";
+import { DynContentSimulator } from "./simulators/DynContent";
 import { GenericParametersSimulator } from "./simulators/generic";
 import { ImageSimulator } from "./simulators/images";
-import { SimulatorImages, SimulatorVideo } from "./simulators/type";
+import { SimulatorDynContent, SimulatorImages, SimulatorVideo } from "./simulators/type";
 import { VideoSimulator } from "./simulators/video";
 
 /* Service to simulate the impact of a specific zone
@@ -87,7 +88,7 @@ class simulationService {
     zone: Zone | ZoneFigma,
     renewable: boolean,
     numberOfVisits: number
-  ): SimulatorVideo | SimulatorImages | undefined {
+  ): SimulatorVideo | SimulatorImages | SimulatorDynContent | undefined {
     if (!zone.params) {
       return undefined;
     }
@@ -96,6 +97,8 @@ class simulationService {
         return new VideoSimulator(zone, renewable, numberOfVisits);
       case ZoneType.Images:
         return new ImageSimulator(zone, renewable, numberOfVisits);
+      case ZoneType.DynamicContent:
+        return new DynContentSimulator(zone, renewable, numberOfVisits);
     }
   }
 }

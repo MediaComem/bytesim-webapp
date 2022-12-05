@@ -51,11 +51,6 @@ export interface ZoneImages extends ZoneInfo {
   params?: ImageParameters | {};
 }
 
-export interface ZoneText extends ZoneInfo {
-  zoneType: ZoneType.Text;
-  params?: any | {};
-}
-
 export interface ZoneDynamic extends ZoneInfo {
   zoneType: ZoneType.DynamicContent;
   params?: any | {};
@@ -65,7 +60,6 @@ export type Zone =
   | ZoneUnknown
   | ZoneVideo
   | ZoneImages
-  | ZoneText
   | ZoneDynamic;
 
 export type ZoneFigma = Omit<Zone, "createdFrom"> & {
@@ -74,6 +68,13 @@ export type ZoneFigma = Omit<Zone, "createdFrom"> & {
   elementId: string;
   hidden?: boolean;
 };
+
+export type ZoneMissingParams= {
+  zoneId: string;
+  zoneName: string;
+  zoneType: ZoneType | "undefined";
+  zoneMissingParams: string[];
+}
 export type TreeZoneEl = {
   id: string;
   children?: TreeZoneEl[];
@@ -87,7 +88,6 @@ export enum ZoneType {
   Video = "Video",
   Images = "Images",
   DynamicContent = "DynamicContent",
-  Text = "Text",
 }
 
 export type FormsType = ZoneParamsType | GenericParameters;

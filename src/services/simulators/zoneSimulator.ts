@@ -84,7 +84,7 @@ export class ZoneSimulator {
    * @param warningMessage the warning displayed to the user
    * @returns a warning or tip message recommandation
    */
-  messageRecommandations(
+  messageForBetterRecommandations(
     options: { [s: string]: unknown } | ArrayLike<unknown>,
     currentParameters: { [x: string]: any },
     key: string,
@@ -103,6 +103,29 @@ export class ZoneSimulator {
         };
         recommandations.push(reco);
     }
+    return recommandations;
+  }
+
+    /**
+   * @param key key of the param to create recommandation
+   * @param type type of
+   * @param warningMessage the warning displayed to the user
+   * @returns a warning or tip message recommandation
+   */
+  messageRecommandations(
+    key: string,
+    type: RecommandationTypes.WARNING | RecommandationTypes.TIP,
+    message: string
+  ) {
+    const recommandations: Recommandation<any>[] = [];
+        const reco: Recommandation<any> = {
+          id: nanoid(),
+          type,
+          zone_id: this.zone_id,
+          parameter: key,
+          message
+        };
+        recommandations.push(reco);
     return recommandations;
   }
 

@@ -9,8 +9,10 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { useDispatch } from "react-redux";
+import { getGeneralEntryLabel } from "../../app/types/generalFormTypes";
 import { RecommandationOption } from "../../app/types/recommandations";
 import { recommandationUpdated } from "../../features/recommandations/recommandationsSlice";
+import { capitalizeFirstLetter } from "../../utils/utils";
 import { RecommandationType } from "./RecommandationsList";
 
 interface BetterChoicesRecommandationProps {
@@ -36,7 +38,13 @@ export function BetterChoicesRecommandation({
     <Box mb={2}>
       <Box flex="1" textAlign="left">
         <Flex>
-          <Text>{recommandation.parameter}</Text>
+          <Text>
+            {recommandation.zoneId === "generic"
+              ? capitalizeFirstLetter(
+                  getGeneralEntryLabel(recommandation.parameter)
+                )
+              : capitalizeFirstLetter(recommandation.parameter)}
+          </Text>
           <Tooltip label={recommandation.bestPracticeMessage || 'empty'} hasArrow>
             ⓘ
           </Tooltip>
@@ -75,7 +83,11 @@ export function BadPracticeRecommandation({
     <Box mb={2}>
       <Box flex="1" textAlign="left">
         <Flex>
-          <Text>{recommandation.parameter}</Text>
+          <Text>{recommandation.zoneId === "generic"
+            ? capitalizeFirstLetter(
+                getGeneralEntryLabel(recommandation.parameter)
+              )
+            : capitalizeFirstLetter(recommandation.parameter)}</Text>
           <Tooltip label={recommandation.bestPracticeMessage} hasArrow>
             ⓘ
           </Tooltip>
@@ -98,6 +110,13 @@ export function TipRecommandation({ recommandation }: TipRecommandationProps) {
       <Box flex="1" textAlign="left">
         <Flex>
           <Text>{recommandation.parameter}</Text>
+          <Text>
+            {recommandation.zoneId === "generic"
+              ? capitalizeFirstLetter(
+                  getGeneralEntryLabel(recommandation.parameter)
+                )
+              : capitalizeFirstLetter(recommandation.parameter)}
+          </Text>
           <Tooltip label={recommandation.bestPracticeMessage} hasArrow>
             ⓘ
           </Tooltip>
