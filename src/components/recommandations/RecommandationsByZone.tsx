@@ -2,6 +2,9 @@ import {
   AccordionButton,
   AccordionItem,
   AccordionPanel,
+  Box,
+  Divider,
+  Flex,
   Grid,
   GridItem,
   Text,
@@ -86,20 +89,38 @@ export default function RecommandationsByZone({
         <Grid templateColumns="1fr 10fr 10fr 1fr" gap={3} w="100%">
           <AccordionChevron isExpanded={isOpenAccordion} />
           <GridItem textAlign="start">
-            <Text mr={1} fontSize="xs" fontWeight={700}>
-              {zoneRecommandations[0].zoneName === "Generic"
-                ? "General Parameters"
-                : zoneRecommandations[0].zoneName}
+            <Text mr={1} mb={2} fontSize="xs">
+              <Text as="span" fontWeight={700}>
+                {zoneRecommandations[0].zoneName === "Generic"
+                  ? "General Parameters"
+                  : zoneRecommandations[0].zoneName}
+              </Text>
+              <Text as="span">{" - " + zone?.zoneType ?? "–"}</Text>
             </Text>
-            <Text fontSize={"xs"}>{zone?.zoneType ?? "–"}</Text>
+            <Text fontSize={"xs"}></Text>
             {zone?.zoneType ? (
               <>
-                <Text fontSize={"xs"}>{`Optimal: -${(
-                  currentZoneImpact.energy - optimalZoneImpact.energy
-                ).toFixed(0)} Kwh`}</Text>
-                <Text
-                  fontSize={"xs"}
-                >{`Current: ${currentZoneImpact.energy.toFixed(0)} Kwh`}</Text>
+                <Text fontSize={"xs"}>
+                  <Flex>
+                    <Box mr={4}>
+                      <Text>Initial parameters:</Text>
+                      <Text>Most sober:</Text>
+                      <Text>Potential gain:</Text>
+                    </Box>
+                    <Box>
+                      <Text
+                        textAlign={"right"}
+                      >{`${currentZoneImpact.energy.toFixed(0)} Kwh`}</Text>
+                      <Text
+                        textAlign={"right"}
+                      >{`${optimalZoneImpact.energy.toFixed(0)} Kwh`}</Text>
+                      <Divider />
+                      <Text textAlign={"right"}>{`${(
+                        currentZoneImpact.energy - optimalZoneImpact.energy
+                      ).toFixed(0)} Kwh`}</Text>
+                    </Box>
+                  </Flex>
+                </Text>
               </>
             ) : null}
           </GridItem>
