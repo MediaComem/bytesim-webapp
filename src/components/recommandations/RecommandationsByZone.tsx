@@ -2,10 +2,8 @@ import {
   AccordionButton,
   AccordionItem,
   AccordionPanel,
-  Box,
   Grid,
   GridItem,
-  Heading,
   Text,
 } from "@chakra-ui/react";
 import AccordionChevron from "../layout/AccordionChevron";
@@ -18,6 +16,7 @@ import { RecommandationType } from "./RecommandationsList";
 import ZoneScreenshot from "../zones/ZoneScreenshot";
 import { useAppSelector } from "../../app/hooks";
 import { RootState } from "../../app/store";
+import { colorTheme } from "../../theme";
 
 interface RecommandationDisplayProps {
   zoneRecommandations: RecommandationType[];
@@ -67,6 +66,7 @@ export default function RecommandationsByZone({
         onClick={() => {
           onToggleAccordion(zoneId);
         }}
+        borderBottom={`1px solid ${colorTheme[100]}`}
       >
         <Grid templateColumns="1fr 10fr 10fr 1fr" gap={3} w="100%">
           <AccordionChevron isExpanded={isOpenAccordion} />

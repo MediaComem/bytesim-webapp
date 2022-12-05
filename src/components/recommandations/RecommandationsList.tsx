@@ -1,11 +1,5 @@
 import {
   Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  Box,
-  Flex,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { GenericParameters } from "../../app/types/generalFormTypes";
