@@ -2,6 +2,7 @@ import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
 import {
   useAppSelector,
   useCalculateImpact,
+  useCalculateOptimalImpact,
   useCalculateRecommandationsImpact,
 } from "../../app/hooks";
 
@@ -26,6 +27,7 @@ const ReportItem = ({ label, value, comparedValue }: ReportItemProps) => (
 export default function ReportGeneralInfo() {
   const impact = useCalculateImpact();
   const impactWithRecommandations = useCalculateRecommandationsImpact();
+  const optimalImpact = useCalculateOptimalImpact();
   const benefits = {
     energy: impact.energy - impactWithRecommandations.energy,
     co2: impact.co2 - impactWithRecommandations.co2,
@@ -74,8 +76,11 @@ export default function ReportGeneralInfo() {
           Optimal
         </Text>
       </GridItem>
-      <ReportItem label="Energy (KWh)" value="–" />
-      <ReportItem label="GWP (kg CO2eq)" value="–" />
+      <ReportItem
+        label="Energy (KWh)"
+        value={optimalImpact.energy.toFixed(0)}
+      />
+      <ReportItem label="GWP (kg CO2eq)" value={optimalImpact.co2.toFixed(0)} />
     </Grid>
   );
 }

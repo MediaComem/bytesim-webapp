@@ -50,6 +50,10 @@ export class DynContentSimulator extends ZoneSimulator implements SimulatorDynCo
     return this.simulateParameters(this.dynContent);
   }
 
+  simulateOptimal() {
+    return this.simulate();
+  }
+
   recommandations() {
     const recommandations: Recommandation<EDynContent>[] = [];
     let tipMessage: string = "";

@@ -68,6 +68,16 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
     return this.simulateParameters(this.video);
   }
 
+  simulateOptimal() {
+    return this.simulateParameters({
+      format: EVideoFormat.FORMAT_VIDEO,
+      quality: EVideoQuality.RES_480_P,
+      duration: EVideoDuration.DUR_10_SEC,
+      autoplay: EBoolean.NO,
+      loop: EBoolean.NO,
+    } as VideoParameters)
+  }
+
   recommandations() {
     const recommandations: Recommandation<EVideoQuality | EVideoDuration>[] =
       [];
