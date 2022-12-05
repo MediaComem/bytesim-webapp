@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { setName } from "../../features/project/projectSlice";
 import ButtonWithIconCustom from "./ButtonWithIconCustom";
 import SaveProjectButton from "../project/SaveProjectButton";
+import UploadButton from "../project/UploadButton";
 
 export default function BytesimeHeader() {
   const projectName = useAppSelector((state) => state.project.name);
@@ -15,31 +16,38 @@ export default function BytesimeHeader() {
       align="center"
       alignSelf="stretch"
       justify={"space-between"}
-      borderBottom='1px solid lightgray'
+      borderBottom="1px solid lightgray"
       id="header"
     >
-      <Flex p={2} gap={2} align='center'>
-        <Heading size={"md"}>■ ByteSim <Badge colorScheme='yellow' variant='outline'>Version alpha</Badge></Heading>
+      <Flex p={2} gap={2} align="center">
+        <Heading size={"md"}>
+          ■ ByteSim{" "}
+          <Badge colorScheme="yellow" variant="outline">
+            Version alpha
+          </Badge>
+        </Heading>
         <Heading size={"md"} fontWeight={"light"}>
           <Input
-          variant={"flushed"}
+            variant={"flushed"}
             value={value}
             onChange={(e) => {
               setValue(e.target.value);
             }}
             onBlur={() => dispatch(setName(value))}
-            width='auto'
+            width="auto"
           />
         </Heading>
         <SaveProjectButton />
+
+        <UploadButton />
       </Flex>
       <ButtonWithIconCustom
-            icon={<></>}
-            label={"Best practices"}
-            //subLabel={"Start with ByteSim"}
-            variant={'ghost'}
-            iconAfter
-          />
+        icon={<></>}
+        label={"Best practices"}
+        //subLabel={"Start with ByteSim"}
+        variant={"ghost"}
+        iconAfter
+      />
       {/* <ProjectSettingsModal /> */}
     </Flex>
   );
