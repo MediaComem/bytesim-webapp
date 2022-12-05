@@ -16,6 +16,10 @@ export class GenericParametersSimulator implements SimulatorGeneric {
     return { energy: 0, co2: 0 };
   }
 
+  simulateOptimal() {
+    return { energy: 0, co2: 0 };
+  }
+
   /**
    * @note assume that the best param is a the first position
    * @param options choices for the user

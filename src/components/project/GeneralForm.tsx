@@ -1,6 +1,7 @@
 import {
   AccordionItem,
   AccordionPanel,
+  Box,
   Button,
   Flex,
   Heading,
@@ -9,9 +10,6 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
-  Radio,
-  RadioGroup,
-  Stack,
   useDisclosure,
 } from "@chakra-ui/react";
 import * as React from "react";
@@ -33,6 +31,7 @@ import ProgressPoints from "../layout/ProgressPoints";
 import { ReactComponent as ResetIcon } from "../../assets/ResetIcon_Active_MouseOver.svg";
 import { css } from "@emotion/css";
 import AccordionCustomTitle from "../layout/AccordionCustomTitle";
+import { colorTheme } from "../../theme";
 
 export default function GeneralFormAccordion() {
   const project = useAppSelector((state) => state.project);
@@ -89,11 +88,11 @@ function GeneralForm({ project }: { project: Project }) {
   const dispatch = useDispatch();
   return (
     <Flex>
-      <div>
+      <Box px={"4"} mt={"-2"}>
         {Object.entries(GeneralFormEntries).map(([key, data]) => {
           return (
             <div key={key}>
-              <Heading size="sm" my={2}>
+              <Heading fontWeight={"bold"} fontSize={12} mt={2} mb={1}>
                 {getGeneralEntryLabel(key)}
               </Heading>
               {typeof data === "number" && (
@@ -116,40 +115,38 @@ function GeneralForm({ project }: { project: Project }) {
                   disableEdition={project.status === "SIMULATION"}
                 />
               )}
-              <RadioGroup
-                value={
-                  project.params
-                    ? String(project.params[key as keyof GenericParameters])
-                    : undefined
-                }
-                isDisabled={project.status === "SIMULATION"}
-              >
-                <Stack>
-                  {typeof data !== "number" &&
-                    Object.values(data)
-                      .filter((v) => typeof v !== "number")
-                      .map((data, index) => (
-                        <Radio
-                          colorScheme={"brand"}
-                          key={index}
-                          value={data}
+              {typeof data !== "number" &&
+                Object.values(data)
+                  .filter((v) => typeof v !== "number")
+                  .map((data, index) => {
+                    return (
+                      <Flex key={index} gap={1} fontSize={12}>
+                        <input
+                          type="radio"
+                          id={`${key}_${data}`}
+                          checked={
+                            project.params &&
+                            project.params[key as keyof GenericParameters] ===
+                              data
+                          }
                           onChange={() => {
                             const newParams = {
                               params: { ...project.params, [key]: data },
                             };
                             dispatch(projectUpdated(newParams));
                           }}
-                          size="sm"
-                        >
-                          {data}
-                        </Radio>
-                      ))}
-                </Stack>
-              </RadioGroup>
+                          className={css({ accentColor: `${colorTheme[500]}` })}
+                        />
+                        <label htmlFor={`${key}_${data}`}>
+                          {data as string}
+                        </label>
+                      </Flex>
+                    );
+                  })}
             </div>
           );
         })}
-      </div>
+      </Box>
     </Flex>
   );
 }

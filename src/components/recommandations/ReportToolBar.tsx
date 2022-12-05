@@ -38,9 +38,9 @@ export default function ReportToolbar({
         onClose={() => setIsMenuOpen(false)}
       >
         <MenuButton as={Box}>
-          <Flex alignItems="center" justifyContent="flex-end" minW={220}>
+          <Flex alignItems="center" justifyContent="flex-end" minW={140}>
             {isMenuOpen ? <ChevronDownIcon /> : <ChevronRightIcon />}
-            <Text fontSize="sm">{`Sort by : ${currentFilter}`}</Text>
+            <Text fontSize="xs">{`Sort by : ${currentFilter}`}</Text>
           </Flex>
         </MenuButton>
         <MenuList>

@@ -30,11 +30,6 @@ import { allZonesReset, zoneAdded } from "./features/zones/zonesSlice";
 import "react-reflex/styles.css";
 import { ReflexContainer, ReflexElement, ReflexSplitter } from "react-reflex";
 import RecoSpinner from "./components/recommandations/RecoSpinner";
-import {
-  isNewImportSvg,
-  useIsNewImportedSvg,
-} from "./features/figma/components/FetchedSVG";
-import { useEffect, useState } from "react";
 
 export default function Home() {
   const dispatch = useDispatch();

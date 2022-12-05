@@ -3,6 +3,7 @@ import {
   AccordionButton,
   AccordionItem,
   AccordionPanel,
+  Text,
   Flex,
 } from "@chakra-ui/react";
 import { Zone, ZoneFigma, ZoneType } from "../../app/types/types";
@@ -29,7 +30,11 @@ export default function ZoneParams({ zone }: ZoneParamsProps) {
                     <AccordionButton pl={12} pr={2} w={"auto"}>
                       <AccordionChevron isExpanded={isExpanded} />
                     </AccordionButton>
-                    <div>{ZoneType[z]}</div>
+                    <div>
+                      <Text fontSize={14}>
+                        {ZoneType[z].replace(/[A-Z]/g, " $&").trim()}
+                      </Text>
+                    </div>
                   </Flex>
                   <AccordionPanel>
                     <ZoneParamsForm zoneId={zone.id} zoneType={z as ZoneType} />
