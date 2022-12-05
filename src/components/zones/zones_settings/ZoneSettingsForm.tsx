@@ -8,12 +8,14 @@ import {
   NumberInputStepper,
   useDisclosure,
 } from "@chakra-ui/react";
+import { css } from "@emotion/css";
 import * as React from "react";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../app/hooks";
 import { Zone, ZoneType } from "../../../app/types/types";
 import { zoneUpdated } from "../../../features/zones/zonesSlice";
+import { colorTheme } from "../../../theme";
 import CustomModal, { confirmText } from "../../layout/CustomModal";
 
 interface VideoFormProps {
@@ -176,6 +178,9 @@ function ZoneSettingsForm({
                             value={data ?? ("" as string)}
                             checked={zone.params && zone.params[key] === data}
                             onChange={handleEventChange}
+                            className={css({
+                              accentColor: `${colorTheme[500]}`,
+                            })}
                           />
                           <label htmlFor={inputId}>{data as string}</label>
                         </Flex>

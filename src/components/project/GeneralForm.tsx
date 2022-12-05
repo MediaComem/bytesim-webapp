@@ -10,9 +10,6 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
-  Radio,
-  RadioGroup,
-  Stack,
   useDisclosure,
 } from "@chakra-ui/react";
 import * as React from "react";
@@ -34,6 +31,7 @@ import ProgressPoints from "../layout/ProgressPoints";
 import { ReactComponent as ResetIcon } from "../../assets/ResetIcon_Active_MouseOver.svg";
 import { css } from "@emotion/css";
 import AccordionCustomTitle from "../layout/AccordionCustomTitle";
+import { colorTheme } from "../../theme";
 
 export default function GeneralFormAccordion() {
   const project = useAppSelector((state) => state.project);
@@ -86,21 +84,6 @@ export default function GeneralFormAccordion() {
   );
 }
 
-/* <Radio
-                          colorScheme={"brand"}
-                          key={index}
-                          value={data}
-                          onChange={() => {
-                            const newParams = {
-                              params: { ...project.params, [key]: data },
-                            };
-                            dispatch(projectUpdated(newParams));
-                          }}
-                          size="sm"
-                        >
-                          {data}
-                        </Radio> */
-
 function GeneralForm({ project }: { project: Project }) {
   const dispatch = useDispatch();
   return (
@@ -152,6 +135,7 @@ function GeneralForm({ project }: { project: Project }) {
                             };
                             dispatch(projectUpdated(newParams));
                           }}
+                          className={css({ accentColor: `${colorTheme[500]}` })}
                         />
                         <label htmlFor={`${key}_${data}`}>
                           {data as string}

@@ -137,7 +137,6 @@ export function ZoneListButton({
                   <Text
                     ml={1}
                     cursor={isNewImportSvg ? "default" : "auto"}
-                    //fontStyle={zone.zoneType ? "initial" : "italic"}
                     whiteSpace={"nowrap"}
                     onDoubleClick={() => setEditNameMode(true)}
                   >

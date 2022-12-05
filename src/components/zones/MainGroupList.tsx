@@ -45,8 +45,6 @@ export default function MainGroupList() {
       <AccordionItem isDisabled={false} borderBottom={"none"}>
         {({ isExpanded }) => (
           <>
-            {/*         <AccordionButton _hover={{ backgroundColor: "brand.100" }} pl={2}> */}
-            {/* <AccordionChevron isExpanded={false} /> */}
             <Box flex="1" textAlign="left">
               <AccordionItemTitleCustom
                 label={
@@ -65,7 +63,6 @@ export default function MainGroupList() {
                 </Button>
               </AccordionItemTitleCustom>
             </Box>
-            {/*   </AccordionButton> */}
 
             <UnfolTreeWrapper
               {...{ firstChildrenTree, zones, openedZoneIds }}

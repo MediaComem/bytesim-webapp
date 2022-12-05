@@ -4,7 +4,3 @@
     #reportToPrint {overflow: inherit}
     #reportToPrint #exportToolbox { display: none;}
 }
-
-input {
-    accent-color: #E435E4;
-}
