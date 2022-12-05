@@ -69,7 +69,7 @@ function PanelTitle({
         minH="50px"
       >
         <>
-          <Heading size={titleSize || "sm"}>{title}</Heading>
+          <Heading size={"16px"}>{title}</Heading>
           {spinner}
         </>
         {toolbarButton}
