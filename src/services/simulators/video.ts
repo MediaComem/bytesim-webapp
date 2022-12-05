@@ -85,7 +85,7 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
         EVideoQuality,
         this.video,
         "quality",
-        { title: "hola", body: "hola", link: "hola" }
+        { title: "Hola", body: "Hola", link: "https://www.romande-energie.ch/" }
       );
       recommandations.push(...recommandationsQuality);
       const recommandationsDuration = this.betterOptionsRecommandations(

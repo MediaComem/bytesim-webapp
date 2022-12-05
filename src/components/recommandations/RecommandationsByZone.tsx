@@ -2,10 +2,8 @@ import {
   AccordionButton,
   AccordionItem,
   AccordionPanel,
-  Box,
   Grid,
   GridItem,
-  Heading,
   Text,
 } from "@chakra-ui/react";
 import AccordionChevron from "../layout/AccordionChevron";

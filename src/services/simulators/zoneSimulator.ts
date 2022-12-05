@@ -1,5 +1,4 @@
 import { nanoid } from "@reduxjs/toolkit";
-import React from "react";
 import { BestPracticeMessage, Recommandation, RecommandationTypes } from "../../app/types/recommandations";
 
 export class ZoneSimulator {
@@ -52,6 +51,7 @@ export class ZoneSimulator {
             energy: currentImpact.energy - energyBetter,
             co2: currentImpact.co2 - co2Better,
           },
+          bestPracticeMessage
         };
 
         if (idx > 1) {

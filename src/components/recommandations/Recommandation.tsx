@@ -1,16 +1,25 @@
 import {
   Box,
   Flex,
+  Heading,
+  Link,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
   Radio,
   RadioGroup,
   Stack,
   Text,
-  Tooltip,
 } from "@chakra-ui/react";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { getGeneralEntryLabel } from "../../app/types/generalFormTypes";
-import { RecommandationOption } from "../../app/types/recommandations";
+import {
+  BestPracticeMessage,
+  RecommandationOption,
+} from "../../app/types/recommandations";
 import { recommandationUpdated } from "../../features/recommandations/recommandationsSlice";
 import { capitalizeFirstLetter } from "../../utils/utils";
 import { RecommandationType } from "./RecommandationsList";
@@ -45,9 +54,23 @@ export function BetterChoicesRecommandation({
                 )
               : capitalizeFirstLetter(recommandation.parameter)}
           </Text>
-          <Tooltip label={recommandation.bestPracticeMessage || 'empty'} hasArrow>
-            ⓘ
-          </Tooltip>
+          {recommandation.bestPracticeMessage && (
+            <>
+              <Popover trigger="hover">
+                <PopoverTrigger>
+                  <div>ⓘ</div>
+                </PopoverTrigger>
+                <PopoverContent>
+                  <PopoverArrow />
+                  <PopoverBody>
+                    <BPTooltipContent
+                      recommandationBP={recommandation.bestPracticeMessage}
+                    />
+                  </PopoverBody>
+                </PopoverContent>
+              </Popover>
+            </>
+          )}
         </Flex>
       </Box>
       <RadioGroup
@@ -83,18 +106,32 @@ export function BadPracticeRecommandation({
     <Box mb={2}>
       <Box flex="1" textAlign="left">
         <Flex>
-          <Text>{recommandation.zoneId === "generic"
-            ? capitalizeFirstLetter(
-                getGeneralEntryLabel(recommandation.parameter)
-              )
-            : capitalizeFirstLetter(recommandation.parameter)}</Text>
-          <Tooltip label={recommandation.bestPracticeMessage} hasArrow>
-            ⓘ
-          </Tooltip>
+          <Text>
+            {recommandation.zoneId === "generic"
+              ? capitalizeFirstLetter(
+                  getGeneralEntryLabel(recommandation.parameter)
+                )
+              : capitalizeFirstLetter(recommandation.parameter)}
+          </Text>
+          {recommandation.bestPracticeMessage && (
+            <Popover trigger="hover">
+              <PopoverTrigger>
+                <div>ⓘ</div>
+              </PopoverTrigger>
+              <PopoverContent>
+                <PopoverArrow />
+                <PopoverBody>
+                  <BPTooltipContent
+                    recommandationBP={recommandation.bestPracticeMessage}
+                  />
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
+          )}
         </Flex>
       </Box>
       <Text fontSize="sm" mt={1} color="red.600">
-         {recommandation.message}
+        {recommandation.message}
       </Text>
     </Box>
   );
@@ -117,14 +154,51 @@ export function TipRecommandation({ recommandation }: TipRecommandationProps) {
                 )
               : capitalizeFirstLetter(recommandation.parameter)}
           </Text>
-          <Tooltip label={recommandation.bestPracticeMessage} hasArrow>
-            ⓘ
-          </Tooltip>
+          {recommandation.bestPracticeMessage && (
+            <Popover trigger="hover">
+              <PopoverTrigger>
+                <div>ⓘ</div>
+              </PopoverTrigger>
+              <PopoverContent>
+                <PopoverArrow />
+                <PopoverBody>
+                  <BPTooltipContent
+                    recommandationBP={recommandation.bestPracticeMessage}
+                  />
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
+          )}
         </Flex>
       </Box>
       <Text fontSize="sm" mt={1} color="yellow.700">
         Tip: {recommandation.message}
       </Text>
     </Box>
+  );
+}
+
+interface BPTooltipContentProps {
+  recommandationBP: BestPracticeMessage;
+  className?: string;
+}
+function BPTooltipContent({
+  recommandationBP,
+  className,
+}: BPTooltipContentProps) {
+  return (
+    <Flex direction={"column"} className={className}>
+      {recommandationBP.title && (
+        <Heading size={"xs"}>{recommandationBP.title}</Heading>
+      )}
+      {recommandationBP.body && (
+        <Text fontSize="xs">{recommandationBP.body}</Text>
+      )}
+      {recommandationBP.link && (
+        <Link fontSize={"xs"} color="brand.500" fontWeight={600} href={recommandationBP.link} target='_blank'>
+          Read more
+        </Link>
+      )}
+    </Flex>
   );
 }
