@@ -1,4 +1,4 @@
-import { Flex, useDisclosure } from "@chakra-ui/react";
+import { Box, ButtonGroup, Flex, Heading, Spacer, useDisclosure } from "@chakra-ui/react";
 import { css, cx } from "@emotion/css";
 import { useDispatch } from "react-redux";
 import { Rnd } from "react-rnd";
@@ -9,7 +9,6 @@ import {
   zoneUpdated,
   zoneToggleHidden,
 } from "../../features/zones/zonesSlice";
-import REHome from "../../assets/RE-homepage.jpg";
 import { Zone } from "../../app/types/types";
 import CustomModal, { confirmText } from "../layout/CustomModal";
 import UploadButton from "../project/UploadButton";
@@ -114,49 +113,38 @@ export default function ZonesView({
           onClose();
         }}
       />
-      <Flex
-        opacity={0.5}
-        width={containerDim}
-        minWidth={containerDim}
-        maxWidth={containerDim}
-        height={containerDim}
-      >
-        <Routes>
-          <Route
-            path="figma/*"
-            element={
-              <Flex width={"100%"}>
+      <Routes>
+        <Route
+          path="figma/*"
+          element={
+            <Flex
+              width={containerDim}
+              minWidth={containerDim}
+              maxWidth={containerDim}
+              height={containerDim}
+            >
+              <Flex opacity={0.5}
+                    width={"100%"}>
                 <FetchedSVG />
               </Flex>
-            }
-          />
-          <Route
-            path="/*"
-            element={
-              <Flex>
-                <div>
-                  <img
-                    src={REHome}
-                    alt="RE homepage"
-                    className={css({
-                      transform: `scale(${zoom})`,
-                      transformOrigin: "top left",
-                      display: "block",
-                      maxWidth: "300px",
-                      maxHeight: "550px",
-                      width: "auto",
-                      height: "auto",
-                      padding: "10px",
-                      boxSizing: "border-box",
-                      opacity: 0.5,
-                    })}
-                  />
-                </div>
-              </Flex>
-            }
-          />
-        </Routes>
-      </Flex>
+            </Flex>
+          }
+        />
+        <Route
+          path="/*"
+          element={
+          <>
+            <Box p='2'>
+              <Heading size='md'>Please import your design to analyze it</Heading>
+            </Box>
+            <Spacer />
+            <ButtonGroup gap='2'>
+              <UploadButton />
+            </ButtonGroup >
+          </>
+          }
+        />
+      </Routes>
       <Flex position="absolute">
         {zones.map((z) => {
           return (
