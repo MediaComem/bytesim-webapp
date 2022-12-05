@@ -84,7 +84,6 @@ export default function RecommandationsByZone({
           <GridItem>
             <ZoneScreenshot zoneId={zoneId} />
           </GridItem>
-          <GridItem>ⓘ</GridItem>
         </Grid>
       </AccordionButton>
       <AccordionPanel>
