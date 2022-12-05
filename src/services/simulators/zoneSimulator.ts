@@ -89,7 +89,8 @@ export class ZoneSimulator {
     currentParameters: { [x: string]: any },
     key: string,
     type: RecommandationTypes.WARNING | RecommandationTypes.TIP,
-    message: string
+    message: string,
+    bestPracticeMessage?: BestPracticeMessage,
   ) {
     const recommandations: Recommandation<any>[] = [];
     const currentChoice = currentParameters[key];
@@ -99,7 +100,8 @@ export class ZoneSimulator {
           type,
           zone_id: this.zone_id,
           parameter: key,
-          message
+          message,
+          bestPracticeMessage
         };
         recommandations.push(reco);
     }
@@ -115,7 +117,8 @@ export class ZoneSimulator {
   messageRecommandations(
     key: string,
     type: RecommandationTypes.WARNING | RecommandationTypes.TIP,
-    message: string
+    message: string,
+    bestPracticeMessage?: BestPracticeMessage,
   ) {
     const recommandations: Recommandation<any>[] = [];
         const reco: Recommandation<any> = {
@@ -123,7 +126,8 @@ export class ZoneSimulator {
           type,
           zone_id: this.zone_id,
           parameter: key,
-          message
+          message,
+          bestPracticeMessage
         };
         recommandations.push(reco);
     return recommandations;
@@ -142,7 +146,8 @@ export class ZoneSimulator {
     key: string,
     threshold: number,
     type: RecommandationTypes.WARNING | RecommandationTypes.TIP,
-    message: string
+    message: string,
+    bestPracticeMessage?: BestPracticeMessage,
   ) {
     const recommandations: Recommandation<any>[] = [];
     const currentChoice = currentParameters[key];
@@ -153,7 +158,8 @@ export class ZoneSimulator {
           type,
           zone_id: this.zone_id,
           parameter: key,
-          message
+          message,
+          bestPracticeMessage
         };
         recommandations.push(reco);
     }
