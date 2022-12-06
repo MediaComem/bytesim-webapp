@@ -59,7 +59,6 @@ export default function RecommandationsByZone({
     }
   };
 
-  console.log(zoneRecommandations[0].zoneName, zone === undefined);
   const optimalZoneImpact =
     zoneRecommandations[0].zoneName !== "Generic" &&
     zone &&
