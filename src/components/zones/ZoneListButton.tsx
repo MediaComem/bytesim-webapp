@@ -49,22 +49,19 @@ export function ZoneListButton({
   const projectStatus = useAppSelector((state) => state.project.status);
   const [value, setValue] = React.useState(zone.name);
   const [editNameMode, setEditNameMode] = React.useState(false);
-  // const [oldZoneName, setOldZoneName] = React.useState(zone.name);
+  const [oldZoneName, setOldZoneName] = React.useState(zone.name);
   const updateZoneName = (newName: string) => {
-    // const newNameObject = {
-    //   id: zone.id,
-    //   name: newName,
-    // };
-    // if (value !== "") {
-    //   setOldZoneName(newName);
-    //   dispatch(zoneUpdated(newNameObject));
-    // } else {
-    //   setValue(oldZoneName);
-    // }
-    // setEditNameMode(false);
-  };
-  const updateZone = (newZone: Partial<Zone>) => {
-    return zoneUpdated(newZone);
+    const newNameObject = {
+       id: zone.id,
+      name: newName,
+    };
+    if (value !== "") {
+      setOldZoneName(newName);
+      dispatch(zoneUpdated(newNameObject));
+    } else {
+      setValue(oldZoneName);
+    }
+    setEditNameMode(false);
   };
   const isNewImportSvg = useIsNewImportedSvg();
   const fallbackTypeZoneDisplayed = !isNewImportSvg ? "- undefined" : "";
@@ -121,11 +118,7 @@ export function ZoneListButton({
                       setValue(e.target.value);
                     }}
                     onBlur={() => {
-                      const newNameZone = {
-                        id: zone.id,
-                        name: value,
-                      };
-                      dispatch(updateZone(newNameZone));
+                      updateZoneName(value ?? "");
                       setEditNameMode(false);
                     }}
                     autoFocus
