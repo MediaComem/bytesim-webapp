@@ -34,11 +34,13 @@ import {
 import { useAppSelector } from "../../../app/hooks";
 import { TreeZoneEl } from "../../../app/types/types";
 import ModalSelectZonesContent from "./ModalSelectZonesContent";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const useIsNewImportedSvg = () => {
   return useAppSelector((store) => store.zonesSlice?.isNew);
 };
 export const isNewImportSvg = () => window.location.href.includes("new=true");
+
 const displayToastWarning = debounce(() => {
   toast({
     title: "Warning",
@@ -76,6 +78,8 @@ const FetchedSVG = ({
 }) => {
   const idsRefs = useRef<string[]>([]);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { search } = useLocation(); // keep image params
 
   const zonesSlices = useAppSelector((store) => store.zonesSlice);
 
@@ -97,10 +101,11 @@ const FetchedSVG = ({
     setTimeout(() => {
       dispatch(zonesSetTree([newTree]));
       dispatch(zonesFilterByElementId(newZones));
-      const displayedUrl = window.location.href
+
+      const newParams = search
         ?.replace("&new=true", "")
         .replace("new=true", "");
-      window.history.pushState({}, "", displayedUrl);
+      navigate(`/figma${newParams}`, { replace: true });
       dispatch(setIsNew(false));
     }, 300);
   };
