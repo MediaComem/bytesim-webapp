@@ -9,24 +9,29 @@ import {
   Link,
   Text,
 } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { bestPracticesGR491 } from "../../services/simulators/bestPractices";
 import AccordionChevron from "../layout/AccordionChevron";
 import { BPTooltipContent } from "./Recommandation";
 
 export default function BestPracticesPage() {
   const navigate = useNavigate();
+  const { search } = useLocation();
+  const imageParams = search.split("&")[0];
   return (
     <>
       <Flex direction="column" p={6}>
-        <Flex gap={4} align="center" justifyContent={'space-between'} marginBottom={4}>
-          <Heading size="xl">
-            Best practices
-          </Heading>
+        <Flex
+          gap={4}
+          align="center"
+          justifyContent={"space-between"}
+          marginBottom={4}
+        >
+          <Heading size="xl">Best practices</Heading>
           <Button
-          variant='outline'
-          colorScheme={'brand'}
-            onClick={() => navigate("..")}
+            variant="outline"
+            colorScheme={"brand"}
+            onClick={() => navigate(`/figma${imageParams}`)}
             alignSelf="flex-start"
             size={"sm"}
           >
@@ -127,7 +132,12 @@ export default function BestPracticesPage() {
             </AccordionItem>
           </Accordion>
         </Flex>
-        <Text marginTop={4} fontSize={'sm'}>Find all best practices to design sustainable digital services on: <Link href='https://gr491.isit-europe.org/en/' color='brand.500'>https://gr491.isit-europe.org/en/</Link></Text>
+        <Text marginTop={4} fontSize={"sm"}>
+          Find all best practices to design sustainable digital services on:{" "}
+          <Link href="https://gr491.isit-europe.org/en/" color="brand.500">
+            https://gr491.isit-europe.org/en/
+          </Link>
+        </Text>
       </Flex>
     </>
   );
