@@ -59,8 +59,11 @@ export default function RecommandationsByZone({
     }
   };
 
+  console.log(zoneRecommandations[0].zoneName, zone === undefined);
   const optimalZoneImpact =
-    zoneRecommandations[0].zoneName !== "Generic" && zone
+    zoneRecommandations[0].zoneName !== "Generic" &&
+    zone &&
+    zone.zoneType !== undefined
       ? simulationService.simulator(zone, true, nbVisits)!.simulateOptimal()
       : {
           energy: 0,
@@ -68,7 +71,9 @@ export default function RecommandationsByZone({
         };
 
   const currentZoneImpact =
-    zoneRecommandations[0].zoneName !== "Generic" && zone
+    zoneRecommandations[0].zoneName !== "Generic" &&
+    zone &&
+    zone.zoneType !== undefined
       ? simulationService
           .simulator(zone, serverType === EServerType.RENEWABLE, nbVisits)!
           .simulate()
