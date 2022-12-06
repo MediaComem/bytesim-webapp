@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 export default function ExportButton() {
   const { search } = useLocation(); // keep image params
-  const imageParams = search.split("&")[0];
   const navigate = useNavigate();
   return (
     <>
@@ -12,7 +11,7 @@ export default function ExportButton() {
         alignSelf={"center"}
         justifySelf={"flex-end"}
         onClick={() => {
-          navigate(`/export${imageParams}`); // keep url params
+          navigate(`/export${search}`); // keep url params
         }}
         size="sm"
         minWidth="min-content"

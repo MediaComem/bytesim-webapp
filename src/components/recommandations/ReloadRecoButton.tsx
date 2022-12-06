@@ -9,7 +9,6 @@ import {
 import { ReactComponent as ResetIcon } from "../../assets/ResetIcon_Active_MouseOver.svg";
 import { recommandationsPopulated } from "../../features/recommandations/recommandationsSlice";
 import { colorTheme } from "../../theme";
-//import { useNavigate } from "react-router-dom";
 
 export default function ReloadRecoButton() {
   const dispatch = useDispatch();
@@ -18,10 +17,6 @@ export default function ReloadRecoButton() {
   const reloadSimulation = React.useCallback(() => {
     dispatch(recommandationsPopulated([...recosGeneric, ...recos]));
   }, [dispatch, recos]);
-  //const currentDisplayedRecos = useAppSelector((state) => state.recommandations);
-  /*   const newRecos = React.useEffect(() => {
-    if (recos.length !== currentDisplayedRecos.length) { return true }
-  }, [recos, currentDisplayedRecos]); */
 
   return (
     <>
