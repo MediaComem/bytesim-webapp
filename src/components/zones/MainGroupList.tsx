@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/hooks";
-import { TreeZoneEl, Zone } from "../../app/types/types";
+import { TreeZoneEl, Zone, ZoneOrigin } from "../../app/types/types";
 import { highlightFigmaZone } from "../../features/figma/utils";
 import AccordionCustomTitle from "../layout/AccordionCustomTitle";
 import { ZoneListButton } from "./ZoneListButton";
@@ -247,6 +247,7 @@ const AccordionZones = ({
                 >
                   <ZoneListButton
                     zone={z}
+                    createdFrom={ZoneOrigin.FIGMA}
                     buttonDelete={
                       <Button
                         variant={"ghost"}
