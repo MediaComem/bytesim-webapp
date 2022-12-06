@@ -44,6 +44,7 @@ export default function RecoWarning({
       flexDirection={"column"}
       overflow="hidden"
       flexShrink={0}
+      maxHeight='100%'
       className={css({
         ".chakra-collapse": {
           display: "flex !important",

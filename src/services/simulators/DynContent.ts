@@ -1,8 +1,9 @@
 import { DynContentParameters, EDynContent } from "../../app/types/dynContentTypes";
-import { Recommandation, RecommandationTypes } from "../../app/types/recommandations";
+import { BestPracticeMessage, Recommandation, RecommandationTypes } from "../../app/types/recommandations";
 import { Zone } from "../../app/types/types";
 import { isZoneComplete } from "../../utils/utils";
 import simulationService from "../simulationService";
+import { bestPracticesGR491 } from "./bestPractices";
 import { dynContentTips } from "./messages";
 import { SimulatorDynContent } from "./type";
 import { ZoneSimulator } from "./zoneSimulator";
@@ -57,15 +58,19 @@ export class DynContentSimulator extends ZoneSimulator implements SimulatorDynCo
   recommandations() {
     const recommandations: Recommandation<EDynContent>[] = [];
     let tipMessage: string = "";
+    let BP: BestPracticeMessage = {}
     switch (this.dynContent.content) {
       case EDynContent.DYN_CONT_DYNAMIC_MAP:
         tipMessage = dynContentTips.dynamicMap;
+        BP = bestPracticesGR491.DynContent.dynMap;
         break;
       case EDynContent.DYN_CONT_ADVERTISING:
         tipMessage = dynContentTips.advertising;
+        BP = bestPracticesGR491.DynContent.advertising;
         break;
       case EDynContent.DYN_CONT_ANYLYTICS:
         tipMessage = dynContentTips.analytics;
+        BP = bestPracticesGR491.DynContent.analytics;
         break;
       default:
         break;
@@ -75,7 +80,8 @@ export class DynContentSimulator extends ZoneSimulator implements SimulatorDynCo
       const recommandationsFormat = this.messageRecommandations(
         "content",
         RecommandationTypes.TIP,
-        tipMessage
+        tipMessage,
+        BP
       );
       recommandations.push(...recommandationsFormat);
     }

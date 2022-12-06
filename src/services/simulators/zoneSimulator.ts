@@ -1,5 +1,5 @@
 import { nanoid } from "@reduxjs/toolkit";
-import { Recommandation, RecommandationTypes } from "../../app/types/recommandations";
+import { BestPracticeMessage, Recommandation, RecommandationTypes } from "../../app/types/recommandations";
 
 export class ZoneSimulator {
   zone_id: string;
@@ -22,8 +22,10 @@ export class ZoneSimulator {
     currentImpact: { energy: number; co2: number },
     options: { [s: string]: unknown } | ArrayLike<unknown>,
     currentParameters: { [x: string]: any },
-    key: string
+    key: string,
+    bestPracticeMessage?: BestPracticeMessage,
   ) {
+    //Why returning an array here?
     const recommandations: Recommandation<any>[] = [];
     const currentChoice = currentParameters[key];
     if (currentChoice) {
@@ -49,6 +51,7 @@ export class ZoneSimulator {
             energy: currentImpact.energy - energyBetter,
             co2: currentImpact.co2 - co2Better,
           },
+          bestPracticeMessage
         };
 
         if (idx > 1) {
@@ -86,7 +89,8 @@ export class ZoneSimulator {
     currentParameters: { [x: string]: any },
     key: string,
     type: RecommandationTypes.WARNING | RecommandationTypes.TIP,
-    message: string
+    message: string,
+    bestPracticeMessage?: BestPracticeMessage,
   ) {
     const recommandations: Recommandation<any>[] = [];
     const currentChoice = currentParameters[key];
@@ -96,7 +100,8 @@ export class ZoneSimulator {
           type,
           zone_id: this.zone_id,
           parameter: key,
-          message
+          message,
+          bestPracticeMessage
         };
         recommandations.push(reco);
     }
@@ -112,7 +117,8 @@ export class ZoneSimulator {
   messageRecommandations(
     key: string,
     type: RecommandationTypes.WARNING | RecommandationTypes.TIP,
-    message: string
+    message: string,
+    bestPracticeMessage?: BestPracticeMessage,
   ) {
     const recommandations: Recommandation<any>[] = [];
         const reco: Recommandation<any> = {
@@ -120,7 +126,8 @@ export class ZoneSimulator {
           type,
           zone_id: this.zone_id,
           parameter: key,
-          message
+          message,
+          bestPracticeMessage
         };
         recommandations.push(reco);
     return recommandations;
@@ -139,7 +146,8 @@ export class ZoneSimulator {
     key: string,
     threshold: number,
     type: RecommandationTypes.WARNING | RecommandationTypes.TIP,
-    message: string
+    message: string,
+    bestPracticeMessage?: BestPracticeMessage,
   ) {
     const recommandations: Recommandation<any>[] = [];
     const currentChoice = currentParameters[key];
@@ -150,7 +158,8 @@ export class ZoneSimulator {
           type,
           zone_id: this.zone_id,
           parameter: key,
-          message
+          message,
+          bestPracticeMessage
         };
         recommandations.push(reco);
     }

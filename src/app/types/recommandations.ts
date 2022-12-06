@@ -3,7 +3,7 @@ export interface Recommandation<T> {
   type: RecommandationType;
   zone_id: string;
   parameter: string;
-  bestPracticeMessage?: string;
+  bestPracticeMessage?: BestPracticeMessage;
   message?: string;
   currentValue?: T;
   betterValue?: T;
@@ -26,4 +26,10 @@ export type RecommandationType = RecommandationTypes.BETTER_VALUE | Recommandati
 export interface RecommandationWithZone<T> extends Recommandation<T> {
   zoneId: string;
   zoneName: string;
+}
+
+export interface BestPracticeMessage {
+  title?: string;
+  body?: string;
+  link?: string;
 }

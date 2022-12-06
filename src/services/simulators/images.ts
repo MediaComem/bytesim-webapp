@@ -3,6 +3,7 @@ import { Recommandation, RecommandationTypes } from "../../app/types/recommandat
 import { Zone } from "../../app/types/types";
 import { isZoneComplete } from "../../utils/utils";
 import simulationService from "../simulationService";
+import { bestPracticesGR491 } from "./bestPractices";
 import { imageTips } from "./messages";
 import { SimulatorImages } from "./type";
 import { ZoneSimulator } from "./zoneSimulator";
@@ -68,7 +69,8 @@ export class ImageSimulator extends ZoneSimulator implements SimulatorImages {
         this.image,
         "format",
         RecommandationTypes.TIP,
-        imageTips.format
+        imageTips.format,
+        bestPracticesGR491.Images.format
       );
       recommandations.push(...recommandationsFormat);
       const recommandationsQuantity = this.quantityMessageRecommandations(
@@ -76,14 +78,16 @@ export class ImageSimulator extends ZoneSimulator implements SimulatorImages {
         "quantity",
         this.MAX_IMAGE_THRESHOLD,
         RecommandationTypes.TIP,
-        imageTips.quantity
+        imageTips.quantity,
+        bestPracticesGR491.Images.quantity
       );
       recommandations.push(...recommandationsQuantity);
       const recommandationsQuality = this.betterOptionsRecommandations(
         currentImpact,
         EImgSize,
         this.image,
-        "size"
+        "size",
+        bestPracticesGR491.Images.size
       );
       recommandations.push(...recommandationsQuality);
     }

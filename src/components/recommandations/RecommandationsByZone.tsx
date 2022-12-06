@@ -19,8 +19,6 @@ import { RecommandationType } from "./RecommandationsList";
 import ZoneScreenshot from "../zones/ZoneScreenshot";
 import { useAppSelector } from "../../app/hooks";
 import { RootState } from "../../app/store";
-import { colorTheme } from "../../theme";
-import { Zone } from "../../app/types/types";
 import simulationService from "../../services/simulationService";
 import { EServerType } from "../../app/types/generalFormTypes";
 
@@ -44,7 +42,6 @@ export default function RecommandationsByZone({
   const serverType =
     useAppSelector((state) => state.project.params.server) ??
     EServerType.RENEWABLE;
-  //const { totalBenefits, setTotalBenefits } = React.useContext(ReportCTX);
   const defineRecommandationType = (reco: RecommandationType) => {
     switch (reco.type) {
       case "betterValue":
@@ -88,7 +85,6 @@ export default function RecommandationsByZone({
         onClick={() => {
           onToggleAccordion(zoneId);
         }}
-        borderBottom={`1px solid ${colorTheme[100]}`}
       >
         <Grid templateColumns="1fr 10fr 10fr 1fr" gap={3} w="100%">
           <AccordionChevron isExpanded={isOpenAccordion} />
@@ -131,8 +127,6 @@ export default function RecommandationsByZone({
           <GridItem>
             <ZoneScreenshot zoneId={zoneId} />
           </GridItem>
-
-          <GridItem>ⓘ</GridItem>
         </Grid>
       </AccordionButton>
       <AccordionPanel>

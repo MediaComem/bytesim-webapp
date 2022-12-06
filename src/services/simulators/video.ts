@@ -1,4 +1,7 @@
-import { Recommandation, RecommandationTypes } from "../../app/types/recommandations";
+import {
+  Recommandation,
+  RecommandationTypes,
+} from "../../app/types/recommandations";
 import { EBoolean, Zone } from "../../app/types/types";
 import {
   VideoParameters,
@@ -8,6 +11,7 @@ import {
 } from "../../app/types/videoTypes";
 import { isZoneComplete } from "../../utils/utils";
 import simulationService from "../simulationService";
+import { bestPracticesGR491 } from "./bestPractices";
 import { videoWarnings } from "./messages";
 import { SimulatorVideo } from "./type";
 import { ZoneSimulator } from "./zoneSimulator";
@@ -59,8 +63,11 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
     co2: number;
   } {
     const videoSize = this.videoSize(params);
-    const energy = simulationService.energyMJ(videoSize, this.renewable) * this.numberOfVisits;
-    const co2 = simulationService.gwp(videoSize, this.renewable) * this.numberOfVisits;
+    const energy =
+      simulationService.energyMJ(videoSize, this.renewable) *
+      this.numberOfVisits;
+    const co2 =
+      simulationService.gwp(videoSize, this.renewable) * this.numberOfVisits;
     return { energy, co2 };
   }
 
@@ -75,7 +82,7 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
       duration: EVideoDuration.DUR_10_SEC,
       autoplay: EBoolean.NO,
       loop: EBoolean.NO,
-    } as VideoParameters)
+    } as VideoParameters);
   }
 
   recommandations() {
@@ -88,21 +95,24 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
         currentImpact,
         EVideoQuality,
         this.video,
-        "quality"
+        "quality",
+        bestPracticesGR491.Video.quality
       );
       recommandations.push(...recommandationsQuality);
       const recommandationsDuration = this.betterOptionsRecommandations(
         currentImpact,
         EVideoDuration,
         this.video,
-        "duration"
+        "duration",
+        bestPracticesGR491.Video.duration
       );
       recommandations.push(...recommandationsDuration);
       const recommandationsFormat = this.betterOptionsRecommandations(
         currentImpact,
         EVideoFormat,
         this.video,
-        "format"
+        "format",
+        bestPracticesGR491.Video.format
       );
       recommandations.push(...recommandationsFormat);
       const recommandationsAutoplay = this.messageForBetterRecommandations(
@@ -110,7 +120,8 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
         this.video,
         "autoplay",
         RecommandationTypes.WARNING,
-        videoWarnings.autoplay
+        videoWarnings.autoplay,
+        bestPracticesGR491.Video.autoplay
       );
       recommandations.push(...recommandationsAutoplay);
       const recommandationsLoop = this.messageForBetterRecommandations(
@@ -118,7 +129,8 @@ export class VideoSimulator extends ZoneSimulator implements SimulatorVideo {
         this.video,
         "loop",
         RecommandationTypes.WARNING,
-        videoWarnings.loop
+        videoWarnings.loop,
+        bestPracticesGR491.Video.loop
       );
       recommandations.push(...recommandationsLoop);
     }

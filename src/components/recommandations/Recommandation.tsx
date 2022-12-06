@@ -1,14 +1,23 @@
 import {
   Box,
   Flex,
+  Heading,
+  Link,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
   Text,
-  Tooltip,
 } from "@chakra-ui/react";
 import { css } from "@emotion/css";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { getGeneralEntryLabel } from "../../app/types/generalFormTypes";
-import { RecommandationOption } from "../../app/types/recommandations";
+import {
+  BestPracticeMessage,
+  RecommandationOption,
+} from "../../app/types/recommandations";
 import { recommandationUpdated } from "../../features/recommandations/recommandationsSlice";
 import { colorTheme } from "../../theme";
 import { capitalizeFirstLetter } from "../../utils/utils";
@@ -48,9 +57,23 @@ export function BetterChoicesRecommandation({
                 )
               : capitalizeFirstLetter(recommandation.parameter)}
           </Text>
-          <Tooltip label="Biblio de reco + best practices" hasArrow>
-            ⓘ
-          </Tooltip>
+          {recommandation.bestPracticeMessage && (
+            <>
+              <Popover trigger="hover">
+                <PopoverTrigger>
+                  <div>ⓘ</div>
+                </PopoverTrigger>
+                <PopoverContent>
+                  <PopoverArrow />
+                  <PopoverBody>
+                    <BPTooltipContent
+                      recommandationBP={recommandation.bestPracticeMessage}
+                    />
+                  </PopoverBody>
+                </PopoverContent>
+              </Popover>
+            </>
+          )}
         </Flex>
       </Box>
       <Flex gap={1} fontSize={"xs"}>
@@ -118,9 +141,21 @@ export function BadPracticeRecommandation({
                 )
               : capitalizeFirstLetter(recommandation.parameter)}
           </Text>
-          <Tooltip label="Biblio de reco + best practices" hasArrow>
-            ⓘ
-          </Tooltip>
+          {recommandation.bestPracticeMessage && (
+            <Popover trigger="hover">
+              <PopoverTrigger>
+                <div>ⓘ</div>
+              </PopoverTrigger>
+              <PopoverContent>
+                <PopoverArrow />
+                <PopoverBody>
+                  <BPTooltipContent
+                    recommandationBP={recommandation.bestPracticeMessage}
+                  />
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
+          )}
         </Flex>
       </Box>
       <Text fontSize="xs" color="red.600" mt={0}>
@@ -146,14 +181,51 @@ export function TipRecommandation({ recommandation }: TipRecommandationProps) {
                 )
               : capitalizeFirstLetter(recommandation.parameter)}
           </Text>
-          <Tooltip label="Biblio de reco + best practices" hasArrow>
-            ⓘ
-          </Tooltip>
+          {recommandation.bestPracticeMessage && (
+            <Popover trigger="hover">
+              <PopoverTrigger>
+                <div>ⓘ</div>
+              </PopoverTrigger>
+              <PopoverContent>
+                <PopoverArrow />
+                <PopoverBody>
+                  <BPTooltipContent
+                    recommandationBP={recommandation.bestPracticeMessage}
+                  />
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
+          )}
         </Flex>
       </Box>
       <Text fontSize="xs" color="yellow.700">
         Tip: {recommandation.message}
       </Text>
     </Box>
+  );
+}
+
+interface BPTooltipContentProps {
+  recommandationBP: BestPracticeMessage;
+  className?: string;
+}
+export function BPTooltipContent({
+  recommandationBP,
+  className,
+}: BPTooltipContentProps) {
+  return (
+    <Flex direction={"column"} className={className}>
+      {recommandationBP.title && (
+        <Heading size={"xs"}>{recommandationBP.title}</Heading>
+      )}
+      {recommandationBP.body && (
+        <Text fontSize="xs">{recommandationBP.body}</Text>
+      )}
+      {recommandationBP.link && (
+        <Link fontSize={"xs"} color="brand.500" fontWeight={600} href={recommandationBP.link} target='_blank'>
+          Read more
+        </Link>
+      )}
+    </Flex>
   );
 }
