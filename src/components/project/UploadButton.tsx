@@ -1,6 +1,5 @@
 import {
   Button,
-  Input,
   Modal,
   ModalBody,
   ModalContent,
@@ -30,7 +29,7 @@ export default function UploadButton() {
 
   return (
     <>
-      <Button onClick={onOpen} size={"sm"}>
+      <Button onClick={onOpen} size={"sm"} variant='outline'>
         Import an Artwork
       </Button>
       <Modal isOpen={isOpen} onClose={onClose}>

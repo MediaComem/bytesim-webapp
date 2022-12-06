@@ -9,6 +9,7 @@ export default function SaveProjectButton() {
       <Button
         onClick={onOpen}
         size={'sm'}
+        variant='outline'
       >
         Save project
       </Button>
