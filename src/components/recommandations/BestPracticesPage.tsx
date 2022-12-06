@@ -17,7 +17,6 @@ import { BPTooltipContent } from "./Recommandation";
 export default function BestPracticesPage() {
   const navigate = useNavigate();
   const { search } = useLocation();
-  const imageParams = search.split("&")[0];
   return (
     <>
       <Flex direction="column" p={6}>
@@ -31,7 +30,7 @@ export default function BestPracticesPage() {
           <Button
             variant="outline"
             colorScheme={"brand"}
-            onClick={() => navigate(`/figma${imageParams}`)}
+            onClick={() => navigate(`/figma${search}`)}
             alignSelf="flex-start"
             size={"sm"}
           >

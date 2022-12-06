@@ -101,7 +101,6 @@ const FetchedSVG = ({
     setTimeout(() => {
       dispatch(zonesSetTree([newTree]));
       dispatch(zonesFilterByElementId(newZones));
-
       const newParams = search
         ?.replace("&new=true", "")
         .replace("new=true", "");

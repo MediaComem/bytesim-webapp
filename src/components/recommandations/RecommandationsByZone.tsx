@@ -99,7 +99,9 @@ export default function RecommandationsByZone({
                   ? "General Parameters"
                   : zoneRecommandations[0].zoneName}
               </Text>
-              <Text as="span">{" - " + zone?.zoneType ?? "–"}</Text>
+              <Text as="span" hidden={zone?.zoneType === undefined}>
+                {" - " + zone?.zoneType ?? "–"}
+              </Text>
             </Text>
             <Text fontSize={"xs"}></Text>
             {zone?.zoneType ? (

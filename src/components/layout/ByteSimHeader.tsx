@@ -16,7 +16,6 @@ export default function BytesimeHeader() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { search } = useLocation();
-  const imageParams = search.split("&")[0];
   return (
     <Flex
       align="center"
@@ -52,7 +51,6 @@ export default function BytesimeHeader() {
       <ButtonWithIconCustom
         icon={<></>}
         label={"Best practices"}
-        //subLabel={"Start with ByteSim"}
         variant={"ghost"}
         iconAfter
         onClick={() => navigate(`./best-practices${search}`)}
