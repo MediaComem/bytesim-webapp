@@ -10,7 +10,7 @@ import { css, cx } from "@emotion/css";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/hooks";
-import { Zone, ZoneType } from "../../app/types/types";
+import { Zone, ZoneOrigin, ZoneType } from "../../app/types/types";
 import { colorTheme } from "../../theme";
 import AccordionChevron from "../layout/AccordionChevron";
 import { ReactComponent as OpenIcon } from "../../assets/Fleche_Fermee.svg";
@@ -30,6 +30,7 @@ import { useIsNewImportedSvg } from "../../features/figma/components/FetchedSVG"
 
 interface ZoneListButtonProps {
   zone: Zone;
+  createdFrom?: ZoneOrigin.FIGMA | ZoneOrigin.USER;
   onOpen?: () => void;
   isExpanded: boolean;
   buttonDelete?: any;
@@ -39,6 +40,7 @@ interface ZoneListButtonProps {
 
 export function ZoneListButton({
   zone,
+  createdFrom,
   isExpanded,
   onOpen,
   buttonDelete,
@@ -139,7 +141,11 @@ export function ZoneListButton({
               </>
             }
             size={"14"}
-            icon={"drawnZone"}
+            icon={
+              createdFrom && createdFrom === ZoneOrigin.FIGMA
+                ? "importedGroup"
+                : "drawnZone"
+            }
             iconClassName={css({ transform: "scale(0.8)" })}
           />
           <Text fontSize={"sm"} color={"gray"} whiteSpace="nowrap" ml={2}>

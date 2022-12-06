@@ -80,6 +80,11 @@ export type TreeZoneEl = {
   children?: TreeZoneEl[];
 };
 
+export enum ZoneOrigin {
+  FIGMA = "figma",
+  USER = "user"
+}
+
 export type ProjectStatus = "EDITING" | "SIMULATION" | "LOADING";
 export type ZoneStatus = "EDITING" | "ACTIVE" | "LOADING";
 export type UserStatus = "CONNECTED" | "AFK" | "LOADING";
