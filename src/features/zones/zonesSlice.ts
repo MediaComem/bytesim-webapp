@@ -1,9 +1,19 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import { TreeZoneEl, Zone, ZoneMissingParams, ZoneStatus } from "../../app/types/types";
+import {
+  TreeZoneEl,
+  Zone,
+  ZoneMissingParams,
+  ZoneStatus,
+} from "../../app/types/types";
 import { getMissingZoneParams, isZoneComplete } from "../../utils/utils";
-import { getChildrenIdsOfTree, getParentsOfNode } from "../figma/utils";
+import {
+  getChildrenIdsOfTree,
+  getParentsOfNode,
+  getRelativePosition,
+  getSvgDims,
+} from "../figma/utils";
 
 type ZoneStore = { zones: Zone[]; tree: TreeZoneEl[]; isNew: boolean };
 const initialState: ZoneStore = {
@@ -55,9 +65,12 @@ const zonesSlice = createSlice({
   reducers: {
     zoneAdded: {
       reducer(state, action: PayloadAction<Pick<Zone, "id">>) {
+        const containerDim = getSvgDims();
         const newPayload: Zone = {
           ...defaultZone,
           ...action.payload,
+          containerLastWidth: containerDim?.width,
+          containerLastHeight: containerDim?.height,
           name: `Zone ${state.zones.length + 1}`,
         };
         state.zones.forEach((zone) => {
@@ -175,6 +188,36 @@ const zonesSlice = createSlice({
         if (zoneToAdd) updateZoneBy(state, zoneToAdd, "elementId");
       });
     },
+    zonesUpdatePosition(
+      state,
+      action: PayloadAction<{
+        containerWidth?: number;
+        containerHeight?: number;
+      }>
+    ) {
+      // get all zones with elementId
+      state.zones = state.zones.map((zone) => {
+        if (zone.createdFrom === "figma") {
+          if (!zone.elementId) return zone;
+          return { ...zone, ...getRelativePosition(zone.elementId) };
+        }
+        // drawn zone
+        const { containerWidth, containerHeight } = action.payload;
+        if (!containerWidth || !containerHeight) return zone;
+        // ratio between containerLastWidth anda action.containerWidth
+        const ratioWidth = containerWidth / (zone.containerLastWidth ?? 1);
+        const ratioHeight = containerHeight / (zone.containerLastHeight ?? 1);
+        return {
+          ...zone,
+          x: zone.x * ratioWidth,
+          y: zone.y * ratioHeight,
+          width: zone.width * ratioWidth,
+          height: zone.height * ratioHeight,
+          containerLastWidth: containerWidth,
+          containerLastHeight: containerHeight,
+        };
+      });
+    },
     zonesSetTree(state, action: PayloadAction<TreeZoneEl[]>) {
       return { ...state, tree: action.payload };
     },
@@ -218,6 +261,7 @@ export const {
   zoneToggleHidden,
   zoneUpdated,
   zoneDuplicated,
+  zonesUpdatePosition,
   zonesUpdatedByElementId,
   zonesSetTree,
   setIsNew,

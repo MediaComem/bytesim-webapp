@@ -1,1 +1,0 @@
-export const ZONES_CONTAINER_WIDTH = 400;

@@ -1,13 +1,22 @@
-import { Box, ButtonGroup, Flex, Heading, Spacer, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  ButtonGroup,
+  Flex,
+  Heading,
+  Spacer,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { css, cx } from "@emotion/css";
 import { useDispatch } from "react-redux";
 import { Rnd } from "react-rnd";
+
 import { useSelectedZone, useAppZones } from "../../app/hooks";
 import {
   zoneDeleted,
   zoneActiveToggled,
   zoneUpdated,
   zoneToggleHidden,
+  zonesUpdatePosition,
 } from "../../features/zones/zonesSlice";
 import { Zone } from "../../app/types/types";
 import CustomModal, { confirmText } from "../layout/CustomModal";
@@ -17,9 +26,12 @@ import { Route, Routes } from "react-router-dom";
 import FetchedSVG from "../../features/figma/components/FetchedSVG";
 import { colorTheme } from "../../theme";
 
-import { ZONES_CONTAINER_WIDTH } from "../../services/const";
-import { ZONES_CONTAINER_PADDING } from "../../features/figma/utils";
-import { useEffect } from "react";
+import {
+  getSvgDims,
+  ZONES_CONTAINER_PADDING,
+} from "../../features/figma/utils";
+import { useCallback, useEffect, useState } from "react";
+import useSize from "../../hooks/useSize";
 
 const brandColor = colorTheme[400];
 const resizeHandleSVG = (
@@ -75,7 +87,24 @@ export default function ZonesView({
   zoom: number;
 }) {
   const dispatch = useDispatch();
-  const containerDim = `${ZONES_CONTAINER_WIDTH * zoom}px`;
+  const [refContainer, setRefContainer] = useState<HTMLDivElement | null>(null);
+  const containerSize = useSize(refContainer);
+  const [svgLoaded, setSvgLoaded] = useState("");
+
+  const updateZonePostions = useCallback(() => {
+    const containerDim = getSvgDims();
+    if (!containerDim) return;
+    dispatch(
+      zonesUpdatePosition({
+        containerWidth: containerDim?.width,
+        containerHeight: containerDim?.height,
+      })
+    );
+  }, [containerSize?.width, containerSize?.height]);
+
+  useEffect(() => {
+    updateZonePostions();
+  }, [containerSize?.width, svgLoaded]);
 
   const selectedZone = useSelectedZone();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -101,6 +130,7 @@ export default function ZonesView({
       overflow={"auto"}
       grow={1}
       alignSelf="stretch"
+      id="zones-container"
     >
       <CustomModal
         texts={confirmText.deleteZone}
@@ -118,14 +148,15 @@ export default function ZonesView({
           path="figma/*"
           element={
             <Flex
-              width={containerDim}
-              minWidth={containerDim}
-              maxWidth={containerDim}
-              height={containerDim}
+              minWidth={`calc(${zoom * 100}%)`}
+              width={`calc(${zoom * 100}%)`}
+              ref={(ref) => {
+                if (!ref) return;
+                setRefContainer(ref);
+              }}
             >
-              <Flex opacity={0.5}
-                    width={"100%"}>
-                <FetchedSVG />
+              <Flex opacity={0.5} width={"100%"}>
+                <FetchedSVG onLoaded={setSvgLoaded} />
               </Flex>
             </Flex>
           }
@@ -133,23 +164,29 @@ export default function ZonesView({
         <Route
           path="/*"
           element={
-          <>
-            <Box p='2'>
-              <Heading size='md'>Please import your design to analyze it</Heading>
-            </Box>
-            <Spacer />
-            <ButtonGroup gap='2'>
-              <UploadButton />
-            </ButtonGroup >
-          </>
+            <>
+              <Box p="2">
+                <Heading size="md">
+                  Please import your design to analyze it
+                </Heading>
+              </Box>
+              <Spacer />
+              <ButtonGroup gap="2">
+                <UploadButton />
+              </ButtonGroup>
+            </>
           }
         />
       </Routes>
-      <Flex position="absolute">
+      <Flex
+        position="absolute"
+        h={containerSize?.height + "px"}
+        w={containerSize?.width + "px"}
+      >
         {zones.map((z) => {
           return (
             <ZoneFrame
-              key={`${z.id}_${z.x}_${z.y}_${z.width}_${z.height}`}
+              key={`${z.id}_${z.x}_${z.y}_${z.width}_${z.height}}`}
               zone={z}
               disableEdition={disableEdition}
               zoom={zoom}
@@ -176,64 +213,62 @@ function ZoneFrame({
   const dispatch = useDispatch();
   const selectedZone = useSelectedZone();
   return (
-    <>
-      <Rnd
-        key={zone.id}
-        id={zone.id}
-        default={{
-          x: zone.x,
-          y: zone.y,
-          width: zone.width,
-          height: zone.height,
-        }}
-        size={{
-          width: zone.width * zoom,
-          height: zone.height * zoom,
-        }}
-        position={{
-          x: zone.x * zoom,
-          y: zone.y * zoom,
-        }}
-        className={
-          "rightClickable " +
-          cx(zoneStyle, {
-            [selectedZoneStyle]: zone.status === "EDITING",
-          })
+    <Rnd
+      key={zone.id}
+      id={zone.id}
+      default={{
+        x: zone.x,
+        y: zone.y,
+        width: zone.width,
+        height: zone.height,
+      }}
+      size={{
+        width: zone.width,
+        height: zone.height,
+      }}
+      position={{
+        x: zone.x,
+        y: zone.y,
+      }}
+      className={
+        "rightClickable " +
+        cx(zoneStyle, {
+          [selectedZoneStyle]: zone.status === "EDITING",
+        })
+      }
+      onMouseDown={(e) => {
+        const MOUSE_MAIN_BUTTON = 0;
+        const MOUSE_RIGHT_BUTTON = 2;
+        if (
+          e.button === MOUSE_MAIN_BUTTON ||
+          (e.button === MOUSE_RIGHT_BUTTON && zone.id !== selectedZone?.id)
+        ) {
+          dispatch(zoneActiveToggled(zone.id));
         }
-        onMouseDown={(e) => {
-          const MOUSE_MAIN_BUTTON = 0;
-          const MOUSE_RIGHT_BUTTON = 2;
-          if (
-            e.button === MOUSE_MAIN_BUTTON ||
-            (e.button === MOUSE_RIGHT_BUTTON && zone.id !== selectedZone?.id)
-          ) {
-            dispatch(zoneActiveToggled(zone.id));
-          }
-        }}
-        enableResizing={zone.status === "EDITING" && !disableEdition}
-        disableDragging={disableEdition}
-        onResizeStop={(e, direction, ref, delta, position) => {
-          const newZone = {
-            id: zone.id,
-            x: position.x / zoom,
-            y: position.y / zoom,
-            width: zone.width + delta.width / zoom,
-            height: zone.height + delta.height / zoom,
-          };
-          dispatch(zoneUpdated(newZone));
-        }}
-        onDragStop={(e, d) => {
-          const newPos = {
-            id: zone.id,
-            x: d.x / zoom,
-            y: d.y / zoom,
-          };
-          dispatch(zoneUpdated(newPos));
-        }}
-        resizeHandleComponent={handleComp}
-      >
-        <p className={aboveZoneStyle}>{zone.name}</p>
-      </Rnd>
-    </>
+      }}
+      enableResizing={zone.status === "EDITING" && !disableEdition}
+      disableDragging={disableEdition}
+      onResizeStop={(e, direction, ref, delta, position) => {
+        const newZone = {
+          id: zone.id,
+          x: position.x,
+          y: position.y,
+          width: zone.width + delta.width,
+          height: zone.height + delta.height,
+        };
+        dispatch(zoneUpdated(newZone));
+      }}
+      onDragStop={(e, d) => {
+        const newPos = {
+          id: zone.id,
+          x: d.x,
+          y: d.y,
+        };
+        dispatch(zoneUpdated(newPos));
+      }}
+      resizeHandleComponent={handleComp}
+    >
+      <p className={aboveZoneStyle}>{zone.name}</p>
+    </Rnd>
   );
 }
