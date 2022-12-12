@@ -135,7 +135,7 @@ export default function Home() {
                     }}
                     alignItems="center"
                   >
-                    Fit Width
+                    Fit width
                   </Button>
                   {/* <Slider
                     aria-label="slider-zoom"
@@ -175,7 +175,7 @@ export default function Home() {
                       fitSizeZoom({ dim: "height" });
                     }}
                   >
-                    Fit Height
+                    Fit height
                   </Button>
                 </Flex>
               </Flex>
