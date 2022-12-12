@@ -18,7 +18,8 @@ const ZoneScreenshot = ({ zoneId }: ZoneScreenshotProps) => {
     state.zonesSlice.zones?.find((z) => z.id === zoneId)
   );
 
-  const svgContainerWidth = getSvgDims()?.width || 0;
+  const svgContainerWidth =
+    getSvgDims()?.width ?? parseFloat(localStorage.getItem("svgWidth") || "0");
 
   const [zoneDim, setZoneDim] = useState({
     x: zone?.x || 0,
