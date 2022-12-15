@@ -38,7 +38,9 @@ export const getRelativePosition = (elementId: string) => {
     initY: y,
   };
 };
-
+export const getSvgDims = () => {
+  return document.getElementById(REMOTE_PARENT_SVG_ID)?.getBoundingClientRect();
+};
 export const registerHoverEventsOnFigmaEls = (ids: string[]) => {
   // find all svg element with id included in idsRefs.current array and add on hover event a red solid border
   ids.forEach((id) => {

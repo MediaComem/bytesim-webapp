@@ -1,16 +1,5 @@
-import {
-  Accordion,
-  Button,
-  Flex,
-  Slider,
-  SliderFilledTrack,
-  SliderThumb,
-  SliderTrack,
-  Tooltip,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Accordion, Button, Flex, useDisclosure } from "@chakra-ui/react";
 import { css } from "@emotion/css";
-import * as React from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "./app/hooks";
 import CustomModal, { confirmText } from "./components/layout/CustomModal";
@@ -30,14 +19,43 @@ import { allZonesReset, zoneAdded } from "./features/zones/zonesSlice";
 import "react-reflex/styles.css";
 import { ReflexContainer, ReflexElement, ReflexSplitter } from "react-reflex";
 import RecoSpinner from "./components/recommandations/RecoSpinner";
+import {
+  REMOTE_PARENT_SVG_ID,
+  ZONES_CONTAINER_PADDING,
+} from "./features/figma/utils";
+import { useState } from "react";
 
 export default function Home() {
   const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const state = useAppSelector((s) => s);
   const project = state.project;
-  const [zoom, setZoom] = React.useState<number>(100);
-  const [showTooltip, setShowTooltip] = React.useState(false);
+  const [zoom, setZoom] = useState<number>(100);
+  const [isFitWidth, setFitWidth] = useState(true);
+
+  const fitSizeZoom = (
+    { dim }: { dim: "height" | "width" } = { dim: "width" }
+  ) => {
+    // fit the zoom to make the svg fit the width/height of the container
+    // zoom is between 100 and 1000
+    const svg = document.getElementById(REMOTE_PARENT_SVG_ID);
+    const container = document.getElementById("zones-container");
+    if (svg && container) {
+      const svgDim = svg.getBoundingClientRect()[dim];
+      const containerDim =
+        container.getBoundingClientRect()[dim] -
+        2 * ZONES_CONTAINER_PADDING * 4;
+      const newZoom = Math.min(
+        Math.max(100, (containerDim * 100) / svgDim),
+        1000
+      );
+      setZoom(newZoom);
+      setFitWidth(dim === "width");
+      return newZoom;
+    }
+    return 100;
+  };
+
   return (
     <ReflexContainer
       orientation="vertical"
@@ -107,21 +125,19 @@ export default function Home() {
           toolbarButton={
             <>
               <Flex alignItems={"center"}>
-                <Flex align="center">
+                <Flex align="center" gap={2} mx={1}>
                   <Button
-                    variant={"ghost"}
+                    disabled={isFitWidth}
                     size={"sm"}
-                    padding={0}
+                    variant="outline"
                     onClick={() => {
-                      if (zoom > 100) {
-                        setZoom(zoom - 1);
-                      }
+                      fitSizeZoom({ dim: "width" });
                     }}
                     alignItems="center"
                   >
-                    -
+                    Fit width
                   </Button>
-                  <Slider
+                  {/* <Slider
                     aria-label="slider-zoom"
                     defaultValue={1}
                     colorScheme={"brand"}
@@ -150,18 +166,16 @@ export default function Home() {
                         height="10px"
                       />
                     </Tooltip>
-                  </Slider>
+                  </Slider> */}
                   <Button
-                    variant={"ghost"}
+                    disabled={!isFitWidth}
                     size={"sm"}
-                    padding={0}
+                    variant="outline"
                     onClick={() => {
-                      if (zoom < 1000) {
-                        setZoom(zoom + 1);
-                      }
+                      fitSizeZoom({ dim: "height" });
                     }}
                   >
-                    +
+                    Fit height
                   </Button>
                 </Flex>
               </Flex>

@@ -25,6 +25,7 @@ export interface ZoneInfo {
   y: number;
   width: number;
   height: number;
+
   status: ZoneStatus;
   createdFrom?: "user" | "figma";
   // only for figma fields
@@ -34,6 +35,9 @@ export interface ZoneInfo {
   initHeight?: number;
   initX?: number;
   initY?: number;
+  // only for drawn zone fields to recompute size when container dimensions change
+  containerLastWidth?: number;
+  containerLastHeight?: number;
 }
 
 export interface ZoneUnknown extends ZoneInfo {
@@ -56,11 +60,7 @@ export interface ZoneDynamic extends ZoneInfo {
   params?: any | {};
 }
 
-export type Zone =
-  | ZoneUnknown
-  | ZoneVideo
-  | ZoneImages
-  | ZoneDynamic;
+export type Zone = ZoneUnknown | ZoneVideo | ZoneImages | ZoneDynamic;
 
 export type ZoneFigma = Omit<Zone, "createdFrom"> & {
   id: string;
@@ -69,12 +69,12 @@ export type ZoneFigma = Omit<Zone, "createdFrom"> & {
   hidden?: boolean;
 };
 
-export type ZoneMissingParams= {
+export type ZoneMissingParams = {
   zoneId: string;
   zoneName: string;
   zoneType: ZoneType | "undefined";
   zoneMissingParams: string[];
-}
+};
 export type TreeZoneEl = {
   id: string;
   children?: TreeZoneEl[];
@@ -82,7 +82,7 @@ export type TreeZoneEl = {
 
 export enum ZoneOrigin {
   FIGMA = "figma",
-  USER = "user"
+  USER = "user",
 }
 
 export type ProjectStatus = "EDITING" | "SIMULATION" | "LOADING";

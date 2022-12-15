@@ -34,7 +34,11 @@ export function useCalculateImpact(): { energy: number; co2: number } {
   zones.forEach((zone) => {
     if (isZoneComplete(zone)) {
       try {
-        const simulator = simulationService.simulator(zone, renewable, nbVisits);
+        const simulator = simulationService.simulator(
+          zone,
+          renewable,
+          nbVisits
+        );
         if (simulator) {
           const { energy, co2 } = simulator.simulate();
           energyTotal += energy;
@@ -57,7 +61,11 @@ export function useCalculateOptimalImpact(): { energy: number; co2: number } {
   zones.forEach((zone) => {
     if (isZoneComplete(zone)) {
       try {
-        const simulator = simulationService.simulator(zone, renewable, nbVisits);
+        const simulator = simulationService.simulator(
+          zone,
+          renewable,
+          nbVisits
+        );
         if (simulator) {
           const { energy, co2 } = simulator.simulateOptimal();
           energyTotal += energy;
@@ -112,7 +120,11 @@ export function useCalculateRecommandationsImpact(): {
         }
       }
       try {
-        const simulator = simulationService.simulator(simulatedZone, renewable, nbVisits);
+        const simulator = simulationService.simulator(
+          simulatedZone,
+          renewable,
+          nbVisits
+        );
         if (simulator) {
           const { energy, co2 } = simulator.simulate();
           energyTotal += energy;
@@ -153,10 +165,8 @@ export function useCalculateAllRecommandations(): RecommandationWithZone<
 >[] {
   const zones = useAppZones();
   const genericParameters = useAppSelector((state) => state.project.params);
-  const nbVisits = useAppSelector(
-    (state) => state.project.params.nbVisit
-  ) ?? 1;
-  const renewable = genericParameters === EServerType.RENEWABLE;
+  const nbVisits = useAppSelector((state) => state.project.params.nbVisit) ?? 1;
+  const renewable = genericParameters?.server === EServerType.RENEWABLE;
   const recommandations: RecommandationWithZone<
     VideoParameters[keyof VideoParameters]
   >[] = [];

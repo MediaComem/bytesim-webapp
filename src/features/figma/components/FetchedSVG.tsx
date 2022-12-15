@@ -7,7 +7,6 @@ import {
   getNewTreeWithoutHiddenZones,
   getRelativePosition,
   getTreeHierarchyFromDOM,
-  hashCode,
   REMOTE_PARENT_SVG_ID,
 } from "../utils";
 import { colorTheme } from "../../../theme";
@@ -73,8 +72,10 @@ delete defaultFigmaZoneWithoutId["id"];
 
 const FetchedSVG = ({
   url = getSvgUrlFromCurrentUrl(), // "https://bytesim-bucket.s3.eu-west-3.amazonaws.com/0%253A1_Page%25201.svg",
+  onLoaded,
 }: {
   url?: string;
+  onLoaded?: (src: string) => void;
 }) => {
   const idsRefs = useRef<string[]>([]);
   const dispatch = useDispatch();
@@ -133,6 +134,7 @@ const FetchedSVG = ({
         loader={<span>Loading...</span>}
         onError={(error) => console.log(error.message)}
         onLoad={(src, hasCache) => {
+          onLoaded?.(src);
           // if new open modal select
           if (isNewImportSvg()) {
             dispatch(setIsNew(true));
