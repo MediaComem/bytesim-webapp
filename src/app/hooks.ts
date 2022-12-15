@@ -156,7 +156,7 @@ export function useCalculateAllRecommandations(): RecommandationWithZone<
   const nbVisits = useAppSelector(
     (state) => state.project.params.nbVisit
   ) ?? 1;
-  const renewable = genericParameters === EServerType.RENEWABLE;
+  const renewable = genericParameters.server === EServerType.RENEWABLE;
   const recommandations: RecommandationWithZone<
     VideoParameters[keyof VideoParameters]
   >[] = [];
