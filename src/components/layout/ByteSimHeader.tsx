@@ -9,6 +9,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ReactComponent as Logo } from "../../assets/logo.svg";
 import UploadButton from "../project/UploadButton";
 import { css } from "@emotion/css";
+import ImportProjectButton from "../project/ImportProjectButton";
 
 export default function BytesimeHeader() {
   const projectName = useAppSelector((state) => state.project.name);
@@ -47,6 +48,7 @@ export default function BytesimeHeader() {
         </Heading>
         <SaveProjectButton />
         <UploadButton />
+        <ImportProjectButton />
       </Flex>
       <ButtonWithIconCustom
         icon={<></>}

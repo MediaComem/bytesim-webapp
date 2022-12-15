@@ -8,6 +8,7 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 import * as React from "react";
+import ExportProjectButton from "../project/ExportProjectButton";
 
 export interface ModalParams {
   title: string;
@@ -53,7 +54,7 @@ export const confirmText: Record<string, ModalParams> = {
   },
   saveProject: {
     title: "Save project",
-    text: "In this beta version, your project is only saved in your cache. To save your project, keep this link as favorite and do not empty your cache.",
+    text: <><p>In this beta version, your project is only saved in your cache. To save your project, keep this link as favorite and do not empty your cache.</p><p>Export the project data</p><ExportProjectButton /></>,
     cancelButtonText: "OK",
   },
 };
