@@ -7,7 +7,7 @@ import {
   getNewTreeWithoutHiddenZones,
   getRelativePosition,
   getTreeHierarchyFromDOM,
-  hashCode,
+  //hashCode,
   REMOTE_PARENT_SVG_ID,
 } from "../utils";
 import { colorTheme } from "../../../theme";
@@ -132,7 +132,8 @@ const FetchedSVG = ({
         cacheRequests={true}
         loader={<span>Loading...</span>}
         onError={(error) => console.log(error.message)}
-        onLoad={(src, hasCache) => {
+        //onLoad={(src, hasCache) => {
+        onLoad={() => {
           // if new open modal select
           if (isNewImportSvg()) {
             dispatch(setIsNew(true));

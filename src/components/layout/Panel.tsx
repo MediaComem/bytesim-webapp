@@ -53,7 +53,7 @@ interface PanelTitleProps {
 
 function PanelTitle({
   title,
-  titleSize,
+  //titleSize,
   toolbarButton,
   spinner,
   className,

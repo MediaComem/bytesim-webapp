@@ -6,7 +6,7 @@ function Dropzone(props: {
   [x: string]: any;
   onDrop: (files: any) => void;
 }) {
-  const { content, onDrop, ...rest } = props;
+  const { content, onDrop } = props;
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     maxFiles: 1,
