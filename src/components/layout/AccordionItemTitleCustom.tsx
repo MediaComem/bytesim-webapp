@@ -13,7 +13,7 @@ interface AccordionItemTitleWithButtonProps
     BackgroundProps {
   hoverBgColor?: string;
   label: string | React.ReactNode;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   hiddenButtons?: boolean;
   isExpanded: boolean;
 }

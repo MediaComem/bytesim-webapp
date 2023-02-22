@@ -55,13 +55,7 @@ export default function MainGroupList() {
                 }
                 p={2}
                 isExpanded={isExpanded}
-              >
-                <Button>
-                  <Link to={"./figma"}>
-                    <SmallAddIcon />
-                  </Link>
-                </Button>
-              </AccordionItemTitleCustom>
+              />
             </Box>
 
             <UnfolTreeWrapper
