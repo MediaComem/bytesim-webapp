@@ -9,6 +9,7 @@ import {
   Spinner,
   Text,
 } from "@chakra-ui/react";
+import { css } from "@emotion/react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/hooks";
 import { TreeZoneEl, Zone, ZoneOrigin } from "../../app/types/types";
@@ -16,8 +17,8 @@ import { highlightFigmaZone } from "../../features/figma/utils";
 import AccordionCustomTitle from "../layout/AccordionCustomTitle";
 import { ZoneListButton } from "./ZoneListButton";
 import ZoneParams from "./ZoneParams";
-
-import { SmallAddIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { ReactComponent as ShowIcon } from "../../assets/Show.svg";
+import { ReactComponent as HideIcon } from "../../assets/Hide.svg";
 import { colorTheme } from "../../theme";
 import {
   //getSelectedDrawnZoneIndex,
@@ -29,7 +30,6 @@ import {
   useIsNewImportedSvg,
 } from "../../features/figma/components/FetchedSVG";
 import AccordionItemTitleCustom from "../layout/AccordionItemTitleCustom";
-import { Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 
 export default function MainGroupList() {
@@ -183,7 +183,9 @@ const HiddenZone = ({ z }: { z: Zone }) => {
             _hover={{}}
             isDisabled={false}
           >
-            <ViewIcon css={{ margin: "3px" }} fill="black" />
+            <Box m={3}>
+              <ShowIcon />
+            </Box>
           </Button>
         }
       />
@@ -252,7 +254,9 @@ const AccordionZones = ({
                         title="Hide zone and its children"
                         isDisabled={false}
                       >
-                        <ViewOffIcon css={{ margin: "3px" }} fill="black" />
+                        <Box m={3}>
+                          <HideIcon />
+                        </Box>
                       </Button>
                     }
                     isExpanded={isExpanded}

@@ -28,7 +28,7 @@ import {
 import AccordionItemTitleCustom from "../layout/AccordionItemTitleCustom";
 import CustomModal, { confirmText } from "../layout/CustomModal";
 import ProgressPoints from "../layout/ProgressPoints";
-import { ReactComponent as ResetIcon } from "../../assets/ResetIcon_Active_MouseOver.svg";
+import { ReactComponent as ResetIcon } from "../../assets/ResetIcon.svg";
 import { css } from "@emotion/css";
 import AccordionCustomTitle from "../layout/AccordionCustomTitle";
 import { colorTheme } from "../../theme";

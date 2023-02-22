@@ -17,7 +17,7 @@ import { ReactComponent as OpenIcon } from "../../assets/Fleche_Fermee.svg";
 
 import AccordionCustomTitle from "../layout/AccordionCustomTitle";
 import ProgressPoints from "../layout/ProgressPoints";
-import { ReactComponent as ResetIcon } from "../../assets/ResetIcon_Active_MouseOver.svg";
+import { ReactComponent as ResetIcon } from "../../assets/ResetIcon.svg";
 import { ReactComponent as TrashIcon } from "../../assets/TEMP_trash.svg";
 
 import { getTypeEntries } from "../../utils/utils";
@@ -54,7 +54,7 @@ export function ZoneListButton({
   const [oldZoneName, setOldZoneName] = React.useState(zone.name);
   const updateZoneName = (newName: string) => {
     const newNameObject = {
-       id: zone.id,
+      id: zone.id,
       name: newName,
     };
     if (value !== "") {

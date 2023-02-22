@@ -11,7 +11,7 @@ import ZonesList from "./components/zones/ZonesList";
 import ZonesView from "./components/zones/ZonesView";
 import { projectReset } from "./features/project/projectSlice";
 
-import { ReactComponent as ResetIcon } from "./assets/ResetIcon_Active_MouseOver.svg";
+import { ReactComponent as ResetIcon } from "./assets/ResetIcon.svg";
 import ExportButton from "./components/recommandations/ExportButton";
 //import { useNavigate } from "react-router-dom";
 import { colorTheme } from "./theme";
