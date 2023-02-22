@@ -43,7 +43,7 @@ GitHub repo: https://github.com/MediaComem/bytesim
 - [Chakra UI](https://chakra-ui.com/)
 - [React Redux](https://react-redux.js.org/)
 ## Credits
-This project was developed by the [Media Engineering Institute (MEI)](https://heig-vd.ch/rad/instituts/mei) of the HEIG-VD with the support of InnoSuisse and [Romande Énergie](https://www.romande-energie.ch/).
+This project was developed by the [Media Engineering Institute (MEI)](https://heig-vd.ch/rad/instituts/mei) of the HEIG-VD with the support of [Innosuisse](https://www.innosuisse.ch/inno/fr/home.html) and [Romande Énergie](https://www.romande-energie.ch/).
 
 ## License
-This project is licensed under the Mozilla Public License 2.0 - see the [LICENSE](LICENSE.md) file for details
+This project is licensed under the Mozilla Public License 2.0 - see the LICENSE.md file for details
