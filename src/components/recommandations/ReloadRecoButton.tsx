@@ -6,7 +6,7 @@ import {
   useCalculateAllRecommandations,
   useCalculateGenericRecommandations,
 } from "../../app/hooks";
-import { ReactComponent as ResetIcon } from "../../assets/ResetIcon_Active_MouseOver.svg";
+import { ReactComponent as ResetIcon } from "../../assets/ResetIcon.svg";
 import { recommandationsPopulated } from "../../features/recommandations/recommandationsSlice";
 import { colorTheme } from "../../theme";
 

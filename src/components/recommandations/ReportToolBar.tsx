@@ -1,5 +1,5 @@
-import { ChevronDownIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import {
+  AccordionButton,
   Flex,
   Heading,
   Tooltip,
@@ -10,6 +10,7 @@ import {
   MenuItem,
   Box,
 } from "@chakra-ui/react";
+import AccordionChevron from "../layout/AccordionChevron";
 import { useState } from "react";
 import { FilterType } from "./RecoReport";
 
@@ -39,7 +40,9 @@ export default function ReportToolbar({
       >
         <MenuButton as={Box}>
           <Flex alignItems="center" justifyContent="flex-end" minW={140}>
-            {isMenuOpen ? <ChevronDownIcon /> : <ChevronRightIcon />}
+            <AccordionButton m={0} p={1} width="auto">
+              <AccordionChevron isExpanded={isMenuOpen} />
+            </AccordionButton>
             <Text fontSize="xs">{`Sort by : ${currentFilter}`}</Text>
           </Flex>
         </MenuButton>

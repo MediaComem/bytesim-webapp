@@ -16,7 +16,7 @@ import { useAppSelector } from "../../app/hooks";
 import AccordionItemTitleCustom from "../layout/AccordionItemTitleCustom";
 import CustomModal, { confirmText, ModalParams } from "../layout/CustomModal";
 import ZoneParams from "./ZoneParams";
-import { ReactComponent as ResetIcon } from "../../assets/ResetIcon_Active_MouseOver.svg";
+import { ReactComponent as ResetIcon } from "../../assets/ResetIcon.svg";
 import { ReactComponent as TrashIcon } from "../../assets/TEMP_trash.svg";
 import { css } from "@emotion/css";
 import AccordionCustomTitle from "../layout/AccordionCustomTitle";
