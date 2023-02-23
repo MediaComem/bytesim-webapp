@@ -11,12 +11,14 @@ import {
 } from "@chakra-ui/react";
 import * as React from "react";
 import { useDispatch } from "react-redux";
-import shortId from 'short-uuid';
+import shortId from "short-uuid";
 
 import { useNavigate } from "react-router-dom";
 import { setIsNew } from "../../features/zones/zonesSlice";
 import { ReactS3Client } from "../../utils/s3Config";
+import { ReactComponent as ImportIcon } from "../../assets/Import.svg";
 import Dropzone from "../layout/Dropzone";
+import ButtonWithIconCustom from "../layout/ButtonWithIconCustom";
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
 export default function UploadButton() {
@@ -29,9 +31,13 @@ export default function UploadButton() {
 
   return (
     <>
-      <Button onClick={onOpen} size={"sm"} variant='outline'>
-        Import an Artwork
-      </Button>
+      <ButtonWithIconCustom
+        icon={<ImportIcon />}
+        label={"Import an Artwork"}
+        variant={"ghost"}
+        iconAfter={false}
+        onClick={onOpen}
+      />
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay bg="blackAlpha.300" />
         <ModalContent>
@@ -59,10 +65,15 @@ export default function UploadButton() {
               variant="solid"
               colorScheme={"brand"}
               onClick={() => {
-                 // create file name with key and extension + ensure no special characters
-                const fileNameParts = fileName.split('.');
-                ReactS3Client.uploadFile(file,
-                  `${shortId.generate()}_${fileNameParts[0].replace(/[^a-zA-Z0-9 ]/g, '')}.${fileNameParts.pop()}`)
+                // create file name with key and extension + ensure no special characters
+                const fileNameParts = fileName.split(".");
+                ReactS3Client.uploadFile(
+                  file,
+                  `${shortId.generate()}_${fileNameParts[0].replace(
+                    /[^a-zA-Z0-9 ]/g,
+                    ""
+                  )}.${fileNameParts.pop()}`
+                )
                   .then((data: any) => {
                     onClose();
                     navigate(

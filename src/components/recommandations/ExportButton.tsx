@@ -1,16 +1,18 @@
-import { Button } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { ReactComponent as ExportIcon } from "../../assets/Export.svg";
 import { getSvgDims } from "../../features/figma/utils";
+import ButtonWithIconCustom from "../layout/ButtonWithIconCustom";
 
 export default function ExportButton() {
   const { search } = useLocation(); // keep image params
   const navigate = useNavigate();
   return (
     <>
-      <Button
-        variant={"solid"}
-        alignSelf={"center"}
-        justifySelf={"flex-end"}
+      <ButtonWithIconCustom
+        icon={<ExportIcon />}
+        label={"Export"}
+        variant={"ghost"}
+        iconAfter={false}
         onClick={() => {
           localStorage.setItem(
             "svgWidth",
@@ -18,11 +20,7 @@ export default function ExportButton() {
           );
           navigate(`/export${search}`); // keep url params
         }}
-        size="sm"
-        minWidth="min-content"
-      >
-        Export
-      </Button>
+      />
     </>
   );
 }
