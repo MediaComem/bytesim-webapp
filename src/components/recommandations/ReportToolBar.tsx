@@ -1,5 +1,4 @@
 import {
-  AccordionButton,
   Flex,
   Heading,
   Tooltip,
@@ -40,9 +39,7 @@ export default function ReportToolbar({
       >
         <MenuButton as={Box}>
           <Flex alignItems="center" justifyContent="flex-end" minW={140}>
-            <AccordionButton m={0} p={1} width="auto">
-              <AccordionChevron isExpanded={isMenuOpen} />
-            </AccordionButton>
+            <AccordionChevron isExpanded={isMenuOpen} />
             <Text fontSize="xs">{`Sort by : ${currentFilter}`}</Text>
           </Flex>
         </MenuButton>
