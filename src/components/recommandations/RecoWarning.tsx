@@ -44,44 +44,39 @@ export default function RecoWarning({
       flexDirection={"column"}
       overflow="hidden"
       flexShrink={0}
-      maxHeight='100%'
+      maxHeight="100%"
       className={css({
         ".chakra-collapse": {
           display: "flex !important",
           overflow: "auto !important",
         },
+        borderTop: "none",
       })}
     >
-        <AccordionButton
-          _hover={{ backgroundColor: "brand.100" }}
-          pl={4}
-          onClick={() => {
-            toggleErrorPannel();
-          }}
-        >
-            <Center>
-              <AccordionChevron
-                isWarning={true}
-                isExpanded={isToggled}
-                color="#C53030"
-              />
-              <Box>
-                <Text
-                  pl={2}
-                  mr={2}
-                  align="left"
-                  fontSize="xs"
-                  color={"#C53030"}
-                >
-                  You have uncompleted zones that are not taken into account in
-                  the calculation.
-                </Text>
-              </Box>
-              <Box pt={1}>
-                <WarningIcon />
-              </Box>
-            </Center>
-        </AccordionButton>
+      <AccordionButton
+        _hover={{ backgroundColor: "brand.100" }}
+        pl={4}
+        onClick={() => {
+          toggleErrorPannel();
+        }}
+      >
+        <Center>
+          <AccordionChevron
+            isWarning={true}
+            isExpanded={isToggled}
+            color="#C53030"
+          />
+          <Box>
+            <Text pl={2} mr={2} align="left" fontSize="xs" color={"#C53030"}>
+              You have uncompleted zones that are not taken into account in the
+              calculation.
+            </Text>
+          </Box>
+          <Box pt={1}>
+            <WarningIcon />
+          </Box>
+        </Center>
+      </AccordionButton>
       <AccordionPanel pb={4} height={"full"}>
         {Object.values(uncompleteZoneNames).map((zone) => (
           <Box p={4} key={zone.zoneId}>

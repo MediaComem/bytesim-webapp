@@ -22,7 +22,8 @@ export default function BytesimeHeader() {
       align="center"
       alignSelf="stretch"
       justify={"space-between"}
-      borderBottom="1px solid lightgray"
+      borderBottom="2px"
+      borderBottomColor="gray.200"
       id="header"
     >
       <Flex p={2} gap={4} align="center">

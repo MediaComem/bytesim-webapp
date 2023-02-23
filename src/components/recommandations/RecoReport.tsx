@@ -30,7 +30,6 @@ import ReportToolBar from "./ReportToolBar";
 export default function RecoReport() {
   return (
     <>
-      <Divider />
       <ReportBody />
     </>
   );
