@@ -1,24 +1,30 @@
 {
   "files": {
     "main.css": "/bytesim-webapp/static/css/main.e316c534.css",
-    "main.js": "/bytesim-webapp/static/js/main.7329297b.js",
+    "main.js": "/bytesim-webapp/static/js/main.e1bed8b2.js",
     "static/js/988.11335ebf.chunk.js": "/bytesim-webapp/static/js/988.11335ebf.chunk.js",
     "static/media/logo.svg": "/bytesim-webapp/static/media/logo.a042472b8202454702ee924aad176552.svg",
     "static/media/TEMP_trash.svg": "/bytesim-webapp/static/media/TEMP_trash.dc72c668146cdd51f2507770034fd5d7.svg",
     "static/media/GeneralSettings_Icon.svg": "/bytesim-webapp/static/media/GeneralSettings_Icon.675088608896b304004937abdd9c6b3a.svg",
     "static/media/Warning.svg": "/bytesim-webapp/static/media/Warning.8c283ce139832044810b8778cb5fcc41.svg",
+    "static/media/Show.svg": "/bytesim-webapp/static/media/Show.3b9a899bb9b4e5110f8a95c2712e541c.svg",
     "index.html": "/bytesim-webapp/index.html",
+    "static/media/Export.svg": "/bytesim-webapp/static/media/Export.52c4a18ed4386f76e5b401d354ad80b9.svg",
+    "static/media/Import.svg": "/bytesim-webapp/static/media/Import.86155ae59e981ad54c20b73f4d32f95e.svg",
+    "static/media/Hide.svg": "/bytesim-webapp/static/media/Hide.a7ea3f239df62bfe0a59e34efdef6b5c.svg",
     "static/media/Tick.svg": "/bytesim-webapp/static/media/Tick.b588a19db2d97aeda210453c74f7b223.svg",
     "static/media/DrawnZones_icon.svg": "/bytesim-webapp/static/media/DrawnZones_icon.c56a1a1f9aa5db18f81d712c8fe6d01a.svg",
-    "static/media/ResetIcon_Active_MouseOver.svg": "/bytesim-webapp/static/media/ResetIcon_Active_MouseOver.e9d411c33085ad40b9c28d8d1fdcf87e.svg",
+    "static/media/Save.svg": "/bytesim-webapp/static/media/Save.e635c2ab06f44418c1457338b6de1004.svg",
+    "static/media/ResetIcon.svg": "/bytesim-webapp/static/media/ResetIcon.557b470f0dc09639fe3c895f4be3c3db.svg",
+    "static/media/BestPractices.svg": "/bytesim-webapp/static/media/BestPractices.2a33f6c2355bdc31c58694497f9bd5e4.svg",
     "static/media/ImportedGroup_Icon.svg": "/bytesim-webapp/static/media/ImportedGroup_Icon.df4d8aab0d4234760c91fd5a161b0d62.svg",
     "static/media/Fleche_Fermee.svg": "/bytesim-webapp/static/media/Fleche_Fermee.d4c5159dd50ddbd0ca5c437ddf39ec68.svg",
     "main.e316c534.css.map": "/bytesim-webapp/static/css/main.e316c534.css.map",
-    "main.7329297b.js.map": "/bytesim-webapp/static/js/main.7329297b.js.map",
+    "main.e1bed8b2.js.map": "/bytesim-webapp/static/js/main.e1bed8b2.js.map",
     "988.11335ebf.chunk.js.map": "/bytesim-webapp/static/js/988.11335ebf.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e316c534.css",
-    "static/js/main.7329297b.js"
+    "static/js/main.e1bed8b2.js"
   ]
 }
