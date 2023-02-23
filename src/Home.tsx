@@ -1,4 +1,10 @@
-import { Accordion, Button, Flex, useDisclosure } from "@chakra-ui/react";
+import {
+  Accordion,
+  background,
+  Button,
+  Flex,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { css } from "@emotion/css";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "./app/hooks";
@@ -107,7 +113,10 @@ export default function Home() {
           </div>
         </Panel>
       </ReflexElement>
-      <ReflexSplitter className={css({ zIndex: 1 })} />
+      <ReflexSplitter
+        style={{ border: "2px" }}
+        className={css({ zIndex: 1 })}
+      />
       <ReflexElement
         className={"middle-pane " + css({ display: "flex" })}
         resizeHeight={false}
@@ -199,7 +208,7 @@ export default function Home() {
           />
         </Panel>
       </ReflexElement>
-      <ReflexSplitter />
+      <ReflexSplitter style={{ border: "2px" }} />
       <ReflexElement
         className={"right-pane " + css({ display: "flex" })}
         resizeHeight={false}

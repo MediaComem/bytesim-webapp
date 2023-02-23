@@ -53,7 +53,6 @@ interface PanelTitleProps {
 
 function PanelTitle({
   title,
-  titleSize,
   toolbarButton,
   spinner,
   className,
@@ -66,7 +65,9 @@ function PanelTitle({
         alignSelf="stretch"
         justify={"space-between"}
         p={2}
-        minH="50px"
+        borderBottom="2px"
+        borderColor="gray.200"
+        minH="60px"
       >
         <>
           <Heading size={"16px"}>{title}</Heading>
@@ -74,7 +75,6 @@ function PanelTitle({
         </>
         {toolbarButton}
       </Flex>
-      <Divider />
     </>
   );
 }
