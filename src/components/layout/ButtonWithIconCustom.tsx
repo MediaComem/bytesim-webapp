@@ -12,31 +12,25 @@ export default function ButtonWithIconCustom({
   label,
   subLabel,
   iconAfter,
-  variant,
   onClick,
   disabled,
 }: ButtonWithIconCustomProps) {
   return (
     <Button
       fontSize="xs"
-      variant={variant || 'outline'}
-      borderRadius={0}
+      variant={"outline"}
+      mr={2}
       display="block"
       height={"auto"}
       px={4}
       py={2}
       onClick={onClick}
-      _hover={{ backgroundColor: "brand.100" }}
       disabled={disabled}
     >
-      <Flex>
+      <Flex alignItems={"center"}>
         <>
-          {!iconAfter && (
-            <Box mr={2} mt={1}>
-              {icon}
-            </Box>
-          )}
-          <Flex align={iconAfter ? "flex-end" : "flex-start"} direction="column">
+          {!iconAfter && <Box mr={2}>{icon}</Box>}
+          <Flex alignItems={"center"}>
             <Text fontSize={"md"}>{label}</Text>
             <Text fontSize={"xs"} whiteSpace="break-spaces" textAlign={"left"}>
               {subLabel}

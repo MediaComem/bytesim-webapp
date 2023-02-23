@@ -1,4 +1,6 @@
 import * as React from "react";
+import { ReactComponent as Logo } from "../../assets/logo.svg";
+import { ReactComponent as BestPracticesIcon } from "../../assets/BestPractices.svg";
 import { Badge, Flex, Heading, Input } from "@chakra-ui/react";
 import { useAppSelector } from "../../app/hooks";
 import { useDispatch } from "react-redux";
@@ -6,7 +8,6 @@ import { setName } from "../../features/project/projectSlice";
 import ButtonWithIconCustom from "./ButtonWithIconCustom";
 import SaveProjectButton from "../project/SaveProjectButton";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ReactComponent as Logo } from "../../assets/logo.svg";
 import UploadButton from "../project/UploadButton";
 import { css } from "@emotion/css";
 
@@ -49,10 +50,10 @@ export default function BytesimeHeader() {
         <UploadButton />
       </Flex>
       <ButtonWithIconCustom
-        icon={<></>}
+        icon={<BestPracticesIcon />}
         label={"Best practices"}
         variant={"ghost"}
-        iconAfter
+        iconAfter={false}
         onClick={() => navigate(`./best-practices${search}`)}
       />
       {/* <ProjectSettingsModal /> */}
