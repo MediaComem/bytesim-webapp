@@ -95,6 +95,13 @@ function ZoneSettingsForm({
       };
       dispatch(zoneUpdated(newZone));
     };
+
+    // Reset pending key and value when zone type changes (to avoid blocking the form if the user come back to the same type)
+    useEffect(() => {
+      setPendingKey("");
+      setPendingValue("");
+    }, [zone.zoneType]);
+
     useEffect(() => {
       if (pendingKey !== "") {
         if (zone.zoneType !== formZoneType && zone.zoneType !== undefined) {
