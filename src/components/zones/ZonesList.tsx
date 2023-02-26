@@ -28,8 +28,10 @@ import {
   getSelectedDrawnZoneIndex,
   zoneDeleted,
 } from "../../features/zones/zonesSlice";
-import { Fragment } from "react";
+import { Fragment, useCallback } from "react";
 import { isEqual } from "lodash";
+import { Zone } from "../../app/types/types";
+import { isEqualDebug } from "../../utils/utils";
 
 export interface DynamicModalParams extends ModalParams {
   onConfirm: () => void;
@@ -45,13 +47,8 @@ export default function ZonesList() {
     onConfirm: () => {},
   });
   const ZONE_TAB_INDEX = 0;
-  const openedZoneIndex = useAppSelector(getSelectedDrawnZoneIndex);
-  const project = useAppSelector((state) => state.project);
 
-  const drawnZones = useAppSelector(
-    (store) => store.zonesSlice.zones.filter((z) => z.createdFrom === "user"),
-    isEqual
-  );
+  const project = useAppSelector((state) => state.project);
 
   return (
     //default index is set to 0 to open zone tab by default
@@ -109,44 +106,10 @@ export default function ZonesList() {
               </Flex>
             </AccordionItemTitleCustom>
             <AccordionPanel p={0}>
-              <Accordion allowToggle index={[openedZoneIndex]}>
-                {drawnZones.map((z, i) => {
-                  return (
-                    <Fragment key={z.id}>
-                      <AccordionItem key={`${z.id}_${i}`} border="none">
-                        {({ isExpanded }) => (
-                          <>
-                            <ZoneListButton
-                              zone={z}
-                              onOpen={() => {
-                                setModalContent({
-                                  ...confirmText.deleteZone,
-                                  onConfirm: () => {
-                                    dispatch(zoneDeleted(z.id));
-                                    dispatch(recommandationsReset());
-                                  },
-                                });
-                                onOpen();
-                              }}
-                              isExpanded={isExpanded}
-                              //setOpen={() => toggleAccordion(i)}
-                            />
-                            <AccordionPanel p={0} bg={"brand.50"}>
-                              <Box p={2} pl={12}>
-                                <Heading size={"xs"}>Type</Heading>
-                                <Text fontSize={"xs"}>
-                                  Specific settings on the page
-                                </Text>
-                              </Box>
-                              <ZoneParams zone={z} />
-                            </AccordionPanel>
-                          </>
-                        )}
-                      </AccordionItem>
-                    </Fragment>
-                  );
-                })}
-              </Accordion>
+              <AccordionDrawnZones
+                onOpen={onOpen}
+                setModalContent={setModalContent}
+              />
             </AccordionPanel>
             <CustomModal
               texts={modalContent}
@@ -163,3 +126,76 @@ export default function ZonesList() {
     </Accordion>
   );
 }
+
+const AccordionDrawnZones = ({
+  setModalContent,
+  onOpen,
+}: {
+  setModalContent: React.Dispatch<React.SetStateAction<DynamicModalParams>>;
+  onOpen: () => void;
+}) => {
+  console.log("AccordionDrawnZones");
+  const openedZoneIndex = useAppSelector(getSelectedDrawnZoneIndex);
+  const drawnZones = useAppSelector(
+    (store) => store.zonesSlice.zones.filter((z) => z.createdFrom === "user"),
+    isEqual
+  );
+  return (
+    <Accordion allowToggle index={openedZoneIndex}>
+      {drawnZones.map((z, i) => {
+        return (
+          <ZoneItem
+            key={z.id}
+            zone={z}
+            setModalContent={setModalContent}
+            onOpen={onOpen}
+          />
+        );
+      })}
+    </Accordion>
+  );
+};
+
+const ZoneItem = React.memo(function ZoneItemComp({
+  zone,
+  setModalContent,
+  onOpen,
+}: {
+  zone: Zone;
+  setModalContent: React.Dispatch<React.SetStateAction<DynamicModalParams>>;
+  onOpen: () => void;
+}) {
+  const dispatch = useDispatch();
+  const onOpenCallback = useCallback(() => {
+    setModalContent({
+      ...confirmText.deleteZone,
+      onConfirm: () => {
+        dispatch(zoneDeleted(zone.id));
+        dispatch(recommandationsReset());
+      },
+    });
+    onOpen();
+  }, []);
+  return (
+    <AccordionItem key={`${zone.id}`} border="none">
+      {({ isExpanded }) => (
+        <>
+          <ZoneListButton
+            zone={zone}
+            onOpen={onOpenCallback}
+            isExpanded={isExpanded}
+            //setOpen={() => toggleAccordion(i)}
+          />
+          <AccordionPanel p={0} bg={"brand.50"}>
+            <Box p={2} pl={12}>
+              <Heading size={"xs"}>Type</Heading>
+              <Text fontSize={"xs"}>Specific settings on the page</Text>
+            </Box>
+            <ZoneParams zone={zone} />
+          </AccordionPanel>
+        </>
+      )}
+    </AccordionItem>
+  );
+},
+isEqual);

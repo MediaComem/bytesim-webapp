@@ -36,14 +36,7 @@ import React, { useState, useEffect } from "react";
 import { isEqual } from "lodash";
 
 export default function MainGroupList() {
-  const zones = useAppSelector(
-    (store) => store.zonesSlice.zones.filter((z) => z.createdFrom === "figma"),
-    isEqual
-  );
-  const firstChildrenTree = useAppSelector(
-    (store) => store.zonesSlice.tree?.[0]?.children,
-    isEqual
-  );
+  console.log("render main group list");
 
   return (
     <Accordion allowToggle defaultIndex={[0]}>
@@ -63,7 +56,7 @@ export default function MainGroupList() {
               />
             </Box>
 
-            <UnfolTreeWrapper {...{ firstChildrenTree, zones }} />
+            <UnfolTreeWrapper />
           </>
         )}
       </AccordionItem>
@@ -73,64 +66,64 @@ export default function MainGroupList() {
 
 let timeout: ReturnType<typeof setTimeout>;
 // eslint-disable-next-line react/display-name
-const UnfolTreeWrapper = React.memo(
-  ({
-    firstChildrenTree,
-    zones,
-  }: {
-    firstChildrenTree: TreeZoneEl[] | undefined;
-    zones: Zone[];
-  }) => {
-    const openedZoneIds = useAppSelector(getSelectedFigmaZoneIds);
+const UnfolTreeWrapper = React.memo(() => {
+  const zones = useAppSelector(
+    (store) => store.zonesSlice.zones.filter((z) => z.createdFrom === "figma"),
+    isEqual
+  );
+  const firstChildrenTree = useAppSelector(
+    (store) => store.zonesSlice.tree?.[0]?.children,
+    isEqual
+  );
+  const openedZoneIds = useAppSelector(getSelectedFigmaZoneIds);
 
-    const isNewImportSvgHook = useIsNewImportedSvg();
-    const [displayContent, setDisplayContent] = useState(false);
-    const [showSpinner, setShowSpinner] = useState(false);
-    // when isNewImportSvg change from true to false, wait 300ms before rendering the component (big SVG can take long to render the tree)
-    useEffect(() => {
-      if (isNewImportSvgHook) {
-        setShowSpinner(false);
-        return setDisplayContent(false);
-      }
+  const isNewImportSvgHook = useIsNewImportedSvg();
+  const [displayContent, setDisplayContent] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
+  // when isNewImportSvg change from true to false, wait 300ms before rendering the component (big SVG can take long to render the tree)
+  useEffect(() => {
+    if (isNewImportSvgHook) {
+      setShowSpinner(false);
+      return setDisplayContent(false);
+    }
 
-      setShowSpinner(true);
+    setShowSpinner(true);
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      setDisplayContent(true);
+      setShowSpinner(false);
+    }, 300);
+
+    return () => {
       if (timeout) clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        setDisplayContent(true);
-        setShowSpinner(false);
-      }, 300);
+    };
+  }, [isNewImportSvgHook]);
 
-      return () => {
-        if (timeout) clearTimeout(timeout);
-      };
-    }, [isNewImportSvgHook]);
+  // first render
+  useEffect(() => {
+    if (!isNewImportSvg()) {
+      setDisplayContent(true);
+      setShowSpinner(false);
+    }
+  }, []);
 
-    // first render
-    useEffect(() => {
-      if (!isNewImportSvg()) {
-        setDisplayContent(true);
-        setShowSpinner(false);
-      }
-    }, []);
-
-    return (
-      <>
-        {showSpinner && (
-          <Flex mt={2} mb={5} justifyContent="center" alignItems="center">
-            <Spinner />
-          </Flex>
-        )}
-        {displayContent && firstChildrenTree && (
-          <UnfoldedTree
-            tree={firstChildrenTree}
-            zones={zones}
-            openedZoneIds={isNewImportSvgHook ? [] : openedZoneIds}
-          />
-        )}
-      </>
-    );
-  }
-);
+  return (
+    <>
+      {showSpinner && (
+        <Flex mt={2} mb={5} justifyContent="center" alignItems="center">
+          <Spinner />
+        </Flex>
+      )}
+      {displayContent && firstChildrenTree && (
+        <UnfoldedTree
+          tree={firstChildrenTree}
+          zones={zones}
+          openedZoneIds={isNewImportSvgHook ? [] : openedZoneIds}
+        />
+      )}
+    </>
+  );
+});
 
 export const UnfoldedTree = ({
   tree,
@@ -144,7 +137,7 @@ export const UnfoldedTree = ({
   setOpenedZoneId?: (id: string) => void;
 }) => {
   return (
-    <>
+    <div>
       {tree?.map((t) => {
         const { openedZonesIdsOfTree, zonesOfTree } = getOpenedZonesOfTree(
           t,
@@ -162,51 +155,46 @@ export const UnfoldedTree = ({
           />
         );
       })}
-    </>
+    </div>
   );
 };
 
-const UnfoldedTreeChild = React.memo(
-  function UnfoldedTreeChilComp({
-    zones,
-    treeZoneEl,
-    openedZoneIds,
-    setOpenedZoneId,
-  }: {
-    treeZoneEl: TreeZoneEl;
-    zones: Zone[];
-    openedZoneIds: string[];
-    setOpenedZoneId?: (id: string) => void;
-  }) {
-    const t = treeZoneEl;
-    const parentZone = zones.find((z) => z.id === t.id);
-    if (parentZone?.hidden) {
-      return <HiddenZone key={`${parentZone.id}_hidden`} z={parentZone} />;
-    }
-    const isExpanded = openedZoneIds.findIndex((zId) => zId === t.id) !== -1;
-
-    return (
-      <AccordionZones
-        key={t.id}
-        zones={zones.filter((z) => z.elementId === t.id)}
-        openedZoneIds={openedZoneIds}
-        setOpenedZoneId={setOpenedZoneId}
-      >
-        {isExpanded && t?.children?.length !== 0 && (
-          <UnfoldedTree
-            tree={t.children!}
-            zones={zones}
-            openedZoneIds={openedZoneIds}
-            setOpenedZoneId={setOpenedZoneId}
-          />
-        )}
-      </AccordionZones>
-    );
-  },
-  (prevProps, nextProps) => {
-    return isEqual(prevProps, nextProps);
+const UnfoldedTreeChild = React.memo(function UnfoldedTreeChildComp({
+  zones,
+  treeZoneEl,
+  openedZoneIds,
+  setOpenedZoneId,
+}: {
+  treeZoneEl: TreeZoneEl;
+  zones: Zone[];
+  openedZoneIds: string[];
+  setOpenedZoneId?: (id: string) => void;
+}) {
+  const t = treeZoneEl;
+  const parentZone = zones.find((z) => z.id === t.id);
+  if (parentZone?.hidden) {
+    return <HiddenZone key={`${parentZone.id}_hidden`} z={parentZone} />;
   }
-);
+  const isExpanded = openedZoneIds.findIndex((zId) => zId === t.id) !== -1;
+  return (
+    <AccordionZones
+      key={t.id}
+      zones={zones.filter((z) => z.elementId === t.id)}
+      openedZoneIds={openedZoneIds}
+      setOpenedZoneId={setOpenedZoneId}
+    >
+      {isExpanded && t?.children?.length !== 0 && (
+        <UnfoldedTree
+          tree={t.children!}
+          zones={zones}
+          openedZoneIds={openedZoneIds}
+          setOpenedZoneId={setOpenedZoneId}
+        />
+      )}
+    </AccordionZones>
+  );
+},
+isEqual);
 
 const HiddenZone = ({ z }: { z: Zone }) => {
   const dispatch = useDispatch();

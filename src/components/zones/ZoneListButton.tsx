@@ -7,7 +7,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { css, cx } from "@emotion/css";
-import React from "react";
+import React, { memo } from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/hooks";
 import { Zone, ZoneOrigin, ZoneType } from "../../app/types/types";
@@ -20,7 +20,7 @@ import ProgressPoints from "../layout/ProgressPoints";
 import { ReactComponent as ResetIcon } from "../../assets/ResetIcon.svg";
 import { ReactComponent as TrashIcon } from "../../assets/TEMP_trash.svg";
 
-import { getTypeEntries } from "../../utils/utils";
+import { getTypeEntries, isEqualDebug } from "../../utils/utils";
 import {
   zoneActiveToggled,
   zoneReset,
@@ -38,7 +38,7 @@ interface ZoneListButtonProps {
   setOpenedZoneId?: (id: string) => void;
 }
 
-export function ZoneListButton({
+export const ZoneListButton = memo(function ZoneListBtn({
   zone,
   createdFrom,
   isExpanded,
@@ -67,6 +67,8 @@ export function ZoneListButton({
   };
   const isNewImportSvg = useIsNewImportedSvg();
   const fallbackTypeZoneDisplayed = !isNewImportSvg ? "- undefined" : "";
+
+  console.log("render zone list button", zone.id, hiddenMode);
   return (
     <>
       <Box
@@ -190,4 +192,5 @@ export function ZoneListButton({
       </Box>
     </>
   );
-}
+},
+isEqualDebug);
