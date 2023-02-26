@@ -15,6 +15,7 @@ import { useAppSelector } from "../../app/hooks";
 import { TreeZoneEl, Zone, ZoneOrigin } from "../../app/types/types";
 import {
   getAllZonesIdsOfTree,
+  getOpenedZonesOfTree,
   highlightFigmaZone,
 } from "../../features/figma/utils";
 import AccordionCustomTitle from "../layout/AccordionCustomTitle";
@@ -141,18 +142,13 @@ export const UnfoldedTree = ({
   openedZoneIds: string[];
   setOpenedZoneId?: (id: string) => void;
 }) => {
-  // console.log("render UnfoldedTree");
   return (
     <>
       {tree?.map((t) => {
-        const zonesIds = getAllZonesIdsOfTree(t);
-        // console.log("zonesIds", zonesIds);
-        // console.log("zones", zones);
-        const zonesOfTree = zones.filter((z) =>
-          zonesIds.includes(z.elementId!)
-        );
-        const openedZonesIdsOfTree = openedZoneIds.filter((zId) =>
-          zonesIds.includes(zId)
+        const { openedZonesIdsOfTree, zonesOfTree } = getOpenedZonesOfTree(
+          t,
+          zones,
+          openedZoneIds
         );
         return (
           <UnfoldedTreeChild
@@ -207,28 +203,7 @@ const UnfoldedTreeChild = React.memo(
     );
   },
   (prevProps, nextProps) => {
-    // // logs all props with tree id to check their differences
-    // console.log(
-    //   "UnfoldedTreeChild",
-    //   prevProps.treeZoneEl.id,
-    //   prevProps,
-    //   nextProps
-    // );
-
-    const eq = isEqual(prevProps, nextProps);
-
-    // const eq = isEmpty(
-    //   xorWith(Object.entries(prevProps), Object.entries(nextProps), isEqual)
-    // );
-    // console.log(
-    //   "UnfoldedTreeChild",
-    //   prevProps.treeZoneEl.id,
-    //   "eq",
-    //   !!eq
-    //   // prevProps,
-    //   // nextProps
-    // );
-    return eq;
+    return isEqual(prevProps, nextProps);
   }
 );
 
