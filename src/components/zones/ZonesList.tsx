@@ -29,6 +29,7 @@ import {
   zoneDeleted,
 } from "../../features/zones/zonesSlice";
 import { Fragment } from "react";
+import { isEqual } from "lodash";
 
 export interface DynamicModalParams extends ModalParams {
   onConfirm: () => void;
@@ -46,9 +47,12 @@ export default function ZonesList() {
   const ZONE_TAB_INDEX = 0;
   const openedZoneIndex = useAppSelector(getSelectedDrawnZoneIndex);
   const project = useAppSelector((state) => state.project);
-  const drawnZones = useAppSelector((state) =>
-    state.zonesSlice.zones.filter((zone) => zone.createdFrom === "user")
+
+  const drawnZones = useAppSelector(
+    (store) => store.zonesSlice.zones.filter((z) => z.createdFrom === "user"),
+    isEqual
   );
+
   return (
     //default index is set to 0 to open zone tab by default
     <Accordion allowToggle defaultIndex={[ZONE_TAB_INDEX]}>

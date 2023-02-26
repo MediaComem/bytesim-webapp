@@ -9,12 +9,10 @@ import {
   Spinner,
   Text,
 } from "@chakra-ui/react";
-import { css } from "@emotion/react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/hooks";
 import { TreeZoneEl, Zone, ZoneOrigin } from "../../app/types/types";
 import {
-  getAllZonesIdsOfTree,
   getOpenedZonesOfTree,
   highlightFigmaZone,
 } from "../../features/figma/utils";
@@ -35,14 +33,17 @@ import {
 } from "../../features/figma/components/FetchedSVG";
 import AccordionItemTitleCustom from "../layout/AccordionItemTitleCustom";
 import React, { useState, useEffect } from "react";
-import { isEmpty, isEqual, xorWith } from "lodash";
+import { isEqual } from "lodash";
 
 export default function MainGroupList() {
-  const zonesSlices = useAppSelector((store) => store.zonesSlice);
-
-  const zones = zonesSlices?.zones.filter((z) => z.createdFrom === "figma");
-  const firstChildrenTree = zonesSlices.tree?.[0]?.children;
-  // return null;
+  const zones = useAppSelector(
+    (store) => store.zonesSlice.zones.filter((z) => z.createdFrom === "figma"),
+    isEqual
+  );
+  const firstChildrenTree = useAppSelector(
+    (store) => store.zonesSlice.tree?.[0]?.children,
+    isEqual
+  );
 
   return (
     <Accordion allowToggle defaultIndex={[0]}>
