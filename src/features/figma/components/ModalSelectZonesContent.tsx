@@ -7,7 +7,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { TreeZoneEl, Zone } from "../../../app/types/types";
-import { unfoldTree } from "../../../components/zones/MainGroupList";
+import { UnfoldedTree } from "../../../components/zones/MainGroupList";
 import { isNewImportSvg, useIsNewImportedSvg } from "./FetchedSVG";
 
 const ModalSelectZonesContent = ({
@@ -49,10 +49,14 @@ const ModalSelectZonesContent = ({
           }}
           pl={2}
         ></AccordionButton>
-        {mounted &&
-          isNewSvg &&
-          firstChildrenTree &&
-          unfoldTree(firstChildrenTree, zones, openedZoneIds, setOpenedZoneId)}
+        {mounted && isNewSvg && firstChildrenTree && (
+          <UnfoldedTree
+            tree={firstChildrenTree}
+            zones={zones}
+            openedZoneIds={openedZoneIds}
+            setOpenedZoneId={setOpenedZoneId}
+          />
+        )}
         {!mounted && (
           <Flex justifyContent="center" py={10}>
             <Spinner />

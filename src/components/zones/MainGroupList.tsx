@@ -13,7 +13,10 @@ import { css } from "@emotion/react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/hooks";
 import { TreeZoneEl, Zone, ZoneOrigin } from "../../app/types/types";
-import { highlightFigmaZone } from "../../features/figma/utils";
+import {
+  getAllZonesIdsOfTree,
+  highlightFigmaZone,
+} from "../../features/figma/utils";
 import AccordionCustomTitle from "../layout/AccordionCustomTitle";
 import { ZoneListButton } from "./ZoneListButton";
 import ZoneParams from "./ZoneParams";
@@ -31,10 +34,10 @@ import {
 } from "../../features/figma/components/FetchedSVG";
 import AccordionItemTitleCustom from "../layout/AccordionItemTitleCustom";
 import React, { useState, useEffect } from "react";
+import { isEmpty, isEqual, xorWith } from "lodash";
 
 export default function MainGroupList() {
   const zonesSlices = useAppSelector((store) => store.zonesSlice);
-  const openedZoneIds = useAppSelector(getSelectedFigmaZoneIds);
 
   const zones = zonesSlices?.zones.filter((z) => z.createdFrom === "figma");
   const firstChildrenTree = zonesSlices.tree?.[0]?.children;
@@ -58,9 +61,7 @@ export default function MainGroupList() {
               />
             </Box>
 
-            <UnfolTreeWrapper
-              {...{ firstChildrenTree, zones, openedZoneIds }}
-            />
+            <UnfolTreeWrapper {...{ firstChildrenTree, zones }} />
           </>
         )}
       </AccordionItem>
@@ -74,12 +75,12 @@ const UnfolTreeWrapper = React.memo(
   ({
     firstChildrenTree,
     zones,
-    openedZoneIds,
   }: {
     firstChildrenTree: TreeZoneEl[] | undefined;
     zones: Zone[];
-    openedZoneIds: string[];
   }) => {
+    const openedZoneIds = useAppSelector(getSelectedFigmaZoneIds);
+
     const isNewImportSvgHook = useIsNewImportedSvg();
     const [displayContent, setDisplayContent] = useState(false);
     const [showSpinner, setShowSpinner] = useState(false);
@@ -117,25 +118,70 @@ const UnfolTreeWrapper = React.memo(
             <Spinner />
           </Flex>
         )}
-        {displayContent &&
-          firstChildrenTree &&
-          unfoldTree(
-            firstChildrenTree,
-            zones,
-            isNewImportSvgHook ? [] : openedZoneIds
-          )}
+        {displayContent && firstChildrenTree && (
+          <UnfoldedTree
+            tree={firstChildrenTree}
+            zones={zones}
+            openedZoneIds={isNewImportSvgHook ? [] : openedZoneIds}
+          />
+        )}
       </>
     );
   }
 );
 
-export const unfoldTree = (
-  tree: TreeZoneEl[],
-  zones: Zone[],
-  openedZoneIds: string[],
-  setOpenedZoneId?: (id: string) => void
-) => {
-  return tree?.map((t) => {
+export const UnfoldedTree = ({
+  tree,
+  zones,
+  openedZoneIds,
+  setOpenedZoneId,
+}: {
+  tree: TreeZoneEl[];
+  zones: Zone[];
+  openedZoneIds: string[];
+  setOpenedZoneId?: (id: string) => void;
+}) => {
+  // console.log("render UnfoldedTree");
+  return (
+    <>
+      {tree?.map((t) => {
+        const zonesIds = getAllZonesIdsOfTree(t);
+        // console.log("zonesIds", zonesIds);
+        // console.log("zones", zones);
+        const zonesOfTree = zones.filter((z) =>
+          zonesIds.includes(z.elementId!)
+        );
+        const openedZonesIdsOfTree = openedZoneIds.filter((zId) =>
+          zonesIds.includes(zId)
+        );
+        return (
+          <UnfoldedTreeChild
+            key={t.id}
+            // zones={zones}
+            zones={zonesOfTree}
+            treeZoneEl={t}
+            openedZoneIds={openedZonesIdsOfTree}
+            setOpenedZoneId={setOpenedZoneId}
+          />
+        );
+      })}
+    </>
+  );
+};
+
+const UnfoldedTreeChild = React.memo(
+  function UnfoldedTreeChilComp({
+    zones,
+    treeZoneEl,
+    openedZoneIds,
+    setOpenedZoneId,
+  }: {
+    treeZoneEl: TreeZoneEl;
+    zones: Zone[];
+    openedZoneIds: string[];
+    setOpenedZoneId?: (id: string) => void;
+  }) {
+    const t = treeZoneEl;
     const parentZone = zones.find((z) => z.id === t.id);
     if (parentZone?.hidden) {
       return <HiddenZone key={`${parentZone.id}_hidden`} z={parentZone} />;
@@ -149,13 +195,42 @@ export const unfoldTree = (
         openedZoneIds={openedZoneIds}
         setOpenedZoneId={setOpenedZoneId}
       >
-        {isExpanded &&
-          t?.children?.length !== 0 &&
-          unfoldTree(t.children!, zones, openedZoneIds, setOpenedZoneId)}
+        {isExpanded && t?.children?.length !== 0 && (
+          <UnfoldedTree
+            tree={t.children!}
+            zones={zones}
+            openedZoneIds={openedZoneIds}
+            setOpenedZoneId={setOpenedZoneId}
+          />
+        )}
       </AccordionZones>
     );
-  });
-};
+  },
+  (prevProps, nextProps) => {
+    // // logs all props with tree id to check their differences
+    // console.log(
+    //   "UnfoldedTreeChild",
+    //   prevProps.treeZoneEl.id,
+    //   prevProps,
+    //   nextProps
+    // );
+
+    const eq = isEqual(prevProps, nextProps);
+
+    // const eq = isEmpty(
+    //   xorWith(Object.entries(prevProps), Object.entries(nextProps), isEqual)
+    // );
+    // console.log(
+    //   "UnfoldedTreeChild",
+    //   prevProps.treeZoneEl.id,
+    //   "eq",
+    //   !!eq
+    //   // prevProps,
+    //   // nextProps
+    // );
+    return eq;
+  }
+);
 
 const HiddenZone = ({ z }: { z: Zone }) => {
   const dispatch = useDispatch();
