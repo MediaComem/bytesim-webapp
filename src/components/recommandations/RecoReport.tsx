@@ -150,4 +150,3 @@ export function ReportBody({
     </>
   );
 }
-ReportBody.whyDidYouRender = true;
