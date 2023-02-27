@@ -31,7 +31,6 @@ import {
 } from "../../features/figma/utils";
 import { memo, useCallback, useEffect, useState } from "react";
 import useSize from "../../hooks/useSize";
-import { consoleDebug, isEqualDebug } from "../../utils/utils";
 import { isEqual } from "lodash";
 import { RootState } from "../../app/store";
 

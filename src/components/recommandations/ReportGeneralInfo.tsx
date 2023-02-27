@@ -6,7 +6,6 @@ import {
   useCalculateOptimalImpact,
   useCalculateRecommandationsImpact,
 } from "../../app/hooks";
-import { consoleDebug } from "../../utils/utils";
 
 type ReportItemProps = {
   label: string;

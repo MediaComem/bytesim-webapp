@@ -14,6 +14,7 @@ import { ZoneMissingParams } from "../../app/types/types";
 import { useDispatch } from "react-redux";
 import { zoneActivate } from "../../features/zones/zonesSlice";
 import { css } from "@emotion/css";
+import { memo } from "react";
 
 interface RecoWarningProps {
   isHidden: boolean;
@@ -21,14 +22,13 @@ interface RecoWarningProps {
   uncompleteZoneNames: Array<ZoneMissingParams>;
   toggleErrorPannel: () => void;
 }
-export default function RecoWarning({
+const RecoWaring = memo(function RecoWarning({
   isHidden,
   isToggled,
   uncompleteZoneNames,
   toggleErrorPannel,
 }: RecoWarningProps) {
   const dispatch = useDispatch();
-
   function toggleZone(zoneId: string): void {
     dispatch(zoneActivate(zoneId));
   }
@@ -56,9 +56,7 @@ export default function RecoWarning({
       <AccordionButton
         _hover={{ backgroundColor: "brand.100" }}
         pl={4}
-        onClick={() => {
-          toggleErrorPannel();
-        }}
+        onClick={toggleErrorPannel}
       >
         <Center>
           <AccordionChevron
@@ -117,4 +115,5 @@ export default function RecoWarning({
       </AccordionPanel>
     </AccordionItem>
   );
-}
+});
+export default RecoWaring;

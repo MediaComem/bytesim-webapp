@@ -1,7 +1,6 @@
-import {
-  Accordion,
-} from "@chakra-ui/react";
-import { useState } from "react";
+import { Accordion } from "@chakra-ui/react";
+import { isEqual } from "lodash";
+import { memo, useState } from "react";
 import { GenericParameters } from "../../app/types/generalFormTypes";
 import { RecommandationWithZone } from "../../app/types/recommandations";
 import { VideoParameters } from "../../app/types/videoTypes";
@@ -74,7 +73,7 @@ const getFilteredRecoGroupedByZone = (
   return [generic, ...arrZoneReco];
 };
 
-export default function RecommandationsList({
+const RecommdendationList = memo(function RecommandationsList({
   recommandations,
   allOpen,
   filterBy,
@@ -118,4 +117,6 @@ export default function RecommandationsList({
       })}
     </Accordion>
   );
-}
+},
+isEqual);
+export default RecommdendationList;

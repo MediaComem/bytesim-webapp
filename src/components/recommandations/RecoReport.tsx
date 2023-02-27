@@ -10,11 +10,10 @@ import {
 } from "@chakra-ui/react";
 import { css } from "@emotion/css";
 import { isEqual } from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   useAppSelector,
-  useAppZones,
   useCalculateAllRecommandations,
   useCalculateGenericRecommandations,
 } from "../../app/hooks";
@@ -24,7 +23,6 @@ import { RecommandationWithZone } from "../../app/types/recommandations";
 import { VideoParameters } from "../../app/types/videoTypes";
 import { recommandationsPopulated } from "../../features/recommandations/recommandationsSlice";
 import { getUncompleteZones } from "../../features/zones/zonesSlice";
-import { isEqualDebug } from "../../utils/utils";
 import RecommandationsList from "./RecommandationsList";
 import RecoWarning from "./RecoWarning";
 import ReportGeneralInfo from "./ReportGeneralInfo";
@@ -74,13 +72,13 @@ export function ReportBody({
   );
 
   const projectGeneralParams = useAppSelector((state) => state.project.params);
-  // const recos = useAppSelector((state) => state.recommandations);
-  const recos: any = [];
+  const recos = useAppSelector((state) => state.recommandations);
+  // const recos: any = [];
   const uncompleteZones = useAppSelector(getUncompleteZones, isEqual);
   const [errorPanelToggled, setErrorPanelToggled] = React.useState(false);
-  const toggleErrorPannel = (): void => {
-    setErrorPanelToggled(!errorPanelToggled);
-  };
+  const toggleErrorPannel = useCallback((): void => {
+    setErrorPanelToggled((prev) => !prev);
+  }, [setErrorPanelToggled]);
   useEffect(() => {
     dispatch(
       recommandationsPopulated([...genericRecomandations, ...recommandations])
@@ -96,12 +94,12 @@ export function ReportBody({
         display={"flex"}
         flexDirection="column"
       >
-        {/* <RecoWarning
+        <RecoWarning
           isHidden={!(!isReportPage && uncompleteZones.length !== 0)}
           isToggled={errorPanelToggled}
           uncompleteZoneNames={uncompleteZones}
           toggleErrorPannel={toggleErrorPannel}
-        /> */}
+        />
         <AccordionItem
           overflow={"hidden"}
           display={"flex"}
@@ -133,7 +131,7 @@ export function ReportBody({
               currentFilter={filterBy}
             />
             <Divider />
-            {/* <div className={css({ overflowY: "auto", overflowX: "hidden" })}>
+            <div className={css({ overflowY: "auto", overflowX: "hidden" })}>
               {recos?.length > 0 ? (
                 <RecommandationsList
                   recommandations={customRecos || recos}
@@ -145,7 +143,7 @@ export function ReportBody({
                   No recommandations. Congrats!
                 </Flex>
               )}
-            </div> */}
+            </div>
           </AccordionPanel>
         </AccordionItem>
       </Accordion>

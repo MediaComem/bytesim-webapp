@@ -20,7 +20,7 @@ import ProgressPoints from "../layout/ProgressPoints";
 import { ReactComponent as ResetIcon } from "../../assets/ResetIcon.svg";
 import { ReactComponent as TrashIcon } from "../../assets/TEMP_trash.svg";
 
-import { getTypeEntries, isEqualDebug } from "../../utils/utils";
+import { getTypeEntries } from "../../utils/utils";
 import {
   zoneActiveToggled,
   zoneReset,

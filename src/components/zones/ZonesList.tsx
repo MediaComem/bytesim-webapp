@@ -28,10 +28,9 @@ import {
   getSelectedDrawnZoneIndex,
   zoneDeleted,
 } from "../../features/zones/zonesSlice";
-import { Fragment, memo, useCallback } from "react";
+import { memo, useCallback } from "react";
 import { isEqual } from "lodash";
 import { Zone } from "../../app/types/types";
-import { isEqualDebug } from "../../utils/utils";
 
 export interface DynamicModalParams extends ModalParams {
   onConfirm: () => void;

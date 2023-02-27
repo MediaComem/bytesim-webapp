@@ -1,9 +1,8 @@
-import { consoleDebug } from "./../utils/utils";
 import { isEqual } from "lodash";
 import { createDraftSafeSelector } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import simulationService from "../services/simulationService";
-import { isEqualDebug, isZoneComplete } from "../utils/utils";
+import { isZoneComplete } from "../utils/utils";
 import { AppDispatch, RootState } from "./store";
 import { GenericParameters, EServerType } from "./types/generalFormTypes";
 import {
@@ -23,7 +22,7 @@ export const zoneSelector = createDraftSafeSelector(
   (state) => state
 );
 
-const selectZonesWithoutStatus = (state: RootState): Zone[] =>
+export const selectZonesWithoutStatus = (state: RootState): Zone[] =>
   state.zonesSlice.zones
     .filter((z) => {
       return !z.hidden;

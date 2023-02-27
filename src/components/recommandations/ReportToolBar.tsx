@@ -12,7 +12,6 @@ import {
 import AccordionChevron from "../layout/AccordionChevron";
 import { memo, useState } from "react";
 import { FilterType } from "./RecoReport";
-import { consoleDebug } from "../../utils/utils";
 
 type ReportToolBarProps = {
   onChangeFilter: (filter: FilterType) => void;
