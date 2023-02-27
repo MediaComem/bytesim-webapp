@@ -23,13 +23,13 @@ import CustomModal, { confirmText } from "../layout/CustomModal";
 import UploadButton from "../project/UploadButton";
 
 import { Route, Routes } from "react-router-dom";
-import FetchedSVG from "../../features/figma/components/FetchedSVG";
+import FetchedImage from "../../features/importImage/components/FetchedImage";
 import { colorTheme } from "../../theme";
 
 import {
   getSvgDims,
   ZONES_CONTAINER_PADDING,
-} from "../../features/figma/utils";
+} from "../../features/importImage/utils";
 import { useCallback, useEffect, useState } from "react";
 import useSize from "../../hooks/useSize";
 
@@ -156,7 +156,7 @@ export default function ZonesView({
               }}
             >
               <Flex opacity={0.5} width={"100%"}>
-                <FetchedSVG onLoaded={setSvgLoaded} />
+                <FetchedImage onLoaded={setSvgLoaded} />
               </Flex>
             </Flex>
           }

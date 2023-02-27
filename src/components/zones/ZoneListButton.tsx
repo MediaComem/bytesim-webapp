@@ -26,7 +26,7 @@ import {
   zoneReset,
   zoneUpdated,
 } from "../../features/zones/zonesSlice";
-import { useIsNewImportedSvg } from "../../features/figma/components/FetchedSVG";
+import { useIsNewImportedSvg } from "../../features/importImage/components/FetchedImage";
 
 interface ZoneListButtonProps {
   zone: Zone;

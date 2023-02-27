@@ -13,10 +13,12 @@ import { colorTheme } from "../../../theme";
 import {
   allZonesReset,
   defaultFigmaZone,
+  zonesStoreResetInitalState,
   setIsNew,
   zonesFilterByElementId,
   zonesSetTree,
   zonesUpdatedByElementId,
+  zoneAdded,
 } from "../../zones/zonesSlice";
 import { toast } from "../../..";
 import { debounce } from "lodash";
@@ -29,16 +31,20 @@ import {
   ModalOverlay,
   useDisclosure,
   ModalBody,
+  Image,
+  Text,
 } from "@chakra-ui/react";
 import { useAppSelector } from "../../../app/hooks";
 import { TreeZoneEl } from "../../../app/types/types";
 import ModalSelectZonesContent from "./ModalSelectZonesContent";
 import { useLocation, useNavigate } from "react-router-dom";
+import ModalIndicationManualZones from "./ModalIndicationManualZones";
+import { projectUpdated } from "../../project/projectSlice";
 
 export const useIsNewImportedSvg = () => {
   return useAppSelector((store) => store.zonesSlice?.isNew);
 };
-export const isNewImportSvg = () => window.location.href.includes("new=true");
+export const isNewImportImage = () => window.location.href.includes("new=true");
 
 const displayToastWarning = debounce(() => {
   toast({
@@ -49,7 +55,7 @@ const displayToastWarning = debounce(() => {
     isClosable: true,
   });
 }, 1000);
-export const getSvgUrlFromCurrentUrl = () => {
+export const getImageUrlFromCurrentUrl = () => {
   // get current url
   const url = window.location.href;
   // find in the url bytesimBucket, region and key
@@ -70,17 +76,93 @@ const defaultFigmaZoneWithoutId = { ...defaultFigmaZone };
 //@ts-ignore
 delete defaultFigmaZoneWithoutId["id"];
 
-const FetchedSVG = ({
-  url = getSvgUrlFromCurrentUrl(), // "https://bytesim-bucket.s3.eu-west-3.amazonaws.com/0%253A1_Page%25201.svg",
-  onLoaded,
-}: {
-  url?: string;
+type FetchedProps = {
+  url: string;
   onLoaded?: (src: string) => void;
-}) => {
+};
+
+const FetchedImage = ({
+  url = getImageUrlFromCurrentUrl(), // "https://bytesim-bucket.s3.eu-west-3.amazonaws.com/0%253A1_Page%25201.svg",
+  onLoaded: onLoadedProps,
+}: Partial<FetchedProps>) => {
+  const dispatch = useDispatch();
+  const isImageSvg = url?.endsWith(".svg");
+
+  const onLoaded = () => {
+    onLoadedProps?.(url);
+
+    dispatch(projectUpdated({ imageType: isImageSvg ? "svg" : "other" }));
+  };
+  if (isImageSvg) {
+    return <FetchedSvg url={url} onLoaded={onLoaded} />;
+  }
+  return <FetchedImageNonSvg url={url} onLoaded={onLoaded} />;
+};
+
+const FetchedImageNonSvg = ({ url, onLoaded }: FetchedProps) => {
+  const dispatch = useDispatch();
+  const { isOpen: isModalOpen, onClose, onOpen } = useDisclosure();
+  const onModalValidateClose = useOnModalValidateClose();
+
+  const onClose_ = () => {
+    dispatch(allZonesReset());
+    onClose();
+
+    setTimeout(() => {
+      dispatch(zonesStoreResetInitalState());
+      onModalValidateClose();
+      dispatch(zoneAdded());
+    });
+  };
+
+  return (
+    <>
+      <Modal isOpen={isModalOpen} onClose={onClose_}>
+        <ModalOverlay bg={"blackAlpha.900"} />
+        <ModalContent minW="50vw">
+          <ModalHeader>{`Image successfuly imported!`}</ModalHeader>
+          <ModalBody
+            display={"flex"}
+            justifyContent="center"
+            px={2}
+            flexDir="column"
+          >
+            <Image mb={8} alignSelf={"center"} src={url} w="30%"></Image>
+            <Text mb={8}>
+              The next step is to add some drawn on your image as in the example
+              below.
+            </Text>
+            <ModalIndicationManualZones />
+          </ModalBody>
+          <ModalFooter>
+            <Button color="green.300" onClick={onClose_}>
+              Next
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      <Image
+        minW={"100%"}
+        src={url}
+        onLoad={() => {
+          onLoaded?.(url);
+          if (isNewImportImage()) {
+            dispatch(setIsNew(true));
+            onOpen();
+          }
+        }}
+      ></Image>
+    </>
+  );
+};
+const FetchedSvg = ({
+  url, // "https://bytesim-bucket.s3.eu-west-3.amazonaws.com/0%253A1_Page%25201.svg",
+  onLoaded,
+}: FetchedProps) => {
   const idsRefs = useRef<string[]>([]);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { search } = useLocation(); // keep image params
+
+  const onModalValidateClose = useOnModalValidateClose();
 
   const zonesSlices = useAppSelector((store) => store.zonesSlice);
 
@@ -102,11 +184,7 @@ const FetchedSVG = ({
     setTimeout(() => {
       dispatch(zonesSetTree([newTree]));
       dispatch(zonesFilterByElementId(newZones));
-      const newParams = search
-        ?.replace("&new=true", "")
-        .replace("new=true", "");
-      navigate(`/figma${newParams}`, { replace: true });
-      dispatch(setIsNew(false));
+      onModalValidateClose();
     }, 300);
   };
 
@@ -136,7 +214,7 @@ const FetchedSVG = ({
         onLoad={(src, hasCache) => {
           onLoaded?.(src);
           // if new open modal select
-          if (isNewImportSvg()) {
+          if (isNewImportImage()) {
             dispatch(setIsNew(true));
             onOpen();
           } else if (zones?.length !== 0) {
@@ -232,4 +310,17 @@ const FetchedSVG = ({
     </>
   );
 };
-export default FetchedSVG;
+export default FetchedImage;
+
+const useOnModalValidateClose = () => {
+  const dispatch = useDispatch();
+  const { search } = useLocation(); // keep image params
+  const navigate = useNavigate();
+
+  const newParams = search?.replace("&new=true", "").replace("new=true", "");
+
+  return () => {
+    navigate(`/figma${newParams}`, { replace: true });
+    dispatch(setIsNew(false));
+  };
+};

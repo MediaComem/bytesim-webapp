@@ -8,7 +8,7 @@ import {
 import { useEffect, useState } from "react";
 import { TreeZoneEl, Zone } from "../../../app/types/types";
 import { unfoldTree } from "../../../components/zones/MainGroupList";
-import { isNewImportSvg, useIsNewImportedSvg } from "./FetchedSVG";
+import { isNewImportImage, useIsNewImportedSvg } from "./FetchedImage";
 
 const ModalSelectZonesContent = ({
   zones,
