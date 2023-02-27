@@ -28,7 +28,7 @@ import {
   getSelectedDrawnZoneIndex,
   zoneDeleted,
 } from "../../features/zones/zonesSlice";
-import { Fragment, useCallback } from "react";
+import { Fragment, memo, useCallback } from "react";
 import { isEqual } from "lodash";
 import { Zone } from "../../app/types/types";
 import { isEqualDebug } from "../../utils/utils";
@@ -134,7 +134,6 @@ const AccordionDrawnZones = ({
   setModalContent: React.Dispatch<React.SetStateAction<DynamicModalParams>>;
   onOpen: () => void;
 }) => {
-  console.log("AccordionDrawnZones");
   const openedZoneIndex = useAppSelector(getSelectedDrawnZoneIndex);
   const drawnZones = useAppSelector(
     (store) => store.zonesSlice.zones.filter((z) => z.createdFrom === "user"),
@@ -178,24 +177,45 @@ const ZoneItem = React.memo(function ZoneItemComp({
   }, []);
   return (
     <AccordionItem key={`${zone.id}`} border="none">
-      {({ isExpanded }) => (
-        <>
-          <ZoneListButton
-            zone={zone}
-            onOpen={onOpenCallback}
+      {({ isExpanded }) => {
+        return (
+          <AccordionContent
             isExpanded={isExpanded}
-            //setOpen={() => toggleAccordion(i)}
+            zone={zone}
+            onOpenCallback={onOpenCallback}
           />
-          <AccordionPanel p={0} bg={"brand.50"}>
-            <Box p={2} pl={12}>
-              <Heading size={"xs"}>Type</Heading>
-              <Text fontSize={"xs"}>Specific settings on the page</Text>
-            </Box>
-            <ZoneParams zone={zone} />
-          </AccordionPanel>
-        </>
-      )}
+        );
+      }}
     </AccordionItem>
+  );
+},
+isEqual);
+
+const AccordionContent = memo(function InnerAccordionContent({
+  isExpanded,
+  zone,
+  onOpenCallback,
+}: {
+  isExpanded: boolean;
+  zone: Zone;
+  onOpenCallback: () => void;
+}) {
+  return (
+    <>
+      <ZoneListButton
+        zone={zone}
+        onOpen={onOpenCallback}
+        isExpanded={isExpanded}
+        //setOpen={() => toggleAccordion(i)}
+      />
+      <AccordionPanel p={0} bg={"brand.50"}>
+        <Box p={2} pl={12}>
+          <Heading size={"xs"}>Type</Heading>
+          <Text fontSize={"xs"}>Specific settings on the page</Text>
+        </Box>
+        <ZoneParams zone={zone} />
+      </AccordionPanel>
+    </>
   );
 },
 isEqual);

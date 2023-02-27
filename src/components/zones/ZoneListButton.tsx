@@ -27,6 +27,7 @@ import {
   zoneUpdated,
 } from "../../features/zones/zonesSlice";
 import { useIsNewImportedSvg } from "../../features/figma/components/FetchedSVG";
+import { isEqual } from "lodash";
 
 interface ZoneListButtonProps {
   zone: Zone;
@@ -68,7 +69,6 @@ export const ZoneListButton = memo(function ZoneListBtn({
   const isNewImportSvg = useIsNewImportedSvg();
   const fallbackTypeZoneDisplayed = !isNewImportSvg ? "- undefined" : "";
 
-  console.log("render zone list button", zone.id, hiddenMode);
   return (
     <>
       <Box
@@ -93,13 +93,13 @@ export const ZoneListButton = memo(function ZoneListBtn({
           dispatch(zoneActiveToggled(zone.id));
         }}
       >
-        <Flex align="center" justify="flex-start">
+        <Flex align="center" justify="flex-start" cursor="pointer">
           {hiddenMode ? (
             <Box px={"6.5px"} py={"15px"} width="auto">
               <OpenIcon />
             </Box>
           ) : (
-            <AccordionButton m={0} p={1} width="auto">
+            <AccordionButton m={0} p={1}>
               <AccordionChevron isExpanded={isExpanded} />
             </AccordionButton>
           )}
@@ -193,4 +193,4 @@ export const ZoneListButton = memo(function ZoneListBtn({
     </>
   );
 },
-isEqualDebug);
+isEqual);

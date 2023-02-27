@@ -36,8 +36,6 @@ import React, { useState, useEffect } from "react";
 import { isEqual } from "lodash";
 
 export default function MainGroupList() {
-  console.log("render main group list");
-
   return (
     <Accordion allowToggle defaultIndex={[0]}>
       <AccordionItem isDisabled={false} borderBottom={"none"}>
