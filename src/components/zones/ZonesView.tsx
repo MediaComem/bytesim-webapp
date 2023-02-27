@@ -7,10 +7,9 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { css, cx } from "@emotion/css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Rnd } from "react-rnd";
 
-import { useSelectedZone, useAppZones, useAppSelector } from "../../app/hooks";
 import {
   zoneDeleted,
   zoneActiveToggled,
@@ -34,6 +33,7 @@ import { memo, useCallback, useEffect, useState } from "react";
 import useSize from "../../hooks/useSize";
 import { consoleDebug, isEqualDebug } from "../../utils/utils";
 import { isEqual } from "lodash";
+import { RootState } from "../../app/store";
 
 const brandColor = colorTheme[400];
 const resizeHandleSVG = (
@@ -107,11 +107,13 @@ export default function ZonesView({
   useEffect(() => {
     updateZonePostions();
   }, [containerSize?.width, svgLoaded]);
-  const zones = useAppZones()?.filter((z) => !z.hidden);
+  const zones = useSelector(
+    (state: RootState) => state.zonesSlice.zones.filter((z) => !z.hidden),
+    isEqual
+  );
 
   // const selectedZone = useSelectedZone();
   const selectedZone = zones?.find((z) => z.status === "EDITING");
-  console.log("selectedZone is", selectedZone?.id);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const handleDelete = (e: KeyboardEvent) => {
     if ((e.key === "Backspace" || e.key === "Delete") && selectedZone) {
@@ -125,7 +127,6 @@ export default function ZonesView({
       document.removeEventListener("keydown", handleDelete);
     };
   }, [selectedZone]);
-  consoleDebug("render ZonesView parent");
   return (
     <Flex
       align={"flex-start"}
@@ -195,7 +196,6 @@ export default function ZonesView({
               zone={z}
               isSelectedZone={z.id !== selectedZone?.id}
               disableEdition={disableEdition}
-              zoom={zoom}
             />
           );
         })}
@@ -203,21 +203,18 @@ export default function ZonesView({
     </Flex>
   );
 }
-ZonesView.whyDidYouRender = true;
 
 interface ZoneFrameProps {
   //RCmenustate:RightClickMenuState;
   zone: Zone;
   isSelectedZone: boolean;
   disableEdition: boolean;
-  zoom: number;
 }
 const ZoneFrame = memo(function ZoneFrame({
   //RCmenustate,
   zone,
   disableEdition,
   isSelectedZone,
-  zoom,
 }: ZoneFrameProps) {
   const dispatch = useDispatch();
 
