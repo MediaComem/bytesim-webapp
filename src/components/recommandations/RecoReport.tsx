@@ -128,10 +128,10 @@ export function ReportBody({
                 Estimated visit/month : {projectGeneralParams.nbVisit}
               </Text>
             </Box>
-            {/* <ReportToolBar
-              onChangeFilter={(newFilter: FilterType) => setFilterBy(newFilter)}
+            <ReportToolBar
+              onChangeFilter={setFilterBy}
               currentFilter={filterBy}
-            /> */}
+            />
             <Divider />
             {/* <div className={css({ overflowY: "auto", overflowX: "hidden" })}>
               {recos?.length > 0 ? (
