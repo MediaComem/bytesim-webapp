@@ -57,7 +57,7 @@ export function ReportBody({
   const dispatch = useDispatch();
   const recommandations = useCalculateAllRecommandations();
   const genericRecomandations = useCalculateGenericRecommandations();
-  const zones = useSelector(
+  const zones = useAppSelector(
     (state: RootState) =>
       state.zonesSlice.zones
         .filter((z) => {

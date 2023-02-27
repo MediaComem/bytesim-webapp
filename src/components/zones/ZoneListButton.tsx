@@ -93,14 +93,14 @@ export const ZoneListButton = memo(function ZoneListBtn({
           dispatch(zoneActiveToggled(zone.id));
         }}
       >
-        <Flex align="center" justify="flex-start" cursor="pointer">
+        <Flex align="center" justify="flex-start">
           {hiddenMode ? (
             <Box px={"6.5px"} py={"15px"} width="auto">
               <OpenIcon />
             </Box>
           ) : (
             <AccordionButton m={0} p={1}>
-              <AccordionChevron isExpanded={isExpanded} />
+              <AccordionChevron isExpanded={isExpanded} width="auto" />
             </AccordionButton>
           )}
           <AccordionCustomTitle

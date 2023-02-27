@@ -33,6 +33,7 @@ import { memo, useCallback, useEffect, useState } from "react";
 import useSize from "../../hooks/useSize";
 import { isEqual } from "lodash";
 import { RootState } from "../../app/store";
+import { useAppSelector } from "../../app/hooks";
 
 const brandColor = colorTheme[400];
 const resizeHandleSVG = (
@@ -106,7 +107,7 @@ export default function ZonesView({
   useEffect(() => {
     updateZonePostions();
   }, [containerSize?.width, svgLoaded]);
-  const zones = useSelector(
+  const zones = useAppSelector(
     (state: RootState) => state.zonesSlice.zones.filter((z) => !z.hidden),
     isEqual
   );
