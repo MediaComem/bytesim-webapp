@@ -48,3 +48,6 @@ export const isEqualDebug = (a: any, b: any) => {
   console.log("isEqual", isEq, a, b);
   return isEq;
 };
+
+export const consoleDebug = (msg: string, ...optionalParams: any[]) =>
+  console.log(`%c ${msg}`, "color: #ff0000", ...optionalParams);

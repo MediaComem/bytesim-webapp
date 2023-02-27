@@ -13,5 +13,15 @@ module.exports = override((config) => {
       importSource: "@welldone-software/why-did-you-render",
     });
   }
+
+  // @ts-ignore
+  config.resolve.alias = {
+    // @ts-ignore
+    ...config.resolve.alias,
+    "react-redux":
+      process.env.NODE_ENV === "development"
+        ? "react-redux/dist/react-redux.js"
+        : "react-redux/lib",
+  };
   return config;
 });

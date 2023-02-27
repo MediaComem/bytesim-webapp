@@ -5,6 +5,7 @@
   "homepage": "https://MediaComem.github.io/bytesim-webapp",
   "scripts": {
     "start": "react-scripts start",
+    "debug": "react-app-rewired start",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "build": "react-scripts build",
@@ -66,6 +67,8 @@
     "@types/debounce": "^1.2.1",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "@typescript-eslint/parser": "^5.30.0",
+    "@welldone-software/why-did-you-render": "^7.0.1",
+    "customize-cra": "^1.0.0",
     "eslint": "^8.18.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",

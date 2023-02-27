@@ -10,7 +10,7 @@ import { css, cx } from "@emotion/css";
 import { useDispatch } from "react-redux";
 import { Rnd } from "react-rnd";
 
-import { useSelectedZone, useAppZones } from "../../app/hooks";
+import { useSelectedZone, useAppZones, useAppSelector } from "../../app/hooks";
 import {
   zoneDeleted,
   zoneActiveToggled,
@@ -30,8 +30,10 @@ import {
   getSvgDims,
   ZONES_CONTAINER_PADDING,
 } from "../../features/figma/utils";
-import { useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import useSize from "../../hooks/useSize";
+import { consoleDebug, isEqualDebug } from "../../utils/utils";
+import { isEqual } from "lodash";
 
 const brandColor = colorTheme[400];
 const resizeHandleSVG = (
@@ -105,8 +107,11 @@ export default function ZonesView({
   useEffect(() => {
     updateZonePostions();
   }, [containerSize?.width, svgLoaded]);
+  const zones = useAppZones()?.filter((z) => !z.hidden);
 
-  const selectedZone = useSelectedZone();
+  // const selectedZone = useSelectedZone();
+  const selectedZone = zones?.find((z) => z.status === "EDITING");
+  console.log("selectedZone is", selectedZone?.id);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const handleDelete = (e: KeyboardEvent) => {
     if ((e.key === "Backspace" || e.key === "Delete") && selectedZone) {
@@ -120,7 +125,7 @@ export default function ZonesView({
       document.removeEventListener("keydown", handleDelete);
     };
   }, [selectedZone]);
-  const zones = useAppZones()?.filter((z) => !z.hidden);
+  consoleDebug("render ZonesView parent");
   return (
     <Flex
       align={"flex-start"}
@@ -188,6 +193,7 @@ export default function ZonesView({
             <ZoneFrame
               key={`${z.id}_${z.x}_${z.y}_${z.width}_${z.height}}`}
               zone={z}
+              isSelectedZone={z.id !== selectedZone?.id}
               disableEdition={disableEdition}
               zoom={zoom}
             />
@@ -197,21 +203,26 @@ export default function ZonesView({
     </Flex>
   );
 }
+ZonesView.whyDidYouRender = true;
 
 interface ZoneFrameProps {
   //RCmenustate:RightClickMenuState;
   zone: Zone;
+  isSelectedZone: boolean;
   disableEdition: boolean;
   zoom: number;
 }
-function ZoneFrame({
+const ZoneFrame = memo(function ZoneFrame({
   //RCmenustate,
   zone,
   disableEdition,
+  isSelectedZone,
   zoom,
 }: ZoneFrameProps) {
   const dispatch = useDispatch();
-  const selectedZone = useSelectedZone();
+
+  // const selectedZone = zone;
+  consoleDebug("render ZoneFrame", zone.id);
   return (
     <Rnd
       key={zone.id}
@@ -241,7 +252,7 @@ function ZoneFrame({
         const MOUSE_RIGHT_BUTTON = 2;
         if (
           e.button === MOUSE_MAIN_BUTTON ||
-          (e.button === MOUSE_RIGHT_BUTTON && zone.id !== selectedZone?.id)
+          (e.button === MOUSE_RIGHT_BUTTON && isSelectedZone)
         ) {
           dispatch(zoneActiveToggled(zone.id));
         }
@@ -271,4 +282,4 @@ function ZoneFrame({
       <p className={aboveZoneStyle}>{zone.name}</p>
     </Rnd>
   );
-}
+}, isEqual);

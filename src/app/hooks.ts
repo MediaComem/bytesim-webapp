@@ -1,7 +1,8 @@
+import { isEqual } from "lodash";
 import { createDraftSafeSelector } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import simulationService from "../services/simulationService";
-import { isZoneComplete } from "../utils/utils";
+import { isEqualDebug, isZoneComplete } from "../utils/utils";
 import { AppDispatch, RootState } from "./store";
 import { GenericParameters, EServerType } from "./types/generalFormTypes";
 import {
@@ -200,10 +201,8 @@ export function useCalculateRecommandationsForZone(
 }
 
 export function useSelectedZone(): Zone | undefined {
-  let zone;
-  const zones = useAppSelector((state) => state.zonesSlice.zones);
-  zones.forEach((z) => {
-    if (z.status === "EDITING") zone = z;
-  });
-  return zone;
+  return useAppSelector(
+    (state) => state.zonesSlice.zones?.find((z) => z.status === "EDITING"),
+    isEqual
+  );
 }
