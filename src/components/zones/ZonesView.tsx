@@ -218,8 +218,6 @@ const ZoneFrame = memo(function ZoneFrame({
 }: ZoneFrameProps) {
   const dispatch = useDispatch();
 
-  // const selectedZone = zone;
-  consoleDebug("render ZoneFrame", zone.id);
   return (
     <Rnd
       key={zone.id}

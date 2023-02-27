@@ -9,19 +9,22 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { css } from "@emotion/css";
+import { isEqual } from "lodash";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   useAppSelector,
   useAppZones,
   useCalculateAllRecommandations,
   useCalculateGenericRecommandations,
 } from "../../app/hooks";
+import { RootState } from "../../app/store";
 import { GenericParameters } from "../../app/types/generalFormTypes";
 import { RecommandationWithZone } from "../../app/types/recommandations";
 import { VideoParameters } from "../../app/types/videoTypes";
 import { recommandationsPopulated } from "../../features/recommandations/recommandationsSlice";
 import { getUncompleteZones } from "../../features/zones/zonesSlice";
+import { isEqualDebug } from "../../utils/utils";
 import RecommandationsList from "./RecommandationsList";
 import RecoWarning from "./RecoWarning";
 import ReportGeneralInfo from "./ReportGeneralInfo";
@@ -56,14 +59,24 @@ export function ReportBody({
   const dispatch = useDispatch();
   const recommandations = useCalculateAllRecommandations();
   const genericRecomandations = useCalculateGenericRecommandations();
-  const zones = useAppZones();
+  const zones = useSelector(
+    (state: RootState) =>
+      state.zonesSlice.zones
+        .filter((z) => {
+          return !z.hidden;
+        })
+        // compare without status field
+        .map((z) => ({ ...z, status: undefined })),
+    isEqual
+  );
   const [filterBy, setFilterBy] = useState<FilterType>(
     FilterType.POTENTIEL_GAIN
   );
 
   const projectGeneralParams = useAppSelector((state) => state.project.params);
-  const recos = useAppSelector((state) => state.recommandations);
-  const uncompleteZones = useAppSelector(getUncompleteZones);
+  // const recos = useAppSelector((state) => state.recommandations);
+  const recos: any = [];
+  const uncompleteZones = useAppSelector(getUncompleteZones, isEqual);
   const [errorPanelToggled, setErrorPanelToggled] = React.useState(false);
   const toggleErrorPannel = (): void => {
     setErrorPanelToggled(!errorPanelToggled);
@@ -83,12 +96,12 @@ export function ReportBody({
         display={"flex"}
         flexDirection="column"
       >
-        <RecoWarning
+        {/* <RecoWarning
           isHidden={!(!isReportPage && uncompleteZones.length !== 0)}
           isToggled={errorPanelToggled}
           uncompleteZoneNames={uncompleteZones}
           toggleErrorPannel={toggleErrorPannel}
-        />
+        /> */}
         <AccordionItem
           overflow={"hidden"}
           display={"flex"}
@@ -115,12 +128,12 @@ export function ReportBody({
                 Estimated visit/month : {projectGeneralParams.nbVisit}
               </Text>
             </Box>
-            <ReportToolBar
+            {/* <ReportToolBar
               onChangeFilter={(newFilter: FilterType) => setFilterBy(newFilter)}
               currentFilter={filterBy}
-            />
+            /> */}
             <Divider />
-            <div className={css({ overflowY: "auto", overflowX: "hidden" })}>
+            {/* <div className={css({ overflowY: "auto", overflowX: "hidden" })}>
               {recos?.length > 0 ? (
                 <RecommandationsList
                   recommandations={customRecos || recos}
@@ -132,10 +145,11 @@ export function ReportBody({
                   No recommandations. Congrats!
                 </Flex>
               )}
-            </div>
+            </div> */}
           </AccordionPanel>
         </AccordionItem>
       </Accordion>
     </>
   );
 }
+ReportBody.whyDidYouRender = true;

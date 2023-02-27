@@ -1,3 +1,4 @@
+import { consoleDebug } from "./../utils/utils";
 import { isEqual } from "lodash";
 import { createDraftSafeSelector } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
@@ -22,10 +23,24 @@ export const zoneSelector = createDraftSafeSelector(
   (state) => state
 );
 
+const selectZonesWithoutStatus = (state: RootState): Zone[] =>
+  state.zonesSlice.zones
+    .filter((z) => {
+      return !z.hidden;
+    })
+    // compare without status field
+    .map((z) => ({ ...z, status: "ACTIVE" }));
+export const zoneSelectorWithoutStatus = createDraftSafeSelector(
+  selectZonesWithoutStatus,
+  (state) => state
+);
+
 export const useAppZones = () => useAppSelector(zoneSelector);
+export const useAppZonesWithoutStatus = () =>
+  useAppSelector(zoneSelectorWithoutStatus, isEqual);
 
 export function useCalculateImpact(): { energy: number; co2: number } {
-  const zones = useAppSelector(zoneSelector);
+  const zones = useAppZonesWithoutStatus();
   const renewable = useAppSelector(
     (state) => state.project.params.server === EServerType.RENEWABLE
   );
@@ -54,7 +69,7 @@ export function useCalculateImpact(): { energy: number; co2: number } {
 }
 
 export function useCalculateOptimalImpact(): { energy: number; co2: number } {
-  const zones = useAppSelector(zoneSelector);
+  const zones = useAppZonesWithoutStatus();
   const renewable = true;
   const nbVisits = useAppSelector((state) => state.project.params.nbVisit) ?? 1;
   let energyTotal = 0;
@@ -84,7 +99,7 @@ export function useCalculateRecommandationsImpact(): {
   energy: number;
   co2: number;
 } {
-  const zones = useAppSelector(zoneSelector);
+  const zones = useAppZonesWithoutStatus();
   const recommandations = useAppSelector((state) => state.recommandations);
   const nbVisits = useAppSelector((state) => state.project.params.nbVisit) ?? 1; // if no visitor impact per visit
   let renewable = useAppSelector(
