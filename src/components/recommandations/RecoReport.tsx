@@ -11,7 +11,7 @@ import {
 import { css } from "@emotion/css";
 import { isEqual } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   useAppSelector,
   useCalculateAllRecommandations,
