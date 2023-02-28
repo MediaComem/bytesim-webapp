@@ -13,6 +13,8 @@ function Dropzone(props: {
     multiple: false,
     accept: {
       "image/svg": [".svg"],
+      // allow any other kind of image
+      "image/*": [".jpg", ".jpeg", ".png", ".gif", ".webp"],
     },
   });
   const bg = useColorModeValue("gray.100", "navy.700");

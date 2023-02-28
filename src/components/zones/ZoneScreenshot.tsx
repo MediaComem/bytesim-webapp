@@ -1,9 +1,9 @@
 import { useAppSelector } from "../../app/hooks";
 import { Image as ChakraImage, Box } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { getSvgUrlFromCurrentUrl } from "../../features/figma/components/FetchedSVG";
+import { getImageUrlFromCurrentUrl } from "../../features/importImage/components/FetchedImage";
 import { RootState } from "../../app/store";
-import { getSvgDims } from "../../features/figma/utils";
+import { getSvgDims } from "../../features/importImage/utils";
 
 // GET image loaded into project
 // Link project to S3 url -> one img/ project
@@ -27,7 +27,7 @@ const ZoneScreenshot = ({ zoneId }: ZoneScreenshotProps) => {
     width: zone?.width || 0,
     height: zone?.height || 0,
   });
-  const imageUrl = getSvgUrlFromCurrentUrl();
+  const imageUrl = getImageUrlFromCurrentUrl();
 
   useEffect(() => {
     if (!zone) return;

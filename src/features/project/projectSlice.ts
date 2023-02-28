@@ -14,6 +14,7 @@ const initialState: Project = {
     infiniteScroll: undefined,
     plugins: undefined,
   },
+  imageType: "svg",
 };
 
 const projectSlice = createSlice({
@@ -36,7 +37,7 @@ const projectSlice = createSlice({
         });
       }
     },
-    projectUpdated(state, action: PayloadAction<Partial<Project>>) {
+    projectParamsUpdated(state, action: PayloadAction<Partial<Project>>) {
       if (
         !Object.prototype.hasOwnProperty.call(action.payload, "params") ||
         state.status !== "SIMULATION"
@@ -44,10 +45,14 @@ const projectSlice = createSlice({
         Object.assign(state, action.payload);
       }
     },
+    projectUpdated(state, action: PayloadAction<Partial<Project>>) {
+      Object.assign(state, action.payload);
+    },
   },
 });
 
-export const { setName, projectReset, projectUpdated } = projectSlice.actions;
+export const { setName, projectReset, projectParamsUpdated, projectUpdated } =
+  projectSlice.actions;
 // Other code such as selectors can use the imported `RootState` type
 export const selectProject = (state: RootState) => state.project;
 

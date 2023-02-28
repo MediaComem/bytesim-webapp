@@ -28,7 +28,7 @@ import RecoSpinner from "./components/recommandations/RecoSpinner";
 import {
   REMOTE_PARENT_SVG_ID,
   ZONES_CONTAINER_PADDING,
-} from "./features/figma/utils";
+} from "./features/importImage/utils";
 import { useState } from "react";
 
 export default function Home() {

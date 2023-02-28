@@ -13,7 +13,7 @@ import {
   getParentsOfNode,
   getRelativePosition,
   getSvgDims,
-} from "../figma/utils";
+} from "../importImage/utils";
 
 type ZoneStore = { zones: Zone[]; tree: TreeZoneEl[]; isNew: boolean };
 const initialState: ZoneStore = {
@@ -246,10 +246,14 @@ const zonesSlice = createSlice({
     setIsNew(state, action: PayloadAction<boolean>) {
       state.isNew = action.payload;
     },
+    zonesStoreResetInitalState(state) {
+      Object.assign(state, initialState);
+    },
   },
 });
 
 export const {
+  zonesStoreResetInitalState,
   zoneAdded,
   zoneDeleted,
   zoneActiveToggled,
