@@ -66,8 +66,8 @@ export const ZoneListButton = memo(function ZoneListBtn({
     }
     setEditNameMode(false);
   };
-  const isNewImportSvg = useIsNewImportedImage();
-  const fallbackTypeZoneDisplayed = !isNewImportSvg ? "- undefined" : "";
+  const isNewImportImage = useIsNewImportedImage();
+  const fallbackTypeZoneDisplayed = !isNewImportImage ? "- undefined" : "";
 
   return (
     <>
@@ -106,7 +106,7 @@ export const ZoneListButton = memo(function ZoneListBtn({
           <AccordionCustomTitle
             label={
               <>
-                {editNameMode && !isNewImportSvg ? (
+                {editNameMode && !isNewImportImage ? (
                   <Input
                     value={value}
                     onKeyDown={(e) => {
@@ -133,7 +133,7 @@ export const ZoneListButton = memo(function ZoneListBtn({
                 ) : (
                   <Text
                     ml={1}
-                    cursor={isNewImportSvg ? "default" : "auto"}
+                    cursor={isNewImportImage ? "default" : "auto"}
                     whiteSpace={"nowrap"}
                     onDoubleClick={() => setEditNameMode(true)}
                   >
@@ -166,7 +166,7 @@ export const ZoneListButton = memo(function ZoneListBtn({
           )}
         </Flex>
         <Flex className={cx("visibleOnHover ", css({ visibility: "hidden" }))}>
-          {!hiddenMode && !isNewImportSvg && (
+          {!hiddenMode && !isNewImportImage && (
             <Button
               variant={"ghost"}
               title="Reset zone"
