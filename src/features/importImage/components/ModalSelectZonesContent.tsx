@@ -19,7 +19,7 @@ const ModalSelectZonesContent = ({
 }) => {
   const [openedZoneIds, setOpenedZoneIds] = useState<string[]>([]);
   const [mounted, setMounted] = useState(false);
-  const isNewSvg = useIsNewImportedImage();
+  const isNewImage = useIsNewImportedImage();
   useEffect(() => {
     setTimeout(() => {
       setMounted(true);
@@ -49,7 +49,7 @@ const ModalSelectZonesContent = ({
           }}
           pl={2}
         ></AccordionButton>
-        {mounted && isNewSvg && firstChildrenTree && (
+        {mounted && isNewImage && firstChildrenTree && (
           <UnfoldedTree
             tree={firstChildrenTree}
             zones={zones}
