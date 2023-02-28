@@ -80,12 +80,12 @@ const UnfoldedTreeWrapper = React.memo(() => {
   );
   const openedZoneIds = useAppSelector(getSelectedFigmaZoneIds);
 
-  const isNewImportSvgHook = useIsNewImportedImage();
+  const isNewImportImageHook = useIsNewImportedImage();
   const [displayContent, setDisplayContent] = useState(false);
   const [showSpinner, setShowSpinner] = useState(false);
   // when isNewImportSvg change from true to false, wait 300ms before rendering the component (big SVG can take long to render the tree)
   useEffect(() => {
-    if (isNewImportSvgHook) {
+    if (isNewImportImageHook) {
       setShowSpinner(false);
       return setDisplayContent(false);
     }
@@ -100,7 +100,7 @@ const UnfoldedTreeWrapper = React.memo(() => {
     return () => {
       if (timeout) clearTimeout(timeout);
     };
-  }, [isNewImportSvgHook]);
+  }, [isNewImportImageHook]);
 
   // first render
   useEffect(() => {
@@ -121,7 +121,7 @@ const UnfoldedTreeWrapper = React.memo(() => {
         <UnfoldedTree
           tree={firstChildrenTree}
           zones={zones}
-          openedZoneIds={isNewImportSvgHook ? [] : openedZoneIds}
+          openedZoneIds={isNewImportImageHook ? [] : openedZoneIds}
         />
       )}
     </>
