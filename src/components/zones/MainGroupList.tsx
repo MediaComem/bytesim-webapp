@@ -12,10 +12,7 @@ import {
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/hooks";
 import { TreeZoneEl, Zone, ZoneOrigin } from "../../app/types/types";
-import {
-  getOpenedZonesOfTree,
-  highlightFigmaZone,
-} from "../../features/figma/utils";
+
 import AccordionCustomTitle from "../layout/AccordionCustomTitle";
 import { ZoneListButton } from "./ZoneListButton";
 import ZoneParams from "./ZoneParams";
@@ -28,14 +25,22 @@ import {
   zoneToggleHidden,
 } from "../../features/zones/zonesSlice";
 import {
-  isNewImportSvg,
+  isNewImportImage,
   useIsNewImportedSvg,
-} from "../../features/figma/components/FetchedSVG";
+} from "../../features/importImage/components/FetchedImage";
 import AccordionItemTitleCustom from "../layout/AccordionItemTitleCustom";
 import React, { useState, useEffect } from "react";
 import { isEqual } from "lodash";
+import {
+  getOpenedZonesOfTree,
+  highlightFigmaZone,
+} from "../../features/importImage/utils";
 
 export default function MainGroupList() {
+  const isImageSvg = useAppSelector(
+    (store) => store.project.imageType === "svg"
+  );
+  if (!isImageSvg) return null;
   return (
     <Accordion allowToggle defaultIndex={[0]}>
       <AccordionItem isDisabled={false} borderBottom={"none"}>
@@ -99,7 +104,7 @@ const UnfolTreeWrapper = React.memo(() => {
 
   // first render
   useEffect(() => {
-    if (!isNewImportSvg()) {
+    if (!isNewImportImage()) {
       setDisplayContent(true);
       setShowSpinner(false);
     }
@@ -300,7 +305,7 @@ const AccordionZones = ({
                     //setOpen={() => toggleAccordion(i)}
                     setOpenedZoneId={setOpenedZoneId}
                   />
-                  {!isNewImportSvg() && (
+                  {!isNewImportImage() && (
                     <AccordionPanel p={0} bg={"brand.50"}>
                       <Box fontSize={12} pl={14}>
                         <Heading size="xs" fontSize="12px">

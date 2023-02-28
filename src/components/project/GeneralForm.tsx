@@ -23,7 +23,7 @@ import {
 import { Project } from "../../app/types/types";
 import {
   projectReset,
-  projectUpdated,
+  projectParamsUpdated,
 } from "../../features/project/projectSlice";
 import AccordionItemTitleCustom from "../layout/AccordionItemTitleCustom";
 import CustomModal, { confirmText } from "../layout/CustomModal";
@@ -110,7 +110,7 @@ function GeneralForm({ project }: { project: Project }) {
                     const newParams = {
                       params: { ...project.params, [key]: Number(n) },
                     };
-                    dispatch(projectUpdated(newParams));
+                    dispatch(projectParamsUpdated(newParams));
                   }}
                   disableEdition={project.status === "SIMULATION"}
                 />
@@ -133,7 +133,7 @@ function GeneralForm({ project }: { project: Project }) {
                             const newParams = {
                               params: { ...project.params, [key]: data },
                             };
-                            dispatch(projectUpdated(newParams));
+                            dispatch(projectParamsUpdated(newParams));
                           }}
                           className={css({ accentColor: `${colorTheme[500]}` })}
                         />

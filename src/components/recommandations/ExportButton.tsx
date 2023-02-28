@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { ReactComponent as ExportIcon } from "../../assets/Export.svg";
-import { getSvgDims } from "../../features/figma/utils";
+import { getSvgDims } from "../../features/importImage/utils";
 import ButtonWithIconCustom from "../layout/ButtonWithIconCustom";
 
 export default function ExportButton() {

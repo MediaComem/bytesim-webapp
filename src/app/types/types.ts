@@ -10,6 +10,7 @@ export interface Project {
   status: ProjectStatus;
   params: GenericParameters;
   screenshotBlob?: string;
+  imageType?: "svg" | "other";
 }
 
 export interface User {
