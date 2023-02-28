@@ -59,7 +59,7 @@ export default function MainGroupList() {
               />
             </Box>
 
-            <UnfolTreeWrapper />
+            <UnfoldedTreeWrapper />
           </>
         )}
       </AccordionItem>
@@ -69,7 +69,7 @@ export default function MainGroupList() {
 
 let timeout: ReturnType<typeof setTimeout>;
 // eslint-disable-next-line react/display-name
-const UnfolTreeWrapper = React.memo(() => {
+const UnfoldedTreeWrapper = React.memo(() => {
   const zones = useAppSelector(
     (store) => store.zonesSlice.zones.filter((z) => z.createdFrom === "figma"),
     isEqual
