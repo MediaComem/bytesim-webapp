@@ -26,7 +26,7 @@ import {
 } from "../../features/zones/zonesSlice";
 import {
   isNewImportImage,
-  useIsNewImportedSvg,
+  useIsNewImportedImage,
 } from "../../features/importImage/components/FetchedImage";
 import AccordionItemTitleCustom from "../layout/AccordionItemTitleCustom";
 import React, { useState, useEffect } from "react";
@@ -80,7 +80,7 @@ const UnfolTreeWrapper = React.memo(() => {
   );
   const openedZoneIds = useAppSelector(getSelectedFigmaZoneIds);
 
-  const isNewImportSvgHook = useIsNewImportedSvg();
+  const isNewImportSvgHook = useIsNewImportedImage();
   const [displayContent, setDisplayContent] = useState(false);
   const [showSpinner, setShowSpinner] = useState(false);
   // when isNewImportSvg change from true to false, wait 300ms before rendering the component (big SVG can take long to render the tree)

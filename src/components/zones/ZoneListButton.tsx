@@ -27,7 +27,7 @@ import {
   zoneUpdated,
 } from "../../features/zones/zonesSlice";
 import { isEqual } from "lodash";
-import { useIsNewImportedSvg } from "../../features/importImage/components/FetchedImage";
+import { useIsNewImportedImage } from "../../features/importImage/components/FetchedImage";
 
 interface ZoneListButtonProps {
   zone: Zone;
@@ -66,7 +66,7 @@ export const ZoneListButton = memo(function ZoneListBtn({
     }
     setEditNameMode(false);
   };
-  const isNewImportSvg = useIsNewImportedSvg();
+  const isNewImportSvg = useIsNewImportedImage();
   const fallbackTypeZoneDisplayed = !isNewImportSvg ? "- undefined" : "";
 
   return (

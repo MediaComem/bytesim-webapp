@@ -91,7 +91,7 @@ export default function ZonesView({
   const dispatch = useDispatch();
   const [refContainer, setRefContainer] = useState<HTMLDivElement | null>(null);
   const containerSize = useSize(refContainer);
-  const [svgLoaded, setSvgLoaded] = useState("");
+  const [imgLoaded, setImageLoaded] = useState("");
 
   const updateZonePostions = useCallback(() => {
     const containerDim = getSvgDims();
@@ -106,7 +106,7 @@ export default function ZonesView({
 
   useEffect(() => {
     updateZonePostions();
-  }, [containerSize?.width, svgLoaded]);
+  }, [containerSize?.width, imgLoaded]);
   const zones = useAppSelector(
     (state: RootState) => state.zonesSlice.zones.filter((z) => !z.hidden),
     isEqual
@@ -162,7 +162,7 @@ export default function ZonesView({
               }}
             >
               <Flex opacity={0.5} width={"100%"}>
-                <FetchedImage onLoaded={setSvgLoaded} />
+                <FetchedImage onLoaded={setImageLoaded} />
               </Flex>
             </Flex>
           }
