@@ -129,8 +129,8 @@ const FetchedImageNonSvg = ({ url, onLoaded }: FetchedProps) => {
           >
             <Image mb={8} alignSelf={"center"} src={url} w="30%"></Image>
             <Text mb={8}>
-              The next step is to add some drawn on your image as in the example
-              below.
+              The next step is to draw some zones on your image to analyze them
+              as in the example
             </Text>
             <ModalIndicationManualZones />
           </ModalBody>
