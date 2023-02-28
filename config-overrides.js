@@ -1,6 +1,8 @@
 const { override, getBabelLoader } = require("customize-cra");
 
 module.exports = override((config) => {
+  // for now CRA overrides is only used in development mode for debugging purposes with wdyr
+  if (process.env.NODE_ENV !== "development") return config;
   //@ts-ignore
   const options = getBabelLoader(config, false).options;
 

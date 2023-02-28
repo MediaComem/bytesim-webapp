@@ -22,6 +22,7 @@ export const zoneSelector = createDraftSafeSelector(
   (state) => state
 );
 
+// this selector is used to compare zones without the status field (triggered when you open/close a zone) in order to prevent useless re-rendering
 export const selectZonesWithoutStatus = (state: RootState): Zone[] =>
   state.zonesSlice.zones
     .filter((z) => {
