@@ -7,7 +7,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { css, cx } from "@emotion/css";
-import React from "react";
+import React, { memo } from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/hooks";
 import { Zone, ZoneOrigin, ZoneType } from "../../app/types/types";
@@ -26,7 +26,8 @@ import {
   zoneReset,
   zoneUpdated,
 } from "../../features/zones/zonesSlice";
-import { useIsNewImportedSvg } from "../../features/importImage/components/FetchedImage";
+import { isEqual } from "lodash";
+import { useIsNewImportedImage } from "../../features/importImage/components/FetchedImage";
 
 interface ZoneListButtonProps {
   zone: Zone;
@@ -38,7 +39,7 @@ interface ZoneListButtonProps {
   setOpenedZoneId?: (id: string) => void;
 }
 
-export function ZoneListButton({
+export const ZoneListButton = memo(function ZoneListBtn({
   zone,
   createdFrom,
   isExpanded,
@@ -65,8 +66,9 @@ export function ZoneListButton({
     }
     setEditNameMode(false);
   };
-  const isNewImportSvg = useIsNewImportedSvg();
-  const fallbackTypeZoneDisplayed = !isNewImportSvg ? "- undefined" : "";
+  const isNewImportImage = useIsNewImportedImage();
+  const fallbackTypeZoneDisplayed = !isNewImportImage ? "- undefined" : "";
+
   return (
     <>
       <Box
@@ -97,14 +99,14 @@ export function ZoneListButton({
               <OpenIcon />
             </Box>
           ) : (
-            <AccordionButton m={0} p={1} width="auto">
-              <AccordionChevron isExpanded={isExpanded} />
+            <AccordionButton m={0} p={1}>
+              <AccordionChevron isExpanded={isExpanded} width="auto" />
             </AccordionButton>
           )}
           <AccordionCustomTitle
             label={
               <>
-                {editNameMode && !isNewImportSvg ? (
+                {editNameMode && !isNewImportImage ? (
                   <Input
                     value={value}
                     onKeyDown={(e) => {
@@ -131,7 +133,7 @@ export function ZoneListButton({
                 ) : (
                   <Text
                     ml={1}
-                    cursor={isNewImportSvg ? "default" : "auto"}
+                    cursor={isNewImportImage ? "default" : "auto"}
                     whiteSpace={"nowrap"}
                     onDoubleClick={() => setEditNameMode(true)}
                   >
@@ -164,7 +166,7 @@ export function ZoneListButton({
           )}
         </Flex>
         <Flex className={cx("visibleOnHover ", css({ visibility: "hidden" }))}>
-          {!hiddenMode && !isNewImportSvg && (
+          {!hiddenMode && !isNewImportImage && (
             <Button
               variant={"ghost"}
               title="Reset zone"
@@ -190,4 +192,5 @@ export function ZoneListButton({
       </Box>
     </>
   );
-}
+},
+isEqual);

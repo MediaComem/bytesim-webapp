@@ -7,8 +7,8 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { TreeZoneEl, Zone } from "../../../app/types/types";
-import { unfoldTree } from "../../../components/zones/MainGroupList";
-import { isNewImportImage, useIsNewImportedSvg } from "./FetchedImage";
+import { UnfoldedTree } from "../../../components/zones/MainGroupList";
+import { useIsNewImportedImage } from "./FetchedImage";
 
 const ModalSelectZonesContent = ({
   zones,
@@ -19,7 +19,7 @@ const ModalSelectZonesContent = ({
 }) => {
   const [openedZoneIds, setOpenedZoneIds] = useState<string[]>([]);
   const [mounted, setMounted] = useState(false);
-  const isNewSvg = useIsNewImportedSvg();
+  const isNewImage = useIsNewImportedImage();
   useEffect(() => {
     setTimeout(() => {
       setMounted(true);
@@ -49,10 +49,14 @@ const ModalSelectZonesContent = ({
           }}
           pl={2}
         ></AccordionButton>
-        {mounted &&
-          isNewSvg &&
-          firstChildrenTree &&
-          unfoldTree(firstChildrenTree, zones, openedZoneIds, setOpenedZoneId)}
+        {mounted && isNewImage && firstChildrenTree && (
+          <UnfoldedTree
+            tree={firstChildrenTree}
+            zones={zones}
+            openedZoneIds={openedZoneIds}
+            setOpenedZoneId={setOpenedZoneId}
+          />
+        )}
         {!mounted && (
           <Flex justifyContent="center" py={10}>
             <Spinner />

@@ -1,4 +1,5 @@
 import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
+import { memo } from "react";
 import {
   useAppSelector,
   useCalculateImpact,
@@ -24,7 +25,7 @@ const ReportItem = ({ label, value, comparedValue }: ReportItemProps) => (
   </Box>
 );
 
-export default function ReportGeneralInfo() {
+const ReportGeneralInfo = memo(function ReportGeneralInfo() {
   const impact = useCalculateImpact();
   const impactWithRecommandations = useCalculateRecommandationsImpact();
   const optimalImpact = useCalculateOptimalImpact();
@@ -83,4 +84,5 @@ export default function ReportGeneralInfo() {
       <ReportItem label="GWP (kg CO2eq)" value={optimalImpact.co2.toFixed(0)} />
     </Grid>
   );
-}
+});
+export default ReportGeneralInfo;

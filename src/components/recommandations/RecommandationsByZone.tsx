@@ -21,6 +21,7 @@ import { useAppSelector } from "../../app/hooks";
 import { RootState } from "../../app/store";
 import simulationService from "../../services/simulationService";
 import { EServerType } from "../../app/types/generalFormTypes";
+import { isEqual } from "lodash";
 
 interface RecommandationDisplayProps {
   zoneRecommandations: RecommandationType[];
@@ -35,8 +36,14 @@ export default function RecommandationsByZone({
   onToggleAccordion,
   isOpenAccordion,
 }: RecommandationDisplayProps) {
-  const zone = useAppSelector((state: RootState) =>
-    state.zonesSlice.zones?.find((z) => z.id === zoneId)
+  const zone = useAppSelector(
+    (state: RootState) => state.zonesSlice.zones?.find((z) => z.id === zoneId),
+    (prev, next) => {
+      // compare prev and next without status
+      const prevWithoutStatus = { ...prev, status: undefined };
+      const nextWithoutStatus = { ...next, status: undefined };
+      return isEqual(prevWithoutStatus, nextWithoutStatus);
+    }
   );
   const nbVisits = useAppSelector((state) => state.project.params.nbVisit) ?? 1;
   const serverType =

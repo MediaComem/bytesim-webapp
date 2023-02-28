@@ -1,3 +1,4 @@
+import { isEqual } from "lodash";
 import { createDraftSafeSelector } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import simulationService from "../services/simulationService";
@@ -21,10 +22,25 @@ export const zoneSelector = createDraftSafeSelector(
   (state) => state
 );
 
+// this selector is used to compare zones without the status field (triggered when you open/close a zone) in order to prevent useless re-rendering
+export const selectZonesWithoutStatus = (state: RootState): Zone[] =>
+  state.zonesSlice.zones
+    .filter((z) => {
+      return !z.hidden;
+    })
+    // compare without status field
+    .map((z) => ({ ...z, status: "ACTIVE" }));
+export const zoneSelectorWithoutStatus = createDraftSafeSelector(
+  selectZonesWithoutStatus,
+  (state) => state
+);
+
 export const useAppZones = () => useAppSelector(zoneSelector);
+export const useAppZonesWithoutStatus = () =>
+  useAppSelector(zoneSelectorWithoutStatus, isEqual);
 
 export function useCalculateImpact(): { energy: number; co2: number } {
-  const zones = useAppSelector(zoneSelector);
+  const zones = useAppZonesWithoutStatus();
   const renewable = useAppSelector(
     (state) => state.project.params.server === EServerType.RENEWABLE
   );
@@ -53,7 +69,7 @@ export function useCalculateImpact(): { energy: number; co2: number } {
 }
 
 export function useCalculateOptimalImpact(): { energy: number; co2: number } {
-  const zones = useAppSelector(zoneSelector);
+  const zones = useAppZonesWithoutStatus();
   const renewable = true;
   const nbVisits = useAppSelector((state) => state.project.params.nbVisit) ?? 1;
   let energyTotal = 0;
@@ -83,7 +99,7 @@ export function useCalculateRecommandationsImpact(): {
   energy: number;
   co2: number;
 } {
-  const zones = useAppSelector(zoneSelector);
+  const zones = useAppZonesWithoutStatus();
   const recommandations = useAppSelector((state) => state.recommandations);
   const nbVisits = useAppSelector((state) => state.project.params.nbVisit) ?? 1; // if no visitor impact per visit
   let renewable = useAppSelector(
@@ -200,10 +216,8 @@ export function useCalculateRecommandationsForZone(
 }
 
 export function useSelectedZone(): Zone | undefined {
-  let zone;
-  const zones = useAppSelector((state) => state.zonesSlice.zones);
-  zones.forEach((z) => {
-    if (z.status === "EDITING") zone = z;
-  });
-  return zone;
+  return useAppSelector(
+    (state) => state.zonesSlice.zones?.find((z) => z.status === "EDITING"),
+    isEqual
+  );
 }

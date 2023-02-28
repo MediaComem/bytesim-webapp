@@ -34,8 +34,7 @@ import { useState } from "react";
 export default function Home() {
   const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const state = useAppSelector((s) => s);
-  const project = state.project;
+  const project = useAppSelector((s) => s.project);
   const [zoom, setZoom] = useState<number>(100);
   const [isFitWidth, setFitWidth] = useState(true);
 

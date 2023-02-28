@@ -10,7 +10,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import AccordionChevron from "../layout/AccordionChevron";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { FilterType } from "./RecoReport";
 
 type ReportToolBarProps = {
@@ -18,7 +18,7 @@ type ReportToolBarProps = {
   currentFilter: FilterType;
 };
 
-export default function ReportToolbar({
+const ReportToolbar = memo(function ReportToolbar({
   onChangeFilter,
   currentFilter,
 }: ReportToolBarProps) {
@@ -58,4 +58,5 @@ export default function ReportToolbar({
       </Menu>
     </Flex>
   );
-}
+});
+export default ReportToolbar;

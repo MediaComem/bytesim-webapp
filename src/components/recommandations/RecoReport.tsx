@@ -9,14 +9,15 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { css } from "@emotion/css";
-import React, { useEffect, useState } from "react";
+import { isEqual } from "lodash";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
   useAppSelector,
-  useAppZones,
   useCalculateAllRecommandations,
   useCalculateGenericRecommandations,
 } from "../../app/hooks";
+import { RootState } from "../../app/store";
 import { GenericParameters } from "../../app/types/generalFormTypes";
 import { RecommandationWithZone } from "../../app/types/recommandations";
 import { VideoParameters } from "../../app/types/videoTypes";
@@ -56,18 +57,28 @@ export function ReportBody({
   const dispatch = useDispatch();
   const recommandations = useCalculateAllRecommandations();
   const genericRecomandations = useCalculateGenericRecommandations();
-  const zones = useAppZones();
+  const zones = useAppSelector(
+    (state: RootState) =>
+      state.zonesSlice.zones
+        .filter((z) => {
+          return !z.hidden;
+        })
+        // compare without status field
+        .map((z) => ({ ...z, status: undefined })),
+    isEqual
+  );
   const [filterBy, setFilterBy] = useState<FilterType>(
     FilterType.POTENTIEL_GAIN
   );
 
   const projectGeneralParams = useAppSelector((state) => state.project.params);
   const recos = useAppSelector((state) => state.recommandations);
-  const uncompleteZones = useAppSelector(getUncompleteZones);
+  // const recos: any = [];
+  const uncompleteZones = useAppSelector(getUncompleteZones, isEqual);
   const [errorPanelToggled, setErrorPanelToggled] = React.useState(false);
-  const toggleErrorPannel = (): void => {
-    setErrorPanelToggled(!errorPanelToggled);
-  };
+  const toggleErrorPannel = useCallback((): void => {
+    setErrorPanelToggled((prev) => !prev);
+  }, [setErrorPanelToggled]);
   useEffect(() => {
     dispatch(
       recommandationsPopulated([...genericRecomandations, ...recommandations])
@@ -116,7 +127,7 @@ export function ReportBody({
               </Text>
             </Box>
             <ReportToolBar
-              onChangeFilter={(newFilter: FilterType) => setFilterBy(newFilter)}
+              onChangeFilter={setFilterBy}
               currentFilter={filterBy}
             />
             <Divider />

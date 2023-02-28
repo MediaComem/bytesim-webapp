@@ -1,6 +1,8 @@
 import { cloneDeep } from "lodash";
+
 import { TreeZoneEl, Zone } from "../../app/types/types";
 import { colorTheme } from "../../theme";
+const memoizerific = require("memoizerific");
 
 // simple hash function, do not use for sensitive data
 export const hashCode = (str: string) =>
@@ -209,9 +211,23 @@ export const getNewTreeWithoutHiddenZones = (
   return newParentTree;
 };
 
-export const getAllZonesIdsOfTree = (tree: TreeZoneEl): string[] => {
-  return [
-    tree?.id,
-    ...(tree?.children?.flatMap((child) => getAllZonesIdsOfTree(child)) ?? []),
-  ].filter((id) => id);
-};
+export const getAllZonesIdsOfTree = memoizerific(200)(
+  (tree: TreeZoneEl): string[] => {
+    return [
+      tree?.id,
+      ...(tree?.children?.flatMap((child) => getAllZonesIdsOfTree(child)) ??
+        []),
+    ].filter((id) => id);
+  }
+);
+
+export const getOpenedZonesOfTree = memoizerific(200)(
+  (t: TreeZoneEl, zones: Zone[], openedZoneIds: string[]) => {
+    const zonesIds = getAllZonesIdsOfTree(t);
+    const zonesOfTree = zones.filter((z) => zonesIds.includes(z.elementId!));
+    const openedZonesIdsOfTree = openedZoneIds.filter((zId) =>
+      zonesIds.includes(zId)
+    );
+    return { openedZonesIdsOfTree, zonesOfTree };
+  }
+);

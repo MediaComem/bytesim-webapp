@@ -10,7 +10,6 @@ import { css, cx } from "@emotion/css";
 import { useDispatch } from "react-redux";
 import { Rnd } from "react-rnd";
 
-import { useSelectedZone, useAppZones } from "../../app/hooks";
 import {
   zoneDeleted,
   zoneActiveToggled,
@@ -26,12 +25,15 @@ import { Route, Routes } from "react-router-dom";
 import FetchedImage from "../../features/importImage/components/FetchedImage";
 import { colorTheme } from "../../theme";
 
+import { memo, useCallback, useEffect, useState } from "react";
+import useSize from "../../hooks/useSize";
+import { isEqual } from "lodash";
+import { RootState } from "../../app/store";
+import { useAppSelector } from "../../app/hooks";
 import {
   getSvgDims,
   ZONES_CONTAINER_PADDING,
 } from "../../features/importImage/utils";
-import { useCallback, useEffect, useState } from "react";
-import useSize from "../../hooks/useSize";
 
 const brandColor = colorTheme[400];
 const resizeHandleSVG = (
@@ -89,7 +91,7 @@ export default function ZonesView({
   const dispatch = useDispatch();
   const [refContainer, setRefContainer] = useState<HTMLDivElement | null>(null);
   const containerSize = useSize(refContainer);
-  const [svgLoaded, setSvgLoaded] = useState("");
+  const [imgLoaded, setImageLoaded] = useState("");
 
   const updateZonePostions = useCallback(() => {
     const containerDim = getSvgDims();
@@ -104,9 +106,14 @@ export default function ZonesView({
 
   useEffect(() => {
     updateZonePostions();
-  }, [containerSize?.width, svgLoaded]);
+  }, [containerSize?.width, imgLoaded]);
+  const zones = useAppSelector(
+    (state: RootState) => state.zonesSlice.zones.filter((z) => !z.hidden),
+    isEqual
+  );
 
-  const selectedZone = useSelectedZone();
+  // const selectedZone = useSelectedZone();
+  const selectedZone = zones?.find((z) => z.status === "EDITING");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const handleDelete = (e: KeyboardEvent) => {
     if ((e.key === "Backspace" || e.key === "Delete") && selectedZone) {
@@ -120,7 +127,6 @@ export default function ZonesView({
       document.removeEventListener("keydown", handleDelete);
     };
   }, [selectedZone]);
-  const zones = useAppZones()?.filter((z) => !z.hidden);
   return (
     <Flex
       align={"flex-start"}
@@ -156,7 +162,7 @@ export default function ZonesView({
               }}
             >
               <Flex opacity={0.5} width={"100%"}>
-                <FetchedImage onLoaded={setSvgLoaded} />
+                <FetchedImage onLoaded={setImageLoaded} />
               </Flex>
             </Flex>
           }
@@ -188,8 +194,8 @@ export default function ZonesView({
             <ZoneFrame
               key={`${z.id}_${z.x}_${z.y}_${z.width}_${z.height}}`}
               zone={z}
+              isSelectedZone={z.id !== selectedZone?.id}
               disableEdition={disableEdition}
-              zoom={zoom}
             />
           );
         })}
@@ -201,17 +207,17 @@ export default function ZonesView({
 interface ZoneFrameProps {
   //RCmenustate:RightClickMenuState;
   zone: Zone;
+  isSelectedZone: boolean;
   disableEdition: boolean;
-  zoom: number;
 }
-function ZoneFrame({
+const ZoneFrame = memo(function ZoneFrame({
   //RCmenustate,
   zone,
   disableEdition,
-  zoom,
+  isSelectedZone,
 }: ZoneFrameProps) {
   const dispatch = useDispatch();
-  const selectedZone = useSelectedZone();
+
   return (
     <Rnd
       key={zone.id}
@@ -241,7 +247,7 @@ function ZoneFrame({
         const MOUSE_RIGHT_BUTTON = 2;
         if (
           e.button === MOUSE_MAIN_BUTTON ||
-          (e.button === MOUSE_RIGHT_BUTTON && zone.id !== selectedZone?.id)
+          (e.button === MOUSE_RIGHT_BUTTON && isSelectedZone)
         ) {
           dispatch(zoneActiveToggled(zone.id));
         }
@@ -271,4 +277,4 @@ function ZoneFrame({
       <p className={aboveZoneStyle}>{zone.name}</p>
     </Rnd>
   );
-}
+}, isEqual);

@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { memo, useRef, useCallback } from "react";
 import SVG from "react-inlinesvg";
 import { useDispatch } from "react-redux";
 
@@ -21,7 +21,7 @@ import {
   zoneAdded,
 } from "../../zones/zonesSlice";
 import { toast } from "../../..";
-import { debounce } from "lodash";
+import { debounce, isEqual } from "lodash";
 import {
   Button,
   Modal,
@@ -35,13 +35,13 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useAppSelector } from "../../../app/hooks";
-import { TreeZoneEl } from "../../../app/types/types";
+import { TreeZoneEl, Zone } from "../../../app/types/types";
 import ModalSelectZonesContent from "./ModalSelectZonesContent";
 import { useLocation, useNavigate } from "react-router-dom";
 import ModalIndicationManualZones from "./ModalIndicationManualZones";
 import { projectUpdated } from "../../project/projectSlice";
 
-export const useIsNewImportedSvg = () => {
+export const useIsNewImportedImage = () => {
   return useAppSelector((store) => store.zonesSlice?.isNew);
 };
 export const isNewImportImage = () => window.location.href.includes("new=true");
@@ -79,32 +79,59 @@ delete defaultFigmaZoneWithoutId["id"];
 type FetchedProps = {
   url: string;
   onLoaded?: (src: string) => void;
+  onModalValidateClose: () => void;
 };
 
-const FetchedImage = ({
+const FetchedImage = memo(function FetchedImage({
   url = getImageUrlFromCurrentUrl(), // "https://bytesim-bucket.s3.eu-west-3.amazonaws.com/0%253A1_Page%25201.svg",
   onLoaded: onLoadedProps,
-}: Partial<FetchedProps>) => {
+}: Partial<FetchedProps>) {
+  useLocation();
   const dispatch = useDispatch();
   const isImageSvg = url?.endsWith(".svg");
 
-  const onLoaded = () => {
+  const onLoaded = useCallback(() => {
     onLoadedProps?.(url);
-
     dispatch(projectUpdated({ imageType: isImageSvg ? "svg" : "other" }));
-  };
-  if (isImageSvg) {
-    return <FetchedSvg url={url} onLoaded={onLoaded} />;
-  }
-  return <FetchedImageNonSvg url={url} onLoaded={onLoaded} />;
-};
+  }, [url, isImageSvg, dispatch]);
 
-const FetchedImageNonSvg = ({ url, onLoaded }: FetchedProps) => {
+  const { search } = useLocation(); // keep image params
+  const navigate = useNavigate();
+
+  const newParams = search?.replace("&new=true", "").replace("new=true", "");
+
+  const onModalValidateClose = useCallback(() => {
+    navigate(`/figma${newParams}`, { replace: true });
+    dispatch(setIsNew(false));
+  }, [navigate, newParams, dispatch]);
+
+  if (isImageSvg) {
+    return (
+      <FetchedSvg
+        url={url}
+        onLoaded={onLoaded}
+        onModalValidateClose={onModalValidateClose}
+      />
+    );
+  }
+  return (
+    <FetchedImageNonSvg
+      url={url}
+      onLoaded={onLoaded}
+      onModalValidateClose={onModalValidateClose}
+    />
+  );
+});
+
+const FetchedImageNonSvg = memo(function FetchedImageNonSvg({
+  url,
+  onLoaded,
+  onModalValidateClose,
+}: FetchedProps) {
   const dispatch = useDispatch();
   const { isOpen: isModalOpen, onClose, onOpen } = useDisclosure();
-  const onModalValidateClose = useOnModalValidateClose();
 
-  const onClose_ = () => {
+  const onClose_ = useCallback(() => {
     dispatch(allZonesReset());
     onClose();
 
@@ -113,7 +140,7 @@ const FetchedImageNonSvg = ({ url, onLoaded }: FetchedProps) => {
       onModalValidateClose();
       dispatch(zoneAdded());
     });
-  };
+  }, [onClose, onModalValidateClose, dispatch]);
 
   return (
     <>
@@ -154,27 +181,33 @@ const FetchedImageNonSvg = ({ url, onLoaded }: FetchedProps) => {
       ></Image>
     </>
   );
-};
-const FetchedSvg = ({
+});
+const FetchedSvg = function FetchedSvg({
   url, // "https://bytesim-bucket.s3.eu-west-3.amazonaws.com/0%253A1_Page%25201.svg",
   onLoaded,
-}: FetchedProps) => {
+  onModalValidateClose,
+}: FetchedProps) {
   const idsRefs = useRef<string[]>([]);
   const dispatch = useDispatch();
 
-  const onModalValidateClose = useOnModalValidateClose();
+  // prevent useless renders by switching a zone status
+  const zones: Zone[] = useAppSelector(
+    (store) =>
+      store.zonesSlice.zones
+        .filter((z) => z.createdFrom === "figma")
+        .map((z) => ({ ...z, status: "ACTIVE" })),
+    isEqual
+  );
+  const tree = useAppSelector((store) => store.zonesSlice.tree);
 
-  const zonesSlices = useAppSelector((store) => store.zonesSlice);
-
-  const zones = zonesSlices?.zones.filter((z) => z.createdFrom === "figma");
-  const firstChildrenTree = zonesSlices.tree?.[0]?.children;
+  const firstChildrenTree = tree?.[0]?.children;
 
   const uniqueHash = `svg_elements_to_parse`;
   const { isOpen: isModalOpen, onClose, onOpen } = useDisclosure();
 
   const onModalCloseValidate = () => {
     const newTree: TreeZoneEl = {
-      id: zonesSlices.tree?.[0]?.id,
+      id: tree?.[0]?.id,
     };
     getNewTreeWithoutHiddenZones(firstChildrenTree, zones, newTree);
     const newZones = getAllZonesIdsOfTree(newTree);
@@ -187,7 +220,6 @@ const FetchedSvg = ({
       onModalValidateClose();
     }, 300);
   };
-
   return (
     <>
       <Modal isOpen={isModalOpen} onClose={onModalCloseValidate}>
@@ -312,15 +344,19 @@ const FetchedSvg = ({
 };
 export default FetchedImage;
 
-const useOnModalValidateClose = () => {
+function useOnModalValidateClose() {
   const dispatch = useDispatch();
   const { search } = useLocation(); // keep image params
   const navigate = useNavigate();
 
   const newParams = search?.replace("&new=true", "").replace("new=true", "");
 
-  return () => {
+  return function onModalClose() {
     navigate(`/figma${newParams}`, { replace: true });
     dispatch(setIsNew(false));
   };
-};
+  // return useCallback(function onModalClose() {
+  // navigate(`/figma${newParams}`, { replace: true });
+  // dispatch(setIsNew(false));
+  // }, []);
+}

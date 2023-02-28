@@ -1,18 +1,20 @@
+import { BoxProps } from "@chakra-ui/react";
 import { css, cx } from "@emotion/css";
 import { AccordionChevronSVG } from "./AccordionChevronSVG";
-interface AccordionChevronProps {
+type AccordionChevronProps = {
   isExpanded: boolean;
   isWarning?: true;
   setOpen?: () => void;
   className?: string;
   color?: string;
-}
+} & BoxProps;
 export default function AccordionChevron({
   isExpanded,
   isWarning,
   setOpen,
   className,
   color = "#000",
+  ...otherProps
 }: AccordionChevronProps) {
   return (
     <div
@@ -32,6 +34,7 @@ export default function AccordionChevron({
           css({ stroke: isWarning ? "#C53030" : "black" }),
           className
         )}
+        {...otherProps}
       />
     </div>
   );

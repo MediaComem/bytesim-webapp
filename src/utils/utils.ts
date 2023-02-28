@@ -1,3 +1,4 @@
+import { isEqual } from "lodash";
 import { DynContentFormEntries } from "../app/types/dynContentTypes";
 import { ImageFormEntries } from "../app/types/imgTypes";
 import { Zone, ZoneType } from "../app/types/types";
@@ -29,13 +30,24 @@ export const isZoneComplete = (zone: Zone) => {
 };
 
 export const capitalizeFirstLetter = (str: string): string => {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
 export const getMissingZoneParams = (zone: Zone): string[] => {
   if (zone.params && zone.zoneType) {
     const zoneTypeEntries = Object.keys(getTypeEntries(zone.zoneType));
     const zoneEntriesInParams = Object.keys(zone.params);
-    return zoneTypeEntries.filter(value => !zoneEntriesInParams.includes(value));
+    return zoneTypeEntries.filter(
+      (value) => !zoneEntriesInParams.includes(value)
+    );
   }
   return [];
-}
+};
+
+export const isEqualDebug = (a: any, b: any) => {
+  const isEq = isEqual(a, b);
+  console.log("isEqual", isEq, a, b);
+  return isEq;
+};
+
+export const consoleDebug = (msg: string, ...optionalParams: any[]) =>
+  console.log(`%c ${msg}`, "color: #ff0000", ...optionalParams);
