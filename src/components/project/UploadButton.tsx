@@ -15,7 +15,6 @@ import shortId from "short-uuid";
 
 import { useNavigate } from "react-router-dom";
 import { setIsNew } from "../../features/zones/zonesSlice";
-import { ReactS3Client } from "../../utils/s3Config";
 import { ReactComponent as ImportIcon } from "../../assets/Import.svg";
 import Dropzone from "../layout/Dropzone";
 import ButtonWithIconCustom from "../layout/ButtonWithIconCustom";
@@ -28,6 +27,48 @@ export default function UploadButton() {
   const [errorMessage, setErrorMessage] = React.useState<string>("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  // Uploads the selected artwork to S3 and redirect the user to his new project's URL
+  const uploadArtworkToS3 = async () => {
+    // create file name with key and extension + ensure no special characters
+    const fileNameParts = fileName.split(".");
+    const key = `${shortId.generate()}_${fileNameParts[0].replace(
+      /[^a-zA-Z0-9 ]/g,
+      ""
+    )}.${fileNameParts.pop()}`;
+    const type = (file as File).type;
+    // Generate a sign URL to upload to s3 bucket
+    // Based on https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/modules/_aws_sdk_s3_presigned_post.html
+    const response = await fetch(
+      new URL(
+        `${
+          process.env.REACT_APP_S3_UPLOAD_URL_GENERATOR
+        }?key=${key}&contentType=${encodeURIComponent(type)}`
+      )
+    );
+    const presigned = (await response.json()) as {
+      uploadURL: string;
+      fields: { [key: string]: string };
+    };
+
+    const fd = new FormData();
+    for (const field in presigned.fields) {
+      fd.append(field, presigned.fields[field]);
+    }
+    fd.append("file", file as File);
+
+    const data = await fetch(presigned.uploadURL, { method: "post", body: fd });
+    if (data.ok) {
+      onClose();
+      navigate(`/figma?key=${encodeURIComponent(key)}&new=true`);
+      setFile(undefined);
+      setFileName("");
+      dispatch(setIsNew(true));
+    } else {
+      setErrorMessage("Error while uploading the image");
+      console.log(data);
+    }
+  };
 
   return (
     <>
@@ -64,30 +105,7 @@ export default function UploadButton() {
             <Button
               variant="solid"
               colorScheme={"brand"}
-              onClick={() => {
-                // create file name with key and extension + ensure no special characters
-                const fileNameParts = fileName.split(".");
-                ReactS3Client.uploadFile(
-                  file,
-                  `${shortId.generate()}_${fileNameParts[0].replace(
-                    /[^a-zA-Z0-9 ]/g,
-                    ""
-                  )}.${fileNameParts.pop()}`
-                )
-                  .then((data: any) => {
-                    onClose();
-                    navigate(
-                      `/figma?key=${encodeURIComponent(data.key)}&new=true`
-                    );
-                    setFile(undefined);
-                    setFileName("");
-                    dispatch(setIsNew(true));
-                  })
-                  .catch((err: any) => {
-                    setErrorMessage("Error while uploading the image");
-                    console.log(err);
-                  });
-              }}
+              onClick={uploadArtworkToS3}
             >
               OK
             </Button>
