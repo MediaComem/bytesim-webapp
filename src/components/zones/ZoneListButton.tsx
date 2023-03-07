@@ -37,6 +37,7 @@ interface ZoneListButtonProps {
   buttonDelete?: any;
   hiddenMode?: boolean;
   setOpenedZoneId?: (id: string) => void;
+  showChevronLeft?: boolean;
 }
 
 export const ZoneListButton = memo(function ZoneListBtn({
@@ -46,6 +47,7 @@ export const ZoneListButton = memo(function ZoneListBtn({
   onOpen,
   buttonDelete,
   hiddenMode = false,
+  showChevronLeft = true,
   setOpenedZoneId,
 }: ZoneListButtonProps) {
   const dispatch = useDispatch();
@@ -98,10 +100,12 @@ export const ZoneListButton = memo(function ZoneListBtn({
             <Box px={"6.5px"} py={"15px"} width="auto">
               <OpenIcon />
             </Box>
-          ) : (
+          ) : showChevronLeft ? (
             <AccordionButton m={0} p={1}>
               <AccordionChevron isExpanded={isExpanded} width="auto" />
             </AccordionButton>
+          ) : (
+            <></>
           )}
           <AccordionCustomTitle
             label={

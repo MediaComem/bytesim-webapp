@@ -133,11 +133,13 @@ export const UnfoldedTree = ({
   zones,
   openedZoneIds,
   setOpenedZoneId,
+  showChevronLeftIfNoChildren = true,
 }: {
   tree: TreeZoneEl[];
   zones: Zone[];
   openedZoneIds: string[];
   setOpenedZoneId?: (id: string) => void;
+  showChevronLeftIfNoChildren?: boolean;
 }) => {
   return (
     <div>
@@ -155,6 +157,7 @@ export const UnfoldedTree = ({
             treeZoneEl={t}
             openedZoneIds={openedZonesIdsOfTree}
             setOpenedZoneId={setOpenedZoneId}
+            showChevronLeftIfNoChildren={showChevronLeftIfNoChildren}
           />
         );
       })}
@@ -167,11 +170,13 @@ const UnfoldedTreeChild = React.memo(function UnfoldedTreeChildComp({
   treeZoneEl,
   openedZoneIds,
   setOpenedZoneId,
+  showChevronLeftIfNoChildren = true,
 }: {
   treeZoneEl: TreeZoneEl;
   zones: Zone[];
   openedZoneIds: string[];
   setOpenedZoneId?: (id: string) => void;
+  showChevronLeftIfNoChildren?: boolean;
 }) {
   const t = treeZoneEl;
   const parentZone = zones.find((z) => z.id === t.id);
@@ -185,6 +190,7 @@ const UnfoldedTreeChild = React.memo(function UnfoldedTreeChildComp({
       zones={zones.filter((z) => z.elementId === t.id)}
       openedZoneIds={openedZoneIds}
       setOpenedZoneId={setOpenedZoneId}
+      showChevronLeft={showChevronLeftIfNoChildren || t?.children?.length !== 0}
     >
       {isExpanded && t?.children?.length !== 0 && (
         <UnfoldedTree
@@ -192,6 +198,7 @@ const UnfoldedTreeChild = React.memo(function UnfoldedTreeChildComp({
           zones={zones}
           openedZoneIds={openedZoneIds}
           setOpenedZoneId={setOpenedZoneId}
+          showChevronLeftIfNoChildren={showChevronLeftIfNoChildren}
         />
       )}
     </AccordionZones>
@@ -239,11 +246,13 @@ const AccordionZones = ({
   children = null,
   openedZoneIds,
   setOpenedZoneId,
+  showChevronLeft = true,
 }: {
   zones: Zone[];
   children?: any;
   openedZoneIds?: string[] | undefined;
   setOpenedZoneId?: (id: string) => void;
+  showChevronLeft?: boolean;
 }) => {
   const dispatch = useDispatch();
 
@@ -304,6 +313,7 @@ const AccordionZones = ({
                     isExpanded={isExpanded}
                     //setOpen={() => toggleAccordion(i)}
                     setOpenedZoneId={setOpenedZoneId}
+                    showChevronLeft={showChevronLeft}
                   />
                   {!isNewImportImage() && (
                     <AccordionPanel p={0} bg={"brand.50"}>

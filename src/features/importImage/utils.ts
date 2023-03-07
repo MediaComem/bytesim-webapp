@@ -142,7 +142,7 @@ export const getChildrenIdsOfTree = (
 ): string[] => {
   if (!id || !tree) return [];
   const subTree = getNodeSubTree(id, tree);
-  // crawl through all chilfren
+  // crawl through all children
   return (
     subTree?.children?.flatMap((child) => {
       return [child.id, ...getChildrenIdsOfTree(child.id, tree)];
