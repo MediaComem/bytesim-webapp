@@ -23,7 +23,7 @@ import AccordionCustomTitle from "../layout/AccordionCustomTitle";
 import { recommandationsReset } from "../../features/recommandations/recommandationsSlice";
 import { ZoneListButton } from "./ZoneListButton";
 import {
-  allZonesDeleted,
+  allDrawnZonesDeleted,
   allZonesReset,
   getSelectedDrawnZoneIndex,
   zoneDeleted,
@@ -91,7 +91,7 @@ export default function ZonesList() {
                     setModalContent({
                       ...confirmText.deleteAllZones,
                       onConfirm: () => {
-                        dispatch(allZonesDeleted());
+                        dispatch(allDrawnZonesDeleted());
                         //dispatch(recommandationsReset());
                       },
                     });
