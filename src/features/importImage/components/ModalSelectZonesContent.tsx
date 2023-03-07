@@ -55,6 +55,7 @@ const ModalSelectZonesContent = ({
             zones={zones}
             openedZoneIds={openedZoneIds}
             setOpenedZoneId={setOpenedZoneId}
+            showChevronLeftIfNoChildren={false}
           />
         )}
         {!mounted && (
