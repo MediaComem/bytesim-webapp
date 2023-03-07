@@ -57,10 +57,21 @@ export function ReportBody({
   const dispatch = useDispatch();
   const recommandations = useCalculateAllRecommandations();
   const genericRecomandations = useCalculateGenericRecommandations();
+  const zonesHiddenId: string[] = [];
   const zones = useAppSelector(
     (state: RootState) =>
       state.zonesSlice.zones
         .filter((z) => {
+          const inTheHiddenList = zonesHiddenId.includes(z.id);
+          // if hidden and not in the list of hidden zones, put it in the list
+          if (z.hidden && !inTheHiddenList) {
+            zonesHiddenId.push(z.id);
+          }
+          // if it's not hidden and in the list remove it
+          if (!z.hidden && inTheHiddenList) {
+            zonesHiddenId.splice(zonesHiddenId.indexOf(z.id), 1);
+          }
+
           return !z.hidden;
         })
         // compare without status field
@@ -84,6 +95,10 @@ export function ReportBody({
       recommandationsPopulated([...genericRecomandations, ...recommandations])
     );
   }, [zones, projectGeneralParams]);
+
+  const recommandationsList = (customRecos || recos).filter((r) => {
+    return !zonesHiddenId.includes(r.zoneId);
+  });
 
   return (
     <>
@@ -132,9 +147,9 @@ export function ReportBody({
             />
             <Divider />
             <div className={css({ overflowY: "auto", overflowX: "hidden" })}>
-              {recos?.length > 0 ? (
+              {recommandationsList?.length > 0 ? (
                 <RecommandationsList
-                  recommandations={customRecos || recos}
+                  recommandations={recommandationsList}
                   allOpen={!!allOpen}
                   filterBy={filterBy}
                 />
