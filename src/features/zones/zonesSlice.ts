@@ -146,7 +146,7 @@ const zonesSlice = createSlice({
           return {
             ...z,
             zoneType: undefined,
-            params: undefined,
+            params: {},
             ...(z.createdFrom === "figma" && {
               width: z.initWidth!,
               height: z.initHeight!,
