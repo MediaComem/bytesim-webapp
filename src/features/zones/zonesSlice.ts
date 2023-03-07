@@ -239,9 +239,8 @@ const zonesSlice = createSlice({
       });
     },
 
-    allZonesDeleted(state) {
-      if (state.zones) state.zones.length = 0;
-      if (state.tree) state.tree.length = 0;
+    allDrawnZonesDeleted(state) {
+      if (state.zones) state.zones = state.zones.filter((z) => z.createdFrom !== "user");
     },
     setIsNew(state, action: PayloadAction<boolean>) {
       state.isNew = action.payload;
@@ -260,7 +259,7 @@ export const {
   zoneActivate,
   allZonesReset,
   zonesFilterByElementId,
-  allZonesDeleted,
+  allDrawnZonesDeleted,
   zoneReset,
   zoneToggleHidden,
   zoneUpdated,
