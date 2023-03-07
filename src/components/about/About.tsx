@@ -19,7 +19,8 @@ export default function About() {
             <Text marginTop={4} marginBottom={4} fontSize={"md"}>
               Project developed by the&nbsp;
               <Link href="https://heig-vd.ch/rad/instituts/mei" color="brand.500">Media Engineering Institute</Link>&nbsp;
-              with the support of <Link href="https://www.romande-energie.ch/" color="brand.500">Romande Énergie</Link>.
+              with contributions from <Link href="https://www.appik-studio.ch" color="brand.500">Appik</Link>&nbsp;
+              and the support of <Link href="https://www.romande-energie.ch/" color="brand.500">Romande Énergie</Link>.
             </Text>
           </ModalBody>
         </ModalContent>
