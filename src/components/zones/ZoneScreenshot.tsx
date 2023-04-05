@@ -3,7 +3,7 @@ import { Image as ChakraImage, Box } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { getImageUrlFromCurrentUrl } from "../../features/importImage/components/FetchedImage";
 import { RootState } from "../../app/store";
-import { getSvgDims } from "../../features/importImage/utils";
+import { getImageDimensions } from "../../features/importImage/utils";
 
 // GET image loaded into project
 // Link project to S3 url -> one img/ project
@@ -18,8 +18,9 @@ const ZoneScreenshot = ({ zoneId }: ZoneScreenshotProps) => {
     state.zonesSlice.zones?.find((z) => z.id === zoneId)
   );
 
-  const svgContainerWidth =
-    getSvgDims()?.width ?? parseFloat(localStorage.getItem("svgWidth") || "0");
+  const imgContainerWidth =
+    getImageDimensions()?.width ??
+    parseFloat(localStorage.getItem("imgWidth") || "0");
 
   const [zoneDim, setZoneDim] = useState({
     x: zone?.x || 0,
@@ -33,7 +34,7 @@ const ZoneScreenshot = ({ zoneId }: ZoneScreenshotProps) => {
     if (!zone) return;
 
     const img = new Image();
-    img.width = svgContainerWidth;
+    img.width = imgContainerWidth;
     img.src = imageUrl;
 
     img.onload = () => {
@@ -63,7 +64,7 @@ const ZoneScreenshot = ({ zoneId }: ZoneScreenshotProps) => {
       <ChakraImage
         border="1px solid lightgray"
         objectFit="contain"
-        src={`//images.weserv.nl/?url=${imageUrl}&w=${svgContainerWidth}&cx=${zoneDim.x}&cy=${zoneDim.y}&cw=${zoneDim.width}&ch=${zoneDim.height}`}
+        src={`//images.weserv.nl/?url=${imageUrl}&w=${imgContainerWidth}&cx=${zoneDim.x}&cy=${zoneDim.y}&cw=${zoneDim.width}&ch=${zoneDim.height}`}
         height="80px" /* fallbackSrc="/assets/placeholder.gif" */
       />
     </Box>

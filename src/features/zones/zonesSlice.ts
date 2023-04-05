@@ -12,7 +12,7 @@ import {
   getChildrenIdsOfTree,
   getParentsOfNode,
   getRelativePosition,
-  getSvgDims,
+  getImageDimensions,
 } from "../importImage/utils";
 
 type ZoneStore = { zones: Zone[]; tree: TreeZoneEl[]; isNew: boolean };
@@ -65,7 +65,7 @@ const zonesSlice = createSlice({
   reducers: {
     zoneAdded: {
       reducer(state, action: PayloadAction<Pick<Zone, "id">>) {
-        const containerDim = getSvgDims();
+        const containerDim = getImageDimensions();
         const newPayload: Zone = {
           ...defaultZone,
           ...action.payload,

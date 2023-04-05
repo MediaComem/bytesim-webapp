@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { ReactComponent as ExportIcon } from "../../assets/Export.svg";
-import { getSvgDims } from "../../features/importImage/utils";
+import { getImageDimensions } from "../../features/importImage/utils";
 import ButtonWithIconCustom from "../layout/ButtonWithIconCustom";
 
 export default function ExportButton() {
@@ -15,8 +15,8 @@ export default function ExportButton() {
         iconAfter={false}
         onClick={() => {
           localStorage.setItem(
-            "svgWidth",
-            getSvgDims()?.width?.toString() || ""
+            "imgWidth",
+            getImageDimensions()?.width?.toString() || ""
           );
           navigate(`/export${search}`); // keep url params
         }}

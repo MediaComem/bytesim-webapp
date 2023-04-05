@@ -40,7 +40,7 @@ export const getRelativePosition = (elementId: string) => {
     initY: y,
   };
 };
-export const getSvgDims = () => {
+export const getImageDimensions = () => {
   return document.getElementById(REMOTE_PARENT_ID)?.getBoundingClientRect();
 };
 export const registerHoverEventsOnFigmaEls = (ids: string[]) => {
