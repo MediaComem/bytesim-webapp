@@ -7,7 +7,7 @@ import {
   getNewTreeWithoutHiddenZones,
   getRelativePosition,
   getTreeHierarchyFromDOM,
-  REMOTE_PARENT_SVG_ID,
+  REMOTE_PARENT_ID,
 } from "../utils";
 import { colorTheme } from "../../../theme";
 import {
@@ -169,6 +169,7 @@ const FetchedImageNonSvg = memo(function FetchedImageNonSvg({
         </ModalContent>
       </Modal>
       <Image
+        id={REMOTE_PARENT_ID}
         minW={"100%"}
         src={url}
         onLoad={() => {
@@ -238,7 +239,7 @@ const FetchedSvg = function FetchedSvg({
         </ModalContent>
       </Modal>
       <SVG
-        id={REMOTE_PARENT_SVG_ID}
+        id={REMOTE_PARENT_ID}
         style={{ minWidth: "100%" }}
         cacheRequests={true}
         loader={<span>Loading...</span>}
@@ -278,7 +279,7 @@ const FetchedSvg = function FetchedSvg({
           // replace width parameter of svg tag by width="100%"
           const newCode = code
             // add id = removeSvgId to parent svg element
-            // .replace(/<svg/g, `<svg id=${REMOTE_PARENT_SVG_ID}`)
+            // .replace(/<svg/g, `<svg id=${REMOTE_PARENT_ID}`)
             .replace(/width="[^"]+"/, 'width="100%"')
             //add svg tag attribute preserveAspectRatio="xMinYMin meet"
             .replace(/<svg/, '<svg preserveAspectRatio="xMinYMin meet"')
