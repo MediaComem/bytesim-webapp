@@ -26,7 +26,7 @@ import "react-reflex/styles.css";
 import { ReflexContainer, ReflexElement, ReflexSplitter } from "react-reflex";
 import RecoSpinner from "./components/recommandations/RecoSpinner";
 import {
-  REMOTE_PARENT_SVG_ID,
+  REMOTE_PARENT_ID,
   ZONES_CONTAINER_PADDING,
 } from "./features/importImage/utils";
 import { useState } from "react";
@@ -43,7 +43,7 @@ export default function Home() {
   ) => {
     // fit the zoom to make the svg fit the width/height of the container
     // zoom is between 100 and 1000
-    const svg = document.getElementById(REMOTE_PARENT_SVG_ID);
+    const svg = document.getElementById(REMOTE_PARENT_ID);
     const container = document.getElementById("zones-container");
     if (svg && container) {
       const svgDim = svg.getBoundingClientRect()[dim];

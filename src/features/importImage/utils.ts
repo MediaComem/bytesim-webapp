@@ -18,11 +18,11 @@ const HIGHLIGHT_STYLE = {
   strokeWidth: 5,
 };
 
-export const REMOTE_PARENT_SVG_ID = "REMOTE_PARENT_SVG_ID";
+export const REMOTE_PARENT_ID = "REMOTE_PARENT_ID";
 export const ZONES_CONTAINER_PADDING = 6; // rem
 
 export const getRelativePosition = (elementId: string) => {
-  const parent = document.getElementById(REMOTE_PARENT_SVG_ID);
+  const parent = document.getElementById(REMOTE_PARENT_ID);
   const element = document.getElementById(elementId);
   if (!element || !parent) return;
   const { top, left, width, height } = element.getBoundingClientRect();
@@ -40,8 +40,8 @@ export const getRelativePosition = (elementId: string) => {
     initY: y,
   };
 };
-export const getSvgDims = () => {
-  return document.getElementById(REMOTE_PARENT_SVG_ID)?.getBoundingClientRect();
+export const getImageDimensions = () => {
+  return document.getElementById(REMOTE_PARENT_ID)?.getBoundingClientRect();
 };
 export const registerHoverEventsOnFigmaEls = (ids: string[]) => {
   // find all svg element with id included in idsRefs.current array and add on hover event a red solid border

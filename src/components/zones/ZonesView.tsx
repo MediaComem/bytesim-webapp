@@ -31,7 +31,7 @@ import { isEqual } from "lodash";
 import { RootState } from "../../app/store";
 import { useAppSelector } from "../../app/hooks";
 import {
-  getSvgDims,
+  getImageDimensions,
   ZONES_CONTAINER_PADDING,
 } from "../../features/importImage/utils";
 
@@ -94,7 +94,7 @@ export default function ZonesView({
   const [imgLoaded, setImageLoaded] = useState("");
 
   const updateZonePostions = useCallback(() => {
-    const containerDim = getSvgDims();
+    const containerDim = getImageDimensions();
     if (!containerDim) return;
     dispatch(
       zonesUpdatePosition({
