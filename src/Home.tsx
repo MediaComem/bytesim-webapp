@@ -1,6 +1,5 @@
 import {
   Accordion,
-  background,
   Button,
   Flex,
   useDisclosure,

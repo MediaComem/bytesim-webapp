@@ -1,5 +1,5 @@
 import useResizeObserver from "@react-hook/resize-observer";
-import React, { useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 
 const useSize = (targetRef: any) => {
   const [size, setSize] = useState<DOMRect>();

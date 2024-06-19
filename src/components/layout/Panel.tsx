@@ -1,4 +1,4 @@
-import { Divider, Flex, Heading, ResponsiveValue } from "@chakra-ui/react";
+import { Flex, Heading, ResponsiveValue } from "@chakra-ui/react";
 import { css } from "@emotion/css";
 import * as React from "react";
 

@@ -1,5 +1,5 @@
-# Sample workflow for building and deploying a Jekyll site to GitHub Pages
-name: Deploy Jekyll with GitHub Pages dependencies preinstalled
+# Workflow to build and deploy bytesim on github pages
+name: Deploy Bytesim web application with GitHub Pages dependencies preinstalled
 
 on:
   # Runs on pushes targeting the default branch
@@ -34,32 +34,32 @@ jobs:
         with: 
           node-version: 20.x
 
-      - name: Install Packages and Build Application  # Installs npm packages and builds the Vue.js application.
+      - name: Install Packages and Build Application  # Installs npm packages and builds the application.
         run: |
           npm ci
           npm run build
+        env:
+            REACT_APP_S3_BUCKET: ${{ secrets.REACT_APP_S3_BUCKET }}
+            REACT_APP_S3_REGION: ${{ secrets.REACT_APP_S3_REGION }}
+            REACT_APP_S3_UPLOAD_URL_GENERATOR: ${{ secrets.REACT_APP_S3_UPLOAD_URL_GENERATOR }}
 
       - name: Setup Pages  # Configures pages for deployment.
         id: pages
         uses: actions/configure-pages@v3
 
-      - name: Build with Jekyll  # Builds the application with Jekyll.
-        uses: actions/jekyll-build-pages@v1
-        with:
-          source: ./build/
-          destination: ./_site
-
       - name: Upload artifact  # Uploads the build artifact.
         uses: actions/upload-pages-artifact@v2
+        with:
+          path: ./build
 
   # Deployment job
   deploy:
     name: Deploy Application  # Defines the name of the deployment job.
 
-      # Add a dependency to the build job
+    # Add a dependency to the build job
     needs: build  # Specifies that the deployment job depends on the successful completion of the build job.
 
-      # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
     permissions:
       pages: write      # Grants write permission to deploy to Pages.
       id-token: write   # Grants write permission to verify the deployment source.
