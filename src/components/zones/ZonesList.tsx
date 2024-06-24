@@ -140,7 +140,7 @@ const AccordionDrawnZones = ({
   );
   return (
     <Accordion allowToggle index={openedZoneIndex}>
-      {drawnZones.map((z, i) => {
+      {drawnZones.map((z) => {
         return (
           <ZoneItem
             key={z.id}

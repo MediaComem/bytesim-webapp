@@ -244,7 +244,7 @@ const FetchedSvg = function FetchedSvg({
         cacheRequests={true}
         loader={<span>Loading...</span>}
         onError={(error) => console.log(error.message)}
-        onLoad={(src, hasCache) => {
+        onLoad={(src) => {
           onLoaded?.(src);
           // if new open modal select
           if (isNewImportImage()) {
@@ -345,6 +345,7 @@ const FetchedSvg = function FetchedSvg({
 };
 export default FetchedImage;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function useOnModalValidateClose() {
   const dispatch = useDispatch();
   const { search } = useLocation(); // keep image params
